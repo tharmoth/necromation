@@ -1,0 +1,71 @@
+﻿{
+  "recipes" : [
+    {
+      "name" : "Gear",
+      "ingredients" :
+      {"Iron Plate" : 2}
+    },
+    {
+      "name" : "Belt",
+      "ingredients" :
+      {"Iron Plate" : 1,
+        "Gear" : 1}
+
+    },
+    {
+      "name" : "Inserter",
+      "ingredients" :
+      {"Iron Plate" : 1,
+        "Gear" : 1}
+    },
+    {
+      "name" : "Assembler",
+      "ingredients" :
+      {"Circuit" : 3,
+        "Iron Plate" : 9,
+        "Gear" : 5}
+    },
+    {
+      "name" : "Circuit",
+      "ingredients" :
+      {"Copper Cable" : 3,
+        "Iron Plate" : 1}
+    },
+    {
+      "name" : "Copper Cable",
+      "ingredients" :
+      {"Copper Plate" : 1},
+      "count" : 2
+    },
+    {
+      "name" : "Stone Furnace",
+      "ingredients" :
+      {"Stone" : 5}
+    },
+    {
+      "name" : "Mining Drill",
+      "ingredients" :
+      {"Stone Furnace" : 1,
+        "Iron Plate" : 3,
+        "Gear" : 3}
+    },
+    {
+      "name" : "Science Pack 1",
+      "ingredients" :
+      {"Copper Plate" : 1,
+        "Gear" : 1}
+    },
+    {
+      "name" : "Iron Plate",
+      "category" : "smelting",
+      "ingredients" :
+      {"Iron Ore" : 1}
+    },
+    {
+      "name" : "Copper Plate",
+      "category" : "smelting",
+      "ingredients" :
+      {"Copper Ore" : 1}
+    }
+  ]
+}

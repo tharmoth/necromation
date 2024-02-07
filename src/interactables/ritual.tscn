@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://c13ebi8puh40v"]
+
+[ext_resource type="Script" path="res://src/interactables/Alter.cs" id="1_gqwt6"]
+[ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="2_0wdsu"]
+
+[node name="Ritual" type="Node2D"]
+script = ExtResource("1_gqwt6")
+duration = 5.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_0wdsu")
+centered = false
+region_enabled = true
+region_rect = Rect2(96, 0, 32, 32)
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
+offset_top = 23.0
+offset_right = 128.0
+offset_bottom = 50.0
+scale = Vector2(0.25, 0.25)

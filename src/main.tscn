@@ -1,0 +1,143 @@
+[gd_scene load_steps=14 format=3 uid="uid://5frwg0ceb1di"]
+
+[ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
+[ext_resource type="Script" path="res://src/character/Character.cs" id="2_vcqpu"]
+[ext_resource type="PackedScene" uid="uid://b4brehoa4o8oj" path="res://src/interactables/grave.tscn" id="3_vgpin"]
+[ext_resource type="PackedScene" uid="uid://doury1opgbft3" path="res://src/interactables/nightshade.tscn" id="4_u6n1d"]
+[ext_resource type="PackedScene" uid="uid://c13ebi8puh40v" path="res://src/interactables/ritual.tscn" id="5_adkqt"]
+[ext_resource type="Script" path="res://src/gui/ItemList.cs" id="6_hwtap"]
+[ext_resource type="PackedScene" uid="uid://cc5nx8t4olpjn" path="res://src/gui/item_label.tscn" id="7_ofafi"]
+[ext_resource type="Script" path="res://src/interactables/AlchemyTable.cs" id="8_156mn"]
+[ext_resource type="Script" path="res://src/gui/Actionbar.cs" id="8_pptpt"]
+[ext_resource type="Script" path="res://src/interactables/Spawner.cs" id="9_i611q"]
+[ext_resource type="Script" path="res://src/interactables/Collectable.cs" id="10_unmpu"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8qpuw"]
+texture = ExtResource("1_4vku0")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_1emfp"]
+tile_size = Vector2i(32, 32)
+sources/1 = SubResource("TileSetAtlasSource_8qpuw")
+
+[node name="Main" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_1emfp")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 1, 0, 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 131075, 1, 0, 196611, 1, 0, 196610, 1, 0, 196609, 1, 0, 131073, 1, 0, 131074, 1, 0, 196608, 1, 0, 131072, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 65541, 1, 0, 131077, 1, 0, 196613, 1, 0, 196612, 1, 0, 262148, 1, 0, 262147, 1, 0, 65539, 1, 0, 65540, 1, 0, 131076, 1, 0, 262149, 1, 0, 262146, 1, 0, 262145, 1, 0, 262144, 1, 0, 327680, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 1, 0, 327685, 1, 0, 393216, 1, 0, 393217, 1, 0, 393218, 1, 0, 393219, 1, 0, 393220, 1, 0, 393221, 1, 0, 393222, 1, 0, 327686, 1, 0, 262150, 1, 0, 196614, 1, 0, 131078, 1, 0, 65542, 1, 0, 6, 1, 0)
+
+[node name="Character" type="Node2D" parent="."]
+z_index = 1
+script = ExtResource("2_vcqpu")
+
+[node name="Sprite2D" type="Sprite2D" parent="Character"]
+texture = ExtResource("1_4vku0")
+region_enabled = true
+region_rect = Rect2(64, 0, 32, 32)
+
+[node name="Camera2D" type="Camera2D" parent="Character"]
+zoom = Vector2(2, 2)
+
+[node name="Grave4" parent="." instance=ExtResource("3_vgpin")]
+position = Vector2(199, 49)
+
+[node name="Grave3" parent="." instance=ExtResource("3_vgpin")]
+position = Vector2(189, 103)
+
+[node name="Grave2" parent="." instance=ExtResource("3_vgpin")]
+position = Vector2(147, 62)
+
+[node name="Grave" parent="." instance=ExtResource("3_vgpin")]
+position = Vector2(168, 82)
+
+[node name="Nightshade" parent="." instance=ExtResource("4_u6n1d")]
+position = Vector2(141, 185)
+
+[node name="Nightshade2" parent="." instance=ExtResource("4_u6n1d")]
+position = Vector2(184, 170)
+
+[node name="Nightshade3" parent="." instance=ExtResource("4_u6n1d")]
+position = Vector2(138, 129)
+
+[node name="Ritual" parent="." instance=ExtResource("5_adkqt")]
+position = Vector2(37, 147)
+duration = 1.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryList" type="VBoxContainer" parent="CanvasLayer/Control/HBoxContainer"]
+layout_mode = 2
+script = ExtResource("6_hwtap")
+
+[node name="ItemLabel" parent="CanvasLayer/Control/HBoxContainer/InventoryList" instance=ExtResource("7_ofafi")]
+layout_mode = 2
+
+[node name="Actionbar" type="HBoxContainer" parent="CanvasLayer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+script = ExtResource("8_pptpt")
+
+[node name="AlchemyTable" type="Node2D" parent="."]
+position = Vector2(10, 109)
+script = ExtResource("8_156mn")
+duration = 5.0
+
+[node name="Sprite2D" type="Sprite2D" parent="AlchemyTable"]
+texture = ExtResource("1_4vku0")
+centered = false
+region_enabled = true
+region_rect = Rect2(224, 0, 32, 32)
+
+[node name="ProgressBar" type="ProgressBar" parent="AlchemyTable"]
+visible = false
+offset_top = 23.0
+offset_right = 128.0
+offset_bottom = 50.0
+scale = Vector2(0.25, 0.25)
+
+[node name="Spawner" type="Node2D" parent="."]
+position = Vector2(167, 173)
+script = ExtResource("9_i611q")
+_type = ExtResource("4_u6n1d")
+_range = 50
+
+[node name="Grave5" type="Node2D" parent="."]
+position = Vector2(65, 49)
+script = ExtResource("10_unmpu")
+type = "Stone"
+duration = 3.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Grave5"]
+texture = ExtResource("1_4vku0")
+centered = false
+region_enabled = true
+region_rect = Rect2(192, 0, 32, 32)
+
+[node name="ProgressBar" type="ProgressBar" parent="Grave5"]
+visible = false
+offset_top = 23.0
+offset_right = 128.0
+offset_bottom = 50.0
+scale = Vector2(0.25, 0.25)
