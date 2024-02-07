@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://8u4b0we3njl5"]
+
+[ext_resource type="Script" path="res://src/interactables/Collectable.cs" id="1_644go"]
+[ext_resource type="Texture2D" uid="uid://bjodlc8eb4xhh" path="res://res/sprites/missing.png" id="2_qqg2r"]
+
+[node name="Resource" type="Node2D"]
+position = Vector2(199, 49)
+script = ExtResource("1_644go")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_qqg2r")
+region_rect = Rect2(160, 0, 32, 32)
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
+custom_minimum_size = Vector2(128, 0)
+offset_left = -16.0
+offset_top = 8.0
+offset_right = 112.0
+offset_bottom = 35.0
+scale = Vector2(0.25, 0.25)
+size_flags_horizontal = 4
+size_flags_vertical = 4

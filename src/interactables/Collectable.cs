@@ -4,19 +4,19 @@ namespace Necromation;
 
 public partial class Collectable : Interactable
 {
-    [Export]
-    private string type;
+    [Export] public string Type { get; set; } = "Stone";
     
     public override void _Ready()
     {
         base._Ready();
         AddToGroup("resources");
+        GetNode<Sprite2D>("Sprite2D").Texture = GD.Load<Texture2D>($"res://res/sprites/{Type}.png");
     }
     
     protected override void Complete()
     {
         base.Complete();
-        Inventory.Instance.AddItem(type);
+        Inventory.Instance.AddItem(Type);
         QueueFree();
     }
 }
