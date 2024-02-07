@@ -18,6 +18,7 @@ public partial class Inventory : Node
 			QueueFree(); // The Singleton is already loaded, kill this instance
 		}
 		_instance = this;
+		_instance.AddItem("Stone", 10);
 	}
 
 	public ImmutableDictionary<string, int> Items => _items.ToImmutableDictionary();
