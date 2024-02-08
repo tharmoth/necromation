@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c13ebi8puh40v"]
+
+[ext_resource type="Script" path="res://src/interactables/Furnace.cs" id="1_pwetf"]
+[ext_resource type="Texture2D" uid="uid://dofd35ihyr0nl" path="res://res/sprites/Stone Furnace.png" id="2_t15v0"]
+
+[node name="Building" type="Node2D"]
+script = ExtResource("1_pwetf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_t15v0")
+region_rect = Rect2(96, 0, 32, 32)
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
+offset_top = 23.0
+offset_right = 128.0
+offset_bottom = 50.0
+scale = Vector2(0.25, 0.25)

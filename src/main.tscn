@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=11 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
+[ext_resource type="Script" path="res://src/gui/GUI.cs" id="1_yiksk"]
 [ext_resource type="Script" path="res://src/character/Character.cs" id="2_vcqpu"]
+[ext_resource type="Script" path="res://src/gui/RecipePopup.cs" id="5_1ckdu"]
 [ext_resource type="Script" path="res://src/gui/ItemList.cs" id="6_hwtap"]
 [ext_resource type="PackedScene" uid="uid://37ciggwme04r" path="res://src/interactables/spawner.tscn" id="6_ummi6"]
 [ext_resource type="PackedScene" uid="uid://cc5nx8t4olpjn" path="res://src/gui/item_label.tscn" id="7_ofafi"]
@@ -23,6 +25,7 @@ sources/1 = SubResource("TileSetAtlasSource_8qpuw")
 [node name="Main" type="Node2D"]
 
 [node name="GUI" type="CanvasLayer" parent="."]
+script = ExtResource("1_yiksk")
 
 [node name="Control" type="Control" parent="GUI"]
 layout_mode = 3
@@ -60,6 +63,22 @@ layout_mode = 2
 size_flags_vertical = 8
 script = ExtResource("8_pptpt")
 
+[node name="Popup" type="PanelContainer" parent="GUI/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_1ckdu")
+_category = "smelting"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/Popup"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RecipeList" type="VBoxContainer" parent="GUI/Control/Popup/ScrollContainer"]
+layout_mode = 2
+
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_1emfp")
 format = 2
@@ -78,12 +97,12 @@ region_rect = Rect2(64, 0, 32, 32)
 zoom = Vector2(2, 2)
 
 [node name="Spawner" parent="." instance=ExtResource("6_ummi6")]
-position = Vector2(217, 5)
+position = Vector2(290, 2)
 
 [node name="Spawner2" parent="." instance=ExtResource("6_ummi6")]
-position = Vector2(217, 223)
-_resourceType = "Iron"
+position = Vector2(291, 236)
+_resourceType = "Iron Ore"
 
 [node name="Spawner3" parent="." instance=ExtResource("6_ummi6")]
-position = Vector2(-2, 221)
-_resourceType = "Copper"
+position = Vector2(2, 248)
+_resourceType = "Copper Ore"

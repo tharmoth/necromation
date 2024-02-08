@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwvidti62u8l4"
-path="res://.godot/imported/Copper.png-3abbe08aae638736ad7d62adfab62e0d.ctex"
+uid="uid://b6fi1ak36b6k"
+path="res://.godot/imported/Copper Bar.png-a98ae92f8432c92515e26fface75b767.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Copper.png"
-dest_files=["res://.godot/imported/Copper.png-3abbe08aae638736ad7d62adfab62e0d.ctex"]
+source_file="res://res/sprites/Copper Bar.png"
+dest_files=["res://.godot/imported/Copper Bar.png-a98ae92f8432c92515e26fface75b767.ctex"]
 
 [params]
 

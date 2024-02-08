@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://c83mcqrhb7trg"]
+[gd_scene load_steps=3 format=3 uid="uid://carr3xjne5jbl"]
 
 [ext_resource type="Script" path="res://src/interactables/Collectable.cs" id="1_wkes8"]
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="2_f4vvc"]
