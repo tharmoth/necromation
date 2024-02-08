@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://bjodlc8eb4xhh" path="res://res/sprites/missing.png" id="2_qqg2r"]
 
 [node name="Resource" type="Node2D"]
-position = Vector2(199, 49)
 script = ExtResource("1_644go")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

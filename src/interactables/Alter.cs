@@ -20,7 +20,7 @@ public partial class Alter : Interactable
         base.Complete();
         if (CanInteract())
         {
-            _recipe.Craft(Inventory.Instance);
+            // _recipe.Craft(Inventory.Instance, this);
         }
         else
         {

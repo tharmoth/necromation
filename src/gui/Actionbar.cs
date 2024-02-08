@@ -1,9 +1,13 @@
 using Godot;
 using System;
+using System.Linq;
 using Necromation.character;
 
-public partial class Actionbar : HBoxContainer
+public partial class Actionbar : Control
 {
+	[Export] private string _category = "None";
+	[Export] private PackedScene _buttonScene = GD.Load<PackedScene>("res://src/gui/recipe_button.tscn");
+	
 	public override void _Ready()
 	{
 		AddMissingItems();
@@ -11,11 +15,10 @@ public partial class Actionbar : HBoxContainer
 	
 	private void AddMissingItems()
 	{
-		foreach (var item in Database.Instance.Recipes)
+		foreach (var item in Database.Instance.Recipes.Where(recipe => recipe.Category == _category))
 		{
-			var button = GD.Load<PackedScene>("res://src/gui/recipe_button.tscn").Instantiate<RecipeButton>();
+			var button = _buttonScene.Instantiate<RecipeButton>();
 			button.ItemType = item.Name;
-			GD.Print(item);
 			button.Recipe = item;
 			AddChild(button);
 		}

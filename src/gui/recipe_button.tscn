@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://mglb0kkmg3ql"]
 
 [ext_resource type="Script" path="res://src/gui/RecipeButton.cs" id="1_p5ht2"]
-[ext_resource type="PackedScene" uid="uid://c13ebi8puh40v" path="res://src/interactables/ritual.tscn" id="2_ox5c0"]
+[ext_resource type="PackedScene" uid="uid://c13ebi8puh40v" path="res://src/interactables/building.tscn" id="2_ox5c0"]
 
 [node name="RecipeButton" type="PanelContainer"]
 script = ExtResource("1_p5ht2")

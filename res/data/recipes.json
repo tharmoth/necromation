@@ -3,38 +3,37 @@
     {
       "name" : "Gear",
       "ingredients" :
-      {"Iron Plate" : 2}
+      {"Iron Bar" : 2}
     },
     {
       "name" : "Belt",
       "ingredients" :
-      {"Iron Plate" : 1,
+      {"Iron Bar" : 1,
         "Gear" : 1}
-
     },
     {
       "name" : "Inserter",
       "ingredients" :
-      {"Iron Plate" : 1,
+      {"Iron Bar" : 1,
         "Gear" : 1}
     },
     {
       "name" : "Assembler",
       "ingredients" :
       {"Circuit" : 3,
-        "Iron Plate" : 9,
+        "Iron Bar" : 9,
         "Gear" : 5}
     },
     {
       "name" : "Circuit",
       "ingredients" :
       {"Copper Cable" : 3,
-        "Iron Plate" : 1}
+        "Iron Bar" : 1}
     },
     {
       "name" : "Copper Cable",
       "ingredients" :
-      {"Copper Plate" : 1},
+      {"Copper Bar" : 1},
       "count" : 2
     },
     {
@@ -43,26 +42,26 @@
       {"Stone" : 5}
     },
     {
-      "name" : "Mining Drill",
+      "name" : "Mine",
       "ingredients" :
       {"Stone Furnace" : 1,
-        "Iron Plate" : 3,
+        "Iron Bar" : 3,
         "Gear" : 3}
     },
     {
-      "name" : "Science Pack 1",
+      "name" : "Experiment",
       "ingredients" :
-      {"Copper Plate" : 1,
+      {"Copper Bar" : 1,
         "Gear" : 1}
     },
     {
-      "name" : "Iron Plate",
+      "name" : "Iron Bar",
       "category" : "smelting",
       "ingredients" :
       {"Iron Ore" : 1}
     },
     {
-      "name" : "Copper Plate",
+      "name" : "Copper Bar",
       "category" : "smelting",
       "ingredients" :
       {"Copper Ore" : 1}

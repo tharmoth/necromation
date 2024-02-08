@@ -19,17 +19,14 @@ public partial class RecipeButton : PanelContainer
 	public Recipe Recipe { get; set; }
 	
 	private bool _buildMode;
-	
-	
-	
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GetNode<Button>("Button").GuiInput += _onButtonPressed2;
+		GetNode<Button>("Button").GuiInput += ButtonPressed;
 		GetNode<Button>("Button").Text = ItemType;
         
 		Inventory.Instance.Listeners.Add(Update);
-		
 	}
 	
 	private void Update()
@@ -56,7 +53,7 @@ public partial class RecipeButton : PanelContainer
 		building.GlobalPosition = building.GetGlobalMousePosition();
 	}
 
-	private void _onButtonPressed2(InputEvent @event)
+	private void ButtonPressed(InputEvent @event)
 	{
 		if (@event is not InputEventMouseButton eventMouseButton || eventMouseButton.Pressed) return;
 		if (eventMouseButton.ButtonIndex == MouseButton.Left)
