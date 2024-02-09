@@ -5,20 +5,20 @@ using Necromation.gui;
 
 public partial class TransferInventory : VBoxContainer
 {
-	private Inventory _sourceInventory;
-	public Inventory SourceInventory
+	private Inventory _inventoryToDisplay;
+	public Inventory InventoryToDisplay
 	{
-		get => _sourceInventory;
+		get => _inventoryToDisplay;
 		set
 		{
-			_sourceInventory?.Listeners.Remove(Update);
-			_sourceInventory = value;
-			_sourceInventory.Listeners.Add(Update);
+			_inventoryToDisplay?.Listeners.Remove(Update);
+			_inventoryToDisplay = value;
+			_inventoryToDisplay.Listeners.Add(Update);
 			Update();
 		}
 		
 	}
-	public Inventory TargetInventory { get; set; }
+	public Inventory InventoryToTransferTo { get; set; }
 
 	private void Update()
 	{
@@ -31,7 +31,7 @@ public partial class TransferInventory : VBoxContainer
 	{
 		foreach (var label in GetChildren().OfType<ItemButton>().ToHashSet())
 		{
-			if (SourceInventory.Items.ContainsKey(label.ItemType)) continue;
+			if (InventoryToDisplay.Items.ContainsKey(label.ItemType)) continue;
 			
 			label.QueueFree();
 		}
@@ -39,19 +39,19 @@ public partial class TransferInventory : VBoxContainer
 
 	private void AddButtons()
 	{
-		foreach (var item in SourceInventory.Items.Keys)
+		foreach (var item in InventoryToDisplay.Items.Keys)
 		{
 			if (GetChildren().OfType<ItemButton>().Any(label => label.ItemType == item)) continue;
 
-			var button = new ItemButton(item, SourceInventory, TargetInventory);
+			var button = new ItemButton(item, InventoryToDisplay, InventoryToTransferTo);
 			AddChild(button);
 			button.Update();
 			
 			button.Pressed += () =>
 			{
-				if (!SourceInventory.Items.ContainsKey(button.ItemType)) return;
-				SourceInventory.RemoveItem(button.ItemType);
-				TargetInventory.AddItem(button.ItemType);
+				if (!InventoryToDisplay.Items.ContainsKey(button.ItemType)) return;
+				InventoryToDisplay.RemoveItem(button.ItemType);
+				InventoryToTransferTo.AddItem(button.ItemType);
 			};
 		}
 	}

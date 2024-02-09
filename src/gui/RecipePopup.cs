@@ -23,11 +23,6 @@ public partial class RecipePopup : Control
 		_crafter.SetRecipe(recipe);
 	}
 
-	public interface ICrafter
-	{
-		public void SetRecipe(Recipe recipe);
-	}
-	
 	public override void _Ready()
 	{
 		AddButtons();

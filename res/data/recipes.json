@@ -1,70 +1,113 @@
 ﻿{
-  "recipes" : [
+  "recipes": [
     {
-      "name" : "Gear",
-      "ingredients" :
-      {"Iron Bar" : 2}
+      "name": "Gear",
+      "ingredients": {
+        "Iron Bar": 2
+      },
+      "products": {
+        "Gear": 1
+      }
     },
     {
-      "name" : "Belt",
-      "ingredients" :
-      {"Iron Bar" : 1,
-        "Gear" : 1}
+      "name": "Belt",
+      "ingredients": {
+        "Iron Bar": 1,
+        "Gear": 1
+      },
+      "products": {
+        "Belt": 1
+      }
     },
     {
-      "name" : "Inserter",
-      "ingredients" :
-      {"Iron Bar" : 1,
-        "Gear" : 1}
+      "name": "Inserter",
+      "ingredients": {
+        "Iron Bar": 1,
+        "Gear": 1
+      },
+      "products": {
+        "Inserter": 1
+      }
     },
     {
-      "name" : "Assembler",
-      "ingredients" :
-      {"Circuit" : 3,
-        "Iron Bar" : 9,
-        "Gear" : 5}
+      "name": "Assembler",
+      "ingredients": {
+        "Circuit": 3,
+        "Iron Bar": 9,
+        "Gear": 5
+      },
+      "products": {
+        "Assembler": 1
+      }
     },
     {
-      "name" : "Circuit",
-      "ingredients" :
-      {"Copper Cable" : 3,
-        "Iron Bar" : 1}
+      "name": "Circuit",
+      "ingredients": {
+        "Copper Cable": 3,
+        "Iron Bar": 1
+      },
+      "products": {
+        "Circuit": 1
+      }
     },
     {
-      "name" : "Copper Cable",
-      "ingredients" :
-      {"Copper Bar" : 1},
-      "count" : 2
+      "name": "Copper Cable",
+      "ingredients": {
+        "Copper Bar": 1
+      },
+      "products": {
+        "Copper Cable": 2
+      }
     },
     {
-      "name" : "Stone Furnace",
-      "ingredients" :
-      {"Stone" : 5}
+      "name": "Stone Furnace",
+      "ingredients": {
+        "Stone": 5
+      },
+      "products": {
+        "Stone Furnace": 1
+      }
     },
     {
-      "name" : "Mine",
-      "ingredients" :
-      {"Stone Furnace" : 1,
-        "Iron Bar" : 3,
-        "Gear" : 3}
+      "name": "Mine",
+      "ingredients": {
+        "Stone Furnace": 1,
+        "Iron Bar": 3,
+        "Gear": 3
+      },
+      "products": {
+        "Mine": 1
+      }
     },
     {
-      "name" : "Experiment",
-      "ingredients" :
-      {"Copper Bar" : 1,
-        "Gear" : 1}
+      "name": "Experiment",
+      "ingredients": {
+        "Copper Bar": 1,
+        "Gear": 1
+      },
+      "products": {
+        "Experiment": 1
+      }
     },
     {
-      "name" : "Iron Bar",
-      "category" : "smelting",
-      "ingredients" :
-      {"Iron Ore" : 1}
+      "name": "Iron Bar",
+      "category": "smelting",
+      "ingredients": {
+        "Iron Ore": 1
+      },
+      "products": {
+        "Iron Bar": 1
+      }
     },
     {
-      "name" : "Copper Bar",
-      "category" : "smelting",
-      "ingredients" :
-      {"Copper Ore" : 1}
+      "name": "Copper Bar",
+      "category": "smelting",
+      "ingredients": {
+        "Copper Ore": 1
+      },
+      "products": {
+        "Copper Bar": 1
+      }
     }
   ]
 }

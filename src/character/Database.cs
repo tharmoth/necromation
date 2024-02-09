@@ -50,13 +50,16 @@ public class Database
     private static Recipe CreateRecipeFromDict(Godot.Collections.Dictionary<string, Variant> recipeDict)
     {
         var name = recipeDict["name"].As<string>();
-        var ingredientsMap = recipeDict["ingredients"]
+        var ingredients = recipeDict["ingredients"]
+            .As<Godot.Collections.Dictionary<string, int>>()
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        var products = recipeDict["products"]
             .As<Godot.Collections.Dictionary<string, int>>()
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         var count = recipeDict.TryGetValue("count", out var countVariant) ? countVariant.As<int>() : 1;
         var category = recipeDict.TryGetValue("category", out var categoryVariant) ? categoryVariant.As<string>() : "None";
 
-        return new Recipe(name, ingredientsMap, count, category);
+        return new Recipe(name, ingredients, products, category);
     }
     
 }

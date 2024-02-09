@@ -6,7 +6,6 @@
 [node name="RecipeButton" type="PanelContainer"]
 script = ExtResource("1_p5ht2")
 _buildingScene = ExtResource("2_ox5c0")
-_itemType = "Altar"
 
 [node name="Button" type="Button" parent="."]
 custom_minimum_size = Vector2(100, 100)
