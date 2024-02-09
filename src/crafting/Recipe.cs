@@ -12,13 +12,15 @@ public class Recipe
         string name,
         IReadOnlyDictionary<string, int> ingredients,
         IReadOnlyDictionary<string, int> products,
-        string category = "None"
+        string category = "None",
+        float time = 1.0f
     )
     {
         Name = name;
         Ingredients = ingredients;
         Products = products;
         Category = category;
+        Time = time;
     }
 
     public string Name { get; }
@@ -26,6 +28,8 @@ public class Recipe
     
     public IReadOnlyDictionary<string, int> Products { get; }
     public String Category { get; }
+    
+    public float Time { get; }
     
     public bool CanCraft(Inventory inventory)
     {

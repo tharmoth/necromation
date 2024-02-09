@@ -113,7 +113,7 @@ public partial class Zombie : Node2D
 	    if (!eventMouseButton.Pressed || eventMouseButton.ButtonIndex != MouseButton.Left) return;
 	    if (!sprite.GetRect().HasPoint(sprite.ToLocal(GetGlobalMousePosition()))) return;
 
-	    Inventory.Instance.SelectedZombie = this;
+	    // Inventory.Instance.SelectedZombie = this;
     }
     
     public void SetTarget(Node2D target)
