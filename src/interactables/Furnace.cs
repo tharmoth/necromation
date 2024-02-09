@@ -7,7 +7,16 @@ using Necromation.gui;
 public partial class Furnace : Node2D , RecipePopup.ICrafter
 {
 	public Recipe Recipe;
-	
+	private Inventory _inventory = new Inventory();
+
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		
+		if (Recipe?.CanCraft(_inventory) == true) Recipe.Craft(_inventory);
+	}
+
 	public override void _Input(InputEvent @event)
 	{
 		var sprite = GetNode<Sprite2D>("Sprite2D");
@@ -20,14 +29,22 @@ public partial class Furnace : Node2D , RecipePopup.ICrafter
 	private void LeftClick()
 	{
 		GD.Print("Clicked!");
-		Recipe?.Craft(Inventory.Instance);
+		Recipe?.Craft(_inventory);
 		
 	}
 
 	private void RightClick()
 	{
 		GD.Print("Right Clicked!");
-		GUI.Instance.Popup.DisplayPopup(this);
+		if (Recipe == null)
+		{
+			GUI.Instance.Popup.DisplayPopup(this);
+		}
+		else
+		{
+			GUI.Instance.ContainerGui.Display(_inventory);
+		}
+		
 	}
 
 	public void SetRecipe(Recipe recipe)

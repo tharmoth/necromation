@@ -6,4 +6,7 @@
   <ItemGroup>
     <Content Include="res\data\recipes.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\gui\buttons\" />
+  </ItemGroup>
 </Project>

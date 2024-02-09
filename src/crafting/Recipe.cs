@@ -23,7 +23,7 @@ public class Recipe
 
     private int Count { get; }
     public string Name { get; }
-    private IReadOnlyDictionary<string, int> Ingredients { get; }
+    public IReadOnlyDictionary<string, int> Ingredients { get; }
     public String Category { get; }
     
     public bool CanCraft(Inventory inventory)
