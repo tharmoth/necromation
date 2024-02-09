@@ -45,16 +45,11 @@ public partial class Inventory : Node
 		
 	}
 
-	private Zombie _selectedZombie;
-	
-	public Zombie SelectedZombie
+	public static bool TransferItem(Inventory from, Inventory to, string item, int count = 1)
 	{
-		get => _selectedZombie;
-		set
-		{
-			_selectedZombie = value;
-			Listeners.ForEach(listener => listener());
-		}
+		if (!from.RemoveItem(item, count)) return false;
+		to.AddItem(item, count);
+		return true;
 	}
 	
 }

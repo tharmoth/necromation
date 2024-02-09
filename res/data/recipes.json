@@ -2,6 +2,7 @@
   "recipes": [
     {
       "name": "Gear",
+      "time" : 1,
       "ingredients": {
         "Iron Bar": 2
       },
@@ -11,6 +12,7 @@
     },
     {
       "name": "Belt",
+      "time" : 1,
       "ingredients": {
         "Iron Bar": 1,
         "Gear": 1
@@ -21,6 +23,7 @@
     },
     {
       "name": "Inserter",
+      "time" : 1,
       "ingredients": {
         "Iron Bar": 1,
         "Gear": 1
@@ -31,6 +34,7 @@
     },
     {
       "name": "Assembler",
+      "time" : 1,
       "ingredients": {
         "Circuit": 3,
         "Iron Bar": 9,
@@ -42,6 +46,7 @@
     },
     {
       "name": "Circuit",
+      "time" : 1,
       "ingredients": {
         "Copper Cable": 3,
         "Iron Bar": 1
@@ -52,6 +57,7 @@
     },
     {
       "name": "Copper Cable",
+      "time" : 1,
       "ingredients": {
         "Copper Bar": 1
       },
@@ -61,6 +67,7 @@
     },
     {
       "name": "Stone Furnace",
+      "time" : 1,
       "ingredients": {
         "Stone": 5
       },
@@ -70,6 +77,7 @@
     },
     {
       "name": "Mine",
+      "time" : 1,
       "ingredients": {
         "Stone Furnace": 1,
         "Iron Bar": 3,
@@ -81,6 +89,7 @@
     },
     {
       "name": "Experiment",
+      "time" : 1,
       "ingredients": {
         "Copper Bar": 1,
         "Gear": 1
@@ -91,6 +100,7 @@
     },
     {
       "name": "Iron Bar",
+      "time" : 1,
       "category": "smelting",
       "ingredients": {
         "Iron Ore": 1
@@ -101,6 +111,7 @@
     },
     {
       "name": "Copper Bar",
+      "time" : 1,
       "category": "smelting",
       "ingredients": {
         "Copper Ore": 1

@@ -56,10 +56,10 @@ public class Database
         var products = recipeDict["products"]
             .As<Godot.Collections.Dictionary<string, int>>()
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        var count = recipeDict.TryGetValue("count", out var countVariant) ? countVariant.As<int>() : 1;
+        var time = recipeDict.TryGetValue("time", out var timeVariant) ? timeVariant.As<float>() : 1.0f;
         var category = recipeDict.TryGetValue("category", out var categoryVariant) ? categoryVariant.As<string>() : "None";
 
-        return new Recipe(name, ingredients, products, category);
+        return new Recipe(name, ingredients, products, category, time);
     }
     
 }

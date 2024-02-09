@@ -17,16 +17,8 @@ public abstract partial class Interactable  : Node2D
         if (!eventMouseButton.Pressed || eventMouseButton.ButtonIndex != MouseButton.Left) return;
         if (!sprite.GetRect().HasPoint(sprite.ToLocal(GetGlobalMousePosition()))) return;
 
-        if (Inventory.Instance.SelectedZombie != null)
-        {
-            Inventory.Instance.SelectedZombie.SetTarget(this);
-            Inventory.Instance.SelectedZombie.SetMode(Zombie.Mode.Search);
-            Inventory.Instance.SelectedZombie = null;
-        }
-        else
-        {
-            Interact();
-        }
+
+        Interact();
     }
 
     public void Interact()

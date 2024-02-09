@@ -49,9 +49,8 @@ public partial class TransferInventory : VBoxContainer
 			
 			button.Pressed += () =>
 			{
-				if (!InventoryToDisplay.Items.ContainsKey(button.ItemType)) return;
-				InventoryToDisplay.RemoveItem(button.ItemType);
-				InventoryToTransferTo.AddItem(button.ItemType);
+				var count = Input.IsActionPressed("shift") ? InventoryToDisplay.Items[button.ItemType] : 1;
+				Inventory.TransferItem(InventoryToDisplay, InventoryToTransferTo, button.ItemType, count);
 			};
 		}
 	}
