@@ -11,19 +11,20 @@ public class Recipe
     public Recipe(
         string name,
         IReadOnlyDictionary<string, int> ingredients,
-        int count = 1,
+        IReadOnlyDictionary<string, int> products,
         string category = "None"
     )
     {
         Name = name;
         Ingredients = ingredients;
-        Count = count;
+        Products = products;
         Category = category;
     }
 
-    private int Count { get; }
     public string Name { get; }
-    private IReadOnlyDictionary<string, int> Ingredients { get; }
+    public IReadOnlyDictionary<string, int> Ingredients { get; }
+    
+    public IReadOnlyDictionary<string, int> Products { get; }
     public String Category { get; }
     
     public bool CanCraft(Inventory inventory)
@@ -36,15 +37,19 @@ public class Recipe
         return true;
     }
     
-    public void Craft(Inventory inventory)
+    public void Craft(Inventory inventory, Inventory outputInventory = null)
     {
         if (!CanCraft(inventory)) return;
+        outputInventory ??= inventory;
         
         foreach (var (type, amount) in Ingredients)
         {
             inventory.RemoveItem(type, amount);
         }
         
-        inventory.AddItem(Name, Count);
+        foreach (var (type, amount) in Products)
+        {
+            outputInventory.AddItem(type, amount);
+        }
     }
 }

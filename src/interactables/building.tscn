@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://c13ebi8puh40v"]
+[gd_scene load_steps=3 format=3 uid="uid://cbg55wjqe0hop"]
 
 [ext_resource type="Script" path="res://src/interactables/Furnace.cs" id="1_pwetf"]
 [ext_resource type="Texture2D" uid="uid://dofd35ihyr0nl" path="res://res/sprites/Stone Furnace.png" id="2_t15v0"]

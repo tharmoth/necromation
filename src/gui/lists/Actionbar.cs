@@ -6,7 +6,7 @@ using Necromation.character;
 public partial class Actionbar : Control
 {
 	[Export] private string _category = "None";
-	[Export] private PackedScene _buttonScene = GD.Load<PackedScene>("res://src/gui/recipe_button.tscn");
+	[Export] private PackedScene _buttonScene = GD.Load<PackedScene>("res://src/gui/buttons/recipe_button.tscn");
 	
 	public override void _Ready()
 	{

@@ -16,14 +16,7 @@ public partial class ItemList : VBoxContainer
 	{
 		RemoveMissingItems();
 		AddMissingItems();
-
-		foreach (var child in GetChildren())
-		{
-			if (child is ItemLabel label)
-			{
-				label.Update();
-			}
-		}
+		GetChildren().OfType<ItemLabel>().ToList().ForEach(child => child.Update());
 	}
 	
 	private void RemoveMissingItems()

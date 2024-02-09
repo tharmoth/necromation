@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=3 uid="uid://lbatg01khpfb"]
+
+[ext_resource type="Script" path="res://src/gui/CrafterGUI.cs" id="1_tdwk2"]
+[ext_resource type="Script" path="res://src/gui/ChangeRecipeButton.cs" id="2_kcrb5"]
+[ext_resource type="Script" path="res://src/gui/buttons/HideButton.cs" id="2_kfn7v"]
+[ext_resource type="Script" path="res://src/gui/lists/TransferInventory.cs" id="3_otyet"]
+[ext_resource type="Texture2D" uid="uid://hjj5d2l4ripw" path="res://res/sprites/arrow-down.png" id="4_h18pu"]
+
+[node name="ContainerGUI" type="PanelContainer"]
+custom_minimum_size = Vector2(500, 400)
+offset_left = 326.0
+offset_top = 124.0
+offset_right = 826.0
+offset_bottom = 524.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_tdwk2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ChangeRecipeButton" type="Button" parent="VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("_nodeToHide")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Change Recipe"
+script = ExtResource("2_kcrb5")
+_nodeToHide = NodePath("../../..")
+
+[node name="CloseButton" type="Button" parent="VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("_nodeToHide")]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "X"
+script = ExtResource("2_kfn7v")
+_nodeToHide = NodePath("../../..")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Player" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_otyet")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Input" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_otyet")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_h18pu")
+stretch_mode = 2
+
+[node name="Output" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_otyet")
