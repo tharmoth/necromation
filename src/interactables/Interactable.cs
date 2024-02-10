@@ -2,7 +2,7 @@
 
 namespace Necromation;
 
-public abstract partial class Interactable  : Node2D, IInteractable
+public abstract partial class Interactable  : Node2D
 {
     
     private Tween _tween;
@@ -50,11 +50,4 @@ public abstract partial class Interactable  : Node2D, IInteractable
         progressBar.Value = 0;
         progressBar.Visible = false;
     }
-}
-
-public interface IInteractable
-{
-    public void Interact();
-    public void Cancel();
-    public bool CanInteract();
 }

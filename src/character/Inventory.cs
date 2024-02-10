@@ -36,7 +36,8 @@ public partial class Inventory : Node
 
 	public static bool TransferItem(Inventory from, Inventory to, string item, int count = 1)
 	{
-		if (!from.RemoveItem(item, count)) return false;
+		if (from.CountItem(item) < count) return false;
+		from.RemoveItem(item, count);
 		to.AddItem(item, count);
 		return true;
 	}

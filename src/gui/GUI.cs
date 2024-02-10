@@ -8,6 +8,7 @@ public partial class GUI : CanvasLayer
 	public static GUI Instance => _instance;
 	public RecipePopup Popup => GetNode<RecipePopup>("%Popup");
 	public CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
+	public ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	
 	// Use _EnterTree to make sure the Singleton instance is avaiable in _Ready()
 	public override void _EnterTree(){

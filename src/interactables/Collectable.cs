@@ -2,7 +2,7 @@
 
 namespace Necromation;
 
-public partial class Collectable : Interactable, BuildingTileMap.IBuilding
+public partial class Collectable : Interactable, BuildingTileMap.IBuilding, BuildingTileMap.IEntity
 {
     [Export] public string Type { get; set; } = "Stone";
     

@@ -14,6 +14,11 @@ public partial class TransferInventory : VBoxContainer
 			_inventoryToDisplay?.Listeners.Remove(Update);
 			_inventoryToDisplay = value;
 			_inventoryToDisplay.Listeners.Add(Update);
+			GetChildren().OfType<ItemButton>().ToList().ForEach(button =>
+			{
+				RemoveChild(button);
+				button.QueueFree();
+			});
 			Update();
 		}
 		

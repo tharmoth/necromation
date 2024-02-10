@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://hjj5d2l4ripw" path="res://res/sprites/arrow-down.png" id="4_h18pu"]
 [ext_resource type="Script" path="res://src/gui/ProgressTracker.cs" id="5_bx4wq"]
 
-[node name="ContainerGUI" type="PanelContainer"]
+[node name="CrafterGUI" type="PanelContainer"]
 custom_minimum_size = Vector2(500, 400)
 offset_left = 326.0
 offset_top = 124.0

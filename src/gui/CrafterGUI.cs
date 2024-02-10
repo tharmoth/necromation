@@ -26,6 +26,5 @@ public partial class CrafterGUI : Control
 		{
 			GetNode<ProgressTracker>("%ProgressBar").NodeToTrack = progress;
 		}
-		
 	}
 }

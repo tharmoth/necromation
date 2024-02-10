@@ -2,15 +2,16 @@ using Godot;
 using System;
 using Necromation;
 using Necromation.character;
+using IInteractable = Necromation.interfaces.IInteractable;
 
 public partial class Character : Node2D
 {
-	Inventory _inventory = new Inventory();
-	private Object _selected = null;
+	Inventory _inventory = new();
+	private Object _selected;
 	private Tween _tween;
 	private Sprite2D _sprite;
 	private float _speed = 100;
-	private IInteractable _interactable;
+	private Interactable _resource;
 
 	public Object Selected
 	{
@@ -37,6 +38,7 @@ public partial class Character : Node2D
 	{
 		AddToGroup("player");
 		_inventory.AddItem("Stone", 500);
+		_inventory.AddItem("Mine", 3);
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
@@ -77,23 +79,23 @@ public partial class Character : Node2D
 
 	private void ProcessCursor()
 	{
-		if (Input.IsMouseButtonPressed(MouseButton.Right) && GetBuildingAtMouse() is Interactable building)
+		if (Input.IsMouseButtonPressed(MouseButton.Right) && GetResorceAtMouse() is Interactable resource)
 		{
-			if (building == _interactable && !_interactable.CanInteract()) return;
-			_interactable?.Cancel();
-			_interactable = building;
-			_interactable.Interact();
+			if (resource == _resource && !_resource.CanInteract()) return;
+			_resource?.Cancel();
+			_resource = resource;
+			_resource.Interact();
 		}
 		else
 		{
-			_interactable?.Cancel();
-			_interactable = null;
+			_resource?.Cancel();
+			_resource = null;
 		}
 
-		if (Input.IsActionJustPressed("left_click") && GetBuildingAtMouse() is Furnace furnace) furnace.Interact();
+		if (Input.IsActionJustPressed("left_click") && GetBuildingAtMouse() is IInteractable interactable) interactable.Interact();
 		
 		if (Selected != null) ProcessCursorSelected();
-		else if (Globals.TileMap.GetBuilding(GetGlobalMousePosition()) != null) ProcessCursorMouseover();
+		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition()).Count > 0) ProcessCursorMouseover();
 		else _sprite.Visible = false;
 		
 		if (Input.IsMouseButtonPressed(MouseButton.Left)) LeftMouseButtonPressed();
@@ -120,7 +122,7 @@ public partial class Character : Node2D
 		_tween?.Kill();
 		_tween = null;
 		_sprite.Visible = true;
-		_sprite.Modulate = Globals.TileMap.PositionEmpty(GetGlobalMousePosition()) ? Colors.Green : Colors.Red;
+		_sprite.Modulate = GetBuildingAtMouse() == null ? Colors.Green : Colors.Red;
 		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
 	}
 
@@ -143,12 +145,18 @@ public partial class Character : Node2D
 		}
 		
 		var position = GetGlobalMousePosition();
-		if (!Globals.TileMap.PositionEmpty(position)) return;
+		if (!Globals.TileMap.IsEmpty(position, BuildingTileMap.LayerNames.Buildings)) return;
 		
 		_inventory.RemoveItem(selectedItem);
 
-		var building = GD.Load<PackedScene>("res://src/interactables/building.tscn").Instantiate<Node2D>();
-		Globals.TileMap.Build(position, building as BuildingTileMap.IBuilding);
+		Building building = selectedItem switch
+		{
+			"Mine" => new Mine(),
+			"Stone Furnace" => new Furnace(),
+			_ => null
+		};
+		
+		Globals.TileMap.AddEntity(position, building, BuildingTileMap.LayerNames.Buildings);
 		
 		if(!_inventory.Items.ContainsKey(selectedItem)) Selected = null;
 	}
@@ -156,13 +164,19 @@ public partial class Character : Node2D
 	private void RemoveBuilding()
 	{
 		var building = GetBuildingAtMouse();
-		if (building is null || !building.CanRemove()) return;
-		Globals.TileMap.Remove(building);
-		_inventory.AddItem(building.ItemType);
+		if (building is not BuildingTileMap.IBuilding buildingEntity) return;
+		if (!buildingEntity.CanRemove()) return;
+		Globals.TileMap.RemoveEntity(building);
+		_inventory.AddItem(buildingEntity.ItemType);
 	}
 
-	private BuildingTileMap.IBuilding GetBuildingAtMouse()
+	private BuildingTileMap.IEntity GetBuildingAtMouse()
 	{
-		return Globals.TileMap.GetBuilding(GetGlobalMousePosition());
+		return Globals.TileMap.GetEntities(GetGlobalMousePosition(), BuildingTileMap.LayerNames.Buildings);
+	}
+	
+	private BuildingTileMap.IEntity GetResorceAtMouse()
+	{
+		return Globals.TileMap.GetEntities(GetGlobalMousePosition(), BuildingTileMap.LayerNames.Resources);
 	}
 }

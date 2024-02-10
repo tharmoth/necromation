@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=14 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/gui/GUI.cs" id="1_yiksk"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/gui/lists/Actionbar.cs" id="4_jsksr"]
 [ext_resource type="PackedScene" uid="uid://cgfjtesm7s5bm" path="res://src/gui/popup.tscn" id="6_pwh8y"]
 [ext_resource type="PackedScene" uid="uid://37ciggwme04r" path="res://src/interactables/spawner.tscn" id="6_ummi6"]
+[ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/gui/container_gui.tscn" id="7_cu3ym"]
 [ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/gui/CrafterGUI.tscn" id="7_ky81d"]
 [ext_resource type="PackedScene" uid="uid://cc5nx8t4olpjn" path="res://src/gui/item_label.tscn" id="7_ofafi"]
 [ext_resource type="Script" path="res://src/BuildingTileMap.cs" id="8_rdg81"]
@@ -84,6 +85,11 @@ offset_right = 250.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ContainerGUI" parent="GUI/Control" instance=ExtResource("7_cu3ym")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_1emfp")
