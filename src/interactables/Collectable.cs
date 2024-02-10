@@ -16,7 +16,7 @@ public partial class Collectable : Interactable
     protected override void Complete()
     {
         base.Complete();
-        Inventory.Instance.AddItem(Type);
+        Globals.PlayerInventory.AddItem(Type);
         QueueFree();
     }
 }

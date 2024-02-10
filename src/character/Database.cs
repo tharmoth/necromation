@@ -12,18 +12,7 @@ namespace Necromation.character;
 // https://json2csharp.com/
 public class Database
 {
-    private static Database _instance;
-    public static Database Instance
-    {
-        get
-        {
-            _instance ??= new Database();
-            return _instance;
-        }
-    }
-
     public readonly IReadOnlyList<Recipe> Recipes = LoadRecipes();
-
 
     private static List<Recipe> LoadRecipes()
     {

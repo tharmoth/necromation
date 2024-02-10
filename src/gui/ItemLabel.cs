@@ -9,6 +9,6 @@ public partial class ItemLabel : Container
     public void Update()
     {
         GetNode<Label>("Label").Text = ItemType;
-        GetNode<Label>("Counter").Text = Inventory.Instance.CountItem(ItemType).ToString();
+        GetNode<Label>("Counter").Text = Globals.PlayerInventory.CountItem(ItemType).ToString();
     }
 }

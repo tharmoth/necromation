@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Necromation;
 using Necromation.gui;
 
 public partial class CrafterGUI : Control
@@ -8,14 +9,14 @@ public partial class CrafterGUI : Control
 	{
 		Visible = true;
 		
-		GetNode<TransferInventory>("%Player").InventoryToDisplay = Inventory.Instance;
+		GetNode<TransferInventory>("%Player").InventoryToDisplay = Globals.PlayerInventory;
 		GetNode<TransferInventory>("%Player").InventoryToTransferTo = crafter.GetInputInventory();
 		
 		GetNode<TransferInventory>("%Input").InventoryToDisplay = crafter.GetInputInventory();
-		GetNode<TransferInventory>("%Input").InventoryToTransferTo = Inventory.Instance;
+		GetNode<TransferInventory>("%Input").InventoryToTransferTo = Globals.PlayerInventory;
 		
 		GetNode<TransferInventory>("%Output").InventoryToDisplay = crafter.GetOutputInventory();
-		GetNode<TransferInventory>("%Output").InventoryToTransferTo = Inventory.Instance;
+		GetNode<TransferInventory>("%Output").InventoryToTransferTo = Globals.PlayerInventory;
 		
 		GetNode<ChangeRecipeButton>("%ChangeRecipeButton")._crafter = crafter;
 		
