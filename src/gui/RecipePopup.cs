@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using Necromation;
 using Necromation.character;
 using Necromation.gui;
 
@@ -30,7 +31,7 @@ public partial class RecipePopup : Control
 	
 	private void AddButtons()
 	{
-		foreach (var recipe in Database.Instance.Recipes.Where(recipe => recipe.Category == _category))
+		foreach (var recipe in Globals.Database.Recipes.Where(recipe => recipe.Category == _category))
 		{
 			var button = new Button();
 			button.CustomMinimumSize = new Vector2(100, 30);

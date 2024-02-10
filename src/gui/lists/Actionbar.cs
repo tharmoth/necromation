@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using Necromation;
 using Necromation.character;
 
 public partial class Actionbar : Control
@@ -15,7 +16,7 @@ public partial class Actionbar : Control
 	
 	private void AddMissingItems()
 	{
-		foreach (var item in Database.Instance.Recipes.Where(recipe => recipe.Category == _category))
+		foreach (var item in Globals.Database.Recipes.Where(recipe => recipe.Category == _category))
 		{
 			var button = _buttonScene.Instantiate<RecipeButton>();
 			button.ItemType = item.Name;

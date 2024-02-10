@@ -6,20 +6,9 @@ using System.Linq;
 
 public partial class Inventory : Node
 {
-	private static Inventory _instance;
-	public static Inventory Instance => _instance;
-	
 	public readonly List<Action> Listeners = new();
 
 	private readonly Dictionary<string, int> _items = new();
-
-	public override void _EnterTree(){
-		if(_instance != null){
-			QueueFree(); // The Singleton is already loaded, kill this instance
-		}
-		_instance = this;
-		_instance.AddItem("Stone", 10);
-	}
 
 	public ImmutableDictionary<string, int> Items => _items.ToImmutableDictionary();
 	

@@ -4,7 +4,7 @@ using System.Linq;
 using Necromation.character;
 using Necromation.gui;
 
-public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress
+public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress, BuildingTileMap.IBuilding
 {
 	private Recipe _recipe;
 	private Inventory _inputInventory = new Inventory();
@@ -73,4 +73,6 @@ public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress
 		if (_recipe == null) return 0;
 		return _time / _recipe.Time;
 	}
+
+	public string ItemType => "Stone Furnace";
 }

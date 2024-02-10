@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using Necromation;
 using Necromation.gui;
 
 public partial class ItemList : VBoxContainer
@@ -8,7 +9,7 @@ public partial class ItemList : VBoxContainer
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Inventory.Instance.Listeners.Add(Update);
+		Globals.PlayerInventory.Listeners.Add(Update);
 		Update();
 	}
 
@@ -23,7 +24,7 @@ public partial class ItemList : VBoxContainer
 	{
 		foreach (var label in GetChildren().OfType<ItemLabel>().ToHashSet())
 		{
-			if (Inventory.Instance.Items.ContainsKey(label.ItemType)) continue;
+			if (Globals.PlayerInventory.Items.ContainsKey(label.ItemType)) continue;
 			
 			label.QueueFree();
 		}
@@ -31,7 +32,7 @@ public partial class ItemList : VBoxContainer
 
 	private void AddMissingItems()
 	{
-		foreach (var item in Inventory.Instance.Items.Keys)
+		foreach (var item in Globals.PlayerInventory.Items.Keys)
 		{
 			if (GetChildren().OfType<ItemLabel>().Any(label => label.ItemType == item)) continue;
 			

@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using Necromation;
 using Necromation.gui;
 
 public partial class RecipeButton : PanelContainer
@@ -17,8 +18,6 @@ public partial class RecipeButton : PanelContainer
 		}
 	}
 	public Recipe Recipe { get; set; }
-	
-	private bool _buildMode;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -26,31 +25,12 @@ public partial class RecipeButton : PanelContainer
 		GetNode<Button>("Button").GuiInput += ButtonPressed;
 		GetNode<Button>("Button").Text = ItemType;
         
-		Inventory.Instance.Listeners.Add(Update);
+		Globals.PlayerInventory.Listeners.Add(Update);
 	}
 	
 	private void Update()
 	{
-		GetNode<Label>("Label").Text = Inventory.Instance.CountItem(ItemType).ToString();
-	}
-	
-	public override void _Input(InputEvent @event)
-	{
-		base._Input(@event);
-		
-		if (@event is not InputEventMouseButton eventMouseButton) return;
-		if (eventMouseButton.Pressed && eventMouseButton.ButtonIndex == MouseButton.Right) _buildMode = false;
-		if (!eventMouseButton.Pressed || eventMouseButton.ButtonIndex != MouseButton.Left) return;
-		if (!_buildMode) return;
-		if (Inventory.Instance.CountItem(ItemType) < 1) return;
-		
-		
-		_buildMode = false;
-		Inventory.Instance.RemoveItem(ItemType);
-
-		var building = _buildingScene.Instantiate<Node2D>();
-		GetTree().Root.AddChild(building);
-		building.GlobalPosition = building.GetGlobalMousePosition();
+		GetNode<Label>("Label").Text = Globals.PlayerInventory.CountItem(ItemType).ToString();
 	}
 
 	private void ButtonPressed(InputEvent @event)
@@ -58,11 +38,11 @@ public partial class RecipeButton : PanelContainer
 		if (@event is not InputEventMouseButton eventMouseButton || eventMouseButton.Pressed) return;
 		if (eventMouseButton.ButtonIndex == MouseButton.Left)
 		{
-			_buildMode = true;
+			Globals.Player.Selected = ItemType;
 		}
 		else if (eventMouseButton.ButtonIndex == MouseButton.Right)
 		{
-			Recipe.Craft(Inventory.Instance);
+			Recipe.Craft(Globals.PlayerInventory);
 		}
 	}
 }
