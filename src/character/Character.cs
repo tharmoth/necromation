@@ -12,6 +12,7 @@ public partial class Character : Node2D
 	private Sprite2D _sprite;
 	private float _speed = 100;
 	private Interactable _resource;
+	private int rotationDegrees = 0;
 
 	public Object Selected
 	{
@@ -39,6 +40,7 @@ public partial class Character : Node2D
 		AddToGroup("player");
 		_inventory.AddItem("Stone", 500);
 		_inventory.AddItem("Mine", 3);
+		_inventory.AddItem("Inserter", 3);
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
@@ -68,6 +70,13 @@ public partial class Character : Node2D
 		{
 			Position += new Vector2(0, _speed * (float)delta);
 		}
+
+		if (Input.IsActionJustPressed("rotate"))
+		{
+			rotationDegrees += 90;
+			if (rotationDegrees == 360) rotationDegrees = 0;
+		}
+		if (Selected == null) rotationDegrees = 0;
 
 		if (Input.IsActionPressed("close_gui"))
 		{
@@ -122,6 +131,7 @@ public partial class Character : Node2D
 		_tween?.Kill();
 		_tween = null;
 		_sprite.Visible = true;
+		_sprite.RotationDegrees = rotationDegrees;
 		_sprite.Modulate = GetBuildingAtMouse() == null ? Colors.Green : Colors.Red;
 		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
 	}
@@ -153,6 +163,8 @@ public partial class Character : Node2D
 		{
 			"Mine" => new Mine(),
 			"Stone Furnace" => new Furnace(),
+			"Inserter" => new Inserter(rotationDegrees),
+			"Stone Chest" => new StoneChest(),
 			_ => null
 		};
 		

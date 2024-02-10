@@ -3,7 +3,7 @@ using Necromation.interfaces;
 
 namespace Necromation;
 
-public partial class Mine : Building, IInteractable
+public partial class Mine : Building, IInteractable, Inserter.ITransferTarget
 {
     private Inventory _inventory = new();
     private float _time;
@@ -39,5 +39,15 @@ public partial class Mine : Building, IInteractable
     public void Interact()
     {
          GUI.Instance.ContainerGui.Display(Globals.PlayerInventory, _inventory, ItemType);
+    }
+
+    public Inventory GetInputInventory()
+    {
+        return _inventory;
+    }
+
+    public Inventory GetOutputInventory()
+    {
+        return _inventory;
     }
 }

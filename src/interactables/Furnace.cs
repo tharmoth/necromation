@@ -6,7 +6,7 @@ using Necromation.character;
 using Necromation.gui;
 using Necromation.interfaces;
 
-public partial class Furnace : Building, ICrafter, IInteractable
+public partial class Furnace : Building, ICrafter, IInteractable, Inserter.ITransferTarget
 {
 	private Recipe _recipe;
 	private Inventory _inputInventory = new Inventory();

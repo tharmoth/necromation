@@ -119,6 +119,17 @@
       "products": {
         "Copper Bar": 1
       }
+    },
+    {
+      "name": "Stone Chest",
+      "time" : 1,
+      "ingredients": {
+        "Stone": 5
+      },
+      "products": {
+        "Stone Chest": 1
+      }
     }
+    
   ]
 }
