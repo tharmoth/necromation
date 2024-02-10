@@ -36,7 +36,7 @@ public partial class RecipeButton : PanelContainer
 	private void ButtonPressed(InputEvent @event)
 	{
 		if (@event is not InputEventMouseButton eventMouseButton || eventMouseButton.Pressed) return;
-		if (eventMouseButton.ButtonIndex == MouseButton.Left)
+		if (eventMouseButton.ButtonIndex == MouseButton.Left && Globals.PlayerInventory.CountItem(ItemType) > 0)
 		{
 			Globals.Player.Selected = ItemType;
 		}

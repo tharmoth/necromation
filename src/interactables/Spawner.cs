@@ -6,9 +6,7 @@ public partial class Spawner : Node2D
 {
 	[Export] private PackedScene _type;
 	[Export] private string _resourceType = "Stone";
-	[Export] private int _range = 100;
-	[Export] private int _timeSeconds = 5;
-	[Export] private int _maxSpawned = 5;
+	[Export] private int _radius = 3;
 	
 	private double _time;
 
@@ -16,29 +14,26 @@ public partial class Spawner : Node2D
 	{
 		base._Ready();
 		GetNode<Sprite2D>("Sprite2D").Visible = false;
-		_spawn();
-		_spawn();
-		_spawn();
-	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-		_time += delta;
-		if (_time > _timeSeconds && GetChildCount() <= _maxSpawned)
-		{
-			_time = 0;
-			_spawn();
-		}
+		CallDeferred("_spawn");
 	}
 
 	private void _spawn()
 	{
-		var spawn = _type.Instantiate<Collectable>();
-		spawn.Type = _resourceType;
-		// Place the scene within the spawner's range
-		AddChild(spawn);
-		spawn.GlobalPosition = GlobalPosition + new Vector2((float)GD.RandRange(-_range, _range), (float)GD.RandRange(-_range, _range));
+		var mapPos = Globals.TileMap.GlobalToMap(GlobalPosition);
+		for (var x = -_radius; x <= _radius; x++)
+		{
+			for (var y = -_radius; y <= _radius; y++)
+			{
+				// If the distance from the origin is more than five, skip
+				if (Math.Sqrt(x * x + y * y) > _radius) continue;
+				// Randomly skip some tiles with a frequency increasing closer to the edge
+				if (new Random().NextDouble() > 1.5 - Math.Sqrt(x * x + y * y) / _radius) continue;
+				
+				var spawn = _type.Instantiate<Collectable>();
+				spawn.Type = _resourceType;
+				Globals.TileMap.Build(mapPos + new Vector2I(x, y), spawn);
+			}
+		}
 	}
-	
 }

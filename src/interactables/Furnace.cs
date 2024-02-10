@@ -28,14 +28,6 @@ public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress, Bui
 		_recipe.Craft(_inputInventory, _outputInventory);
 	}
 
-	public override void _Input(InputEvent @event)
-	{
-		var sprite = GetNode<Sprite2D>("Sprite2D");
-		if (@event is not InputEventMouseButton eventMouseButton) return;
-		if (!sprite.GetRect().HasPoint(sprite.ToLocal(GetGlobalMousePosition()))) return;
-		if (!eventMouseButton.Pressed && eventMouseButton.ButtonIndex == MouseButton.Left) LeftClick();
-	}
-
 	private void LeftClick()
 	{
 		if (_recipe == null)
@@ -75,4 +67,8 @@ public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress, Bui
 	}
 
 	public string ItemType => "Stone Furnace";
+	public bool CanRemove()
+	{
+		return true;
+	}
 }

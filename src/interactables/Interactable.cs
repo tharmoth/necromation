@@ -9,17 +9,6 @@ public abstract partial class Interactable  : Node2D
     
     [Export]
     private float duration = 1.0f;
-	
-    public override void _Input(InputEvent @event)
-    {
-        var sprite = GetNode<Sprite2D>("Sprite2D");
-        if (@event is not InputEventMouseButton eventMouseButton) return;
-        if (!eventMouseButton.Pressed || eventMouseButton.ButtonIndex != MouseButton.Left) return;
-        if (!sprite.GetRect().HasPoint(sprite.ToLocal(GetGlobalMousePosition()))) return;
-
-
-        Interact();
-    }
 
     public void Interact()
     {

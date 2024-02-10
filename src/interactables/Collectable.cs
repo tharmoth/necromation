@@ -2,7 +2,7 @@
 
 namespace Necromation;
 
-public partial class Collectable : Interactable
+public partial class Collectable : Interactable, BuildingTileMap.IBuilding
 {
     [Export] public string Type { get; set; } = "Stone";
     
@@ -17,6 +17,12 @@ public partial class Collectable : Interactable
     {
         base.Complete();
         Globals.PlayerInventory.AddItem(Type);
-        QueueFree();
+        // QueueFree();
+    }
+
+    public string ItemType => Type;
+    public bool CanRemove()
+    {
+        return false;
     }
 }

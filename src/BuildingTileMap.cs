@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Necromation;
 
 public partial class BuildingTileMap : SKTileMap
@@ -11,11 +12,11 @@ public partial class BuildingTileMap : SKTileMap
 		Globals.TileMap = this;
 	}
 	
-	public bool CanBuild(Vector2 globalPosition){
-		return CanBuild(GlobalToMap(globalPosition));
+	public bool PositionEmpty(Vector2 globalPosition){
+		return PositionEmpty(GlobalToMap(globalPosition));
 	}
 	
-	public bool CanBuild(Vector2I position){
+	public bool PositionEmpty(Vector2I position){
 		return !_buildings.ContainsKey(position);
 	}
 	
@@ -24,7 +25,7 @@ public partial class BuildingTileMap : SKTileMap
 	}
 	
 	public void Build(Vector2I position, IBuilding building){
-		if (!CanBuild(position)) return;
+		if (!PositionEmpty(position)) return;
 		_buildings.Add(position, building);
 		
 		if (building is not Node2D buildingNode) return;
@@ -43,6 +44,11 @@ public partial class BuildingTileMap : SKTileMap
 		GetTree().Root.RemoveChild(buildingNode);
 	}
 	
+	public void Remove(IBuilding building){
+		var position = _buildings.First(pair => pair.Value == building).Key;
+		Remove(position);
+	}
+	
 	public IBuilding GetBuilding(Vector2I position){
 		return _buildings.ContainsKey(position) ? _buildings[position] : null;
 	}
@@ -54,5 +60,6 @@ public partial class BuildingTileMap : SKTileMap
 	public interface IBuilding
 	{
 		public string ItemType { get; }
+		public bool CanRemove();
 	}
 }
