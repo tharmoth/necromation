@@ -10,4 +10,14 @@ public partial class HideButton : Button
 		base._Pressed();
 		_nodeToHide.Visible = false;
 	}
+
+	public override void _Input(InputEvent @event)
+	{
+		base._Input(@event);
+		if (Input.IsActionPressed("close_gui"))
+		{
+			_nodeToHide.Visible = false;
+		}
+		
+	}
 }

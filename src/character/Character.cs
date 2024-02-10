@@ -8,6 +8,9 @@ public partial class Character : Node2D
 	Inventory _inventory = new Inventory();
 	private Object _selected = null;
 	private Tween _tween;
+	private Sprite2D _sprite;
+	private float _speed = 100;
+	private IInteractable _interactable;
 
 	public Object Selected
 	{
@@ -22,7 +25,6 @@ public partial class Character : Node2D
 			}
 		}
 	}
-	private Sprite2D _sprite;
 	
 	public override void _EnterTree()
 	{
@@ -31,22 +33,17 @@ public partial class Character : Node2D
 		Globals.Player = this;
 	}
 
-	private float _speed = 100;
-	
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
-	
-	
-	
 	{
 		AddToGroup("player");
 		_inventory.AddItem("Stone", 500);
 		_sprite = new Sprite2D();
-		_sprite.ZIndex = 1;
+		_sprite.ZIndex = 2;
+		_sprite.Visible = false;
+		_sprite.Texture = GD.Load<Texture2D>("res://res/sprites/selection.png");
 		GetTree().Root.CallDeferred("add_child", _sprite);
 	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	
 	public override void _Process(double delta)
 	{
 		// Move the character at speed
@@ -69,33 +66,46 @@ public partial class Character : Node2D
 		{
 			Position += new Vector2(0, _speed * (float)delta);
 		}
-		
-		if (Input.IsMouseButtonPressed(MouseButton.Left) && GetBuildingAtMouse() is Interactable building) building.Interact();
+
+		if (Input.IsActionPressed("close_gui"))
+		{
+			Selected = null;
+		}
 
 		ProcessCursor();
 	}
 
 	private void ProcessCursor()
 	{
-		if (Selected != null)
+		if (Input.IsMouseButtonPressed(MouseButton.Right) && GetBuildingAtMouse() is Interactable building)
 		{
-			ProcessCursorSelected();
-		}
-		else if (Globals.TileMap.GetBuilding(GetGlobalMousePosition()) != null)
-		{
-			ProcessCursorMouseover();
+			if (building == _interactable && !_interactable.CanInteract()) return;
+			_interactable?.Cancel();
+			_interactable = building;
+			_interactable.Interact();
 		}
 		else
 		{
-			_sprite.Visible = false;
+			_interactable?.Cancel();
+			_interactable = null;
 		}
+
+		if (Input.IsActionJustPressed("left_click") && GetBuildingAtMouse() is Furnace furnace) furnace.Interact();
+		
+		if (Selected != null) ProcessCursorSelected();
+		else if (Globals.TileMap.GetBuilding(GetGlobalMousePosition()) != null) ProcessCursorMouseover();
+		else _sprite.Visible = false;
+		
+		if (Input.IsMouseButtonPressed(MouseButton.Left)) LeftMouseButtonPressed();
+		if (Input.IsMouseButtonPressed(MouseButton.Right)) RightMouseButtonPressed();
+		if (Input.IsMouseButtonPressed(MouseButton.Right)) Selected = null;
 	}
 
 	private void ProcessCursorMouseover()
 	{
 		_sprite.Visible = true;
-		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
 		_sprite.Modulate = Colors.White;
+		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
 
 		if (_tween != null) return;
 
@@ -114,17 +124,6 @@ public partial class Character : Node2D
 		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
 	}
 
-	public override void _Input(InputEvent @event)
-	{
-		base._Input(@event);
-
-		if (Input.IsMouseButtonPressed(MouseButton.Left)) LeftMouseButtonPressed();
-		if (Input.IsMouseButtonPressed(MouseButton.Right)) RightMouseButtonPressed();
-		
-		if (@event is not InputEventMouseButton eventMouseButton) return;
-		if (!eventMouseButton.Pressed && eventMouseButton.ButtonIndex == MouseButton.Right) RightClick();
-	}
-	
 	private void LeftMouseButtonPressed()
 	{
 		if (Selected is string selectedString) Build(selectedString);
@@ -133,11 +132,6 @@ public partial class Character : Node2D
 	private void RightMouseButtonPressed()
 	{
 		RemoveBuilding();
-	}
-	
-	private void RightClick()
-	{
-		Selected = null;
 	}
 
 	private void Build(string selectedItem)
@@ -162,9 +156,9 @@ public partial class Character : Node2D
 	private void RemoveBuilding()
 	{
 		var building = GetBuildingAtMouse();
-		if (building is null) return;
+		if (building is null || !building.CanRemove()) return;
 		Globals.TileMap.Remove(building);
-		_inventory.AddItem(building.ItemType, 1);
+		_inventory.AddItem(building.ItemType);
 	}
 
 	private BuildingTileMap.IBuilding GetBuildingAtMouse()

@@ -18,6 +18,11 @@ public partial class RecipePopup : Control
 		_crafter = crafter;
 	}
 	
+	public void HidePopup()
+	{
+		Visible = false;
+	}
+	
 	public void SetRecipe(Recipe recipe)
 	{
 		Visible = false;

@@ -1,10 +1,11 @@
 using Godot;
 using System;
 using System.Linq;
+using Necromation;
 using Necromation.character;
 using Necromation.gui;
 
-public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress, BuildingTileMap.IBuilding
+public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress, BuildingTileMap.IBuilding, IInteractable
 {
 	private Recipe _recipe;
 	private Inventory _inputInventory = new Inventory();
@@ -28,7 +29,7 @@ public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress, Bui
 		_recipe.Craft(_inputInventory, _outputInventory);
 	}
 
-	private void LeftClick()
+	public void Interact()
 	{
 		if (_recipe == null)
 		{
@@ -38,6 +39,13 @@ public partial class Furnace : Node2D , ICrafter, ProgressTracker.IProgress, Bui
 		{
 			GUI.Instance.CrafterGui.Display(this);
 		}
+	}
+
+	public void Cancel() { }
+	
+	public bool CanInteract()
+	{
+		return true;
 	}
 
 	public Recipe GetRecipe(Recipe recipe)

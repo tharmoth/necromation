@@ -31,8 +31,6 @@ public partial class BuildingTileMap : SKTileMap
 		if (building is not Node2D buildingNode) return;
 		GetTree().Root.AddChild(buildingNode);
 		buildingNode.GlobalPosition = Globals.TileMap.MapToGlobal(position);
-		
-		GD.Print("Placed building at " + position);
 	}
 	
 	public void Remove(Vector2I position){
