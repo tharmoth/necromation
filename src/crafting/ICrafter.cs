@@ -21,4 +21,9 @@ public interface ICrafter
      * Returns the inventory that the crafter uses to store the products
      */
     public Inventory GetOutputInventory();
+
+    /*
+     * Returns the item category that the crafter can craft.
+     */
+    public string GetCategory();
 }

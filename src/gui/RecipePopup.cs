@@ -13,9 +13,17 @@ public partial class RecipePopup : Control
 	
 	public void DisplayPopup(ICrafter crafter)
 	{
+		_category = crafter.GetCategory();
 		GlobalPosition = GetViewport().GetMousePosition() + new Vector2(40, 0);
 		Visible = true;
 		_crafter = crafter;
+
+		GetNode("RecipeList").GetChildren().OfType<Button>().ToList().ForEach(button =>
+		{
+			RemoveChild(button);
+			button.QueueFree();
+		});
+		AddButtons();
 	}
 	
 	public void HidePopup()
@@ -27,11 +35,6 @@ public partial class RecipePopup : Control
 	{
 		Visible = false;
 		_crafter.SetRecipe(recipe);
-	}
-
-	public override void _Ready()
-	{
-		AddButtons();
 	}
 	
 	private void AddButtons()

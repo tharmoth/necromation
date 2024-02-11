@@ -41,6 +41,7 @@ public partial class Character : Node2D
 		_inventory.AddItem("Stone", 500);
 		_inventory.AddItem("Mine", 3);
 		_inventory.AddItem("Inserter", 3);
+		_inventory.AddItem("Assembler", 3);
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
@@ -50,6 +51,10 @@ public partial class Character : Node2D
 	
 	public override void _Process(double delta)
 	{
+		if (GUI.Instance.CrafterGui.Visible) return;
+		if (GUI.Instance.Popup.Visible) return;
+		if (GUI.Instance.ContainerGui.Visible) return;
+		
 		// Move the character at speed
 		if (Input.IsActionPressed("right"))
 		{
@@ -165,7 +170,8 @@ public partial class Character : Node2D
 			"Stone Furnace" => new Furnace(),
 			"Inserter" => new Inserter(rotationDegrees),
 			"Stone Chest" => new StoneChest(),
-			_ => null
+			"Assembler" => new Assembler(),
+			_ =>  throw new NotImplementedException()
 		};
 		
 		Globals.TileMap.AddEntity(position, building, BuildingTileMap.LayerNames.Buildings);
