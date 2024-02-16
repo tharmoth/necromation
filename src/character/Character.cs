@@ -62,39 +62,21 @@ public partial class Character : Node2D
 		if (GUI.Instance.ContainerGui.Visible) return;
 		
 		// Move the character at speed
-		if (Input.IsActionPressed("right"))
-		{
-			Position += new Vector2(_speed * (float)delta, 0);
-		}
-
-		if (Input.IsActionPressed("left"))
-		{
-			Position += new Vector2(-_speed * (float)delta, 0);
-		}
-		
-		if (Input.IsActionPressed("up"))
-		{
-			Position += new Vector2(0, -_speed * (float)delta);
-		}
-
-		if (Input.IsActionPressed("down"))
-		{
-			Position += new Vector2(0, _speed * (float)delta);
-		}
-
-		if (Input.IsActionJustPressed("rotate"))
-		{
-			rotationDegrees += 90;
-			if (rotationDegrees == 360) rotationDegrees = 0;
-		}
+		if (Input.IsActionPressed("right")) Position += new Vector2(_speed * (float)delta, 0);
+		if (Input.IsActionPressed("left")) Position += new Vector2(-_speed * (float)delta, 0);
+		if (Input.IsActionPressed("up")) Position += new Vector2(0, -_speed * (float)delta);
+		if (Input.IsActionPressed("down")) Position += new Vector2(0, _speed * (float)delta);
+		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Selected == null) rotationDegrees = 0;
-
-		if (Input.IsActionPressed("close_gui"))
-		{
-			Selected = null;
-		}
+		if (Input.IsActionPressed("close_gui")) Selected = null;
 
 		ProcessCursor();
+	}
+	
+	private void RotateSelection()
+	{
+		rotationDegrees += 90;
+		if (rotationDegrees == 360) rotationDegrees = 0;
 	}
 
 	private void ProcessCursor()
@@ -190,6 +172,13 @@ public partial class Character : Node2D
 		};
 		
 		Globals.TileMap.AddEntity(position, building, BuildingTileMap.LayerNames.Buildings);
+
+		// TODO: I don't like having this exception.
+		if (building is UndergroundBelt)
+		{
+			RotateSelection();
+			RotateSelection();
+		}
 		
 		if(!_inventory.Items.ContainsKey(selectedItem)) Selected = null;
 	}
@@ -202,10 +191,6 @@ public partial class Character : Node2D
 		{
 			inputTarget.GetInputInventory().TransferAllTo(_inventory);
 			inputTarget.GetOutputInventory().TransferAllTo(_inventory);
-		} 
-		else if (building is Belt belt)
-		{
-			belt.TransferAllTo(_inventory);
 		}
 		_inventory.Insert(buildingEntity.ItemType);
 		

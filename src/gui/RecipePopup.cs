@@ -20,7 +20,7 @@ public partial class RecipePopup : Control
 
 		GetNode("RecipeList").GetChildren().OfType<Button>().ToList().ForEach(button =>
 		{
-			RemoveChild(button);
+			button.GetParent().RemoveChild(button);
 			button.QueueFree();
 		});
 		AddButtons();

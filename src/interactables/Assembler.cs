@@ -8,8 +8,8 @@ public partial class Assembler : Building, ICrafter, IInteractable, Inserter.ITr
 {
 	public override string ItemType => "Assembler";
     private Recipe _recipe;
-    private Inventory _inputInventory = new Inventory();
-    private Inventory _outputInventory = new Inventory();
+    private Inventory _inputInventory = new();
+    private Inventory _outputInventory = new();
     private float _time;
 
     public override void _Process(double delta)

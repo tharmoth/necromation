@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Godot;
+using Necromation.interactables.belts;
 
 namespace Necromation;
 
@@ -114,24 +115,6 @@ public partial class Inserter : Building
         
         switch (sourceObject, targetObject)
         {
-            case (interactables.belts.Belt from, interactables.belts.Belt to):
-            {
-                var groundItem = from.GetFirstItem();
-                if (groundItem == null || !to.CanAcceptItem()) return false;
-                return Inventory.TransferItem(from, to, groundItem.ItemType);
-            }
-            case (interactables.belts.Belt from, ITransferTarget to):
-            {
-                var groundItem = from.GetFirstItem();
-                if (groundItem == null || !to.CanAcceptItem(groundItem.ItemType)) return false;
-                return Inventory.TransferItem(from, to.GetInputInventory(), groundItem.ItemType);
-            }
-            case (ITransferTarget from, interactables.belts.Belt to):
-            {
-                var item = from.GetOutputInventory().GetFirstItem();
-                if (string.IsNullOrEmpty(item) || !to.CanAcceptItem()) return false;
-                return Inventory.TransferItem(from.GetOutputInventory(), to, item);
-            }
             case (ITransferTarget from, ITransferTarget to):
             {
                 var item = from.GetOutputInventory().GetFirstItem();
@@ -163,7 +146,6 @@ public partial class Inserter : Building
         return sourceEntity switch
         {
             ITransferTarget building => building.GetOutputInventory().GetFirstItem(),
-            interactables.belts.Belt groundItem => groundItem.GetFirstItem() != null ? groundItem.GetFirstItem().ItemType : null,
             _ => null
         };
     }

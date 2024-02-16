@@ -54,30 +54,6 @@ public partial class Inventory : Node
 		to.Insert(item, count);
 		return true;
 	}
-	
-	public static bool TransferItem(Inventory from, Belt to, string item, int count = 1)
-	{
-		if (from.CountItem(item) < count) return false;
-		from.Remove(item, count);
-		to.AddItem(new GroundItem(item));
-		return true;
-	}
-	
-	public static bool TransferItem(Belt from, Inventory to, string item, int count = 1)
-	{
-		if (from.GetFirstItem() == null || from.GetFirstItem().ItemType != item) return false;
-		from.RemoveItem();
-		to.Insert(item, count);
-		return true;
-	}
-	
-	public static bool TransferItem(Belt from, Belt to, string item, int count = 1)
-	{
-		if (from.GetFirstItem() == null || from.GetFirstItem().ItemType != item) return false;
-		from.RemoveItem();
-		to.AddItem(new GroundItem(item));
-		return true;
-	}
 
 	public static bool PlaceItemOnGround(Inventory from, Vector2I position, string item, int count = 1)
 	{
@@ -96,5 +72,10 @@ public partial class Inventory : Node
 	public string GetFirstItem()
 	{
 		return _items.Keys.FirstOrDefault();
+	}
+	
+	public virtual bool CanAcceptItem(string item)
+	{
+		return true;
 	}
 }
