@@ -7,7 +7,6 @@
 [node name="Spawner" type="Node2D"]
 script = ExtResource("1_nwjl7")
 _type = ExtResource("2_3njkj")
-_range = 50
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_af3lw")

@@ -20,7 +20,7 @@ public partial class CrafterGUI : Control
 		
 		GetNode<ChangeRecipeButton>("%ChangeRecipeButton")._crafter = crafter;
 		
-		GetNode<Label>("%Label").Text = crafter.GetRecipe(null)?.Name ?? "No Recipe";
+		GetNode<Label>("%Label").Text = crafter.GetRecipe()?.Name ?? "No Recipe";
 
 		if (crafter is Node progress)
 		{

@@ -2,6 +2,8 @@ using Godot;
 using System;
 using Necromation;
 using Necromation.character;
+using Necromation.interactables.belts;
+using Belt = Necromation.interactables.belts.Belt;
 using IInteractable = Necromation.interfaces.IInteractable;
 
 public partial class Character : Node2D
@@ -38,10 +40,14 @@ public partial class Character : Node2D
 	public override void _Ready()
 	{
 		AddToGroup("player");
-		_inventory.AddItem("Stone", 500);
-		_inventory.AddItem("Mine", 3);
-		_inventory.AddItem("Inserter", 3);
-		_inventory.AddItem("Assembler", 3);
+		_inventory.Insert("Stone", 500);
+		_inventory.Insert("Mine", 3);
+		_inventory.Insert("Stone Furnace", 100);
+		_inventory.Insert("Stone Chest", 100);
+		_inventory.Insert("Inserter", 100);
+		_inventory.Insert("Assembler", 3);
+		_inventory.Insert("Belt", 100);
+		_inventory.Insert("Underground Belt", 100);
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
@@ -137,8 +143,15 @@ public partial class Character : Node2D
 		_tween = null;
 		_sprite.Visible = true;
 		_sprite.RotationDegrees = rotationDegrees;
-		_sprite.Modulate = GetBuildingAtMouse() == null ? Colors.Green : Colors.Red;
+		_sprite.Modulate = GetMouseoverColor();
 		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
+	}
+
+	private Color GetMouseoverColor()
+	{
+		var building = GetBuildingAtMouse();
+		if (building is Belt && _selected is string selectedString && selectedString == "Belt") return Colors.Green;
+		return GetBuildingAtMouse() == null ? Colors.Green : Colors.Red;
 	}
 
 	private void LeftMouseButtonPressed()
@@ -162,15 +175,17 @@ public partial class Character : Node2D
 		var position = GetGlobalMousePosition();
 		if (!Globals.TileMap.IsEmpty(position, BuildingTileMap.LayerNames.Buildings)) return;
 		
-		_inventory.RemoveItem(selectedItem);
+		_inventory.Remove(selectedItem);
 
 		Building building = selectedItem switch
 		{
 			"Mine" => new Mine(),
 			"Stone Furnace" => new Furnace(),
-			"Inserter" => new Inserter(rotationDegrees),
 			"Stone Chest" => new StoneChest(),
 			"Assembler" => new Assembler(),
+			"Inserter" => new Inserter(rotationDegrees),
+			"Belt" => new Belt(rotationDegrees),
+			"Underground Belt" => new UndergroundBelt(rotationDegrees),
 			_ =>  throw new NotImplementedException()
 		};
 		
@@ -183,9 +198,18 @@ public partial class Character : Node2D
 	{
 		var building = GetBuildingAtMouse();
 		if (building is not BuildingTileMap.IBuilding buildingEntity) return;
-		if (!buildingEntity.CanRemove()) return;
+		if (building is Inserter.ITransferTarget inputTarget)
+		{
+			inputTarget.GetInputInventory().TransferAllTo(_inventory);
+			inputTarget.GetOutputInventory().TransferAllTo(_inventory);
+		} 
+		else if (building is Belt belt)
+		{
+			belt.TransferAllTo(_inventory);
+		}
+		_inventory.Insert(buildingEntity.ItemType);
+		
 		Globals.TileMap.RemoveEntity(building);
-		_inventory.AddItem(buildingEntity.ItemType);
 	}
 
 	private BuildingTileMap.IEntity GetBuildingAtMouse()

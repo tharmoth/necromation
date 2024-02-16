@@ -100,7 +100,7 @@
     },
     {
       "name": "Iron Bar",
-      "time" : 1,
+      "time" : 3.2,
       "category": "smelting",
       "ingredients": {
         "Iron Ore": 1
@@ -111,7 +111,7 @@
     },
     {
       "name": "Copper Bar",
-      "time" : 1,
+      "time" : 3.2,
       "category": "smelting",
       "ingredients": {
         "Copper Ore": 1
@@ -128,6 +128,17 @@
       },
       "products": {
         "Stone Chest": 1
+      }
+    },
+    {
+      "name": "Underground Belt",
+      "time" : 1,
+      "ingredients": {
+        "Iron Bar": 10,
+        "Belt": 5
+      },
+      "products": {
+        "Underground Belt": 2
       }
     }
     

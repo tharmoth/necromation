@@ -16,7 +16,7 @@ public partial class Collectable : Interactable, BuildingTileMap.IBuilding, Buil
     protected override void Complete()
     {
         base.Complete();
-        Globals.PlayerInventory.AddItem(Type);
+        Globals.PlayerInventory.Insert(Type);
         // QueueFree();
     }
 

@@ -15,6 +15,12 @@ public partial class Mine : Building, IInteractable, Inserter.ITransferTarget
     {
         base._Process(delta);
 
+        if (MaxOutputItemsReached())
+        {
+            _time = 0;
+            return;
+        }
+
         _time += (float)delta;
 
         if (GetProgressPercent() < 1.0f) return;
@@ -23,17 +29,17 @@ public partial class Mine : Building, IInteractable, Inserter.ITransferTarget
         var resource = Globals.TileMap.GetEntities(Globals.TileMap.GlobalToMap(GlobalPosition), BuildingTileMap.LayerNames.Resources);
         if (resource is not Collectable collectable) return;
         
-        _inventory.AddItem(collectable.ItemType);
+        _inventory.Insert(collectable.ItemType);
+    }
+    
+    private bool MaxOutputItemsReached()
+    {
+        return _inventory.CountAllItems() >= 200;
     }
     
     public override float GetProgressPercent()
     {
         return _time / miningSpeed;
-    }
-    
-    public override bool CanRemove()
-    {
-        return true;
     }
 
     public void Interact()
@@ -49,5 +55,10 @@ public partial class Mine : Building, IInteractable, Inserter.ITransferTarget
     public Inventory GetOutputInventory()
     {
         return _inventory;
+    }
+
+    public bool CanAcceptItem(string item)
+    {
+        return false;
     }
 }

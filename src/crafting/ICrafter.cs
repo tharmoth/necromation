@@ -5,7 +5,7 @@ public interface ICrafter
     /*
      * Return the recipe that the crafter is currently using
      */
-    public Recipe GetRecipe(Recipe recipe);
+    public Recipe GetRecipe();
     
     /*
      * Set the recipe that the crafter should use

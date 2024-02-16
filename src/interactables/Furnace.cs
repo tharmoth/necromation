@@ -14,4 +14,9 @@ public partial class Furnace : Assembler
 	{
 		return "smelting";
 	}
+	
+	protected override bool MaxOutputItemsReached()
+	{
+		return GetOutputInventory().CountAllItems() >= 200;
+	}
 }

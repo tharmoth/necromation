@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Necromation;
+using Belt = Necromation.interactables.belts.Belt;
 
 public partial class Inventory : Node
 {
@@ -12,14 +14,26 @@ public partial class Inventory : Node
 
 	public ImmutableDictionary<string, int> Items => _items.ToImmutableDictionary();
 	
-	public void AddItem(string item, int count = 1)
+	public void TransferAllTo(Inventory other)
+	{
+		other.Insert(_items);
+		_items.Clear();
+		Listeners.ForEach(listener => listener());
+	}
+	
+	public void Insert(Dictionary<string, int> items)
+	{
+		items.ToList().ForEach(entry => Insert(entry.Key, entry.Value));
+	}
+	
+	public void Insert(string item, int count = 1)
 	{
 		_items.TryGetValue(item, out var currentCount);
 		_items[item] = currentCount + count;
 		Listeners.ForEach(listener => listener());
 	}
 	
-	public bool RemoveItem(string item, int count = 1)
+	public bool Remove(string item, int count = 1)
 	{
 		if (!_items.TryGetValue(item, out var currentCount) || currentCount < count) return false;
 		_items[item] -= count;
@@ -31,15 +45,56 @@ public partial class Inventory : Node
 	public int CountItem(string item)
 	{
 		return _items.TryGetValue(item, out var count) ? count : 0;
-		
 	}
 
 	public static bool TransferItem(Inventory from, Inventory to, string item, int count = 1)
 	{
 		if (from.CountItem(item) < count) return false;
-		from.RemoveItem(item, count);
-		to.AddItem(item, count);
+		from.Remove(item, count);
+		to.Insert(item, count);
 		return true;
 	}
 	
+	public static bool TransferItem(Inventory from, Belt to, string item, int count = 1)
+	{
+		if (from.CountItem(item) < count) return false;
+		from.Remove(item, count);
+		to.AddItem(new GroundItem(item));
+		return true;
+	}
+	
+	public static bool TransferItem(Belt from, Inventory to, string item, int count = 1)
+	{
+		if (from.GetFirstItem() == null || from.GetFirstItem().ItemType != item) return false;
+		from.RemoveItem();
+		to.Insert(item, count);
+		return true;
+	}
+	
+	public static bool TransferItem(Belt from, Belt to, string item, int count = 1)
+	{
+		if (from.GetFirstItem() == null || from.GetFirstItem().ItemType != item) return false;
+		from.RemoveItem();
+		to.AddItem(new GroundItem(item));
+		return true;
+	}
+
+	public static bool PlaceItemOnGround(Inventory from, Vector2I position, string item, int count = 1)
+	{
+		if (from.CountItem(item) < count) return false;
+		if (!Globals.TileMap.IsEmpty(position, BuildingTileMap.LayerNames.GroundItems)) return false;
+		from.Remove(item, count);
+		Globals.TileMap.AddEntity(position, new GroundItem(item), BuildingTileMap.LayerNames.GroundItems);
+		return true;
+	}
+
+	public int CountAllItems()
+	{
+		return _items.Values.Sum();
+	}
+
+	public string GetFirstItem()
+	{
+		return _items.Keys.FirstOrDefault();
+	}
 }

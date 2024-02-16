@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://cv8n8au2hbpy0"]
+
+[ext_resource type="Script" path="res://src/map/gui/UnitAccepterPanel.cs" id="1_rk1nh"]
+[ext_resource type="Script" path="res://src/map/gui/UnitsBox.cs" id="2_v4o38"]
+[ext_resource type="Texture2D" uid="uid://beupnxnshoxcv" path="res://res/sprites/horse.png" id="3_ovik3"]
+
+[node name="ProvinceContainer" type="PanelContainer"]
+script = ExtResource("1_rk1nh")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="UnitsBox" type="HBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+script = ExtResource("2_v4o38")
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/UnitsBox"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("3_ovik3")
+stretch_mode = 3

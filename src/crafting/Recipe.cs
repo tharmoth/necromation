@@ -48,12 +48,12 @@ public class Recipe
         
         foreach (var (type, amount) in Ingredients)
         {
-            inventory.RemoveItem(type, amount);
+            inventory.Remove(type, amount);
         }
         
         foreach (var (type, amount) in Products)
         {
-            outputInventory.AddItem(type, amount);
+            outputInventory.Insert(type, amount);
         }
     }
 }
