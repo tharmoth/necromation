@@ -156,8 +156,10 @@ public partial class Character : Node2D
 		if (building is not BuildingTileMap.IBuilding buildingEntity) return;
 		if (building is ITransferTarget inputTarget)
 		{
-			inputTarget.GetInputInventory().TransferAllTo(_inventory);
-			inputTarget.GetOutputInventory().TransferAllTo(_inventory);
+			foreach (var inventory in inputTarget.GetInventories())
+			{
+				Inventory.TransferAllTo(inventory, _inventory);
+			}
 		}
 		_inventory.Insert(buildingEntity.ItemType);
 		

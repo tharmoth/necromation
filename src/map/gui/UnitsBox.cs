@@ -43,7 +43,7 @@ public partial class UnitsBox : HBoxContainer
 		
 		var prov = MapGlobals.SelectedProvince;
 		if (prov == null) return;
-		_inventory ??= MapGlobals.SelectedProvince.GetOutputInventory();
+		_inventory ??= MapGlobals.SelectedProvince.GetInventories().First();
 		if (_inventory == null) return;
 		
 		foreach (var (name, count) in _inventory.Items)

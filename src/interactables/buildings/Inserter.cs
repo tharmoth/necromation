@@ -63,11 +63,6 @@ public partial class Inserter : Building, IRotatable
         SpriteInHand.Position = -BuildingTileMap.TileSize / 2 * new Vector2I(0, 1);
     }
 
-    public override float GetProgressPercent()
-    {
-        return 0;
-    }
-
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -103,9 +98,9 @@ public partial class Inserter : Building, IRotatable
         {
             case (ITransferTarget from, ITransferTarget to):
             {
-                var item = from.GetOutputInventory().GetFirstItem();
-                if (string.IsNullOrEmpty(item) || !to.CanAcceptItem(item)) return false;
-                return Inventory.TransferItem(from.GetOutputInventory(), to.GetInputInventory(), item);
+                var item = from.GetFirstItem();
+                if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) return false;
+                return Inventory.TransferItem(from, to, item);
             }
         }
         return false;
@@ -116,7 +111,7 @@ public partial class Inserter : Building, IRotatable
         var sourceEntity = Globals.TileMap.GetEntities(_input, BuildingTileMap.LayerNames.Buildings);
         return sourceEntity switch
         {
-            ITransferTarget building => building.GetOutputInventory().GetFirstItem(),
+            ITransferTarget building => building.GetFirstItem(),
             _ => null
         };
     }

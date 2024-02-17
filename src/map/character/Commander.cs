@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Collections.Generic;
+using Godot;
 
 namespace Necromation.map.character;
 
@@ -57,19 +58,17 @@ public partial class Commander : Node2D, ITransferTarget
         _province.Commanders.Add(this);
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
     }
+    
+    #region ITransferTarget Implementation
+    /**************************************************************************
+     * ITransferTarget Methods                                                *
+     **************************************************************************/
+    public bool CanAcceptItems(string item, int count = 1, Vector2 position = default) => Units.CanAcceptItems(item, count, position);
+    public void Insert(string item, int count = 1, Vector2 position = default) => Units.Insert(item, count, position);
+    public bool Remove(string item, int count = 1) => Units.Remove(item, count);
+    public string GetFirstItem() => Units.GetFirstItem();
+    public List<Inventory> GetInventories() => Units.GetInventories();
+    #endregion
 
-    public Inventory GetInputInventory()
-    {
-        return Units;
-    }
 
-    public Inventory GetOutputInventory()
-    {
-        return Units;
-    }
-
-    public bool CanAcceptItem(string item)
-    {
-        return true;
-    }
 }

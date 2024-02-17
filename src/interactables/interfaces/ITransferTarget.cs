@@ -1,16 +1,13 @@
-﻿namespace Necromation;
+﻿using System.Collections.Generic;
+using Godot;
+
+namespace Necromation;
 
 public interface ITransferTarget
 {
-    /*
-         * Returns the inventory that the crafter uses to get the ingredients
-         */
-    public Inventory GetInputInventory();
-    
-    /*
-         * Returns the inventory that the crafter uses to store the products
-         */
-    public Inventory GetOutputInventory();
-
-    public bool CanAcceptItem(string item);
+    public bool CanAcceptItems(string item, int count = 1, Vector2 position = default);
+    public void Insert(string item, int count = 1, Vector2 position = default);
+    public bool Remove(string item, int count = 1);
+    public string GetFirstItem();
+    public List<Inventory> GetInventories();
 }

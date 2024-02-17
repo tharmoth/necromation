@@ -47,7 +47,10 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 
 	public abstract Vector2I BuildingSize { get; }
 	public abstract string ItemType { get; }
-	public abstract float GetProgressPercent();
+	public virtual float GetProgressPercent()
+	{
+		return 0;
+	}
 
 	public bool CanPlaceAt(Vector2 position)
 	{

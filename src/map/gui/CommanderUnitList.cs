@@ -19,10 +19,10 @@ public partial class CommanderUnitList : VBoxContainer
 
 		foreach (var commander in provence.Commanders)
 		{
-			var panel = new UnitAccepterPanel(commander.GetOutputInventory());
+			var panel = new UnitAccepterPanel(commander.GetInventories().First());
 			var scroll = new ScrollContainer();
 			scroll.VerticalScrollMode = ScrollContainer.ScrollMode.Disabled;
-			var box = new UnitsBox(commander.GetOutputInventory());
+			var box = new UnitsBox(commander.GetInventories().First());
 			Label label = new();
 			label.Text = commander.Name;
 			box.AddChild(label);

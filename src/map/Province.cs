@@ -43,19 +43,14 @@ public partial class Province : Node, ITransferTarget
         RecruitQueue.Clear();
     }
 
-
-    public Inventory GetInputInventory()
-    {
-        return Units;
-    }
-
-    public Inventory GetOutputInventory()
-    {
-        return Units;
-    }
-
-    public bool CanAcceptItem(string item)
-    {
-        return true;
-    }
+    #region ITransferTarget Implementation
+    /**************************************************************************
+     * ITransferTarget Methods                                                *
+     **************************************************************************/
+    public bool CanAcceptItems(string item, int count = 1, Vector2 position = default) => Units.CanAcceptItems(item, count, position);
+    public void Insert(string item, int count = 1, Vector2 position = default) => Units.Insert(item, count, position);
+    public bool Remove(string item, int count = 1) => Units.Remove(item, count);
+    public string GetFirstItem() => Units.GetFirstItem();
+    public List<Inventory> GetInventories() => Units.GetInventories();
+    #endregion
 }

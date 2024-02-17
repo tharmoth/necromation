@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 using Necromation.map;
 using Necromation.map.gui;
 
@@ -27,6 +28,6 @@ public partial class ArmySetup : PanelContainer
 	private void Update()
 	{
 		GetNode<CommanderUnitList>("%CommanderUnitList").Update();
-		GetNode<UnitsBox>("%UnitsBox").Update(MapGlobals.SelectedProvince.GetOutputInventory());
+		GetNode<UnitsBox>("%UnitsBox").Update(MapGlobals.SelectedProvince.GetInventories().First());
 	}
 }

@@ -18,6 +18,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
      * Properties                                                             *
      **************************************************************************/
     private IRotatable.BuildingOrientation _orientation;
+
     public IRotatable.BuildingOrientation Orientation
     {
         get => _orientation;
@@ -70,36 +71,15 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
             var nextBelt = GetNextBelt();
             if (nextBelt is not Belt belt) continue;
-            if (!belt.CanAcceptItem(groundItem.ItemType)) continue;
+            if (!belt.CanAcceptItems(groundItem.ItemType)) continue;
             BeltTransfer(belt);
             i = 0;
         }
     }
-    
-    public override float GetProgressPercent()
-    {
-        return 0;
-    }
 
-    public Inventory GetInputInventory()
-    {
-        return _inventory;
-    }
-
-    public Inventory GetOutputInventory()
-    {
-        return _inventory;
-    }
-    
     /**************************************************************************
      * Protected Methods                                                      *
      **************************************************************************/
-
-    public bool CanAcceptItem(string item)
-    {
-        return _itemsOnBelt.Count < 4;
-    }
-    
     protected virtual BuildingTileMap.IEntity GetNextBelt()
     {
         return Globals.TileMap.GetEntities(Output, BuildingTileMap.LayerNames.Buildings);
@@ -131,7 +111,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         var item = _itemsOnBelt[0];
         _itemsOnBelt.RemoveAt(0);
         to.AddItem(item);
-        Inventory.TransferItem(_inventory, to.GetInputInventory(), item.ItemType);
+        Inventory.TransferItem(this, to, item.ItemType);
     }
 
     private void UpdateSprites()
@@ -192,10 +172,16 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         Globals.Player.GlobalPosition += -GetTargetLocation(0).DirectionTo(Globals.Player.GlobalPosition) * Speed * (float)delta;
     }
     
-    private bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance)
-    {
-        return Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
-    }
+    private static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
 
-    
+    #region ITransferTarget Implementation
+    /**************************************************************************
+     * ITransferTarget Methods                                                *
+     **************************************************************************/
+    public bool CanAcceptItems(string item,  int count = 1, Vector2 position = default) => _inventory.CountAllItems() + count < 5;
+    public void Insert(string item, int count = 1, Vector2 position = default) => _inventory.Insert(item, count);
+    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
+    public string GetFirstItem() => _inventory.GetFirstItem();
+    public List<Inventory> GetInventories() => _inventory.GetInventories();
+    #endregion
 }
