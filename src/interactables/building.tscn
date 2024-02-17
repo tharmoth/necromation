@@ -1,14 +1,15 @@
 [gd_scene load_steps=4 format=3 uid="uid://cbg55wjqe0hop"]
 
 [ext_resource type="Script" path="res://src/interactables/Furnace.cs" id="1_pwetf"]
-[ext_resource type="Texture2D" uid="uid://dofd35ihyr0nl" path="res://res/sprites/Stone Furnace-2.png" id="2_sba2b"]
+[ext_resource type="Texture2D" uid="uid://bn4riya2kyhpf" path="res://res/sprites/Belt.png" id="2_mjmcs"]
 [ext_resource type="Script" path="res://src/gui/ProgressTracker.cs" id="3_4gsr2"]
 
 [node name="Building" type="Node2D"]
 script = ExtResource("1_pwetf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_sba2b")
+texture = ExtResource("2_mjmcs")
+centered = false
 region_rect = Rect2(96, 0, 32, 32)
 
 [node name="ProgressBar" type="ProgressBar" parent="." node_paths=PackedStringArray("NodeToTrack")]

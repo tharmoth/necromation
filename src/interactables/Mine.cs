@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Linq;
+using Godot;
 using Necromation.interfaces;
 
 namespace Necromation;
@@ -26,10 +27,12 @@ public partial class Mine : Building, IInteractable, Inserter.ITransferTarget
 
         if (GetProgressPercent() < 1.0f) return;
         _time = 0;
+
+        var resource = Globals.TileMap.GetEntityPositions(this)
+            .Select(position => Globals.TileMap.GetEntities(position, BuildingTileMap.LayerNames.Resources))
+            .First(resource => resource is Collectable);
         
-        var resource = Globals.TileMap.GetEntities(Globals.TileMap.GlobalToMap(GlobalPosition), BuildingTileMap.LayerNames.Resources);
         if (resource is not Collectable collectable) return;
-        
         _inventory.Insert(collectable.ItemType);
     }
     

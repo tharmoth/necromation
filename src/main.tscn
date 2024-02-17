@@ -111,12 +111,12 @@ z_index = 1
 script = ExtResource("2_vcqpu")
 
 [node name="Sprite2D" type="Sprite2D" parent="Character"]
+scale = Vector2(2, 2)
 texture = ExtResource("1_4vku0")
 region_enabled = true
 region_rect = Rect2(64, 0, 32, 32)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
-zoom = Vector2(2, 2)
 
 [node name="Stone Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(290, 2)

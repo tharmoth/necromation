@@ -96,6 +96,14 @@ public partial class BuildingTileMap : SKTileMap
 			.ToList();
 	}
 	
+	public List<Vector2I> GetEntityPositions(IEntity entity)
+	{
+		return _layers.Values
+			.SelectMany(layer => layer.Where(pair => pair.Value == entity))
+			.Select(pair => pair.Key)
+			.ToList();
+	}
+	
 	public bool IsEmpty(Vector2 position, LayerNames layerName)
 	{
 		return IsEmpty(GlobalToMap(position), layerName);

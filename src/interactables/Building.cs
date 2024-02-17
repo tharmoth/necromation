@@ -33,8 +33,6 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 		if (BuildingSize.Y % 2 == 0) GlobalPosition += new Vector2(0, 16);
 		
 		var center = Globals.TileMap.GlobalToMap(GlobalPosition);
-		
-		
 
 		// Add the building to the tilemap based on the size of the building. the global position is the center of the
 		// building. First we'll find the top left corner of the building.
@@ -48,15 +46,33 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 		}
 	}
 
-	public override void _Draw()
-	{
-		base._Draw();
-		DrawCircle(Vector2.Zero, 32, Colors.Red);
-	}
-
 	public abstract Vector2I BuildingSize { get; }
 	public abstract string ItemType { get; }
 	public abstract float GetProgressPercent();
+
+	public bool CanPlaceAt(Vector2 position)
+	{
+		position = Globals.TileMap.ToMap(position);
+		
+		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
+		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
+		
+		var center = Globals.TileMap.GlobalToMap(position);
+		
+		var topLeft = center - BuildingSize / 2;
+		for (var x = 0; x < BuildingSize.X; x++)
+		{
+			for (var y = 0; y < BuildingSize.X; y++)
+			{
+				var entity =
+					Globals.TileMap.GetEntities(topLeft + new Vector2I(x, y), 
+						BuildingTileMap.LayerNames.Buildings);
+				if (entity != null) return false;
+			}
+		}
+
+		return true;
+	}
 	
 
 	public static Building GetBuilding(string selectedItem)

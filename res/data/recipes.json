@@ -100,10 +100,11 @@
     },
     {
       "name": "Iron Bar",
-      "time" : 3.2,
+      "time" : 6.4,
       "category": "smelting",
       "ingredients": {
-        "Iron Ore": 1
+        "Iron Ore": 2,
+        "Coal Ore": 1
       },
       "products": {
         "Iron Bar": 1
@@ -111,13 +112,14 @@
     },
     {
       "name": "Copper Bar",
-      "time" : 3.2,
+      "time" : 6.4,
       "category": "smelting",
       "ingredients": {
-        "Copper Ore": 1
+        "Copper Ore": 2,
+        "Coal Ore": 1
       },
       "products": {
-        "Copper Bar": 1
+        "Copper Bar": 2
       }
     },
     {

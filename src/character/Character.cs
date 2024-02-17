@@ -9,7 +9,7 @@ using IInteractable = Necromation.interfaces.IInteractable;
 
 public partial class Character : Node2D
 {
-	private const float Speed = 100;
+	private const float Speed = 200;
 	
 	private Inventory _inventory = new();
 	private Tween _tween;
@@ -62,27 +62,33 @@ public partial class Character : Node2D
 		if (GUI.Instance.Popup.Visible) return;
 		if (GUI.Instance.ContainerGui.Visible) return;
 		
+		if (Selected == null) _rotationDegrees = 0;
+		
 		// Move the character at speed
 		if (Input.IsActionPressed("right")) Position += new Vector2(Speed * (float)delta, 0);
 		if (Input.IsActionPressed("left")) Position += new Vector2(-Speed * (float)delta, 0);
 		if (Input.IsActionPressed("up")) Position += new Vector2(0, -Speed * (float)delta);
 		if (Input.IsActionPressed("down")) Position += new Vector2(0, Speed * (float)delta);
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Selected == null) _rotationDegrees = 0;
-		if (Input.IsActionPressed("close_gui")) Selected = null;
+		if (Input.IsActionPressed("close_gui") || Input.IsActionPressed("clear_selection")) Selected = null;
+		if (Input.IsActionJustPressed("left_click") && GetBuildingAtMouse() is IInteractable interactable) 
+			interactable.Interact();
+		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) 
+			Build(Building.GetBuilding(Selected));
+		
+		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
+		else if (Input.IsMouseButtonPressed(MouseButton.Right)) Mine();
 
-		ProcessCursor();
+		if (Selected != null) SelectedPreview();
+		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition()).Count > 0) MouseoverEntity();
+		else _sprite.Visible = false;
 	}
 	
-	public void RotateSelection()
-	{
-		_rotationDegrees += 90;
-		if (_rotationDegrees == 360) _rotationDegrees = 0;
-	}
 
-	private void ProcessCursor()
+
+	private void Mine()
 	{
-		if (Input.IsMouseButtonPressed(MouseButton.Right) && GetResorceAtMouse() is Interactable resource)
+		if (GetResorceAtMouse() is Interactable resource)
 		{
 			if (resource == _resource && !_resource.CanInteract()) return;
 			_resource?.Cancel();
@@ -94,19 +100,9 @@ public partial class Character : Node2D
 			_resource?.Cancel();
 			_resource = null;
 		}
-
-		if (Input.IsActionJustPressed("left_click") && GetBuildingAtMouse() is IInteractable interactable) interactable.Interact();
-		
-		if (Selected != null) ProcessCursorSelected();
-		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition()).Count > 0) ProcessCursorMouseover();
-		else _sprite.Visible = false;
-		
-		if (Input.IsMouseButtonPressed(MouseButton.Left)) LeftMouseButtonPressed();
-		if (Input.IsMouseButtonPressed(MouseButton.Right)) RightMouseButtonPressed();
-		if (Input.IsMouseButtonPressed(MouseButton.Right)) Selected = null;
 	}
 
-	private void ProcessCursorMouseover()
+	private void MouseoverEntity()
 	{
 		_sprite.Visible = true;
 		_sprite.Modulate = Colors.White;
@@ -120,39 +116,31 @@ public partial class Character : Node2D
 		_tween.TweenCallback(Callable.From(() => _tween = null));
 	}
 
-	private void ProcessCursorSelected()
+	private void SelectedPreview()
 	{
 		_tween?.Kill();
 		_tween = null;
 		_sprite.Visible = true;
 		_sprite.RotationDegrees = _rotationDegrees;
-		_sprite.Modulate = GetMouseoverColor();
 		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
 		
+		if (!Building.IsBuilding(Selected)) return;
+		
 		//TODO: making buildings every tick seems like a bad idea.
-		if (Building.IsBuilding(Selected))
-		{
-			var building = Building.GetBuilding(Selected);
-			if (building.BuildingSize.X % 2 == 0) _sprite.Position += new Vector2(16, 0);
-			if (building.BuildingSize.Y % 2 == 0) _sprite.Position += new Vector2(0, 16);
-		}
-	}
-
-	private Color GetMouseoverColor()
-	{
-		var building = GetBuildingAtMouse();
-		if (building is Belt && _selected is Belt) return Colors.Green;
-		return GetBuildingAtMouse() == null ? Colors.Green : Colors.Red;
-	}
-
-	private void LeftMouseButtonPressed()
-	{
-		if (Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
+		var buildingInHand = Building.GetBuilding(Selected);
+		
+		if (buildingInHand.BuildingSize.X % 2 == 0) _sprite.Position += new Vector2(16, 0);
+		if (buildingInHand.BuildingSize.Y % 2 == 0) _sprite.Position += new Vector2(0, 16);
+		
+		_sprite.Modulate = buildingInHand.CanPlaceAt(GetGlobalMousePosition())
+			? Colors.Green
+			: Colors.Red;
 	}
 	
-	private void RightMouseButtonPressed()
+	public void RotateSelection()
 	{
-		RemoveBuilding();
+		_rotationDegrees += 90;
+		if (_rotationDegrees == 360) _rotationDegrees = 0;
 	}
 
 	private void Build(Building building)
@@ -164,7 +152,7 @@ public partial class Character : Node2D
 		}
 		
 		var position = GetGlobalMousePosition();
-		if (!Globals.TileMap.IsEmpty(position, BuildingTileMap.LayerNames.Buildings)) return;
+		if (!building.CanPlaceAt(position)) return;
 		
 		_inventory.Remove(building.ItemType);
 
