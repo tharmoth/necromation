@@ -2,37 +2,54 @@
 using System.Linq;
 using Godot;
 using Necromation.interactables.belts;
+using Necromation.interactables.interfaces;
 
 namespace Necromation;
 
-public partial class Inserter : Building
+public partial class Inserter : Building, IRotatable
 {
+    public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Inserter";
     private double _time = 0;
     private double _interval = .83;
     private Tween _tween;
-    private Vector2I _input;
-    private Vector2I _output;
     private Sprite2D SpriteInHand = new()
     {
         Scale = new Vector2(0.5f, 0.5f),
         Visible = false,
         ZIndex = 1
     };
-
-    public Inserter(int degrees)
+    
+    private IRotatable.BuildingOrientation _orientation;
+    public IRotatable.BuildingOrientation Orientation
     {
-        _orientation = degrees switch {
-            0 => BuildingOrientation.NorthSouth,
-            90 => BuildingOrientation.EastWest,
-            180 => BuildingOrientation.SouthNorth,
-            270 => BuildingOrientation.WestEast,
-            _ => throw new ArgumentOutOfRangeException(nameof(degrees), degrees, null)
-        };
-        
-        RotationDegrees = degrees;
+        get => _orientation;
+        set
+        {
+            _orientation = value;
+            RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
+        }
+    }
+    
+    private Vector2I position => Globals.TileMap.GlobalToMap(GlobalPosition);
+    private Vector2I _input => position + Orientation switch {
+        IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
+        IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
+        IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, 1),
+        IRotatable.BuildingOrientation.WestEast => new Vector2I(-1, 0),
+        _ => throw new ArgumentOutOfRangeException()
+    };
+    private Vector2I _output => position + Orientation switch {
+        IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, 1),
+        IRotatable.BuildingOrientation.EastWest => new Vector2I(-1, 0),
+        IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, -1),
+        IRotatable.BuildingOrientation.WestEast => new Vector2I(1, 0),
+        _ => throw new ArgumentOutOfRangeException()
+    };
+
+    public Inserter()
+    {
         SetNotifyTransform(true);
-        
         AddChild(SpriteInHand);
     }
 
@@ -45,22 +62,6 @@ public partial class Inserter : Building
     
     private void UpdateInputOutput()
     {
-        var position = Globals.TileMap.GlobalToMap(GlobalPosition);
-        _input = position + _orientation switch {
-            BuildingOrientation.NorthSouth => new Vector2I(0, -1),
-            BuildingOrientation.EastWest => new Vector2I(1, 0),
-            BuildingOrientation.SouthNorth => new Vector2I(0, 1),
-            BuildingOrientation.WestEast => new Vector2I(-1, 0),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        _output = position + _orientation switch {
-            BuildingOrientation.NorthSouth => new Vector2I(0, 1),
-            BuildingOrientation.EastWest => new Vector2I(-1, 0),
-            BuildingOrientation.SouthNorth => new Vector2I(0, -1),
-            BuildingOrientation.WestEast => new Vector2I(1, 0),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        
         SpriteInHand.Position = -BuildingTileMap.TileSize / 2 * new Vector2I(0, 1);
     }
 
@@ -100,19 +101,6 @@ public partial class Inserter : Building
     
     private bool Transfer(object sourceObject, object targetObject)
     {
-        // There are five different cases to consider:
-        // 1. building -> building
-        // 2. building -> ground
-        // 3. belt -> building
-        // 4. belt -> ground
-        // 5. ground -> building
-        // 6. ground -> ground
-        // 7. no valid targets
-        
-        // TODO: I don't like how this logic is handled.
-        // I feel like there should be a more elegant solution. I need to think further about where this logic
-        // should be handled. Maybe in the Inventory class?
-        
         switch (sourceObject, targetObject)
         {
             case (ITransferTarget from, ITransferTarget to):
@@ -121,21 +109,6 @@ public partial class Inserter : Building
                 if (string.IsNullOrEmpty(item) || !to.CanAcceptItem(item)) return false;
                 return Inventory.TransferItem(from.GetOutputInventory(), to.GetInputInventory(), item);
             }
-            // case (ITransferTarget sourceBuilding, null):
-            // {
-            //     var item = sourceBuilding.GetOutputInventory().GetFirstItem();
-            //     if (string.IsNullOrEmpty(item)) return false;
-            //     return Inventory.PlaceItemOnGround(sourceBuilding.GetOutputInventory(), _output, item);
-            // }
-            // case (GroundItem groundItem, ITransferTarget targetBuilding):
-            // {
-            //     if (!targetBuilding.CanAcceptItem(groundItem.ItemType)) return false;
-            //     return groundItem.AddToInventory(targetBuilding.GetInputInventory());
-            // }
-            // case (GroundItem groundItem, null):
-            // {
-            //     return Globals.TileMap.MoveEntity(groundItem, _output, BuildingTileMap.LayerNames.GroundItems);
-            // }
         }
         return false;
     }

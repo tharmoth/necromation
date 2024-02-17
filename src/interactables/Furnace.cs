@@ -8,6 +8,7 @@ using Necromation.interfaces;
 
 public partial class Furnace : Assembler
 {
+	public override Vector2I BuildingSize => Vector2I.One * 2;
 	public override string ItemType => "Stone Furnace";
 
 	public override string GetCategory()

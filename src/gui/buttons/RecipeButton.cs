@@ -26,8 +26,10 @@ public partial class RecipeButton : PanelContainer
 		GetNode<Button>("Button").Text = ItemType;
         
 		Globals.PlayerInventory.Listeners.Add(Update);
+
+		CraftingListPopup.Register(Recipe, GetNode<Button>("Button"));
 	}
-	
+
 	private void Update()
 	{
 		GetNode<Label>("Label").Text = Globals.PlayerInventory.CountItem(ItemType).ToString();
@@ -36,7 +38,7 @@ public partial class RecipeButton : PanelContainer
 	private void ButtonPressed(InputEvent @event)
 	{
 		if (@event is not InputEventMouseButton eventMouseButton || eventMouseButton.Pressed) return;
-		if (eventMouseButton.ButtonIndex == MouseButton.Left && Globals.PlayerInventory.CountItem(ItemType) > 0)
+		if (eventMouseButton.ButtonIndex == MouseButton.Left && Globals.PlayerInventory.CountItem(ItemType) > 0 )
 		{
 			Globals.Player.Selected = ItemType;
 		}

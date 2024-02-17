@@ -5,6 +5,7 @@ namespace Necromation;
 
 public partial class Mine : Building, IInteractable, Inserter.ITransferTarget
 {
+    public override Vector2I BuildingSize => Vector2I.One * 2;
     private Inventory _inventory = new();
     private float _time;
     private float miningSpeed = 1.0f;

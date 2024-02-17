@@ -55,15 +55,6 @@ public partial class Inventory : Node
 		return true;
 	}
 
-	public static bool PlaceItemOnGround(Inventory from, Vector2I position, string item, int count = 1)
-	{
-		if (from.CountItem(item) < count) return false;
-		if (!Globals.TileMap.IsEmpty(position, BuildingTileMap.LayerNames.GroundItems)) return false;
-		from.Remove(item, count);
-		Globals.TileMap.AddEntity(position, new GroundItem(item), BuildingTileMap.LayerNames.GroundItems);
-		return true;
-	}
-
 	public int CountAllItems()
 	{
 		return _items.Values.Sum();

@@ -3,30 +3,31 @@ using System;
 using Necromation;
 using Necromation.character;
 using Necromation.interactables.belts;
+using Necromation.interactables.interfaces;
 using Belt = Necromation.interactables.belts.Belt;
 using IInteractable = Necromation.interfaces.IInteractable;
 
 public partial class Character : Node2D
 {
-	Inventory _inventory = new();
-	private Object _selected;
+	private const float Speed = 100;
+	
+	private Inventory _inventory = new();
 	private Tween _tween;
 	private Sprite2D _sprite;
-	private float _speed = 100;
+	
 	private Interactable _resource;
-	private int rotationDegrees = 0;
+	private int _rotationDegrees;
 
-	public Object Selected
+	private String _selected;
+	public String Selected
 	{
 		get => _selected;
 		set
 		{
 			_selected = value;
-			if (value is string selectedString) _sprite.Texture = GD.Load<Texture2D>($"res://res/sprites/{selectedString}.png");
-			else
-			{
-				_sprite.Texture = GD.Load<Texture2D>("res://res/sprites/selection.png");
-			}
+			_sprite.Texture = _selected == null
+				? GD.Load<Texture2D>("res://res/sprites/selection.png")
+				: Globals.Database.GetTexture(_selected);
 		}
 	}
 	
@@ -62,21 +63,21 @@ public partial class Character : Node2D
 		if (GUI.Instance.ContainerGui.Visible) return;
 		
 		// Move the character at speed
-		if (Input.IsActionPressed("right")) Position += new Vector2(_speed * (float)delta, 0);
-		if (Input.IsActionPressed("left")) Position += new Vector2(-_speed * (float)delta, 0);
-		if (Input.IsActionPressed("up")) Position += new Vector2(0, -_speed * (float)delta);
-		if (Input.IsActionPressed("down")) Position += new Vector2(0, _speed * (float)delta);
+		if (Input.IsActionPressed("right")) Position += new Vector2(Speed * (float)delta, 0);
+		if (Input.IsActionPressed("left")) Position += new Vector2(-Speed * (float)delta, 0);
+		if (Input.IsActionPressed("up")) Position += new Vector2(0, -Speed * (float)delta);
+		if (Input.IsActionPressed("down")) Position += new Vector2(0, Speed * (float)delta);
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Selected == null) rotationDegrees = 0;
+		if (Selected == null) _rotationDegrees = 0;
 		if (Input.IsActionPressed("close_gui")) Selected = null;
 
 		ProcessCursor();
 	}
 	
-	private void RotateSelection()
+	public void RotateSelection()
 	{
-		rotationDegrees += 90;
-		if (rotationDegrees == 360) rotationDegrees = 0;
+		_rotationDegrees += 90;
+		if (_rotationDegrees == 360) _rotationDegrees = 0;
 	}
 
 	private void ProcessCursor()
@@ -124,21 +125,29 @@ public partial class Character : Node2D
 		_tween?.Kill();
 		_tween = null;
 		_sprite.Visible = true;
-		_sprite.RotationDegrees = rotationDegrees;
+		_sprite.RotationDegrees = _rotationDegrees;
 		_sprite.Modulate = GetMouseoverColor();
 		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
+		
+		//TODO: making buildings every tick seems like a bad idea.
+		if (Building.IsBuilding(Selected))
+		{
+			var building = Building.GetBuilding(Selected);
+			if (building.BuildingSize.X % 2 == 0) _sprite.Position += new Vector2(16, 0);
+			if (building.BuildingSize.Y % 2 == 0) _sprite.Position += new Vector2(0, 16);
+		}
 	}
 
 	private Color GetMouseoverColor()
 	{
 		var building = GetBuildingAtMouse();
-		if (building is Belt && _selected is string selectedString && selectedString == "Belt") return Colors.Green;
+		if (building is Belt && _selected is Belt) return Colors.Green;
 		return GetBuildingAtMouse() == null ? Colors.Green : Colors.Red;
 	}
 
 	private void LeftMouseButtonPressed()
 	{
-		if (Selected is string selectedString) Build(selectedString);
+		if (Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 	}
 	
 	private void RightMouseButtonPressed()
@@ -146,9 +155,9 @@ public partial class Character : Node2D
 		RemoveBuilding();
 	}
 
-	private void Build(string selectedItem)
+	private void Build(Building building)
 	{
-		if (!_inventory.Items.ContainsKey(selectedItem))
+		if (!_inventory.Items.ContainsKey(building.ItemType))
 		{
 			Selected = null;
 			return;
@@ -157,30 +166,15 @@ public partial class Character : Node2D
 		var position = GetGlobalMousePosition();
 		if (!Globals.TileMap.IsEmpty(position, BuildingTileMap.LayerNames.Buildings)) return;
 		
-		_inventory.Remove(selectedItem);
+		_inventory.Remove(building.ItemType);
 
-		Building building = selectedItem switch
-		{
-			"Mine" => new Mine(),
-			"Stone Furnace" => new Furnace(),
-			"Stone Chest" => new StoneChest(),
-			"Assembler" => new Assembler(),
-			"Inserter" => new Inserter(rotationDegrees),
-			"Belt" => new Belt(rotationDegrees),
-			"Underground Belt" => new UndergroundBelt(rotationDegrees),
-			_ =>  throw new NotImplementedException()
-		};
-		
-		Globals.TileMap.AddEntity(position, building, BuildingTileMap.LayerNames.Buildings);
+		if (building is IRotatable rotatable)
+			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 
-		// TODO: I don't like having this exception.
-		if (building is UndergroundBelt)
-		{
-			RotateSelection();
-			RotateSelection();
-		}
+		building.GlobalPosition = position;
+		GetTree().Root.AddChild(building);
 		
-		if(!_inventory.Items.ContainsKey(selectedItem)) Selected = null;
+		if(!_inventory.Items.ContainsKey(building.ItemType)) Selected = null;
 	}
 	
 	private void RemoveBuilding()

@@ -50,5 +50,13 @@ public class Database
 
         return new Recipe(name, ingredients, products, category, time);
     }
-    
+
+    public Texture2D GetTexture(string name)
+    {
+        var path = "res://res/sprites/" + name + ".png";
+        var texture = GD.Load<Texture2D>(path);
+        if (texture == null) throw new FileNotFoundException(path);
+        return texture;
+    }
+
 }

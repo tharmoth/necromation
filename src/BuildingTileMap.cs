@@ -10,10 +10,9 @@ public partial class BuildingTileMap : SKTileMap
 	{
 		Buildings,
 		Resources,
-		GroundItems
 	}
 	
-	public static int TileSize = 32;
+	public const int TileSize = 32;
 	
 	private readonly Dictionary<Vector2I, IEntity> _buildings = new Dictionary<Vector2I, IEntity>();
 	private readonly Dictionary<Vector2I, IEntity> _resources = new Dictionary<Vector2I, IEntity>();
@@ -24,7 +23,6 @@ public partial class BuildingTileMap : SKTileMap
 		// TODO: refactor this into a collision mask instead of discrete layers?
 		_layers.Add(LayerNames.Buildings, _buildings);
 		_layers.Add(LayerNames.Resources, _resources);
-		_layers.Add(LayerNames.GroundItems, _resources);
 	}
 
 	public void AddEntity(Vector2 position, IEntity entity, LayerNames layerName)
@@ -36,7 +34,7 @@ public partial class BuildingTileMap : SKTileMap
 		if (!_layers.ContainsKey(layerName)) return;
 		_layers[layerName].Add(position, entity);
 		
-		if (entity is not Node2D buildingNode) return;
+		if (entity is not Node2D buildingNode || buildingNode.GetParent() != null) return;
 		buildingNode.GlobalPosition = Globals.TileMap.MapToGlobal(position);
 		GetTree().Root.AddChild(buildingNode);
 	}
@@ -52,20 +50,25 @@ public partial class BuildingTileMap : SKTileMap
 		_layers[layerName].Remove(position);
 		
 		if (entity is not Node2D buildingNode) return false;
-		GetTree().Root.RemoveChild(buildingNode);
+		if (buildingNode.GetParent() == GetTree().Root) GetTree().Root.RemoveChild(buildingNode);
 		return true;
 	}
 
 	public bool RemoveEntity(IEntity entity)
 	{
+		var removed = false;
+		
 		foreach (var (layerName, layer) in _layers)
 		{
 			if (!layer.ContainsValue(entity)) continue;
-			var position = layer.First(pair => pair.Value == entity).Key;
-			return RemoveEntity(position, layerName);
+			removed = layer.Where(pair => pair.Value == entity)
+				.Select(pair => pair.Key)
+				.ToList()
+				.Select(position => RemoveEntity(position, layerName))
+				.All(hasBeenRemoved => hasBeenRemoved);
 		}
 
-		return false;
+		return removed;
 	}
 	
 	public IEntity GetEntities(Vector2 position, LayerNames layerName)
@@ -113,15 +116,6 @@ public partial class BuildingTileMap : SKTileMap
 		return GetEntities(position).Count == 0;
 	}
 
-	public bool MoveEntity(IEntity entity, Vector2I to, LayerNames layerName)
-	{
-		// TODO: this is a bit inefficient, but it's fine for now, don't add and remove to tree
-		if (!IsEmpty(to, layerName)) return false;
-		if (!RemoveEntity(entity)) return false;
-		AddEntity(to, entity, layerName);
-		return true;
-	}
-	
 	public interface IEntity
 	{
 		

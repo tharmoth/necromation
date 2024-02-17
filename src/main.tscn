@@ -72,9 +72,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 8
 vertical_scroll_mode = 0
 
-[node name="GridContainer" type="GridContainer" parent="GUI/Control/HBoxContainer/ScrollContainer"]
+[node name="GridContainer" type="HBoxContainer" parent="GUI/Control/HBoxContainer/ScrollContainer"]
 layout_mode = 2
-columns = 5
 script = ExtResource("4_jsksr")
 
 [node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]

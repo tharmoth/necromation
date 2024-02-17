@@ -1,0 +1,84 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvji4s2e7iexm"]
+
+[ext_resource type="Script" path="res://src/gui/lists/CraftingListPopup.cs" id="1_wx3hn"]
+[ext_resource type="Texture2D" uid="uid://e6kw3j25kq2m" path="res://res/sprites/Circuit.png" id="2_vnoaw"]
+[ext_resource type="Texture2D" uid="uid://dxo6j52ka5uu1" path="res://res/sprites/Gear.png" id="3_trl6m"]
+[ext_resource type="Texture2D" uid="uid://cjjyn7cm7kybq" path="res://res/sprites/Iron Bar.png" id="4_w0hhy"]
+
+[node name="CraftingListPopup" type="PanelContainer"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 142.0
+offset_bottom = 5.0
+size_flags_vertical = 0
+script = ExtResource("1_wx3hn")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="RecipeNameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "[Recipe Name]"
+
+[node name="IngredientsLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Ingredients:"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Row" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Rows"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row"]
+layout_mode = 2
+texture = ExtResource("2_vnoaw")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row"]
+layout_mode = 2
+text = "3 x Circuit
+"
+
+[node name="Row2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Rows"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row2"]
+layout_mode = 2
+texture = ExtResource("3_trl6m")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row2"]
+layout_mode = 2
+text = "5 x Iron Gear
+"
+
+[node name="Row3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Rows"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row3"]
+layout_mode = 2
+texture = ExtResource("4_w0hhy")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row3"]
+layout_mode = 2
+text = "5 x Iron Bar
+"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CraftingTimeLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.5s Crafting time"

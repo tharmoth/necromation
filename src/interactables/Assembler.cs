@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Godot;
 using Necromation.gui;
 using Necromation.interfaces;
 
@@ -6,6 +7,7 @@ namespace Necromation;
 
 public partial class Assembler : Building, ICrafter, IInteractable, Inserter.ITransferTarget
 {
+	public override Vector2I BuildingSize => Vector2I.One * 3;
 	public override string ItemType => "Assembler";
     private Recipe _recipe;
     private Inventory _inputInventory = new();

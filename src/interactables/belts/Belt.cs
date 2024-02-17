@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using Necromation.interactables.interfaces;
 
 namespace Necromation.interactables.belts;
 
-public partial class Belt : Building, Inserter.ITransferTarget
+public partial class Belt : Building, Inserter.ITransferTarget, IRotatable
 {
     /**************************************************************************
      * Data                                                                   *
@@ -12,37 +13,39 @@ public partial class Belt : Building, Inserter.ITransferTarget
     protected float _secondsPerItem = .5333f;
     private readonly List<GroundItem> _itemsOnBelt = new();
     private readonly Inventory _inventory = new();
-    
+
     /**************************************************************************
      * Properties                                                             *
      **************************************************************************/
+    private IRotatable.BuildingOrientation _orientation;
+    public IRotatable.BuildingOrientation Orientation
+    {
+        get => _orientation;
+        set
+        {
+            _orientation = value;
+            RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
+        }
+    }
+
+    public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Belt";
     protected float Speed => BuildingTileMap.TileSize / _secondsPerItem;
     private Vector2I Output => MapPosition + TargetDirection;
     protected Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
     protected virtual Vector2I TargetDirection => Orientation switch {
-        BuildingOrientation.NorthSouth => new Vector2I(0, -1),
-        BuildingOrientation.EastWest => new Vector2I(1, 0),
-        BuildingOrientation.SouthNorth => new Vector2I(0, 1),
-        BuildingOrientation.WestEast => new Vector2I(-1, 0),
+        IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
+        IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
+        IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, 1),
+        IRotatable.BuildingOrientation.WestEast => new Vector2I(-1, 0),
         _ => throw new ArgumentOutOfRangeException()
     };
     
     /**************************************************************************
      * Public Methods                                                         *
      **************************************************************************/
-    public Belt(int degrees)
+    public Belt()
     {
-        _orientation = degrees switch {
-            0 => BuildingOrientation.NorthSouth,
-            90 => BuildingOrientation.EastWest,
-            180 => BuildingOrientation.SouthNorth,
-            270 => BuildingOrientation.WestEast,
-            _ => throw new ArgumentOutOfRangeException(nameof(degrees), degrees, null)
-        };
-        
-        RotationDegrees = degrees;
-        
         _inventory.Listeners.Add(UpdateSprites);
     }
 
@@ -193,4 +196,6 @@ public partial class Belt : Building, Inserter.ITransferTarget
     {
         return Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
     }
+
+    
 }
