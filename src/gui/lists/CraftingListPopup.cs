@@ -79,13 +79,13 @@ public partial class CraftingListPopup : PanelContainer
 		// Ensure the PopupMenu is not partially off-screen
 		var screenSize = GetViewportRect().Size;
 		
-		// Check if the PopupMenu exceeds the right edge of the screen
+		// Check if the PopupMenu exceeds the right edge of the screen move it to the left of the cursor
 		if (GlobalPosition.X + Size.X > screenSize.X)
 		{
-			GlobalPosition = new Vector2(screenSize.X - Size.X, GlobalPosition.Y);
+			GlobalPosition = new Vector2(GetViewport().GetMousePosition().X - Size.X - 40, GlobalPosition.Y);
 		}
 		
-		// Check if the PopupMenu exceeds the bottom edge of the screen
+		// Check if the PopupMenu exceeds the bottom edge of the screenmove it to the top of the cursor
 		if (GlobalPosition.Y + Size.Y > screenSize.Y)
 		{
 			GlobalPosition = new Vector2(GlobalPosition.X, screenSize.Y - Size.Y);
