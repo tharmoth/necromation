@@ -5,7 +5,7 @@ using Necromation.interactables.interfaces;
 
 namespace Necromation.interactables.belts;
 
-public partial class Belt : Building, Inserter.ITransferTarget, IRotatable
+public partial class Belt : Building, ITransferTarget, IRotatable
 {
     /**************************************************************************
      * Data                                                                   *
@@ -121,7 +121,7 @@ public partial class Belt : Building, Inserter.ITransferTarget, IRotatable
     /**************************************************************************
      * Private Methods                                                        *
      **************************************************************************/
-        /*
+    /*
      * Transfer an item from this belt to the next belt bypassing the inventory.
      * This is done so that the ground item can be moved to the next belt without
      * removing it from the scene tree. Also avoids z level issues.

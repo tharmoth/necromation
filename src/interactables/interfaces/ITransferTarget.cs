@@ -1,19 +1,16 @@
 ﻿namespace Necromation;
 
-public partial class Inserter
+public interface ITransferTarget
 {
-    public interface ITransferTarget
-    {
-        /*
+    /*
          * Returns the inventory that the crafter uses to get the ingredients
          */
-        public Inventory GetInputInventory();
+    public Inventory GetInputInventory();
     
-        /*
+    /*
          * Returns the inventory that the crafter uses to store the products
          */
-        public Inventory GetOutputInventory();
+    public Inventory GetOutputInventory();
 
-        public bool CanAcceptItem(string item);
-    }
+    public bool CanAcceptItem(string item);
 }

@@ -154,7 +154,7 @@ public partial class Character : Node2D
 	{
 		var building = Globals.TileMap.GetBuildingAtMouse();
 		if (building is not BuildingTileMap.IBuilding buildingEntity) return;
-		if (building is Inserter.ITransferTarget inputTarget)
+		if (building is ITransferTarget inputTarget)
 		{
 			inputTarget.GetInputInventory().TransferAllTo(_inventory);
 			inputTarget.GetOutputInventory().TransferAllTo(_inventory);

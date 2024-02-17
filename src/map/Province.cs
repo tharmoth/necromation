@@ -4,7 +4,7 @@ using Necromation.map.character;
 
 namespace Necromation.map;
 
-public partial class Province : Node, Inserter.ITransferTarget
+public partial class Province : Node, ITransferTarget
 {
     public string Name { get; } = MapUtils.GetRandomProvinceName();
     public readonly Dictionary<string, int> RecruitQueue = new();

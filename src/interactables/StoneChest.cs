@@ -3,7 +3,7 @@ using Necromation.interfaces;
 
 namespace Necromation;
 
-public partial class StoneChest : Building, Inserter.ITransferTarget, IInteractable
+public partial class StoneChest : Building, ITransferTarget, IInteractable
 {
     public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Stone Chest";

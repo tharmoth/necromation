@@ -4,7 +4,7 @@ using Necromation.interfaces;
 
 namespace Necromation;
 
-public partial class Mine : Building, IInteractable, Inserter.ITransferTarget
+public partial class Mine : Building, IInteractable, ITransferTarget
 {
     public override Vector2I BuildingSize => Vector2I.One * 2;
     private Inventory _inventory = new();

@@ -5,7 +5,7 @@ using Necromation.interfaces;
 
 namespace Necromation;
 
-public partial class Assembler : Building, ICrafter, IInteractable, Inserter.ITransferTarget
+public partial class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 {
 	public override Vector2I BuildingSize => Vector2I.One * 3;
 	public override string ItemType => "Assembler";

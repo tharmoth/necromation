@@ -2,7 +2,7 @@
 
 namespace Necromation.map.character;
 
-public partial class Commander : Node2D, Inserter.ITransferTarget
+public partial class Commander : Node2D, ITransferTarget
 {
     public string Name { get; } = MapUtils.GetRandomCommanderName();
     public readonly Inventory Units = new();
