@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Godot;
-using Necromation.map.gui;
+﻿using Godot;
 
 namespace Necromation.map.character;
 

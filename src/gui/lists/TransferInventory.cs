@@ -1,7 +1,5 @@
 using Godot;
-using System;
 using System.Linq;
-using Necromation.gui;
 
 public partial class TransferInventory : VBoxContainer
 {

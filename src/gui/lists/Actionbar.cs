@@ -1,8 +1,6 @@
 using Godot;
-using System;
 using System.Linq;
 using Necromation;
-using Necromation.character;
 
 public partial class Actionbar : Control
 {

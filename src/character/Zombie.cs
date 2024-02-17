@@ -1,8 +1,5 @@
 using Godot;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Godot.Collections;
 using Necromation;
 
 public partial class Zombie : Node2D

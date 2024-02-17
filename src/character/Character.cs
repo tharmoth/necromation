@@ -1,10 +1,6 @@
 using Godot;
-using System;
 using Necromation;
-using Necromation.character;
-using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
-using Belt = Necromation.interactables.belts.Belt;
 using IInteractable = Necromation.interfaces.IInteractable;
 
 public partial class Character : Node2D

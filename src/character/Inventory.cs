@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Necromation;
-using Belt = Necromation.interactables.belts.Belt;
 
 public partial class Inventory : Node
 {

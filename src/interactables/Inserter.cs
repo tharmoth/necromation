@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using Godot;
-using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
 
 namespace Necromation;

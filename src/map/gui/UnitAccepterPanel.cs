@@ -1,9 +1,6 @@
 using Godot;
-using System;
 using System.Linq;
-using Necromation;
 using Necromation.map;
-using Necromation.map.gui;
 
 public partial class UnitAccepterPanel : PanelContainer
 {

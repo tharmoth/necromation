@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using Necromation;
-using Necromation.character;
 using Necromation.interactables.belts;
 
 public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, BuildingTileMap.IEntity, ProgressTracker.IProgress

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using Necromation.map.character;
-using Necromation.map.gui;
 
 namespace Necromation.map;
 

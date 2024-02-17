@@ -1,8 +1,6 @@
 using Godot;
-using System;
 using System.Linq;
 using Necromation;
-using Necromation.character;
 using Necromation.gui;
 
 public partial class RecipePopup : Control
