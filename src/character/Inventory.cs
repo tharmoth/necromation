@@ -69,4 +69,5 @@ public partial class Inventory : Node
 	{
 		return true;
 	}
+
 }

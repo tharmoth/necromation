@@ -133,4 +133,15 @@ public partial class BuildingTileMap : SKTileMap
 	{
 		public string ItemType { get; }
 	}
+	
+	
+	public IEntity GetBuildingAtMouse()
+	{
+		return GetEntities(GetGlobalMousePosition(), LayerNames.Buildings);
+	}
+	
+	public IEntity GetResourceAtMouse()
+	{
+		return GetEntities(GetGlobalMousePosition(), LayerNames.Resources);
+	}
 }

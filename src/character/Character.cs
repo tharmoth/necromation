@@ -10,16 +10,14 @@ using IInteractable = Necromation.interfaces.IInteractable;
 public partial class Character : Node2D
 {
 	private const float Speed = 200;
+	private readonly Inventory _inventory = new();
 	
-	private Inventory _inventory = new();
 	private Tween _tween;
 	private Sprite2D _sprite;
-	
 	private Interactable _resource;
 	private int _rotationDegrees;
-
-	private String _selected;
-	public String Selected
+	private string _selected;
+	public string Selected
 	{
 		get => _selected;
 		set
@@ -28,6 +26,8 @@ public partial class Character : Node2D
 			_sprite.Texture = _selected == null
 				? GD.Load<Texture2D>("res://res/sprites/selection.png")
 				: Globals.Database.GetTexture(_selected);
+			
+			if (_selected == null) _rotationDegrees = 0;
 		}
 	}
 	
@@ -58,50 +58,41 @@ public partial class Character : Node2D
 	
 	public override void _Process(double delta)
 	{
+		// Return if a gui is open
 		if (GUI.Instance.CrafterGui.Visible) return;
 		if (GUI.Instance.Popup.Visible) return;
 		if (GUI.Instance.ContainerGui.Visible) return;
-		
-		if (Selected == null) _rotationDegrees = 0;
-		
-		// Move the character at speed
+
+		// Process button presses
 		if (Input.IsActionPressed("right")) Position += new Vector2(Speed * (float)delta, 0);
 		if (Input.IsActionPressed("left")) Position += new Vector2(-Speed * (float)delta, 0);
 		if (Input.IsActionPressed("up")) Position += new Vector2(0, -Speed * (float)delta);
 		if (Input.IsActionPressed("down")) Position += new Vector2(0, Speed * (float)delta);
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionPressed("close_gui") || Input.IsActionPressed("clear_selection")) Selected = null;
-		if (Input.IsActionJustPressed("left_click") && GetBuildingAtMouse() is IInteractable interactable) 
-			interactable.Interact();
-		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) 
-			Build(Building.GetBuilding(Selected));
-		
+		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact();
+		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
-		else if (Input.IsMouseButtonPressed(MouseButton.Right)) Mine();
+		if (Input.IsMouseButtonPressed(MouseButton.Right)) Mine();
 
+		// Process mouseover
 		if (Selected != null) SelectedPreview();
 		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition()).Count > 0) MouseoverEntity();
 		else _sprite.Visible = false;
 	}
 	
-
-
-	private void Mine()
+	/******************************************************************
+	 * Public Methods                                                 *
+	 ******************************************************************/
+	public void RotateSelection()
 	{
-		if (GetResorceAtMouse() is Interactable resource)
-		{
-			if (resource == _resource && !_resource.CanInteract()) return;
-			_resource?.Cancel();
-			_resource = resource;
-			_resource.Interact();
-		}
-		else
-		{
-			_resource?.Cancel();
-			_resource = null;
-		}
+		_rotationDegrees += 90;
+		if (_rotationDegrees == 360) _rotationDegrees = 0;
 	}
-
+	
+	/******************************************************************
+	 * Mouseover                                                      *
+	 ******************************************************************/
 	private void MouseoverEntity()
 	{
 		_sprite.Visible = true;
@@ -136,13 +127,11 @@ public partial class Character : Node2D
 			? Colors.Green
 			: Colors.Red;
 	}
-	
-	public void RotateSelection()
-	{
-		_rotationDegrees += 90;
-		if (_rotationDegrees == 360) _rotationDegrees = 0;
-	}
 
+
+	/******************************************************************
+	 * Player Actions                                                 *
+	 ******************************************************************/
 	private void Build(Building building)
 	{
 		if (!_inventory.Items.ContainsKey(building.ItemType))
@@ -167,7 +156,7 @@ public partial class Character : Node2D
 	
 	private void RemoveBuilding()
 	{
-		var building = GetBuildingAtMouse();
+		var building = Globals.TileMap.GetBuildingAtMouse();
 		if (building is not BuildingTileMap.IBuilding buildingEntity) return;
 		if (building is Inserter.ITransferTarget inputTarget)
 		{
@@ -178,14 +167,20 @@ public partial class Character : Node2D
 		
 		Globals.TileMap.RemoveEntity(building);
 	}
-
-	private BuildingTileMap.IEntity GetBuildingAtMouse()
-	{
-		return Globals.TileMap.GetEntities(GetGlobalMousePosition(), BuildingTileMap.LayerNames.Buildings);
-	}
 	
-	private BuildingTileMap.IEntity GetResorceAtMouse()
+	private void Mine()
 	{
-		return Globals.TileMap.GetEntities(GetGlobalMousePosition(), BuildingTileMap.LayerNames.Resources);
+		if (Globals.TileMap.GetResourceAtMouse() is Interactable resource)
+		{
+			if (resource == _resource && !_resource.CanInteract()) return;
+			_resource?.Cancel();
+			_resource = resource;
+			_resource.Interact();
+		}
+		else
+		{
+			_resource?.Cancel();
+			_resource = null;
+		}
 	}
 }
