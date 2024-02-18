@@ -63,57 +63,61 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     {
         base._Ready();
         
+        GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(UpdateInputOutput);
+        UpdateInputOutput(this);
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
         MovePlayer(delta);
-
-        // TODO: only call this when needed!
-        SetInputOutput();
+        
+        UpdateInputOutput(this);
     }
-
-    /*
-     * Returns a list of adjacent belts. If there is no belt in a given direction, the value will be null
-     * The order of the list is as follows:
-     * 0: Forward
-     * 1: Behind
-     * 2: Right
-     * 3: Left
-     */
-    private List<DoubleBelt> GetAdjacent()
+    
+    protected override void Remove(Inventory to)
     {
-        var rotatedRight = (Vector2) TargetDirectionLocal;
-        rotatedRight = (Vector2I) rotatedRight.Rotated(Mathf.DegToRad(90)).Snapped(Vector2.One);
+        var adjacent = GetAdjacent();
+        base.Remove(to);
+        adjacent.Values.Where(belt => belt != null).ToList().ForEach(belt => UpdateInputOutput(belt));
+        UpdateInputOutput(null);
+    }
+    
+    private DoubleBelt GetBeltInDirection(Vector2 direction)
+    {
+        var global = ToGlobal(direction * BuildingTileMap.TileSize);
+        var map = Globals.TileMap.GlobalToMap(global);
+        var entity = Globals.TileMap.GetEntities(map, BuildingTileMap.LayerNames.Buildings);
 
-        var rotatedLeft = (Vector2) TargetDirectionLocal;
-        rotatedLeft = (Vector2I) rotatedLeft.Rotated(Mathf.DegToRad(-90)).Snapped(Vector2.One);
+        return entity is DoubleBelt belt && belt.GetNextBelt() == this ? belt : null;
+    }
+    
+    /// <summary>
+    /// Returns a dictionary of adjacent belts. If no belt is found in a direction, the corresponding dictionary value
+    /// will be null.
+    /// </summary>
+    /// <returns>A dictionary with keys {"Forward", "Behind", "Right", "Left"} and values as the corresponding
+    /// adjacent <see cref="DoubleBelt"/> instances or null if no belt is present in the direction.</returns>
+    private Dictionary<string, DoubleBelt> GetAdjacent()
+    {
+        var rotatedRight = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(90)).Snapped(Vector2.One);
+        var rotatedLeft = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(-90)).Snapped(Vector2.One);
 
-        var forwardGlobal = ToGlobal(TargetDirectionLocal * BuildingTileMap.TileSize);
-        var behindGlobal = ToGlobal(-TargetDirectionLocal * BuildingTileMap.TileSize);
-        var rightGlobal = ToGlobal(rotatedRight * BuildingTileMap.TileSize);
-        var leftGlobal = ToGlobal(rotatedLeft * BuildingTileMap.TileSize);
-        
-        var forwardMap = Globals.TileMap.GlobalToMap(forwardGlobal);
-        var behindMap = Globals.TileMap.GlobalToMap(behindGlobal);
-        var rightMap = Globals.TileMap.GlobalToMap(rightGlobal);
-        var leftMap = Globals.TileMap.GlobalToMap(leftGlobal);
-        
-        var entityForward = Globals.TileMap.GetEntities(forwardMap, BuildingTileMap.LayerNames.Buildings);
-        var entityBehind = Globals.TileMap.GetEntities(behindMap, BuildingTileMap.LayerNames.Buildings);
-        var entityRight = Globals.TileMap.GetEntities(rightMap, BuildingTileMap.LayerNames.Buildings);
-        var entityLeft = Globals.TileMap.GetEntities(leftMap, BuildingTileMap.LayerNames.Buildings);
+        var beltForward = GetBeltInDirection(TargetDirectionLocal);
+        var beltBehind = GetBeltInDirection(-TargetDirectionLocal);
+        var beltRight = GetBeltInDirection(rotatedRight);
+        var beltLeft = GetBeltInDirection(rotatedLeft);
 
-        var beltForward = entityForward is DoubleBelt belt0 && belt0.GetNextBelt() == this ? belt0 : null;
-        var beltBehind = entityBehind is DoubleBelt belt1 && belt1.GetNextBelt() == this ? belt1 : null;
-        var beltRight = entityRight is DoubleBelt belt2 && belt2.GetNextBelt() == this ? belt2 : null;
-        var beltLeft = entityLeft is DoubleBelt belt3 && belt3.GetNextBelt() == this ? belt3 : null;
-
-        return new List<DoubleBelt>() { beltForward, beltBehind, beltRight, beltLeft };
+        return new Dictionary<string, DoubleBelt>
+        {
+            { "Forward", beltForward },
+            { "Behind", beltBehind },
+            { "Right", beltRight },
+            { "Left", beltLeft }
+        };
     }
 
-    private void SetInputOutput()
+    private static void UpdateInputOutput(DoubleBelt belt)
     {
         // There are 5 cases to consider
         // 1. If a behind belt inputs to this one link left and right
@@ -121,39 +125,41 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
         // 3. if a left belt inputs to this one and there is another input link only left
         // 4. if a right belt inputs to this one and there are no other inputs link left and right.
         // 5. if a right belt inputs to this one and there is another input link only right
-
-        var belts = GetAdjacent();
-        var beltForward = belts[0];
-        var beltBehind = belts[1];
-        var beltRight = belts[2];
-        var beltLeft = belts[3];
+        var belts = belt.GetAdjacent();
+        var beltForward = belts["Forward"];
+        var beltBehind = belts["Behind"];
+        var beltRight = belts["Right"];
+        var beltLeft = belts["Left"];
+        
+        var leftLine = belt?._leftLine;
+        var rightLine = belt?._rightLine;
 
         if (beltBehind != null)
         {
-            beltBehind._leftLine.OutputLine = _leftLine;
-            beltBehind._rightLine.OutputLine = _rightLine;
+            beltBehind._leftLine.OutputLine = leftLine;
+            beltBehind._rightLine.OutputLine = rightLine;
         }
         
         if (beltLeft != null && beltRight == null && beltForward == null && beltBehind == null)
         {
-            beltLeft._leftLine.OutputLine = _leftLine;
-            beltLeft._rightLine.OutputLine = _rightLine;
+            beltLeft._leftLine.OutputLine = leftLine;
+            beltLeft._rightLine.OutputLine = rightLine;
         }
         else if (beltLeft != null)
         {
-            beltLeft._leftLine.OutputLine = _leftLine;
-            beltLeft._rightLine.OutputLine = _leftLine;
+            beltLeft._leftLine.OutputLine = leftLine;
+            beltLeft._rightLine.OutputLine = leftLine;
         }
         
         if (beltRight != null && beltLeft == null && beltForward == null && beltBehind == null)
         {
-            beltRight._leftLine.OutputLine = _leftLine;
-            beltRight._rightLine.OutputLine = _rightLine;
+            beltRight._leftLine.OutputLine = leftLine;
+            beltRight._rightLine.OutputLine = rightLine;
         }
         else if (beltRight != null)
         {
-            beltRight._leftLine.OutputLine = _rightLine;
-            beltRight._rightLine.OutputLine = _rightLine;
+            beltRight._leftLine.OutputLine = rightLine;
+            beltRight._rightLine.OutputLine = rightLine;
         }
     }
 

@@ -75,18 +75,21 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 		_removeTween?.Kill();
 		_removeTween = GetTree().CreateTween();
 		_removeTween.TweenProperty(this, "RemovePercent", 1.0f, 1.0f);
-		_removeTween.TweenCallback(Callable.From(() =>
+		_removeTween.TweenCallback(Callable.From(() => Remove(to)));
+	}
+
+	protected virtual void Remove(Inventory to)
+	{
+		GD.Print("Removed!");
+		if (this is ITransferTarget inputTarget)
 		{
-			if (this is ITransferTarget inputTarget)
+			foreach (var from in inputTarget.GetInventories())
 			{
-				foreach (var from in inputTarget.GetInventories())
-				{
-					Inventory.TransferAllTo(from, to);
-				}
+				Inventory.TransferAllTo(from, to);
 			}
-			to.Insert(ItemType);
-			Globals.TileMap.RemoveEntity(this);
-		}));
+		}
+		to.Insert(ItemType);
+		Globals.TileMap.RemoveEntity(this);
 	}
 	
 	public void CancelRemoval()
