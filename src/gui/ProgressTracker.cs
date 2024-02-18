@@ -6,8 +6,15 @@ public partial class ProgressTracker : ProgressBar
 
 	public override void _Process(double delta)
 	{
-		if (NodeToTrack is IProgress progress && progress.GetProgressPercent() > 0.0f)
+		if (NodeToTrack is Building building && building.RemovePercent > 0.0f)
 		{
+			Visible = true;
+			Value = building.RemovePercent * 100;
+			Modulate = new Color(1, 1, 0);
+		}
+		else if (NodeToTrack is IProgress progress && progress.GetProgressPercent() > 0.0f)
+		{
+			Modulate = new Color(1, 1, 1);
 			Visible = true;
 			Value = progress.GetProgressPercent() * 100;
 		}

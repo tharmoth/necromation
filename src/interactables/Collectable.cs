@@ -17,7 +17,6 @@ public partial class Collectable : Interactable, BuildingTileMap.IBuilding, Buil
     {
         base.Complete();
         Globals.PlayerInventory.Insert(Type);
-        // QueueFree();
     }
 
     public string ItemType => Type;

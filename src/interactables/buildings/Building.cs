@@ -5,9 +5,7 @@ using Necromation.interactables.belts;
 
 public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, BuildingTileMap.IEntity, ProgressTracker.IProgress
 {
-
-	
-	protected readonly Sprite2D _sprite = new();
+	private readonly Sprite2D _sprite = new();
 
 	protected Building()
 	{
@@ -45,13 +43,6 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 		}
 	}
 
-	public abstract Vector2I BuildingSize { get; }
-	public abstract string ItemType { get; }
-	public virtual float GetProgressPercent()
-	{
-		return 0;
-	}
-
 	public bool CanPlaceAt(Vector2 position)
 	{
 		position = Globals.TileMap.ToMap(position);
@@ -75,8 +66,49 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 
 		return true;
 	}
-	
 
+	private Tween _removeTween;
+	public float RemovePercent;
+
+	public void StartRemoval(Inventory to)
+	{
+		_removeTween?.Kill();
+		_removeTween = GetTree().CreateTween();
+		_removeTween.TweenProperty(this, "RemovePercent", 1.0f, 1.0f);
+		_removeTween.TweenCallback(Callable.From(() =>
+		{
+			if (this is ITransferTarget inputTarget)
+			{
+				foreach (var from in inputTarget.GetInventories())
+				{
+					Inventory.TransferAllTo(from, to);
+				}
+			}
+			to.Insert(ItemType);
+			Globals.TileMap.RemoveEntity(this);
+		}));
+	}
+	
+	public void CancelRemoval()
+	{
+		RemovePercent = 0;
+		_removeTween?.Kill();
+		_removeTween = null;
+	}
+	
+	/******************************************************************
+	 * Abstract methods                                               *
+	 ******************************************************************/	
+	public abstract Vector2I BuildingSize { get; }
+	public abstract string ItemType { get; }
+	public virtual float GetProgressPercent()
+	{
+		return 0;
+	}
+
+	/******************************************************************
+	 * Building Factory                                               *
+	 ******************************************************************/
 	public static Building GetBuilding(string selectedItem)
 	{
 		return selectedItem switch

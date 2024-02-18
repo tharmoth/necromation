@@ -7,10 +7,12 @@ public partial class Character : Node2D
 {
 	private const float Speed = 200;
 	private readonly Inventory _inventory = new();
-	
 	private Tween _tween;
 	private Sprite2D _sprite;
+	
 	private Interactable _resource;
+	private Building _buildingBeingRemoved;
+
 	private int _rotationDegrees;
 	private string _selected;
 	public string Selected
@@ -69,7 +71,9 @@ public partial class Character : Node2D
 		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact();
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
+		else CancelRemoval();
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) Mine();
+		else _resource?.Cancel();
 
 		// Process mouseover
 		if (Selected != null) SelectedPreview();
@@ -149,23 +153,23 @@ public partial class Character : Node2D
 		
 		if(!_inventory.Items.ContainsKey(building.ItemType)) Selected = null;
 	}
-	
+
 	private void RemoveBuilding()
 	{
-		var building = Globals.TileMap.GetBuildingAtMouse();
-		if (building is not BuildingTileMap.IBuilding buildingEntity) return;
-		if (building is ITransferTarget inputTarget)
-		{
-			foreach (var inventory in inputTarget.GetInventories())
-			{
-				Inventory.TransferAllTo(inventory, _inventory);
-			}
-		}
-		_inventory.Insert(buildingEntity.ItemType);
-		
-		Globals.TileMap.RemoveEntity(building);
+		var entity = Globals.TileMap.GetBuildingAtMouse();
+		if (entity != _buildingBeingRemoved) CancelRemoval();
+		if (entity == _buildingBeingRemoved) return;
+		if (entity is not Building building) return;
+		_buildingBeingRemoved = building;
+		building.StartRemoval(_inventory);
 	}
 	
+	private void CancelRemoval()
+	{
+		_buildingBeingRemoved?.CancelRemoval();
+		_buildingBeingRemoved = null;
+	}
+
 	private void Mine()
 	{
 		if (Globals.TileMap.GetResourceAtMouse() is Interactable resource)

@@ -59,6 +59,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
          GUI.Instance.ContainerGui.Display(Globals.PlayerInventory, _inventory, ItemType);
     }
     #endregion
+    
     #region ITransferTarget Implementation
     /**************************************************************************
      * ITransferTarget Methods                                                *
