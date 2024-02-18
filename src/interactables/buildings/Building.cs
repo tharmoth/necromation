@@ -120,6 +120,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 			"Inserter" => new Inserter(),
 			"Belt" => new Belt(),
 			"Underground Belt" => new UndergroundBelt(),
+			"Double Belt" => new DoubleBelt(),
 			_ =>  throw new NotImplementedException()
 		};
 	}
@@ -135,6 +136,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 			"Inserter" => true,
 			"Belt" => true,
 			"Underground Belt" => true,
+			"Double Belt" => true,
 			_ => false
 		};
 	}

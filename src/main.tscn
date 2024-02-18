@@ -37,6 +37,7 @@ height = 1024
 noise = SubResource("FastNoiseLite_8xne8")
 
 [node name="Main" type="Node2D"]
+y_sort_enabled = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
 script = ExtResource("1_yiksk")

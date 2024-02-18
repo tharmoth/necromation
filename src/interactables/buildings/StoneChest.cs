@@ -24,8 +24,8 @@ public partial class StoneChest : Building, ITransferTarget, IInteractable
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item,  int count = 1, Vector2 position = default) => _inventory.CountItem(item) < 200;
-    public void Insert(string item, int count = 1, Vector2 position = default) => _inventory.Insert(item, count);
+    public bool CanAcceptItems(string item,  int count = 1) => _inventory.CountItem(item) < 200;
+    public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();
     public List<Inventory> GetInventories() => new() { _inventory };

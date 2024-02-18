@@ -80,7 +80,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item, int count = 1, Vector2 position = default)
+    public bool CanAcceptItems(string item, int count = 1)
     {
 	    if (GetRecipe() == null) return false;
 	    var ingredients = GetRecipe().Ingredients;
@@ -88,7 +88,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	    return ingredients.ContainsKey(item) && itemCount < ingredients[item] * 2;
     }
     
-    public void Insert(string item, int count = 1, Vector2 position = default) => _inputInventory.Insert(item, count);
+    public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _outputInventory.Remove(item, count);
     public string GetFirstItem() => _outputInventory.GetFirstItem();
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };

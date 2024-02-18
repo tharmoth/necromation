@@ -37,7 +37,7 @@ public partial class Inventory : Node, ITransferTarget
 	/**************************************************************************
 	 * ITransferTarget Methods                                                *
 	 **************************************************************************/
-	public void Insert(string item, int count = 1, Vector2 position = default)
+	public void Insert(string item, int count = 1)
 	{
 		_items.TryGetValue(item, out var currentCount);
 		_items[item] = currentCount + count;
@@ -51,7 +51,7 @@ public partial class Inventory : Node, ITransferTarget
 		Listeners.ForEach(listener => listener());
 		return true;
 	}
-	public bool CanAcceptItems(string item, int count = 1, Vector2 position = default) => true;
+	public bool CanAcceptItems(string item, int count = 1) => true;
 	public string GetFirstItem() => _items.Keys.FirstOrDefault();
 	public List<Inventory> GetInventories() => new() { this };
 	#endregion

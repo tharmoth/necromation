@@ -5,7 +5,7 @@ using Necromation.interactables.interfaces;
 
 namespace Necromation.interactables.belts;
 
-public partial class Belt : Building, ITransferTarget, IRotatable
+public partial class TransportLine : Node2D, ITransferTarget
 {
     /**************************************************************************
      * Data                                                                   *
@@ -17,35 +17,13 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     /**************************************************************************
      * Properties                                                             *
      **************************************************************************/
-    private IRotatable.BuildingOrientation _orientation;
-
-    public IRotatable.BuildingOrientation Orientation
-    {
-        get => _orientation;
-        set
-        {
-            _orientation = value;
-            RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
-        }
-    }
-
-    public override Vector2I BuildingSize => Vector2I.One;
-    public override string ItemType => "Belt";
+    public TransportLine OutputLine;
     protected float Speed => BuildingTileMap.TileSize / _secondsPerItem;
-    private Vector2I Output => MapPosition + TargetDirection;
-    protected Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
-    protected virtual Vector2I TargetDirection => Orientation switch {
-        IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
-        IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
-        IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, 1),
-        IRotatable.BuildingOrientation.WestEast => new Vector2I(-1, 0),
-        _ => throw new ArgumentOutOfRangeException()
-    };
     
     /**************************************************************************
      * Public Methods                                                         *
      **************************************************************************/
-    public Belt()
+    public TransportLine()
     {
         _inventory.Listeners.Add(UpdateSprites);
     }
@@ -53,7 +31,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public override void _Process(double delta)
     {
         base._Process(delta);
-        MovePlayer(delta);
 
         for (var i = 0; i < _itemsOnBelt.Count; i++)
         {
@@ -61,39 +38,39 @@ public partial class Belt : Building, ITransferTarget, IRotatable
             var targetLocation = GetTargetLocation(i);
             
             // Slide the item along the belt until it reaches the bottom of the belt.
-            if (!IsEqualApprox(groundItem.GlobalPosition, targetLocation, .5f))
+            if (!IsEqualApprox(groundItem.Position, targetLocation, .5f))
             {
-                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.GlobalPosition) * Speed * (float)delta;
+                groundItem.Position += -targetLocation.DirectionTo(groundItem.Position) * Speed * (float)delta;
                 continue;
             }
             
             if (i != 0) continue;
-
-            var nextBelt = GetNextBelt();
-            if (nextBelt is not Belt belt) continue;
-            if (!belt.CanAcceptItems(groundItem.ItemType)) continue;
-            BeltTransfer(belt);
+            
+            if (OutputLine == null) continue;
+            if (!OutputLine.CanAcceptItems(groundItem.ItemType)) continue;
+            BeltTransfer(OutputLine);
             i = 0;
         }
+    }
+
+    public int GetItemCount(string item = null)
+    {
+        if (item == null) return _inventory.CountAllItems();
+        return _inventory.CountItem(item);
     }
 
     /**************************************************************************
      * Protected Methods                                                      *
      **************************************************************************/
-    protected virtual BuildingTileMap.IEntity GetNextBelt()
-    {
-        return Globals.TileMap.GetEntities(Output, BuildingTileMap.LayerNames.Buildings);
-    }
-    
     protected Vector2 GetTargetLocation(int index)
     {
         return index switch
         {
-            0 => GlobalPosition + TargetDirection * 16,
-            1 => GlobalPosition + TargetDirection * 8,
-            2 => GlobalPosition - TargetDirection * 0,
-            3 => GlobalPosition - TargetDirection * 8,
-            4 => GlobalPosition - TargetDirection * 16,
+            0 => new Vector2I(0, -1) * 16,
+            1 => new Vector2I(0, -1) * 8,
+            2 => new Vector2I(0, -1) * 0,
+            3 => new Vector2I(0, -1) * -8,
+            4 => new Vector2I(0, -1) * -16,
             _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
         };
     }
@@ -106,7 +83,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
      * This is done so that the ground item can be moved to the next belt without
      * removing it from the scene tree. Also avoids z level issues.
      */
-    private void BeltTransfer(Belt to)
+    private void BeltTransfer(TransportLine to)
     {
         var item = _itemsOnBelt[0];
         _itemsOnBelt.RemoveAt(0);
@@ -152,8 +129,9 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     private void AddItem(GroundItem item)
     {
         _itemsOnBelt.Add(item);
-        if (item.GetParent() == null) GetTree().Root.AddChild(item);
-        item.GlobalPosition = GetTargetLocation(4);
+        if (item.GetParent() != null) item.GetParent().RemoveChild(item);
+        if (item.GetParent() != this) AddChild(item);
+        item.Position = GetTargetLocation(4);
     }
     
     private GroundItem RemoveItem()
@@ -162,16 +140,10 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         if (_itemsOnBelt.Count == 0) return null;
         var item = _itemsOnBelt[0];
         _itemsOnBelt.RemoveAt(0);
-        GetTree().Root.RemoveChild(item);
+        RemoveChild(item);
         return item;
     }
 
-    private void MovePlayer(double delta)
-    {
-        if (Globals.TileMap.GlobalToMap(Globals.Player.GlobalPosition) != MapPosition) return;
-        Globals.Player.GlobalPosition += -GetTargetLocation(0).DirectionTo(Globals.Player.GlobalPosition) * Speed * (float)delta;
-    }
-    
     public static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
 
     #region ITransferTarget Implementation/

@@ -47,6 +47,7 @@ public partial class Character : Node2D
 		_inventory.Insert("Assembler", 3);
 		_inventory.Insert("Belt", 100);
 		_inventory.Insert("Underground Belt", 100);
+		_inventory.Insert("Double Belt", 100);
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
@@ -62,10 +63,14 @@ public partial class Character : Node2D
 		if (GUI.Instance.ContainerGui.Visible) return;
 
 		// Process button presses
-		if (Input.IsActionPressed("right")) Position += new Vector2(Speed * (float)delta, 0);
-		if (Input.IsActionPressed("left")) Position += new Vector2(-Speed * (float)delta, 0);
-		if (Input.IsActionPressed("up")) Position += new Vector2(0, -Speed * (float)delta);
-		if (Input.IsActionPressed("down")) Position += new Vector2(0, Speed * (float)delta);
+		if (_buildingBeingRemoved == null)
+		{
+			if (Input.IsActionPressed("right")) Position += new Vector2(Speed * (float)delta, 0);
+			if (Input.IsActionPressed("left")) Position += new Vector2(-Speed * (float)delta, 0);
+			if (Input.IsActionPressed("up")) Position += new Vector2(0, -Speed * (float)delta);
+			if (Input.IsActionPressed("down")) Position += new Vector2(0, Speed * (float)delta);
+		}
+
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionPressed("close_gui") || Input.IsActionPressed("clear_selection")) Selected = null;
 		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact();

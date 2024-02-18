@@ -1,5 +1,6 @@
 ﻿using System;
 using Godot;
+using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
 
 namespace Necromation;
@@ -71,7 +72,7 @@ public partial class Inserter : Building, IRotatable
         if (_time < _interval) return;
 
         var item = GetSourceItem();
-        if (!TryTransfer()) return;
+        if (!Transfer()) return;
         _time = 0;
         Animate(item);
     }
@@ -91,11 +92,41 @@ public partial class Inserter : Building, IRotatable
     {
         SpriteInHand.Visible = false;
     }
-    
-    private bool Transfer(object sourceObject, object targetObject)
+
+    private bool Transfer()
     {
-        switch (sourceObject, targetObject)
+        var sourceEntity = Globals.TileMap.GetEntities(_input, BuildingTileMap.LayerNames.Buildings);
+        var targetEntity = Globals.TileMap.GetEntities(_output, BuildingTileMap.LayerNames.Buildings);
+        
+        switch (sourceEntity, targetEntity)
         {
+            case (ITransferTarget from, DoubleBelt to):
+            {
+                var item = from.GetFirstItem();
+                if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) return false;
+                
+                // if (to.GlobalPosition.X < GlobalPosition.X) to.InsertRight(item);
+                // else if (to.GlobalPosition.Y < GlobalPosition.Y) to.InsertRight(item);
+                // else to.InsertLeft(item);
+                
+                // Randomly insert on the left or right
+                if (new Random().Next(0, 2) == 0)
+                {
+                    if (!to.CanInsertLeft(item)) return false;
+                    from.Remove(item);
+                    to.InsertLeft(item);
+                }
+                else
+                {
+                    if (!to.CanInsertRight(item)) return false;
+                    from.Remove(item);
+                    to.InsertRight(item);
+                }
+
+                return true;
+                
+                // return Inventory.TransferItem(from, to, item);
+            }
             case (ITransferTarget from, ITransferTarget to):
             {
                 var item = from.GetFirstItem();
@@ -116,11 +147,4 @@ public partial class Inserter : Building, IRotatable
         };
     }
 
-    private bool TryTransfer()
-    {
-        var sourceEntity = Globals.TileMap.GetEntities(_input, BuildingTileMap.LayerNames.Buildings);
-        var targetEntity = Globals.TileMap.GetEntities(_output, BuildingTileMap.LayerNames.Buildings);
-
-        return Transfer(sourceEntity, targetEntity);
-    }
 }

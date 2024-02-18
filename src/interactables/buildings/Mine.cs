@@ -64,28 +64,15 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item, int count = 1, Vector2 position = default)
-    {
-        return false;
-    }
-    public void Insert(string item, int count = 1, Vector2 position = default)
-    {
-        return;
-    }
+    public bool CanAcceptItems(string item, int count = 1) => false;
 
-    public bool Remove(string item, int count = 1)
-    {
-        return _inventory.Remove(item, count);
-    }
+    public void Insert(string item, int count = 1) { }
 
-    public string GetFirstItem()
-    {
-        return _inventory.GetFirstItem();
-    }
-    
-    public List<Inventory> GetInventories()
-    {
-        return new List<Inventory> { _inventory };
-    }
+    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
+
+    public string GetFirstItem() => _inventory.GetFirstItem();
+
+    public List<Inventory> GetInventories() => new() { _inventory };
+
     #endregion
 }

@@ -142,6 +142,17 @@
       "products": {
         "Underground Belt": 2
       }
+    },
+    {
+      "name": "Double Belt",
+      "time" : 1,
+      "ingredients": {
+        "Iron Bar": 10,
+        "Belt": 5
+      },
+      "products": {
+        "Double Belt": 2
+      }
     }
     
   ]
