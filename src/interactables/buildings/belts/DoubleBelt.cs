@@ -67,7 +67,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
         base._Ready();
         
         // When this belt is placed, update the input and output of all adjacent belts
-        GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => UpdateInputOutput(belt, belt.GetAdjacent()));
+        GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));
         UpdateInputOutput(this, GetAdjacent());
     }
 
@@ -85,7 +85,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
         UpdateInputOutput(null, adjacent);
     }
     
-    protected DoubleBelt GetBeltInDirection(Vector2 direction)
+    private DoubleBelt GetBeltInDirection(Vector2 direction)
     {
         var global = ToGlobal(direction * BuildingTileMap.TileSize);
         var map = Globals.TileMap.GlobalToMap(global);
@@ -100,19 +100,19 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     /// </summary>
     /// <returns>A dictionary with keys {"Forward", "Behind", "Right", "Left"} and values as the corresponding
     /// adjacent <see cref="DoubleBelt"/> instances or null if no belt is present in the direction.</returns>
-    protected virtual Dictionary<string, DoubleBelt> GetAdjacent()
+    private Dictionary<string, DoubleBelt> GetAdjacent()
     {
         var rotatedRight = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(90)).Snapped(Vector2.One);
         var rotatedLeft = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(-90)).Snapped(Vector2.One);
 
-        var beltForward = GetBeltInDirection(TargetDirectionLocal);
-        var beltBehind = GetBeltInDirection(-TargetDirectionLocal);
+        var outputBelt = GetOutputBelt();
+        var beltBehind = GetBehindBelt();
         var beltRight = GetBeltInDirection(rotatedRight);
         var beltLeft = GetBeltInDirection(rotatedLeft);
 
         return new Dictionary<string, DoubleBelt>
         {
-            { "Forward", beltForward },
+            { "Output", outputBelt },
             { "Behind", beltBehind },
             { "Right", beltRight },
             { "Left", beltLeft }
@@ -172,6 +172,11 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     protected virtual DoubleBelt GetOutputBelt()
     {
         return Globals.TileMap.GetEntities(Output, BuildingTileMap.LayerNames.Buildings) as DoubleBelt;
+    }
+    
+    protected virtual DoubleBelt GetBehindBelt()
+    {
+        return GetBeltInDirection(-TargetDirectionLocal);
     }
     
     public TransportLine GetLeftInventory() => _leftLine;
