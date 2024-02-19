@@ -1,0 +1,14 @@
+﻿{
+  "technology": [
+    {
+      "name": "automation",
+      "count": 20,
+      "ingredients": [
+          "experiment"
+      ],
+      "unlocks" : [
+        "underground-belt"
+      ]
+    }
+  ]
+}

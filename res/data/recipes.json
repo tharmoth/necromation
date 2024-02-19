@@ -11,17 +11,6 @@
       }
     },
     {
-      "name": "Belt",
-      "time" : 1,
-      "ingredients": {
-        "Iron Bar": 1,
-        "Gear": 1
-      },
-      "products": {
-        "Belt": 1
-      }
-    },
-    {
       "name": "Inserter",
       "time" : 1,
       "ingredients": {
@@ -144,7 +133,7 @@
       }
     },
     {
-      "name": "Double Belt",
+      "name": "Belt",
       "time" : 1,
       "ingredients": {
         "Iron Bar": 10,
@@ -154,6 +143,5 @@
         "Double Belt": 2
       }
     }
-    
   ]
 }

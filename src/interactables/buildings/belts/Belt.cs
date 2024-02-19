@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Necromation.interactables.interfaces;
 
@@ -7,18 +8,17 @@ namespace Necromation.interactables.belts;
 
 public partial class Belt : Building, ITransferTarget, IRotatable
 {
-    /**************************************************************************
-     * Data                                                                   *
-     **************************************************************************/
-    protected float _secondsPerItem = .5333f;
-    private readonly List<GroundItem> _itemsOnBelt = new();
-    private readonly Inventory _inventory = new();
+    private float _secondsPerItem = .5333f;
+    public override Vector2I BuildingSize => Vector2I.One;
+    public override string ItemType => "Double Belt";
 
-    /**************************************************************************
-     * Properties                                                             *
-     **************************************************************************/
+    private TransportLine _leftLine = new();
+    private TransportLine _rightLine = new();
+    
+    public TransportLine LeftLine => _leftLine;
+    public TransportLine RightLine => _rightLine;
+    
     private IRotatable.BuildingOrientation _orientation;
-
     public IRotatable.BuildingOrientation Orientation
     {
         get => _orientation;
@@ -28,13 +28,10 @@ public partial class Belt : Building, ITransferTarget, IRotatable
             RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
         }
     }
-
-    public override Vector2I BuildingSize => Vector2I.One;
-    public override string ItemType => "Belt";
     protected float Speed => BuildingTileMap.TileSize / _secondsPerItem;
-    private Vector2I Output => MapPosition + TargetDirection;
+    private Vector2I Output => MapPosition + TargetDirectionGlobal;
     protected Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
-    protected virtual Vector2I TargetDirection => Orientation switch {
+    protected virtual Vector2I TargetDirectionGlobal => Orientation switch {
         IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
         IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
         IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, 1),
@@ -42,128 +39,128 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         _ => throw new ArgumentOutOfRangeException()
     };
     
-    /**************************************************************************
-     * Public Methods                                                         *
-     **************************************************************************/
+    protected virtual Vector2I TargetDirectionLocal => new (0, -1);
+    
+    protected virtual Vector2 GetTargetLocation(int index)
+    {
+        return index switch
+        {
+            0 => GlobalPosition + TargetDirectionGlobal * 16,
+            1 => GlobalPosition + TargetDirectionGlobal * 8,
+            2 => GlobalPosition - TargetDirectionGlobal * 0,
+            3 => GlobalPosition - TargetDirectionGlobal * 8,
+            4 => GlobalPosition - TargetDirectionGlobal * 16,
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
+        };
+    }
+
     public Belt()
     {
-        _inventory.Listeners.Add(UpdateSprites);
+        AddChild(_leftLine);
+        AddChild(_rightLine);
+        _leftLine.Position = new Vector2(-8, 0);
+        _rightLine.Position = new Vector2(8, 0);
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        
+        // When this belt is placed, update the input and output of all adjacent belts
+        GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));
+        UpdateInputOutput(this, GetAdjacent());
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
         MovePlayer(delta);
-
-        for (var i = 0; i < _itemsOnBelt.Count; i++)
-        {
-            var groundItem = _itemsOnBelt[i];
-            var targetLocation = GetTargetLocation(i);
-            
-            // Slide the item along the belt until it reaches the bottom of the belt.
-            if (!IsEqualApprox(groundItem.GlobalPosition, targetLocation, .5f))
-            {
-                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.GlobalPosition) * Speed * (float)delta;
-                continue;
-            }
-            
-            if (i != 0) continue;
-
-            var nextBelt = GetNextBelt();
-            if (nextBelt is not Belt belt) continue;
-            if (!belt.CanAcceptItems(groundItem.ItemType)) continue;
-            BeltTransfer(belt);
-            i = 0;
-        }
-    }
-
-    /**************************************************************************
-     * Protected Methods                                                      *
-     **************************************************************************/
-    protected virtual BuildingTileMap.IEntity GetNextBelt()
-    {
-        return Globals.TileMap.GetEntities(Output, BuildingTileMap.Building);
     }
     
-    protected Vector2 GetTargetLocation(int index)
+    protected override void Remove(Inventory to)
     {
-        return index switch
+        var adjacent = GetAdjacent();
+        base.Remove(to);
+        adjacent.Values.Where(belt => belt != null).ToList().ForEach(belt => UpdateInputOutput(belt, belt.GetAdjacent()));
+        UpdateInputOutput(null, adjacent);
+    }
+    
+    private Belt GetBeltInDirection(Vector2 direction)
+    {
+        var global = ToGlobal(direction * BuildingTileMap.TileSize);
+        var map = Globals.TileMap.GlobalToMap(global);
+        var entity = Globals.TileMap.GetEntities(map, BuildingTileMap.Building);
+
+        return entity is Belt belt && (belt.GetOutputBelt() == this || belt == GetOutputBelt()) ? belt : null;
+    }
+    
+    /// <summary>
+    /// Returns a dictionary of adjacent belts. If no belt is found in a direction, the corresponding dictionary value
+    /// will be null.
+    /// </summary>
+    /// <returns>A dictionary with keys {"Forward", "Behind", "Right", "Left"} and values as the corresponding
+    /// adjacent <see cref="Belt"/> instances or null if no belt is present in the direction.</returns>
+    private Dictionary<string, Belt> GetAdjacent()
+    {
+        var rotatedRight = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(90)).Snapped(Vector2.One);
+        var rotatedLeft = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(-90)).Snapped(Vector2.One);
+
+        var outputBelt = GetOutputBelt();
+        var beltBehind = GetBehindBelt();
+        var beltRight = GetBeltInDirection(rotatedRight);
+        var beltLeft = GetBeltInDirection(rotatedLeft);
+
+        return new Dictionary<string, Belt>
         {
-            0 => GlobalPosition + TargetDirection * 16,
-            1 => GlobalPosition + TargetDirection * 8,
-            2 => GlobalPosition - TargetDirection * 0,
-            3 => GlobalPosition - TargetDirection * 8,
-            4 => GlobalPosition - TargetDirection * 16,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
+            { "Output", outputBelt },
+            { "Behind", beltBehind },
+            { "Right", beltRight },
+            { "Left", beltLeft }
         };
     }
-    
-    /**************************************************************************
-     * Private Methods                                                        *
-     **************************************************************************/
-    /*
-     * Transfer an item from this belt to the next belt bypassing the inventory.
-     * This is done so that the ground item can be moved to the next belt without
-     * removing it from the scene tree. Also avoids z level issues.
-     */
-    private void BeltTransfer(Belt to)
-    {
-        var item = _itemsOnBelt[0];
-        _itemsOnBelt.RemoveAt(0);
-        to.AddItem(item);
-        Inventory.TransferItem(this, to, item.ItemType);
-    }
 
-    private void UpdateSprites()
+    protected virtual void UpdateInputOutput(Belt belt, Dictionary<string, Belt> belts)
     {
-        while (_inventory.CountAllItems() != _itemsOnBelt.Count)
-        {
-            if (_inventory.CountAllItems() < _itemsOnBelt.Count)
-            {
-                RemoveItem();
-            }
-            else
-            {
-                AddItem(new GroundItem(GetMissingItem()));
-            }
-        }
-    }
+        // There are 5 cases to consider
+        // 1. If a behind belt inputs to this one link left and right
+        // 2. If a left belt inputs to this one and there are no other inputs link left and right.
+        // 3. if a left belt inputs to this one and there is another input link only left
+        // 4. if a right belt inputs to this one and there are no other inputs link left and right.
+        // 5. if a right belt inputs to this one and there is another input link only right
+        var beltBehind = belts["Behind"];
+        var beltRight = belts["Right"];
+        var beltLeft = belts["Left"];
+        
+        var leftLine = belt?._leftLine;
+        var rightLine = belt?._rightLine;
 
-    private string GetMissingItem()
-    {
-        // Build an inventory dictionary of the items on the belt and compare it to the inventory to determine what to add.
-        var beltItems = new Dictionary<string, int>();
-        foreach (var item in _itemsOnBelt)
+        if (beltBehind != null)
         {
-            beltItems.TryGetValue(item.ItemType, out var count);
-            beltItems[item.ItemType] = count + 1;
+            beltBehind._leftLine.OutputLine = leftLine;
+            beltBehind._rightLine.OutputLine = rightLine;
         }
-                
-        // Add the first item that is in the inventory but not on the belt.
-        foreach (var (item, count) in _inventory.Items)
+        
+        if (beltLeft != null && beltRight == null && beltBehind == null)
         {
-            if (beltItems.TryGetValue(item, out var beltCount) && beltCount >= count) continue;
-            return item;
+            beltLeft._leftLine.OutputLine = leftLine;
+            beltLeft._rightLine.OutputLine = rightLine;
         }
-
-        return null;
-    }
-    
-    private void AddItem(GroundItem item)
-    {
-        _itemsOnBelt.Add(item);
-        if (item.GetParent() == null) GetTree().Root.AddChild(item);
-        item.GlobalPosition = GetTargetLocation(4);
-    }
-    
-    private GroundItem RemoveItem()
-    {
-        // Return the first item in the list and remove it from the list or else null.
-        if (_itemsOnBelt.Count == 0) return null;
-        var item = _itemsOnBelt[0];
-        _itemsOnBelt.RemoveAt(0);
-        GetTree().Root.RemoveChild(item);
-        return item;
+        else if (beltLeft != null)
+        {
+            beltLeft._leftLine.OutputLine = leftLine;
+            beltLeft._rightLine.OutputLine = leftLine;
+        }
+        
+        if (beltRight != null && beltLeft == null && beltBehind == null)
+        {
+            beltRight._leftLine.OutputLine = leftLine;
+            beltRight._rightLine.OutputLine = rightLine;
+        }
+        else if (beltRight != null)
+        {
+            beltRight._leftLine.OutputLine = rightLine;
+            beltRight._rightLine.OutputLine = rightLine;
+        }
     }
 
     private void MovePlayer(double delta)
@@ -172,17 +169,81 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         Globals.Player.GlobalPosition += -GetTargetLocation(0).DirectionTo(Globals.Player.GlobalPosition) * Speed * (float)delta;
     }
     
-    public static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
+    protected virtual Belt GetOutputBelt()
+    {
+        return Globals.TileMap.GetEntities(Output, BuildingTileMap.Building) as Belt;
+    }
+    
+    protected virtual Belt GetBehindBelt()
+    {
+        return GetBeltInDirection(-TargetDirectionLocal);
+    }
+    
+    public TransportLine GetLeftInventory() => _leftLine;
+    public TransportLine GetRightInventory() => _rightLine;
+    
+    public void InsertLeft(string item, int count = 1)
+    {
+        if (_leftLine.GetItemCount() + count < 5) _leftLine.Insert(item, count);
+    }
 
-    #region ITransferTarget Implementation/
+    public void InsertRight(string item, int count = 1)
+    {
+        if (_rightLine.GetItemCount() + count < 5) _rightLine.Insert(item, count);
+    }
+    
+    public bool CanInsertLeft(string item, int count = 1)
+    {
+        return _leftLine.GetItemCount() + count < 5;
+    }
+    
+    public bool CanInsertRight(string item, int count = 1)
+    {
+        return _rightLine.GetItemCount() + count < 5;
+    }
+
+    #region ITransferTarget Implementation
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item,  int count = 1) => _inventory.CountAllItems() + count < 5;
-    public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
-    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
-    public string GetFirstItem() => _inventory.GetFirstItem();
-    public List<string> GetItems() => _inventory.GetItems();
-    public List<Inventory> GetInventories() => _inventory.GetInventories();
+    public bool CanAcceptItems(string item,  int count = 1)
+    {
+        return _leftLine.GetItemCount() + count < 5 || _rightLine.GetItemCount() + count < 5;
+    }
+    
+    public void Insert(string item, int count = 1)
+    { 
+        // if the position is to the left of the center of the building, insert into the left belt
+        if (_leftLine.GetItemCount() + count < 5) _leftLine.Insert(item, count);
+        else if (_rightLine.GetItemCount() + count < 5) _rightLine.Insert(item, count);
+    }
+    
+    public bool Remove(string item, int count = 1)
+    {
+        if (_leftLine.GetItemCount(item) >= count) return _leftLine.Remove(item, count);
+        if (_rightLine.GetItemCount(item) >= count) return _rightLine.Remove(item, count);
+        return false;
+    }
+    
+    public string GetFirstItem()
+    {
+        var item = _leftLine.GetInventories().First().GetFirstItem();
+        item ??= _rightLine.GetInventories().First().GetFirstItem();;
+        return item;
+    }
+    
+    public List<string> GetItems()
+    {
+        var items = _leftLine.GetItems().ToList();
+        items.AddRange(_rightLine.GetItems());
+        return items;
+    }
+    
+    public List<Inventory> GetInventories() => new()
+        { _leftLine.GetInventories().First(), _rightLine.GetInventories().First() };
+
     #endregion
+
+
+
 }

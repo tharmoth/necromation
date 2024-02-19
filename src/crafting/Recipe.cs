@@ -5,6 +5,12 @@ namespace Necromation.gui;
 
 public class Recipe
 {
+    public string Name { get; }
+    public IReadOnlyDictionary<string, int> Ingredients { get; }
+    public IReadOnlyDictionary<string, int> Products { get; }
+    public String Category { get; }
+    public float Time { get; }
+    
     public Recipe(
         string name,
         IReadOnlyDictionary<string, int> ingredients,
@@ -19,14 +25,6 @@ public class Recipe
         Category = category;
         Time = time;
     }
-
-    public string Name { get; }
-    public IReadOnlyDictionary<string, int> Ingredients { get; }
-    
-    public IReadOnlyDictionary<string, int> Products { get; }
-    public String Category { get; }
-    
-    public float Time { get; }
     
     public bool CanCraft(Inventory inventory)
     {

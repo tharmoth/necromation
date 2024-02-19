@@ -122,7 +122,6 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Inserter" => new Inserter(),
 			"Belt" => new Belt(),
 			"Underground Belt" => new UndergroundBelt(),
-			"Double Belt" => new DoubleBelt(),
 			_ =>  throw new NotImplementedException()
 		};
 	}

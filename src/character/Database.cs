@@ -11,6 +11,7 @@ namespace Necromation.character;
 public class Database
 {
     public readonly IReadOnlyList<Recipe> Recipes = LoadRecipes();
+    public readonly IReadOnlyList<Technology> Technologies = LoadTechnologies();
 
     private static List<Recipe> LoadRecipes()
     {
@@ -25,6 +26,21 @@ public class Database
         }
         GD.PrintErr("Failed to load recipes!");
         return new List<Recipe>();
+    }
+    
+    private static List<Technology> LoadTechnologies()
+    {
+        var dict = LoadJson("res://res/data/technology.json");
+        if (dict != null)
+        {
+            return dict["technology"].As<Godot.Collections.Array>()
+                .Select(x => x.As<Godot.Collections.Dictionary<string, Variant>>())
+                .Select(CreateTechnologyFromDict)
+                .ToList();
+
+        }
+        GD.PrintErr("Failed to load technology!");
+        return new List<Technology>();
     }
     
     private static Godot.Collections.Dictionary<string, Variant> LoadJson(string path)
@@ -47,6 +63,23 @@ public class Database
         var category = recipeDict.TryGetValue("category", out var categoryVariant) ? categoryVariant.As<string>() : "None";
 
         return new Recipe(name, ingredients, products, category, time);
+    }
+    
+    private static Technology CreateTechnologyFromDict(Godot.Collections.Dictionary<string, Variant> recipeDict)
+    {
+        var name = recipeDict["name"].As<string>();
+        var count = recipeDict["name"].As<int>();
+        var ingredients = recipeDict["ingredients"]
+            .As<Godot.Collections.Array<string>>()
+            .ToList();
+        var unlocks = recipeDict["unlocks"]
+            .As<Godot.Collections.Array<string>>()
+            .ToList();
+        var prerequisites = recipeDict["unlocks"]
+            .As<Godot.Collections.Array<string>>()
+            .ToList();
+
+        return new Technology(name, count, ingredients, unlocks, prerequisites);
     }
 
     public Texture2D GetTexture(string name)

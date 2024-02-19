@@ -5,7 +5,7 @@ using Necromation.interactables.interfaces;
 
 namespace Necromation.interactables.belts;
 
-public partial class UndergroundBelt : DoubleBelt
+public partial class UndergroundBelt : Belt
 {
     /*
      * This class feels a bit hacky. There should be a more elegant way to handle the entrance/exit logic.
@@ -59,7 +59,7 @@ public partial class UndergroundBelt : DoubleBelt
         RightLine.RotationDegrees = 180;
     }
 
-    protected override DoubleBelt GetOutputBelt()
+    protected override Belt GetOutputBelt()
     {
         // If this is not an enterance it just outputs to the next belt as usual.
         if (!_isEntrance) return base.GetOutputBelt();
@@ -74,7 +74,7 @@ public partial class UndergroundBelt : DoubleBelt
         return null;
     }
 
-    protected override DoubleBelt GetBehindBelt()
+    protected override Belt GetBehindBelt()
     {
         if (_isEntrance) return base.GetBehindBelt();
 
@@ -88,7 +88,7 @@ public partial class UndergroundBelt : DoubleBelt
         return null;
     }
     
-    protected override void UpdateInputOutput(DoubleBelt belt, Dictionary<string, DoubleBelt> belts)
+    protected override void UpdateInputOutput(Belt belt, Dictionary<string, Belt> belts)
     {
         var beltBehind = belts["Behind"];
         var beltRight = belts["Right"];

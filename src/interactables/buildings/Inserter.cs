@@ -101,7 +101,7 @@ public partial class Inserter : Building, IRotatable
         
         switch (sourceEntity, targetEntity)
         {
-            case (ITransferTarget from, DoubleBelt to):
+            case (ITransferTarget from, Belt to):
             {
                 foreach (var item in from.GetItems())
                 {
