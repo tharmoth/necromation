@@ -80,7 +80,6 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 
 	protected virtual void Remove(Inventory to)
 	{
-		GD.Print("Removed!");
 		if (this is ITransferTarget inputTarget)
 		{
 			foreach (var from in inputTarget.GetInventories())

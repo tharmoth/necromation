@@ -62,6 +62,8 @@ public partial class Character : Node2D
 		if (GUI.Instance.Popup.Visible) return;
 		if (GUI.Instance.ContainerGui.Visible) return;
 
+
+		
 		// Process button presses
 		if (_buildingBeingRemoved == null)
 		{
@@ -85,7 +87,14 @@ public partial class Character : Node2D
 		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition()).Count > 0) MouseoverEntity();
 		else _sprite.Visible = false;
 	}
-	
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		base._UnhandledInput(@event);
+		if (Input.IsActionJustReleased("MWU")) GetNode<Camera2D>("Camera2D").Zoom *= 1.1f;
+		if (Input.IsActionJustReleased("MWD")) GetNode<Camera2D>("Camera2D").Zoom /= 1.1f;
+	}
+
 	/******************************************************************
 	 * Public Methods                                                 *
 	 ******************************************************************/

@@ -8,12 +8,15 @@ namespace Necromation.interactables.belts;
 
 public partial class DoubleBelt : Building, ITransferTarget, IRotatable
 {
-    protected float _secondsPerItem = .5333f;
+    private float _secondsPerItem = .5333f;
     public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Double Belt";
 
     private TransportLine _leftLine = new();
     private TransportLine _rightLine = new();
+    
+    public TransportLine LeftLine => _leftLine;
+    public TransportLine RightLine => _rightLine;
     
     private IRotatable.BuildingOrientation _orientation;
     public IRotatable.BuildingOrientation Orientation
@@ -38,7 +41,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     
     protected virtual Vector2I TargetDirectionLocal => new (0, -1);
     
-    protected Vector2 GetTargetLocation(int index)
+    protected virtual Vector2 GetTargetLocation(int index)
     {
         return index switch
         {
@@ -63,33 +66,32 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     {
         base._Ready();
         
-        GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(UpdateInputOutput);
-        UpdateInputOutput(this);
+        // When this belt is placed, update the input and output of all adjacent belts
+        GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => UpdateInputOutput(belt, belt.GetAdjacent()));
+        UpdateInputOutput(this, GetAdjacent());
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
         MovePlayer(delta);
-        
-        UpdateInputOutput(this);
     }
     
     protected override void Remove(Inventory to)
     {
         var adjacent = GetAdjacent();
         base.Remove(to);
-        adjacent.Values.Where(belt => belt != null).ToList().ForEach(belt => UpdateInputOutput(belt));
-        UpdateInputOutput(null);
+        adjacent.Values.Where(belt => belt != null).ToList().ForEach(belt => UpdateInputOutput(belt, belt.GetAdjacent()));
+        UpdateInputOutput(null, adjacent);
     }
     
-    private DoubleBelt GetBeltInDirection(Vector2 direction)
+    protected DoubleBelt GetBeltInDirection(Vector2 direction)
     {
         var global = ToGlobal(direction * BuildingTileMap.TileSize);
         var map = Globals.TileMap.GlobalToMap(global);
         var entity = Globals.TileMap.GetEntities(map, BuildingTileMap.LayerNames.Buildings);
 
-        return entity is DoubleBelt belt && belt.GetNextBelt() == this ? belt : null;
+        return entity is DoubleBelt belt && (belt.GetOutputBelt() == this || belt == GetOutputBelt()) ? belt : null;
     }
     
     /// <summary>
@@ -98,7 +100,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     /// </summary>
     /// <returns>A dictionary with keys {"Forward", "Behind", "Right", "Left"} and values as the corresponding
     /// adjacent <see cref="DoubleBelt"/> instances or null if no belt is present in the direction.</returns>
-    private Dictionary<string, DoubleBelt> GetAdjacent()
+    protected virtual Dictionary<string, DoubleBelt> GetAdjacent()
     {
         var rotatedRight = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(90)).Snapped(Vector2.One);
         var rotatedLeft = ((Vector2)TargetDirectionLocal).Rotated(Mathf.DegToRad(-90)).Snapped(Vector2.One);
@@ -117,7 +119,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
         };
     }
 
-    private static void UpdateInputOutput(DoubleBelt belt)
+    protected virtual void UpdateInputOutput(DoubleBelt belt, Dictionary<string, DoubleBelt> belts)
     {
         // There are 5 cases to consider
         // 1. If a behind belt inputs to this one link left and right
@@ -125,8 +127,6 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
         // 3. if a left belt inputs to this one and there is another input link only left
         // 4. if a right belt inputs to this one and there are no other inputs link left and right.
         // 5. if a right belt inputs to this one and there is another input link only right
-        var belts = belt.GetAdjacent();
-        var beltForward = belts["Forward"];
         var beltBehind = belts["Behind"];
         var beltRight = belts["Right"];
         var beltLeft = belts["Left"];
@@ -140,7 +140,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
             beltBehind._rightLine.OutputLine = rightLine;
         }
         
-        if (beltLeft != null && beltRight == null && beltForward == null && beltBehind == null)
+        if (beltLeft != null && beltRight == null && beltBehind == null)
         {
             beltLeft._leftLine.OutputLine = leftLine;
             beltLeft._rightLine.OutputLine = rightLine;
@@ -151,7 +151,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
             beltLeft._rightLine.OutputLine = leftLine;
         }
         
-        if (beltRight != null && beltLeft == null && beltForward == null && beltBehind == null)
+        if (beltRight != null && beltLeft == null && beltBehind == null)
         {
             beltRight._leftLine.OutputLine = leftLine;
             beltRight._rightLine.OutputLine = rightLine;
@@ -169,9 +169,9 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
         Globals.Player.GlobalPosition += -GetTargetLocation(0).DirectionTo(Globals.Player.GlobalPosition) * Speed * (float)delta;
     }
     
-    protected virtual BuildingTileMap.IEntity GetNextBelt()
+    protected virtual DoubleBelt GetOutputBelt()
     {
-        return Globals.TileMap.GetEntities(Output, BuildingTileMap.LayerNames.Buildings);
+        return Globals.TileMap.GetEntities(Output, BuildingTileMap.LayerNames.Buildings) as DoubleBelt;
     }
     
     public TransportLine GetLeftInventory() => _leftLine;
