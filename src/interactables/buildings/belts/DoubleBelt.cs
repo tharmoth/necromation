@@ -89,7 +89,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     {
         var global = ToGlobal(direction * BuildingTileMap.TileSize);
         var map = Globals.TileMap.GlobalToMap(global);
-        var entity = Globals.TileMap.GetEntities(map, BuildingTileMap.LayerNames.Buildings);
+        var entity = Globals.TileMap.GetEntities(map, BuildingTileMap.Building);
 
         return entity is DoubleBelt belt && (belt.GetOutputBelt() == this || belt == GetOutputBelt()) ? belt : null;
     }
@@ -171,7 +171,7 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
     
     protected virtual DoubleBelt GetOutputBelt()
     {
-        return Globals.TileMap.GetEntities(Output, BuildingTileMap.LayerNames.Buildings) as DoubleBelt;
+        return Globals.TileMap.GetEntities(Output, BuildingTileMap.Building) as DoubleBelt;
     }
     
     protected virtual DoubleBelt GetBehindBelt()

@@ -84,7 +84,7 @@ public partial class Character : Node2D
 
 		// Process mouseover
 		if (Selected != null) SelectedPreview();
-		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition()).Count > 0) MouseoverEntity();
+		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition(), BuildingTileMap.Building) != null) MouseoverEntity();
 		else _sprite.Visible = false;
 	}
 

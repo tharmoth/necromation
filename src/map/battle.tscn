@@ -1,0 +1,34 @@
+[gd_scene load_steps=8 format=3 uid="uid://biyscljj05i1"]
+
+[ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_2hsjy"]
+[ext_resource type="Script" path="res://src/sk/pan_camera.gd" id="2_rgifv"]
+[ext_resource type="Script" path="res://src/map/battle/BattleTileMap.cs" id="3_kgj4d"]
+[ext_resource type="Texture2D" uid="uid://06j822t4q6qh" path="res://res/sprites/warrior.png" id="4_sydio"]
+[ext_resource type="Script" path="res://src/map/battle/Unit.cs" id="5_36oju"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7p67d"]
+texture = ExtResource("1_2hsjy")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_lv767"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_7p67d")
+
+[node name="Battle" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("2_rgifv")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_lv767")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 131075, 0, 0, 131074, 0, 0, 65538, 0, 0, 65539, 0, 0, 131073, 0, 0, 65537, 0, 0, 131072, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 131077, 0, 0, 65541, 0, 0, 5, 0, 0, 196613, 0, 0, 262148, 0, 0, 262149, 0, 0, 262147, 0, 0, 262146, 0, 0, 262145, 0, 0, 262144, 0, 0)
+script = ExtResource("3_kgj4d")
+
+[node name="Unit" type="Sprite2D" parent="."]
+position = Vector2(14, 19)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_sydio")
+flip_h = true
+script = ExtResource("5_36oju")

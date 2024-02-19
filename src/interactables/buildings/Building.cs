@@ -3,7 +3,7 @@ using System;
 using Necromation;
 using Necromation.interactables.belts;
 
-public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, BuildingTileMap.IEntity, ProgressTracker.IProgress
+public abstract partial class Building : Node2D, BuildingTileMap.IEntity, ProgressTracker.IProgress
 {
 	private readonly Sprite2D _sprite = new();
 
@@ -38,7 +38,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 		{
 			for (var y = 0; y < BuildingSize.X; y++)
 			{
-				Globals.TileMap.AddEntity(topLeft + new Vector2I(x, y), this, BuildingTileMap.LayerNames.Buildings);
+				Globals.TileMap.AddEntity(topLeft + new Vector2I(x, y), this, BuildingTileMap.Building);
 			}
 		}
 	}
@@ -59,7 +59,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IBuilding, Buil
 			{
 				var entity =
 					Globals.TileMap.GetEntities(topLeft + new Vector2I(x, y), 
-						BuildingTileMap.LayerNames.Buildings);
+						BuildingTileMap.Building);
 				if (entity != null) return false;
 			}
 		}

@@ -82,7 +82,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
      **************************************************************************/
     protected virtual BuildingTileMap.IEntity GetNextBelt()
     {
-        return Globals.TileMap.GetEntities(Output, BuildingTileMap.LayerNames.Buildings);
+        return Globals.TileMap.GetEntities(Output, BuildingTileMap.Building);
     }
     
     protected Vector2 GetTargetLocation(int index)

@@ -36,7 +36,7 @@ public partial class UndergroundBelt : DoubleBelt
         for (var i = 1; i <= Range; i++)
         {
             var position = MapPosition + TargetDirectionGlobal * i;
-            var entity = Globals.TileMap.GetEntities(position, BuildingTileMap.LayerNames.Buildings);
+            var entity = Globals.TileMap.GetEntities(position, BuildingTileMap.Building);
             if (entity is UndergroundBelt belt)
             {
                 _isEntrance = !belt._isEntrance;
@@ -68,7 +68,7 @@ public partial class UndergroundBelt : DoubleBelt
         for (var i = 1; i <= Range; i++)
         {
             var position = MapPosition + TargetDirectionGlobal * i;
-            var entity = Globals.TileMap.GetEntities(position, BuildingTileMap.LayerNames.Buildings);
+            var entity = Globals.TileMap.GetEntities(position, BuildingTileMap.Building);
             if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance) return belt;
         }
         return null;
@@ -81,7 +81,7 @@ public partial class UndergroundBelt : DoubleBelt
         for (var i = 1; i <= Range; i++)
         {
             var position = MapPosition - TargetDirectionGlobal * i;
-            var entity = Globals.TileMap.GetEntities(position, BuildingTileMap.LayerNames.Buildings);
+            var entity = Globals.TileMap.GetEntities(position, BuildingTileMap.Building);
             if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance) return belt;
         }
 
