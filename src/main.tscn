@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=21 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/gui/GUI.cs" id="1_yiksk"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/gui/CrafterGUI.tscn" id="7_ky81d"]
 [ext_resource type="PackedScene" uid="uid://cc5nx8t4olpjn" path="res://src/gui/item_label.tscn" id="7_ofafi"]
 [ext_resource type="Script" path="res://src/BuildingTileMap.cs" id="8_rdg81"]
+[ext_resource type="Texture2D" uid="uid://b1n6xxfgdbpss" path="res://res/Light760.png" id="11_2aq0b"]
 [ext_resource type="Script" path="res://src/interactables/PropSpawner.cs" id="12_g7i4t"]
 [ext_resource type="Texture2D" uid="uid://daibay2ip2dxq" path="res://res/sprites/flowers.png" id="13_wlltg"]
 [ext_resource type="Texture2D" uid="uid://bjodlc8eb4xhh" path="res://res/sprites/missing.png" id="14_lo0cp"]
@@ -119,6 +120,11 @@ region_rect = Rect2(64, 0, 32, 32)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 
+[node name="PointLight2D" type="PointLight2D" parent="Character"]
+color = Color(1, 1, 0.207843, 1)
+energy = 2.0
+texture = ExtResource("11_2aq0b")
+
 [node name="Stone Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(290, 2)
 
@@ -183,3 +189,6 @@ texture = ExtResource("14_lo0cp")
 [node name="Coal Spawner2" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(1353, 208)
 _resourceType = "Bone Ore"
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.470588, 0.470588, 0.470588, 1)

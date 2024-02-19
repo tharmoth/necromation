@@ -30,7 +30,7 @@ public class MapUtils
             
         while (true)
         {
-            name = lines[GD.RandRange(0, lines.Length - 1)];
+            name = lines[GD.RandRange(0, lines.Length - 1)].TrimEnd('\r', '\n');
             if (!usedNames.Contains(name) || usedNames.Count == lines.Length - 1)
             {
                 break;

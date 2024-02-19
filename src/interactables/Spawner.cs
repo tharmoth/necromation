@@ -32,6 +32,7 @@ public partial class Spawner : Node2D
 				
 				var spawn = _type.Instantiate<Collectable>();
 				spawn.Type = _resourceType;
+				spawn.GlobalPosition = Globals.TileMap.MapToGlobal(mapPos + new Vector2I(x, y));
 				Globals.TileMap.AddEntity(mapPos + new Vector2I(x, y), spawn, BuildingTileMap.Resource);
 			}
 		}

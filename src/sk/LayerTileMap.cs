@@ -18,27 +18,34 @@ public partial class LayerTileMap : SKTileMap
 		AddEntity(GlobalToMap(position), entity, layerName);
 	}
 
-	public void AddEntity(Vector2I position, IEntity entity, string layerName){
-		if (!_layers.ContainsKey(layerName)) return;
+	public virtual bool AddEntity(Vector2I position, IEntity entity, string layerName){
+		if (!_layers.ContainsKey(layerName)) return false;
 		_layers[layerName].Add(position, entity);
-		
-		if (entity is not Node2D buildingNode || buildingNode.GetParent() != null) return;
-		buildingNode.GlobalPosition = Globals.TileMap.MapToGlobal(position);
+
+		// DEPRECATED
+		if (entity is not Node2D buildingNode || buildingNode.GetParent() != null) return true;
+		// buildingNode.GlobalPosition = MapToGlobal(position);
 		GetTree().Root.AddChild(buildingNode);
+		// GD.Print("Setting parent to root");
+		return true;
 	}
 	
 	public void RemoveEntity(Vector2 position, string layerName){
 		RemoveEntity(GlobalToMap(position), layerName);
 	}
 	
-	public bool RemoveEntity(Vector2I position, string layerName){
+	public virtual bool RemoveEntity(Vector2I position, string layerName){
 		if (!_layers.ContainsKey(layerName)) return false;
 		if (!_layers[layerName].ContainsKey(position)) return false;
 		var entity = _layers[layerName][position];
 		_layers[layerName].Remove(position);
 		
 		if (entity is not Node2D buildingNode) return false;
-		if (buildingNode.GetParent() == GetTree().Root) GetTree().Root.RemoveChild(buildingNode);
+		if (buildingNode.GetParent() == GetTree().Root)
+		{
+			GetTree().Root.RemoveChild(buildingNode);
+			// GD.Print("Removing parent from root");
+		}
 		return true;
 	}
 

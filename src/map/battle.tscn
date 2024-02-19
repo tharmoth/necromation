@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://biyscljj05i1"]
+[gd_scene load_steps=9 format=3 uid="uid://biyscljj05i1"]
 
 [ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_2hsjy"]
 [ext_resource type="Script" path="res://src/sk/pan_camera.gd" id="2_rgifv"]
 [ext_resource type="Script" path="res://src/map/battle/BattleTileMap.cs" id="3_kgj4d"]
-[ext_resource type="Texture2D" uid="uid://06j822t4q6qh" path="res://res/sprites/warrior.png" id="4_sydio"]
-[ext_resource type="Script" path="res://src/map/battle/Unit.cs" id="5_36oju"]
+[ext_resource type="Script" path="res://src/map/battle/UnitSpawner.cs" id="5_puukm"]
+[ext_resource type="Script" path="res://src/map/battle/TempBattlePlayerController.cs" id="6_n4cbp"]
+[ext_resource type="Texture2D" uid="uid://bjodlc8eb4xhh" path="res://res/sprites/missing.png" id="6_qcj3t"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7p67d"]
 texture = ExtResource("1_2hsjy")
@@ -23,12 +24,35 @@ script = ExtResource("2_rgifv")
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_lv767")
 format = 2
-layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 131075, 0, 0, 131074, 0, 0, 65538, 0, 0, 65539, 0, 0, 131073, 0, 0, 65537, 0, 0, 131072, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 131077, 0, 0, 65541, 0, 0, 5, 0, 0, 196613, 0, 0, 262148, 0, 0, 262149, 0, 0, 262147, 0, 0, 262146, 0, 0, 262145, 0, 0, 262144, 0, 0)
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 131075, 0, 0, 131074, 0, 0, 65538, 0, 0, 65539, 0, 0, 131073, 0, 0, 65537, 0, 0, 131072, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 131077, 0, 0, 65541, 0, 0, 5, 0, 0, 196613, 0, 0, 262148, 0, 0, 262149, 0, 0, 262147, 0, 0, 262146, 0, 0, 262145, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 589824, 0, 0, 589825, 0, 0, 589826, 0, 0, 589827, 0, 0, 589828, 0, 0, 589829, 0, 0, 589830, 0, 0, 589831, 0, 0, 589832, 0, 0, 589833, 0, 0, 524297, 0, 0, 458761, 0, 0, 393225, 0, 0, 327689, 0, 0, 262153, 0, 0, 196617, 0, 0, 131081, 0, 0, 65545, 0, 0, 9, 0, 0, 8, 0, 0, 7, 0, 0, 6, 0, 0, 65542, 0, 0, 65543, 0, 0, 131079, 0, 0, 131078, 0, 0, 196616, 0, 0, 262152, 0, 0, 262151, 0, 0, 327687, 0, 0, 327686, 0, 0, 327685, 0, 0, 327684, 0, 0, 196614, 0, 0, 262150, 0, 0, 393222, 0, 0, 393221, 0, 0, 458757, 0, 0, 458756, 0, 0, 458755, 0, 0, 393219, 0, 0, 393218, 0, 0, 327682, 0, 0, 327683, 0, 0, 393220, 0, 0, 458754, 0, 0, 458753, 0, 0, 393217, 0, 0, 327681, 0, 0, 524289, 0, 0, 524290, 0, 0, 524291, 0, 0, 524292, 0, 0, 524293, 0, 0, 524294, 0, 0, 524295, 0, 0, 524296, 0, 0, 458760, 0, 0, 393224, 0, 0, 327688, 0, 0, 393223, 0, 0, 458759, 0, 0, 458758, 0, 0, 196615, 0, 0, 131080, 0, 0, 65544, 0, 0)
 script = ExtResource("3_kgj4d")
 
-[node name="Unit" type="Sprite2D" parent="."]
-position = Vector2(14, 19)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("4_sydio")
-flip_h = true
-script = ExtResource("5_36oju")
+[node name="PlayerController" type="Node2D" parent="."]
+script = ExtResource("6_n4cbp")
+
+[node name="Spawner" type="Node2D" parent="."]
+position = Vector2(48, 80)
+script = ExtResource("5_puukm")
+_spawnCount = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="Spawner"]
+texture = ExtResource("6_qcj3t")
+metadata/_edit_lock_ = true
+
+[node name="Spawner" type="Node2D" parent="Spawner"]
+position = Vector2(-34, -2)
+script = ExtResource("5_puukm")
+_spawnCount = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="Spawner/Spawner"]
+texture = ExtResource("6_qcj3t")
+metadata/_edit_lock_ = true
+
+[node name="Spawner2" type="Node2D" parent="."]
+position = Vector2(303, 17)
+script = ExtResource("5_puukm")
+_team = "Enemy"
+
+[node name="Sprite2D" type="Sprite2D" parent="Spawner2"]
+texture = ExtResource("6_qcj3t")
+metadata/_edit_lock_ = true
