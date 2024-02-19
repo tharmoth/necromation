@@ -5,11 +5,11 @@ using Necromation.interactables.belts;
 
 public abstract partial class Building : Node2D, BuildingTileMap.IEntity, ProgressTracker.IProgress
 {
-	private readonly Sprite2D _sprite = new();
+	protected readonly Sprite2D Sprite = new();
 
 	protected Building()
 	{
-		AddChild(_sprite);
+		AddChild(Sprite);
 		
 		var progress = new ProgressTracker();
 		progress.NodeToTrack = this;
@@ -22,7 +22,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	public override void _Ready()
 	{
 		base._Ready();
-		_sprite.Texture = Globals.Database.GetTexture(ItemType);
+		Sprite.Texture = Globals.Database.GetTexture(ItemType);
 
 		GlobalPosition = Globals.TileMap.ToMap(GlobalPosition);
 		

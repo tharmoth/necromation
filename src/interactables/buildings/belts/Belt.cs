@@ -182,6 +182,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();
+    public List<string> GetItems() => _inventory.GetItems();
     public List<Inventory> GetInventories() => _inventory.GetInventories();
     #endregion
 }

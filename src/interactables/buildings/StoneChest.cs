@@ -28,6 +28,7 @@ public partial class StoneChest : Building, ITransferTarget, IInteractable
     public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();
+    public List<string> GetItems() => _inventory.GetItems();
     public List<Inventory> GetInventories() => new() { _inventory };
     #endregion
 }

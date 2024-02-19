@@ -53,6 +53,7 @@ public partial class Inventory : Node, ITransferTarget
 	}
 	public bool CanAcceptItems(string item, int count = 1) => true;
 	public string GetFirstItem() => _items.Keys.FirstOrDefault();
+	public List<string> GetItems() => _items.Keys.ToList();
 	public List<Inventory> GetInventories() => new() { this };
 	#endregion
 }

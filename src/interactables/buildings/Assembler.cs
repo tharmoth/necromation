@@ -90,6 +90,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     
     public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _outputInventory.Remove(item, count);
+    public List<string> GetItems() => _outputInventory.GetItems();
     public string GetFirstItem() => _outputInventory.GetFirstItem();
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
 

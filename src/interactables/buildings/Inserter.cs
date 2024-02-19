@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Godot;
 using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
@@ -50,6 +51,7 @@ public partial class Inserter : Building, IRotatable
     {
         SetNotifyTransform(true);
         AddChild(SpriteInHand);
+        Sprite.ZIndex = 2;
     }
 
     public override void _Notification(int what)
@@ -61,7 +63,7 @@ public partial class Inserter : Building, IRotatable
     
     private void UpdateInputOutput()
     {
-        SpriteInHand.Position = -BuildingTileMap.TileSize / 2 * new Vector2I(0, 1);
+        SpriteInHand.Position = -BuildingTileMap.TileSize * new Vector2I(0, 1);
     }
 
     public override void _Process(double delta)
@@ -74,7 +76,6 @@ public partial class Inserter : Building, IRotatable
         var item = GetSourceItem();
         if (!Transfer()) return;
         _time = 0;
-        Animate(item);
     }
 
     private void Animate(string item)
@@ -102,36 +103,38 @@ public partial class Inserter : Building, IRotatable
         {
             case (ITransferTarget from, DoubleBelt to):
             {
-                var item = from.GetFirstItem();
-                if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) return false;
-                
-                // if (to.GlobalPosition.X < GlobalPosition.X) to.InsertRight(item);
-                // else if (to.GlobalPosition.Y < GlobalPosition.Y) to.InsertRight(item);
-                // else to.InsertLeft(item);
-                
-                // Randomly insert on the left or right
-                if (new Random().Next(0, 2) == 0)
+                foreach (var item in from.GetItems())
                 {
-                    if (!to.CanInsertLeft(item)) return false;
-                    from.Remove(item);
-                    to.InsertLeft(item);
+                    if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) continue;
+                    if (to.CanInsertLeft(item))
+                    {
+                        from.Remove(item);
+                        to.InsertLeft(item);
+                        Animate(item);
+                        return true;
+                    }
+                    if (to.CanInsertRight(item))
+                    {
+                        from.Remove(item);
+                        to.InsertRight(item);
+                        Animate(item);
+                        return true;
+                    }
                 }
-                else
-                {
-                    if (!to.CanInsertRight(item)) return false;
-                    from.Remove(item);
-                    to.InsertRight(item);
-                }
-
-                return true;
-                
-                // return Inventory.TransferItem(from, to, item);
+                return false;
             }
             case (ITransferTarget from, ITransferTarget to):
             {
-                var item = from.GetFirstItem();
-                if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) return false;
-                return Inventory.TransferItem(from, to, item);
+                foreach (var item in from.GetItems())
+                {
+                    if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) continue;
+                    
+                    var b = Inventory.TransferItem(from, to, item);
+                    Animate(item);
+                    return b;
+                }
+
+                return false;
             }
         }
         return false;

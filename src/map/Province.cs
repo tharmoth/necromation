@@ -51,6 +51,7 @@ public partial class Province : Node, ITransferTarget
     public void Insert(string item, int count = 1) => Units.Insert(item, count);
     public bool Remove(string item, int count = 1) => Units.Remove(item, count);
     public string GetFirstItem() => Units.GetFirstItem();
+    public List<string> GetItems() => Units.GetItems();
     public List<Inventory> GetInventories() => Units.GetInventories();
     #endregion
 }

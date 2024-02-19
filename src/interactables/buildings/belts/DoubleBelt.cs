@@ -232,6 +232,13 @@ public partial class DoubleBelt : Building, ITransferTarget, IRotatable
         return item;
     }
     
+    public List<string> GetItems()
+    {
+        var items = _leftLine.GetItems().ToList();
+        items.AddRange(_rightLine.GetItems());
+        return items;
+    }
+    
     public List<Inventory> GetInventories() => new()
         { _leftLine.GetInventories().First(), _rightLine.GetInventories().First() };
 
