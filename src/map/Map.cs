@@ -8,6 +8,9 @@ public partial class Map : Node2D
 	{
 		MapGlobals.SelectedSprite = GetNode<Sprite2D>("%SelectedSprite");
 		MapGlobals.UpdateListeners.Add(UpdateLabel);
+		
+		var provence = MapGlobals.TileMap.GetProvence(Vector2I.One);
+		SelectProvince(provence);
 	}
 	
 	public override void _UnhandledInput(InputEvent @event)

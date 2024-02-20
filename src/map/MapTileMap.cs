@@ -7,6 +7,7 @@ using Necromation.map.character;
 public partial class MapTileMap : SKTileMap
 {
 	private readonly Dictionary<Vector2I, Province> _provences = new();
+	public const int TileSize = 32;
 	
 	public override void _EnterTree()
 	{
@@ -23,7 +24,7 @@ public partial class MapTileMap : SKTileMap
 			GetTree().Root.CallDeferred("add_child", provence);
 		}
 		var prov = _provences[Vector2I.One];
-
+		prov.Owner = "Player";
 		prov.Units.Insert("soldier", 10);
 		prov.Units.Insert("archer", 10);
 		prov.Units.Insert("horse", 10);

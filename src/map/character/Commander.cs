@@ -57,6 +57,8 @@ public partial class Commander : Node2D, ITransferTarget
         if (_province == null) return;
         _province.Commanders.Add(this);
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
+        
+        _province.Owner = "Player";
     }
     
     #region ITransferTarget Implementation

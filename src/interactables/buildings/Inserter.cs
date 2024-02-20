@@ -84,9 +84,9 @@ public partial class Inserter : Building, IRotatable
         SpriteInHand.Visible = true;
         _tween?.Kill();
         _tween = GetTree().CreateTween();
-        _tween.TweenProperty(this, "rotation", Rotation + Math.PI, _interval/2);
+        _tween.TweenProperty(Sprite, "rotation", Sprite.Rotation + Math.PI, _interval/2);
         _tween.TweenCallback(new Callable(this, "DropItem"));
-        _tween.TweenProperty(this, "rotation", Rotation, _interval/2);
+        _tween.TweenProperty(Sprite, "rotation", Sprite.Rotation, _interval/2);
     }
 
     private void DropItem()
@@ -103,23 +103,29 @@ public partial class Inserter : Building, IRotatable
         {
             case (ITransferTarget from, Belt to):
             {
-                foreach (var item in from.GetItems())
+                foreach (var item in from.GetItems().Where(item => !string.IsNullOrEmpty(item) && to.CanAcceptItems(item)))
                 {
-                    if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) continue;
-                    if (to.CanInsertLeft(item))
+                    // Weird double checks due to degree weirdness. Should probably be done another way.
+                    if ((TransportLine.IsEqualApprox(to.RotationDegrees + 90, RotationDegrees) 
+                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees + 90) 
+                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 180) 
+                         || TransportLine.IsEqualApprox(to.RotationDegrees - 180, RotationDegrees)) && to.CanInsertLeft(item))
                     {
                         from.Remove(item);
                         to.InsertLeft(item);
                         Animate(item);
                         return true;
                     }
-                    if (to.CanInsertRight(item))
+                    if ((TransportLine.IsEqualApprox(to.RotationDegrees - 90, RotationDegrees) 
+                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 90)
+                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees)) && to.CanInsertRight(item))
                     {
                         from.Remove(item);
                         to.InsertRight(item);
                         Animate(item);
                         return true;
                     }
+                    // GD.Print("Belt ROtation: " + to.RotationDegrees + " Inserter Rotation: " + RotationDegrees);
                 }
                 return false;
             }

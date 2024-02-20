@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Godot;
+using Necromation.character;
 using Necromation.map.character;
 
 namespace Necromation.map;
@@ -10,10 +11,32 @@ public partial class Province : Node, ITransferTarget
     public readonly Dictionary<string, int> RecruitQueue = new();
     public readonly Inventory Units = new();
     public readonly List<Commander> Commanders = new();
+    private Sprite2D _flagSprite = new();
+    private string _owner = "Unclaimed";
+    public string Owner
+    {
+        get => _owner;
+        set
+        {
+            _owner = value;
+            _flagSprite.Texture = MapUtils.GetTexture($"{_owner} Flag");
+        }
+    }
+    
     
     public Province()
     {
         MapGlobals.TurnListeners.Add(OnTurnEnd);
+        _flagSprite.Texture = MapUtils.GetTexture("Unclaimed Flag");
+        _flagSprite.Scale = new Vector2(0.25f, 0.25f);
+        AddChild(_flagSprite);
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        _flagSprite.GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(this));
+        _flagSprite.GlobalPosition -= Vector2.One * MapTileMap.TileSize / 4.0f;
     }
 
     public void Recruit(string type)

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Godot;
+using FileAccess = Godot.FileAccess;
 
 namespace Necromation.map;
 
@@ -40,5 +42,13 @@ public class MapUtils
         usedNames.Add(name);
         
         return name;
+    }
+    
+    public static Texture2D GetTexture(string name)
+    {
+        var path = "res://res/sprites/" + name + ".png";
+        var texture = GD.Load<Texture2D>(path);
+        if (texture == null) throw new FileNotFoundException(path);
+        return texture;
     }
 }
