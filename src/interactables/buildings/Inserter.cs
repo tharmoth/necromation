@@ -50,7 +50,7 @@ public partial class Inserter : Building, IRotatable
     public Inserter()
     {
         SetNotifyTransform(true);
-        AddChild(SpriteInHand);
+        Sprite.AddChild(SpriteInHand);
         Sprite.ZIndex = 2;
     }
 
@@ -107,7 +107,7 @@ public partial class Inserter : Building, IRotatable
                 {
                     // Weird double checks due to degree weirdness. Should probably be done another way.
                     if ((TransportLine.IsEqualApprox(to.RotationDegrees + 90, RotationDegrees) 
-                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees + 90) 
+                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 90) 
                          || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 180) 
                          || TransportLine.IsEqualApprox(to.RotationDegrees - 180, RotationDegrees)) && to.CanInsertLeft(item))
                     {
@@ -117,7 +117,7 @@ public partial class Inserter : Building, IRotatable
                         return true;
                     }
                     if ((TransportLine.IsEqualApprox(to.RotationDegrees - 90, RotationDegrees) 
-                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 90)
+                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees + 90)
                          || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees)) && to.CanInsertRight(item))
                     {
                         from.Remove(item);
