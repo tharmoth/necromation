@@ -26,7 +26,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
 
         _time += (float)delta;
 
-        if (GetProgressPercent() < 1.0f) return;
+        if (GetProgressPercent() < 2.0f) return;
         _time = 0;
 
         var resource = Globals.TileMap.GetEntityPositions(this)
@@ -40,6 +40,11 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     public override float GetProgressPercent()
     {
         return _time / _miningSpeed;
+    }
+    
+    public override bool CanPlaceAt(Vector2 position)
+    {
+        return base.CanPlaceAt(position) && GetOccupiedPositions(position).Any(Globals.TileMap.IsResource);
     }
     
     /**************************************************************************

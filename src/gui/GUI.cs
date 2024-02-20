@@ -15,5 +15,10 @@ public partial class GUI : CanvasLayer
 		}
 		_instance = this;
 	}
-	
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		base._UnhandledInput(@event);
+		if (Input.IsActionJustPressed("open_technology")) ;
+	}
 }

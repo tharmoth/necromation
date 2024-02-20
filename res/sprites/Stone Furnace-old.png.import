@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://id0xiktpwf7d"
-path="res://.godot/imported/Belt.png-9c9875f63c31e2b54e8f5661de3282e5.ctex"
+uid="uid://76mvf63sf64x"
+path="res://.godot/imported/Stone Furnace-old.png-9dcf8fd92a9f0575dcfe1ddbd2f05493.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Belt.png"
-dest_files=["res://.godot/imported/Belt.png-9c9875f63c31e2b54e8f5661de3282e5.ctex"]
+source_file="res://res/sprites/Stone Furnace-old.png"
+dest_files=["res://.godot/imported/Stone Furnace-old.png-9dcf8fd92a9f0575dcfe1ddbd2f05493.ctex"]
 
 [params]
 

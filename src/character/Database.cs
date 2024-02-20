@@ -7,11 +7,23 @@ using FileAccess = Godot.FileAccess;
 
 namespace Necromation.character;
 
-// https://json2csharp.com/
 public class Database
 {
     public readonly IReadOnlyList<Recipe> Recipes = LoadRecipes();
     public readonly IReadOnlyList<Technology> Technologies = LoadTechnologies();
+    
+    public readonly List<Recipe> UnlockedRecipes = new();
+    public readonly List<Recipe> ResearchedTechnologies = new();
+    
+    public Database()
+    {
+        List<string> lockedRecipes = new();
+        foreach (var technology in Technologies)
+        {
+            lockedRecipes.AddRange(technology.Unlocks);
+        }
+        UnlockedRecipes.AddRange(Recipes.Where(recipe => !lockedRecipes.Contains(recipe.Name)).ToList());
+    }
 
     private static List<Recipe> LoadRecipes()
     {
@@ -22,7 +34,6 @@ public class Database
                 .Select(x => x.As<Godot.Collections.Dictionary<string, Variant>>())
                 .Select(CreateRecipeFromDict)
                 .ToList();
-
         }
         GD.PrintErr("Failed to load recipes!");
         return new List<Recipe>();
@@ -37,7 +48,6 @@ public class Database
                 .Select(x => x.As<Godot.Collections.Dictionary<string, Variant>>())
                 .Select(CreateTechnologyFromDict)
                 .ToList();
-
         }
         GD.PrintErr("Failed to load technology!");
         return new List<Technology>();
@@ -68,7 +78,7 @@ public class Database
     private static Technology CreateTechnologyFromDict(Godot.Collections.Dictionary<string, Variant> recipeDict)
     {
         var name = recipeDict["name"].As<string>();
-        var count = recipeDict["name"].As<int>();
+        var count = recipeDict["count"].As<int>();
         var ingredients = recipeDict["ingredients"]
             .As<Godot.Collections.Array<string>>()
             .ToList();

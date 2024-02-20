@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Necromation.interactables.interfaces;
 
@@ -57,6 +58,11 @@ public partial class UndergroundBelt : Belt
         RightLine.Position = leftpos;
         LeftLine.RotationDegrees = 180;
         RightLine.RotationDegrees = 180;
+    }
+    
+    public override bool CanPlaceAt(Vector2 position)
+    {
+        return GetOccupiedPositions(position).All(Globals.TileMap.IsBuildable);
     }
 
     protected override Belt GetOutputBelt()

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://id0xiktpwf7d"
-path="res://.godot/imported/Double Belt.png-8c405b2a01c44d6be6060561d932dced.ctex"
+uid="uid://cmaiq8mfiyp2w"
+path="res://.godot/imported/Shitty Bush.png-b797e3259eb2de39eb24f288fe7d5bf0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Double Belt.png"
-dest_files=["res://.godot/imported/Double Belt.png-8c405b2a01c44d6be6060561d932dced.ctex"]
+source_file="res://res/sprites/Shitty Bush.png"
+dest_files=["res://.godot/imported/Shitty Bush.png-b797e3259eb2de39eb24f288fe7d5bf0.ctex"]
 
 [params]
 

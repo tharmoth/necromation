@@ -8,7 +8,7 @@ public partial class StoneChest : Building, ITransferTarget, IInteractable
 {
     public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Stone Chest";
-    Inventory _inventory = new();
+    private Inventory _inventory = new();
 
     #region IInteractable Implementation
     /**************************************************************************
@@ -24,7 +24,7 @@ public partial class StoneChest : Building, ITransferTarget, IInteractable
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item,  int count = 1) => _inventory.CountItem(item) < 200;
+    public virtual bool CanAcceptItems(string item,  int count = 1) => _inventory.CountItem(item) < 200;
     public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();

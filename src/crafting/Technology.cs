@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Godot;
+using Necromation.character;
 
 namespace Necromation.gui;
 
@@ -9,7 +12,25 @@ public class Technology
     public IReadOnlyList<string> Ingredients { get; }
     public IReadOnlyList<string> Unlocks { get; }
     public IReadOnlyList<string> Prerequisites { get; }
-    
+    public bool Researched = false;
+    private double _progress = 0;
+
+    public double Progress
+    {
+        get => _progress; 
+        set
+        {
+            _progress = value;
+            if (_progress < Count) return;
+            Researched = true;
+            GD.Print("Researched " + Name);
+            var unlockedRecipes = Globals.Database.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
+            Globals.Database.UnlockedRecipes.AddRange(unlockedRecipes);
+            Globals.ResearchListeners.ForEach(listener => listener());
+            Globals.CurrentTechnology = null;
+        }
+    }
+
     public Technology(
         string name,
         int count,

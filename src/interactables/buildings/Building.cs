@@ -1,11 +1,15 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Necromation;
 using Necromation.interactables.belts;
 
 public abstract partial class Building : Node2D, BuildingTileMap.IEntity, ProgressTracker.IProgress
 {
 	protected readonly Sprite2D Sprite = new();
+	private Tween _removeTween;
+	public float RemovePercent;
 
 	protected Building()
 	{
@@ -16,59 +20,37 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		progress.Size = new Vector2(128, 28);
 		progress.Scale = new Vector2(0.25f, 0.25f);
 		progress.Position = new Vector2(-16, 8);
-		AddChild(progress);
+		// AddChild(progress);
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
 		Sprite.Texture = Globals.Database.GetTexture(ItemType);
-
 		GlobalPosition = Globals.TileMap.ToMap(GlobalPosition);
-		
-		if (BuildingSize.X % 2 == 0) GlobalPosition += new Vector2(16, 0);
-		if (BuildingSize.Y % 2 == 0) GlobalPosition += new Vector2(0, 16);
-		
-		var center = Globals.TileMap.GlobalToMap(GlobalPosition);
+		if (BuildingSize.X % 2 == 0) Sprite.GlobalPosition += new Vector2(16, 0);
+		if (BuildingSize.Y % 2 == 0) Sprite.GlobalPosition += new Vector2(0, 16);
 
-		// Add the building to the tilemap based on the size of the building. the global position is the center of the
-		// building. First we'll find the top left corner of the building.
-		var topLeft = center - BuildingSize / 2;
-		for (var x = 0; x < BuildingSize.X; x++)
-		{
-			for (var y = 0; y < BuildingSize.X; y++)
-			{
-				Globals.TileMap.AddEntity(topLeft + new Vector2I(x, y), this, BuildingTileMap.Building);
-			}
-		}
+		// If the building is placed on top of another building, remove the other building. This should only happen for
+		// IRotateables as other buildings should not be able to be placed on top of each other.
+		var positions = GetOccupiedPositions(GlobalPosition);
+		positions.Select(pos => Globals.TileMap.GetEntities(pos, BuildingTileMap.Building))
+			.Select(entity => entity as Building)
+			.Where(entity => entity != null)
+			.Distinct()
+			.ToList()
+			.ForEach(building => building.Remove(Globals.PlayerInventory));
+		
+		positions.ForEach(pos => Globals.TileMap.AddEntity(pos, this, BuildingTileMap.Building));
 	}
-
-	public bool CanPlaceAt(Vector2 position)
+	
+	/******************************************************************
+	 * Public Methods                                                 *
+	 ******************************************************************/
+	public virtual bool CanPlaceAt(Vector2 position)
 	{
-		position = Globals.TileMap.ToMap(position);
-		
-		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
-		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
-		
-		var center = Globals.TileMap.GlobalToMap(position);
-		
-		var topLeft = center - BuildingSize / 2;
-		for (var x = 0; x < BuildingSize.X; x++)
-		{
-			for (var y = 0; y < BuildingSize.X; y++)
-			{
-				var entity =
-					Globals.TileMap.GetEntities(topLeft + new Vector2I(x, y), 
-						BuildingTileMap.Building);
-				if (entity != null) return false;
-			}
-		}
-
-		return true;
+		return GetOccupiedPositions(position).All(Globals.TileMap.IsBuildable);
 	}
-
-	private Tween _removeTween;
-	public float RemovePercent;
 
 	public void StartRemoval(Inventory to)
 	{
@@ -77,7 +59,18 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		_removeTween.TweenProperty(this, "RemovePercent", 1.0f, 1.0f);
 		_removeTween.TweenCallback(Callable.From(() => Remove(to)));
 	}
+	
+		
+	public void CancelRemoval()
+	{
+		RemovePercent = 0;
+		_removeTween?.Kill();
+		_removeTween = null;
+	}
 
+	/******************************************************************
+	 * Protected Methods                                              *
+	 ******************************************************************/
 	protected virtual void Remove(Inventory to)
 	{
 		if (this is ITransferTarget inputTarget)
@@ -90,13 +83,20 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		to.Insert(ItemType);
 		Globals.TileMap.RemoveEntity(this);
 	}
-	
-	public void CancelRemoval()
+
+	protected List<Vector2I> GetOccupiedPositions(Vector2 position)
 	{
-		RemovePercent = 0;
-		_removeTween?.Kill();
-		_removeTween = null;
+		position = Globals.TileMap.ToMap(position);
+		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
+		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
+		var topLeft = Globals.TileMap.GlobalToMap(position) - BuildingSize / 2;
+
+		var positions = (from x in Enumerable.Range(0, BuildingSize.X)
+			from y in Enumerable.Range(0, BuildingSize.Y)
+			select topLeft + new Vector2I(x, y)).ToList();
+		return positions;
 	}
+
 	
 	/******************************************************************
 	 * Abstract methods                                               *
@@ -122,6 +122,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Inserter" => new Inserter(),
 			"Belt" => new Belt(),
 			"Underground Belt" => new UndergroundBelt(),
+			"Research Lab" => new ResearchLab(),
 			_ =>  throw new NotImplementedException()
 		};
 	}
@@ -137,7 +138,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Inserter" => true,
 			"Belt" => true,
 			"Underground Belt" => true,
-			"Double Belt" => true,
+			"Research Lab" => true,
 			_ => false
 		};
 	}

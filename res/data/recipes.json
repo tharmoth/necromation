@@ -1,13 +1,14 @@
 ﻿{
   "recipes": [
     {
-      "name": "Gear",
+      "name": "Belt",
       "time" : 1,
       "ingredients": {
-        "Iron Bar": 2
+        "Iron Bar": 1,
+        "Gear": 1
       },
       "products": {
-        "Gear": 1
+        "Belt": 2
       }
     },
     {
@@ -22,36 +23,14 @@
       }
     },
     {
-      "name": "Assembler",
+      "name": "Underground Belt",
       "time" : 1,
       "ingredients": {
-        "Circuit": 3,
-        "Iron Bar": 9,
-        "Gear": 5
+        "Iron Bar": 10,
+        "Belt": 5
       },
       "products": {
-        "Assembler": 1
-      }
-    },
-    {
-      "name": "Circuit",
-      "time" : 1,
-      "ingredients": {
-        "Copper Cable": 3,
-        "Iron Bar": 1
-      },
-      "products": {
-        "Circuit": 1
-      }
-    },
-    {
-      "name": "Copper Cable",
-      "time" : 1,
-      "ingredients": {
-        "Copper Bar": 1
-      },
-      "products": {
-        "Copper Cable": 2
+        "Underground Belt": 2
       }
     },
     {
@@ -74,6 +53,71 @@
       },
       "products": {
         "Mine": 1
+      }
+    },
+    {
+      "name": "Assembler",
+      "time" : 1,
+      "ingredients": {
+        "Circuit": 3,
+        "Iron Bar": 9,
+        "Gear": 5
+      },
+      "products": {
+        "Assembler": 1
+      }
+    },
+    {
+      "name": "Stone Chest",
+      "time" : 1,
+      "ingredients": {
+        "Stone": 5
+      },
+      "products": {
+        "Stone Chest": 1
+      }
+    },
+    {
+      "name": "Research Lab",
+        "time" : 1,
+        "ingredients": {
+          "Circuit": 5,
+          "Iron Bar": 10,
+          "Gear": 5
+        },
+        "products": {
+          "Research Lab": 1
+        }
+    },
+    {
+      "name": "Gear",
+      "time" : 1,
+      "ingredients": {
+        "Iron Bar": 2
+      },
+      "products": {
+        "Gear": 1
+      }
+    },
+    {
+      "name": "Circuit",
+      "time" : 1,
+      "ingredients": {
+        "Copper Cable": 3,
+        "Iron Bar": 1
+      },
+      "products": {
+        "Circuit": 1
+      }
+    },
+    {
+      "name": "Copper Cable",
+      "time" : 1,
+      "ingredients": {
+        "Copper Bar": 1
+      },
+      "products": {
+        "Copper Cable": 2
       }
     },
     {
@@ -109,38 +153,6 @@
       },
       "products": {
         "Copper Bar": 2
-      }
-    },
-    {
-      "name": "Stone Chest",
-      "time" : 1,
-      "ingredients": {
-        "Stone": 5
-      },
-      "products": {
-        "Stone Chest": 1
-      }
-    },
-    {
-      "name": "Underground Belt",
-      "time" : 1,
-      "ingredients": {
-        "Iron Bar": 10,
-        "Belt": 5
-      },
-      "products": {
-        "Underground Belt": 2
-      }
-    },
-    {
-      "name": "Belt",
-      "time" : 1,
-      "ingredients": {
-        "Iron Bar": 10,
-        "Belt": 5
-      },
-      "products": {
-        "Double Belt": 2
       }
     }
   ]

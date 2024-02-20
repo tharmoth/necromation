@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cbg55wjqe0hop"]
 
-[ext_resource type="Script" path="res://src/interactables/Furnace.cs" id="1_pwetf"]
-[ext_resource type="Texture2D" uid="uid://bn4riya2kyhpf" path="res://res/sprites/Belt.png" id="2_mjmcs"]
+[ext_resource type="Script" path="res://src/interactables/buildings/Furnace.cs" id="1_pwetf"]
+[ext_resource type="Texture2D" uid="uid://id0xiktpwf7d" path="res://res/sprites/Belt.png" id="2_mjmcs"]
 [ext_resource type="Script" path="res://src/gui/ProgressTracker.cs" id="3_4gsr2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grm1v"]

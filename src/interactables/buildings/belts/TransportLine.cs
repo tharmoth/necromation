@@ -132,6 +132,7 @@ public partial class TransportLine : Node2D, ITransferTarget
         if (item.GetParent() != null) item.GetParent().RemoveChild(item);
         if (item.GetParent() != this) AddChild(item);
         item.Position = GetTargetLocation(4);
+        item.GlobalRotation = 0;
     }
     
     private GroundItem RemoveItem()

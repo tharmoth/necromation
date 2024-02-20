@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://id0xiktpwf7d"
-path="res://.godot/imported/Belt.png-9c9875f63c31e2b54e8f5661de3282e5.ctex"
+uid="uid://bq41lf0u1v8xg"
+path="res://.godot/imported/Unclaimed Flag.png-a4ed1f5e0bebde083c1eb13b03dd024b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Belt.png"
-dest_files=["res://.godot/imported/Belt.png-9c9875f63c31e2b54e8f5661de3282e5.ctex"]
+source_file="res://res/sprites/Unclaimed Flag.png"
+dest_files=["res://.godot/imported/Unclaimed Flag.png-a4ed1f5e0bebde083c1eb13b03dd024b.ctex"]
 
 [params]
 

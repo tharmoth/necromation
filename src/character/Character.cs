@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Necromation;
 using Necromation.interactables.interfaces;
@@ -39,15 +40,22 @@ public partial class Character : Node2D
 	public override void _Ready()
 	{
 		AddToGroup("player");
-		_inventory.Insert("Stone", 500);
-		_inventory.Insert("Mine", 3);
-		_inventory.Insert("Stone Furnace", 100);
-		_inventory.Insert("Stone Chest", 100);
-		_inventory.Insert("Inserter", 100);
-		_inventory.Insert("Assembler", 3);
-		_inventory.Insert("Belt", 100);
-		_inventory.Insert("Underground Belt", 100);
-		_inventory.Insert("Double Belt", 100);
+		
+		Globals.Database.Recipes
+			.Select(recipe => recipe.Products.First().Key)
+			.ToList()
+			.ForEach(item => _inventory.Insert(item, 100));
+		
+		// _inventory.Insert("Stone", 500);
+		// _inventory.Insert("Mine", 3);
+		// _inventory.Insert("Stone Furnace", 100);
+		// _inventory.Insert("Stone Chest", 100);
+		// _inventory.Insert("Inserter", 100);
+		// _inventory.Insert("Assembler", 3);
+		// _inventory.Insert("Belt", 100);
+		// _inventory.Insert("Underground Belt", 100);
+		// _inventory.Insert("Double Belt", 100);
+		// _inventory.Insert("Research Lab", 100);
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
@@ -62,8 +70,6 @@ public partial class Character : Node2D
 		if (GUI.Instance.Popup.Visible) return;
 		if (GUI.Instance.ContainerGui.Visible) return;
 
-
-		
 		// Process button presses
 		if (_buildingBeingRemoved == null)
 		{
@@ -91,8 +97,8 @@ public partial class Character : Node2D
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
-		if (Input.IsActionJustReleased("MWU")) GetNode<Camera2D>("Camera2D").Zoom *= 1.1f;
-		if (Input.IsActionJustReleased("MWD")) GetNode<Camera2D>("Camera2D").Zoom /= 1.1f;
+		// if (Input.IsActionJustReleased("MWU")) GetNode<Camera2D>("Camera2D").Zoom *= 1.1f;
+		// if (Input.IsActionJustReleased("MWD")) GetNode<Camera2D>("Camera2D").Zoom /= 1.1f;
 	}
 
 	/******************************************************************
@@ -133,6 +139,9 @@ public partial class Character : Node2D
 		
 		//TODO: making buildings every tick seems like a bad idea.
 		var buildingInHand = Building.GetBuilding(Selected);
+		
+		if (buildingInHand is IRotatable rotatable)
+			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 		
 		if (buildingInHand.BuildingSize.X % 2 == 0) _sprite.Position += new Vector2(16, 0);
 		if (buildingInHand.BuildingSize.Y % 2 == 0) _sprite.Position += new Vector2(0, 16);

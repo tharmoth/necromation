@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://id0xiktpwf7d"
-path="res://.godot/imported/Belt.png-9c9875f63c31e2b54e8f5661de3282e5.ctex"
+uid="uid://dtym36gpw8e7c"
+path="res://.godot/imported/Check Mark.png-ef5fe424f530a37a8c9d33387a531e17.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Belt.png"
-dest_files=["res://.godot/imported/Belt.png-9c9875f63c31e2b54e8f5661de3282e5.ctex"]
+source_file="res://res/sprites/Check Mark.png"
+dest_files=["res://.godot/imported/Check Mark.png-ef5fe424f530a37a8c9d33387a531e17.ctex"]
 
 [params]
 
