@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=19 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/Map.cs" id="1_muam7"]
 [ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_ri0bn"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://src/map/gui/RecruitGUI.cs" id="6_w0llc"]
 [ext_resource type="Script" path="res://src/gui/buttons/HideButton.cs" id="7_7pjmg"]
 [ext_resource type="Script" path="res://src/map/gui/CommanderList.cs" id="7_60yos"]
+[ext_resource type="Script" path="res://src/map/gui/MapToFactoryButton.cs" id="7_ep6dt"]
+[ext_resource type="Script" path="res://src/map/gui/MapToBattleButton.cs" id="8_0ooys"]
 [ext_resource type="Script" path="res://src/map/gui/UnitsBox.cs" id="9_c3vao"]
 [ext_resource type="Script" path="res://src/map/gui/ArmySetup.cs" id="9_e04hp"]
 [ext_resource type="Script" path="res://src/map/gui/UnitAccepterPanel.cs" id="10_c0v4h"]
@@ -83,6 +85,16 @@ text = "Army Setup"
 script = ExtResource("6_0uqa6")
 _nodeToShow = NodePath("../../../ArmySetup")
 _nodesToHide = [NodePath("../..")]
+
+[node name="FactoryButton" type="Button" parent="MapGui/MainGui/Buttons"]
+layout_mode = 2
+text = "Factory"
+script = ExtResource("7_ep6dt")
+
+[node name="BattleButton" type="Button" parent="MapGui/MainGui/Buttons"]
+layout_mode = 2
+text = "Battle"
+script = ExtResource("8_0ooys")
 
 [node name="Control" type="Control" parent="MapGui/MainGui/Buttons"]
 layout_mode = 2

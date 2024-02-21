@@ -1,11 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://biyscljj05i1"]
+[gd_scene load_steps=12 format=3 uid="uid://biyscljj05i1"]
 
 [ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_2hsjy"]
+[ext_resource type="Script" path="res://src/map/battle/Battle.cs" id="1_nyo56"]
 [ext_resource type="Script" path="res://src/sk/pan_camera.gd" id="2_rgifv"]
 [ext_resource type="Script" path="res://src/map/battle/BattleTileMap.cs" id="3_kgj4d"]
 [ext_resource type="Script" path="res://src/map/battle/UnitSpawner.cs" id="5_puukm"]
 [ext_resource type="Script" path="res://src/map/battle/TempBattlePlayerController.cs" id="6_n4cbp"]
 [ext_resource type="Texture2D" uid="uid://bjodlc8eb4xhh" path="res://res/sprites/missing.png" id="6_qcj3t"]
+[ext_resource type="Script" path="res://src/map/battle/BattleGUI.cs" id="8_66t67"]
+[ext_resource type="Script" path="res://src/map/battle/BattleToMapButton.cs" id="8_y7rcu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7p67d"]
 texture = ExtResource("1_2hsjy")
@@ -17,8 +20,11 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_7p67d")
 
 [node name="Battle" type="Node2D"]
+script = ExtResource("1_nyo56")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(166, 158)
+zoom = Vector2(2, 2)
 script = ExtResource("2_rgifv")
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -31,20 +37,11 @@ script = ExtResource("3_kgj4d")
 script = ExtResource("6_n4cbp")
 
 [node name="Spawner" type="Node2D" parent="."]
-position = Vector2(48, 80)
+position = Vector2(16, 17)
 script = ExtResource("5_puukm")
 _spawnCount = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="Spawner"]
-texture = ExtResource("6_qcj3t")
-metadata/_edit_lock_ = true
-
-[node name="Spawner" type="Node2D" parent="Spawner"]
-position = Vector2(-34, -2)
-script = ExtResource("5_puukm")
-_spawnCount = 5
-
-[node name="Sprite2D" type="Sprite2D" parent="Spawner/Spawner"]
 texture = ExtResource("6_qcj3t")
 metadata/_edit_lock_ = true
 
@@ -56,3 +53,25 @@ _team = "Enemy"
 [node name="Sprite2D" type="Sprite2D" parent="Spawner2"]
 texture = ExtResource("6_qcj3t")
 metadata/_edit_lock_ = true
+
+[node name="GUI" type="CanvasLayer" parent="."]
+script = ExtResource("8_66t67")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="GUI/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/HBoxContainer"]
+layout_mode = 2
+
+[node name="ExitBattleButton" type="Button" parent="GUI/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+script = ExtResource("8_y7rcu")

@@ -60,7 +60,7 @@ public partial class Character : Node2D
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
 		_sprite.Texture = GD.Load<Texture2D>("res://res/sprites/selection.png");
-		GetTree().Root.CallDeferred("add_child", _sprite);
+		Globals.FactoryScene.CallDeferred("add_child", _sprite);
 	}
 	
 	public override void _Process(double delta)
@@ -172,7 +172,7 @@ public partial class Character : Node2D
 			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 
 		building.GlobalPosition = position;
-		GetTree().Root.AddChild(building);
+		Globals.FactoryScene.AddChild(building);
 		
 		if(!_inventory.Items.ContainsKey(building.ItemType)) Selected = null;
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Godot;
 using Necromation.character;
 using Necromation.gui;
 
@@ -14,4 +15,9 @@ public class Globals
     public static Database Database => _database ??= new Database();
     public static Technology CurrentTechnology = Database.Technologies[0];
     public static List<Action> ResearchListeners = new();
+    public static Camera2D Camera => Player.GetNode<Camera2D>("Camera2D");
+
+    public static Node FactoryScene;
+    public static Node MapScene;
+    public static Node BattleScene;
 }

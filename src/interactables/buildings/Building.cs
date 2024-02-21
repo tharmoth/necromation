@@ -9,7 +9,19 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 {
 	protected readonly Sprite2D Sprite = new();
 	private Tween _removeTween;
-	public float RemovePercent;
+
+	private float _removePercent;
+	public float RemovePercent
+	{
+		get => _removePercent;
+		set
+		{
+			_removePercent = value;
+			GUI.Instance.ProgressBar.Visible = true;
+			GUI.Instance.ProgressBar.Value = value * 100;
+			GUI.Instance.ProgressBar.Visible = _removePercent is < 1 and > 0;
+		}
+	}
 
 	protected Building()
 	{
@@ -56,7 +68,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	{
 		_removeTween?.Kill();
 		_removeTween = GetTree().CreateTween();
-		_removeTween.TweenProperty(this, "RemovePercent", 1.0f, 1.0f);
+		_removeTween.TweenProperty(this, "RemovePercent", 1.0f, .333f);
 		_removeTween.TweenCallback(Callable.From(() => Remove(to)));
 	}
 	
@@ -82,6 +94,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		}
 		to.Insert(ItemType);
 		Globals.TileMap.RemoveEntity(this);
+		GUI.Instance.ProgressBar.Visible = false;
 	}
 
 	protected List<Vector2I> GetOccupiedPositions(Vector2 position)
@@ -123,6 +136,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Belt" => new Belt(),
 			"Underground Belt" => new UndergroundBelt(),
 			"Research Lab" => new ResearchLab(),
+			"Barracks" => new Barracks(),
 			_ =>  throw new NotImplementedException()
 		};
 	}
@@ -139,6 +153,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Belt" => true,
 			"Underground Belt" => true,
 			"Research Lab" => true,
+			"Barracks" => true,
 			_ => false
 		};
 	}

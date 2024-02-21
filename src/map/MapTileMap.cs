@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using Necromation;
 using Necromation.map;
 using Necromation.map.character;
 
@@ -21,19 +22,34 @@ public partial class MapTileMap : SKTileMap
 		{
 			var provence = new Province();
 			_provences.Add(location, provence);
-			GetTree().Root.CallDeferred("add_child", provence);
+			Globals.MapScene.CallDeferred("add_child", provence);
 		}
+		
 		var prov = _provences[Vector2I.One];
 		prov.Owner = "Player";
-		prov.Units.Insert("soldier", 10);
-		prov.Units.Insert("archer", 10);
-		prov.Units.Insert("horse", 10);
-		
-		var commander = new Commander(prov);
-		prov.Commanders.Add(commander);
-		commander.Units.Insert("warrior", 10);
-		GetTree().Root.CallDeferred("add_child", commander);
 
+		MoveUnitsToFromFactory();
+
+		var commander = new Commander(prov);
+		commander.Team = "Player";
+		prov.Commanders.Add(commander);
+		
+		Globals.MapScene.CallDeferred("add_child", commander);
+
+	}
+
+	public void MoveUnitsToFromFactory()
+	{
+		if (Globals.TileMap == null) return;
+		
+		var prov = _provences[Vector2I.One];
+		foreach (var barracks in Globals.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
+		{
+			var inventory = barracks.GetInventories().First();
+			var count = inventory.CountItem("Warrior");
+			prov.Units.Insert("Warrior", count);
+			inventory.Remove("Warrior", count);
+		}
 	}
 
 	public Province GetProvence(Vector2I position)

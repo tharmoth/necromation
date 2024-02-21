@@ -106,9 +106,11 @@ public partial class Inserter : Building, IRotatable
                 foreach (var item in from.GetItems().Where(item => !string.IsNullOrEmpty(item) && to.CanAcceptItems(item)))
                 {
                     // Weird double checks due to degree weirdness. Should probably be done another way.
+                    // BAD BAD BAD CODE - USE BRAIN TO MAKE BETTER
                     if ((TransportLine.IsEqualApprox(to.RotationDegrees + 90, RotationDegrees) 
                          || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 90) 
                          || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 180) 
+                         || TransportLine.IsEqualApprox(to.RotationDegrees - 270, RotationDegrees) 
                          || TransportLine.IsEqualApprox(to.RotationDegrees - 180, RotationDegrees)) && to.CanInsertLeft(item))
                     {
                         from.Remove(item);
@@ -118,6 +120,7 @@ public partial class Inserter : Building, IRotatable
                     }
                     if ((TransportLine.IsEqualApprox(to.RotationDegrees - 90, RotationDegrees) 
                          || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees + 90)
+                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 270)
                          || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees)) && to.CanInsertRight(item))
                     {
                         from.Remove(item);

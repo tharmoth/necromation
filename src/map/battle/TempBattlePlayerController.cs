@@ -4,9 +4,10 @@ using Necromation;
 
 public partial class TempBattlePlayerController : Node2D
 {
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _Ready()
 	{
+		base._Ready();
+		BattleGlobals.Camera = GetParent().GetNode<Camera2D>("Camera2D");
 	}
 
 	public override void _UnhandledInput(InputEvent @event)

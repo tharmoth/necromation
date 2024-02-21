@@ -14,4 +14,5 @@ public class MapGlobals
     public static Sprite2D SelectedSprite;
     public static Province SelectedProvince;
     public static Commander SelectedCommander;
+    public static Camera2D Camera;
 }

@@ -25,7 +25,7 @@ public partial class UnitRect : TextureRect
     
     public override void _Ready()
     {
-        Texture = UnitName switch
+        Texture = UnitName.ToLower() switch
         {
             "soldier" => soldierTexture,
             "archer" => archerTexture,

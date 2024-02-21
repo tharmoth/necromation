@@ -1,5 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Necromation;
 
 public partial class UnitSpawner : Node2D
 {
@@ -13,14 +16,47 @@ public partial class UnitSpawner : Node2D
 	}
 
 	private void _spawn() {
+		if (BattleGlobals.Provence != null)
+		{
+			LoadFromCommanders();
+		}
+		else
+		{
+			LoadDefault();
+		}
+	}
+
+	private void LoadFromCommanders()
+	{
+		var position = BattleGlobals.TileMap.GlobalToMap(GlobalPosition);
+		var index = 0;
+		BattleGlobals.Provence.Commanders
+			.Where(commander => commander.Team == _team)
+			.SelectMany(commander => commander.Units.Items.ToList()).ToList().ForEach(entry =>
+		{
+			for (var i = 0; i < entry.Value; i++)
+			{
+				AddUnit(position + new Vector2I(0, index));
+				index++;
+			}
+		});
+	}
+	
+	private void LoadDefault()
+	{
 		var position = BattleGlobals.TileMap.GlobalToMap(GlobalPosition);
 		for (var i = 0; i < _spawnCount; i++)
 		{
-			var newUnit = new Unit();
-			newUnit.Position = BattleGlobals.TileMap.MapToGlobal(position + new Vector2I(0, i));
-			newUnit.Team = _team;
-			GD.Print("Spawning unit at" + (position + new Vector2I(0, i)));
-			GetTree().Root.CallDeferred("add_child", newUnit);
+			AddUnit(position + new Vector2I(0, i));
 		}
 	}
+
+	private void AddUnit(Vector2I position)
+	{
+		var newUnit = new Unit();
+		newUnit.Position = BattleGlobals.TileMap.MapToGlobal(position);
+		newUnit.Team = _team;
+		Globals.BattleScene.CallDeferred("add_child", newUnit);
+	}
+	
 }

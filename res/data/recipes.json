@@ -154,6 +154,28 @@
       "products": {
         "Copper Bar": 2
       }
+    },
+    {
+      "name": "Warrior",
+      "time" : 10.0,
+      "ingredients": {
+        "Bone Ore": 1,
+        "Iron Bar": 1
+      },
+      "products": {
+        "Warrior": 1
+      }
+    },
+    {
+      "name": "Barracks",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Iron Bar": 5
+      },
+      "products": {
+        "Barracks": 1
+      }
     }
   ]
 }

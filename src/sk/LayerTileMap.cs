@@ -25,7 +25,7 @@ public partial class LayerTileMap : SKTileMap
 		// DEPRECATED
 		if (entity is not Node2D buildingNode || buildingNode.GetParent() != null) return true;
 		// buildingNode.GlobalPosition = MapToGlobal(position);
-		GetTree().Root.AddChild(buildingNode);
+		Globals.FactoryScene.AddChild(buildingNode);
 		// GD.Print("Setting parent to root");
 		return true;
 	}
@@ -41,9 +41,9 @@ public partial class LayerTileMap : SKTileMap
 		_layers[layerName].Remove(position);
 		
 		if (entity is not Node2D buildingNode) return false;
-		if (buildingNode.GetParent() == GetTree().Root)
+		if (buildingNode.GetParent() == Globals.FactoryScene)
 		{
-			GetTree().Root.RemoveChild(buildingNode);
+			Globals.FactoryScene.RemoveChild(buildingNode);
 			// GD.Print("Removing parent from root");
 		}
 		return true;
@@ -83,6 +83,15 @@ public partial class LayerTileMap : SKTileMap
 		return GetEntities(GlobalToMap(position));
 	}
 
+	public List<IEntity> GetEntitiesOfType(string clazz)
+	{
+		return _layers.Values
+			.SelectMany(layer => layer.Values)
+			.Where(entity => entity is Building building && building.GetType().Name == clazz)
+			.Distinct()
+			.ToList();
+	}
+	
 	public List<IEntity> GetEntities(Vector2I position)
 	{
 		return _layers.Values

@@ -1,6 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=28 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
+[ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
 [ext_resource type="Script" path="res://src/gui/GUI.cs" id="1_yiksk"]
 [ext_resource type="Script" path="res://src/gui/lists/ItemList.cs" id="2_6s52s"]
 [ext_resource type="Script" path="res://src/character/Character.cs" id="2_vcqpu"]
@@ -12,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/gui/container_gui.tscn" id="7_cu3ym"]
 [ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/gui/CrafterGUI.tscn" id="7_ky81d"]
 [ext_resource type="PackedScene" uid="uid://cc5nx8t4olpjn" path="res://src/gui/item_label.tscn" id="7_ofafi"]
+[ext_resource type="Script" path="res://src/gui/buttons/FactoryToMapButton.cs" id="8_h8m0a"]
+[ext_resource type="PackedScene" uid="uid://yhp2pgk86ofe" path="res://src/map.tscn" id="8_nlxv6"]
 [ext_resource type="Script" path="res://src/BuildingTileMap.cs" id="8_rdg81"]
 [ext_resource type="Texture2D" uid="uid://dtym36gpw8e7c" path="res://res/sprites/Check Mark.png" id="10_ad1g1"]
 [ext_resource type="Texture2D" uid="uid://bibd4p41sh314" path="res://res/sprites/Experiment.png" id="11_r32wn"]
@@ -42,7 +45,7 @@ height = 1024
 noise = SubResource("FastNoiseLite_8xne8")
 
 [node name="Main" type="Node2D"]
-y_sort_enabled = true
+script = ExtResource("1_suggu")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 script = ExtResource("1_yiksk")
@@ -72,13 +75,25 @@ script = ExtResource("2_6s52s")
 [node name="ItemLabel" parent="GUI/Control/HBoxContainer/InventoryList" instance=ExtResource("7_ofafi")]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+show_percentage = false
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 vertical_scroll_mode = 0
 
-[node name="GridContainer" type="HBoxContainer" parent="GUI/Control/HBoxContainer/ScrollContainer"]
+[node name="GridContainer" type="HBoxContainer" parent="GUI/Control/HBoxContainer/VBoxContainer2/ScrollContainer"]
 layout_mode = 2
 script = ExtResource("4_jsksr")
 
@@ -101,6 +116,12 @@ script = ExtResource("5_fhi1j")
 [node name="ProgressBar" type="ProgressBar" parent="GUI/Control/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 script = ExtResource("6_snael")
+
+[node name="MapButton" type="Button" parent="GUI/Control/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Map"
+script = ExtResource("8_h8m0a")
+_scene = ExtResource("8_nlxv6")
 
 [node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]
 unique_name_in_owner = true

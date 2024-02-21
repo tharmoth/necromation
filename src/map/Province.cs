@@ -5,7 +5,7 @@ using Necromation.map.character;
 
 namespace Necromation.map;
 
-public partial class Province : Node, ITransferTarget
+public partial class Province : Node2D, ITransferTarget
 {
     public string Name { get; } = MapUtils.GetRandomProvinceName();
     public readonly Dictionary<string, int> RecruitQueue = new();
@@ -23,13 +23,13 @@ public partial class Province : Node, ITransferTarget
         }
     }
     
-    
     public Province()
     {
         MapGlobals.TurnListeners.Add(OnTurnEnd);
         _flagSprite.Texture = MapUtils.GetTexture("Unclaimed Flag");
         _flagSprite.Scale = new Vector2(0.25f, 0.25f);
         AddChild(_flagSprite);
+        GD.Print("Province Created");
     }
 
     public override void _Ready()
@@ -55,7 +55,7 @@ public partial class Province : Node, ITransferTarget
                 {
                     var commander = new Commander(this);
                     Commanders.Add(commander);
-                    GetTree().Root.AddChild(commander);
+                    Globals.MapScene.AddChild(commander);
                 }
             }
             else

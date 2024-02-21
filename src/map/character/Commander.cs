@@ -6,6 +6,8 @@ namespace Necromation.map.character;
 public partial class Commander : Node2D, ITransferTarget
 {
     public string Name { get; } = MapUtils.GetRandomCommanderName();
+    public string Team { get; set; }
+
     public readonly Inventory Units = new();
     private readonly Line2D _line = new();
     private readonly Sprite2D _sprite = new();
@@ -24,7 +26,7 @@ public partial class Commander : Node2D, ITransferTarget
     public override void _Ready()
     {
         base._Ready();
-        GetTree().Root.CallDeferred("add_child", _line);
+        Globals.MapScene.CallDeferred("add_child", _line);
         
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
         _targetLocation = MapGlobals.TileMap.GetLocation(_province);
