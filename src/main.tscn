@@ -1,25 +1,17 @@
-[gd_scene load_steps=28 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=20 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
 [ext_resource type="Script" path="res://src/gui/GUI.cs" id="1_yiksk"]
-[ext_resource type="Script" path="res://src/gui/lists/ItemList.cs" id="2_6s52s"]
 [ext_resource type="Script" path="res://src/character/Character.cs" id="2_vcqpu"]
-[ext_resource type="Script" path="res://src/gui/lists/Actionbar.cs" id="4_jsksr"]
-[ext_resource type="Script" path="res://src/gui/ResearchLabel.cs" id="5_fhi1j"]
+[ext_resource type="PackedScene" uid="uid://kxkejlx5p0rg" path="res://src/gui/factory_gui.tscn" id="3_jfksi"]
 [ext_resource type="PackedScene" uid="uid://cgfjtesm7s5bm" path="res://src/gui/popup.tscn" id="6_pwh8y"]
-[ext_resource type="Script" path="res://src/gui/ResearchProgressBar.cs" id="6_snael"]
 [ext_resource type="PackedScene" uid="uid://37ciggwme04r" path="res://src/interactables/spawner.tscn" id="6_ummi6"]
 [ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/gui/container_gui.tscn" id="7_cu3ym"]
 [ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/gui/CrafterGUI.tscn" id="7_ky81d"]
-[ext_resource type="PackedScene" uid="uid://cc5nx8t4olpjn" path="res://src/gui/item_label.tscn" id="7_ofafi"]
-[ext_resource type="Script" path="res://src/gui/buttons/FactoryToMapButton.cs" id="8_h8m0a"]
-[ext_resource type="PackedScene" uid="uid://yhp2pgk86ofe" path="res://src/map.tscn" id="8_nlxv6"]
 [ext_resource type="Script" path="res://src/BuildingTileMap.cs" id="8_rdg81"]
-[ext_resource type="Texture2D" uid="uid://dtym36gpw8e7c" path="res://res/sprites/Check Mark.png" id="10_ad1g1"]
-[ext_resource type="Texture2D" uid="uid://bibd4p41sh314" path="res://res/sprites/Experiment.png" id="11_r32wn"]
-[ext_resource type="Texture2D" uid="uid://mmc7pi4i3blc" path="res://res/sprites/Underground Belt.png" id="12_5tvyy"]
 [ext_resource type="Script" path="res://src/interactables/PropSpawner.cs" id="12_g7i4t"]
+[ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
 [ext_resource type="Texture2D" uid="uid://daibay2ip2dxq" path="res://res/sprites/flowers.png" id="13_wlltg"]
 [ext_resource type="Texture2D" uid="uid://bjodlc8eb4xhh" path="res://res/sprites/missing.png" id="14_lo0cp"]
 [ext_resource type="Texture2D" uid="uid://dnmggl74lexk0" path="res://res/sprites/grass.png" id="15_32vgj"]
@@ -59,69 +51,8 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control"]
+[node name="FactoryGUI" parent="GUI/Control" instance=ExtResource("3_jfksi")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="InventoryList" type="VBoxContainer" parent="GUI/Control/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-script = ExtResource("2_6s52s")
-
-[node name="ItemLabel" parent="GUI/Control/HBoxContainer/InventoryList" instance=ExtResource("7_ofafi")]
-layout_mode = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/Control/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-alignment = 2
-
-[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/HBoxContainer/VBoxContainer2"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-show_percentage = false
-
-[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 8
-vertical_scroll_mode = 0
-
-[node name="GridContainer" type="HBoxContainer" parent="GUI/Control/HBoxContainer/VBoxContainer2/ScrollContainer"]
-layout_mode = 2
-script = ExtResource("4_jsksr")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/HBoxContainer"]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/HBoxContainer/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="GUI/Control/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-text = "Researching: Nothing"
-horizontal_alignment = 1
-script = ExtResource("5_fhi1j")
-
-[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-script = ExtResource("6_snael")
-
-[node name="MapButton" type="Button" parent="GUI/Control/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Map"
-script = ExtResource("8_h8m0a")
-_scene = ExtResource("8_nlxv6")
 
 [node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]
 unique_name_in_owner = true
@@ -148,158 +79,10 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[node name="TechGUI" type="PanelContainer" parent="GUI/Control"]
+[node name="TechGUI" parent="GUI/Control" instance=ExtResource("13_jc62p")]
+unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(500, 400)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -200.0
-offset_right = 250.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="GUI/Control/TechGUI"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/TechGUI/MarginContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "TechGUI
-"
-
-[node name="Control" type="Control" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Button" type="Button" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "X"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-icon = ExtResource("10_ad1g1")
-
-[node name="Label" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Logistics"
-horizontal_alignment = 1
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Cost:"
-
-[node name="TextureRect" type="TextureRect" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-texture = ExtResource("11_r32wn")
-stretch_mode = 2
-
-[node name="Label2" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "x100"
-
-[node name="HSeparator2" type="HSeparator" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Effects: "
-
-[node name="TextureRect" type="TextureRect" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-texture = ExtResource("12_5tvyy")
-
-[node name="HBoxContainer6" type="HBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer6"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Description:"
-
-[node name="Label2" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer6"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Allows the construction of underground belts."
-autowrap_mode = 2
-
-[node name="HSeparator" type="HSeparator" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer4"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Unlocks: "
-
-[node name="Label2" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-text = "Circuits 1, Iron Smelting, Gem Sorting"
-
-[node name="PanelContainer2" type="PanelContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
-layout_mode = 2
-icon = ExtResource("10_ad1g1")
-
-[node name="Label" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
-layout_mode = 2
-text = "Iron Smelting"
-
-[node name="TextureRect" type="TextureRect" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("11_r32wn")
-
-[node name="Label2" type="Label" parent="GUI/Control/TechGUI/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
-layout_mode = 2
-text = "x100"
 
 [node name="TileMap" type="TileMap" parent="."]
 z_index = -5

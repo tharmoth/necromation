@@ -56,7 +56,7 @@ public partial class Character : Node2D
 	public override void _Process(double delta)
 	{
 		// Return if a gui is open
-		if (GUI.Instance.IsAnyGUIOpen()) return;
+		if (GUI.Instance.IsAnyGuiOpen()) return;
 
 		// Process button presses
 		if (_buildingBeingRemoved == null)

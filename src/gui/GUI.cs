@@ -8,7 +8,9 @@ public partial class GUI : CanvasLayer
 	private RecipePopup Popup => GetNode<RecipePopup>("%Popup");
 	private CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
-	public ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
+	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
+	
+	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
 	
 	// Use _EnterTree to make sure the Singleton instance is avaiable in _Ready()
 	public override void _EnterTree(){
@@ -21,10 +23,10 @@ public partial class GUI : CanvasLayer
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
-		if (Input.IsActionJustPressed("open_technology")) ;
+		if (Input.IsActionJustPressed("open_technology")) TechGui.Display();
 	}
 	
-	public bool IsAnyGUIOpen()
+	public bool IsAnyGuiOpen()
 	{
 		return Popup.Visible || CrafterGui.Visible || ContainerGui.Visible;
 	}
@@ -42,5 +44,12 @@ public partial class GUI : CanvasLayer
 	public void Display(Inventory to, Inventory from, string title)
 	{
 		ContainerGui.Display(to, from, title);
+	}
+
+	public void SetProgress(double value)
+	{
+		ProgressBar.Visible = true;
+		ProgressBar.Value = value * 100;
+		ProgressBar.Visible = value is < 1 and > 0;
 	}
 }

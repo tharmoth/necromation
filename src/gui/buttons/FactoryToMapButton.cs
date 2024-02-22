@@ -23,11 +23,11 @@ public partial class FactoryToMapButton : Button
 		shit.Visible = false;
 		shit.ProcessMode = ProcessModeEnum.Disabled;
 
-		Globals.Camera.Enabled = false;
+		Globals.FactoryCamera.Enabled = false;
 		GUI.Instance.Visible = false;
         
 		MapGui.Instance.Visible = true;
-		MapGlobals.Camera.Enabled = true;
+		Globals.MapCamera.Enabled = true;
 		
 		MapGlobals.TileMap.MoveUnitsToFromFactory();
 	}

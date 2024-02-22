@@ -1,0 +1,93 @@
+[gd_scene load_steps=5 format=3 uid="uid://dym3bw8at8qt1"]
+
+[ext_resource type="Script" path="res://src/gui/TechGUI/TechPanel.cs" id="1_24d1f"]
+[ext_resource type="Texture2D" uid="uid://dtym36gpw8e7c" path="res://res/sprites/Check Mark.png" id="1_qmolt"]
+[ext_resource type="Texture2D" uid="uid://bibd4p41sh314" path="res://res/sprites/Experiment.png" id="2_ildly"]
+[ext_resource type="Texture2D" uid="uid://mmc7pi4i3blc" path="res://res/sprites/Underground Belt.png" id="3_0yt3m"]
+
+[node name="TechPanel" type="PanelContainer"]
+script = ExtResource("1_24d1f")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TitleRow" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="SelectButton" type="Button" parent="VBoxContainer/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("1_qmolt")
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Logistics"
+horizontal_alignment = 1
+
+[node name="CostRow" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/CostRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Cost:"
+
+[node name="CostTexture" type="TextureRect" parent="VBoxContainer/CostRow"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("2_ildly")
+stretch_mode = 2
+
+[node name="CostLabel" type="Label" parent="VBoxContainer/CostRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "x100"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="EffectsRow" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/EffectsRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Effects: "
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/EffectsRow"]
+layout_mode = 2
+texture = ExtResource("3_0yt3m")
+
+[node name="DescriptionRow" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/DescriptionRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Description:"
+
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer/DescriptionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Allows the construction of underground belts."
+autowrap_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="UnlocksRow" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/UnlocksRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Unlocks: "
+
+[node name="UnlocksLabel" type="Label" parent="VBoxContainer/UnlocksRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Circuits 1, Iron Smelting, Gem Sorting"

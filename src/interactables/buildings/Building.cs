@@ -17,9 +17,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		set
 		{
 			_removePercent = value;
-			GUI.Instance.ProgressBar.Visible = true;
-			GUI.Instance.ProgressBar.Value = value * 100;
-			GUI.Instance.ProgressBar.Visible = _removePercent is < 1 and > 0;
+			GUI.Instance.SetProgress(value);
 		}
 	}
 
@@ -95,7 +93,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		}
 		to.Insert(ItemType);
 		Globals.TileMap.RemoveEntity(this);
-		GUI.Instance.ProgressBar.Visible = false;
+		RemovePercent = 100;
 	}
 
 	/******************************************************************

@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3 uid="uid://kxkejlx5p0rg"]
+
+[ext_resource type="Script" path="res://src/gui/lists/ItemList.cs" id="1_yqfmf"]
+[ext_resource type="PackedScene" uid="uid://cc5nx8t4olpjn" path="res://src/gui/item_label.tscn" id="2_k0s7t"]
+[ext_resource type="Script" path="res://src/gui/lists/Actionbar.cs" id="3_0kh2d"]
+[ext_resource type="Script" path="res://src/gui/ResearchLabel.cs" id="4_jeonu"]
+[ext_resource type="Script" path="res://src/gui/ResearchProgressBar.cs" id="5_wvl28"]
+[ext_resource type="Script" path="res://src/gui/buttons/FactoryToMapButton.cs" id="6_hpk6f"]
+[ext_resource type="PackedScene" uid="uid://yhp2pgk86ofe" path="res://src/map.tscn" id="7_o115q"]
+
+[node name="FactoryGUI" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryList" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+script = ExtResource("1_yqfmf")
+
+[node name="ItemLabel" parent="InventoryList" instance=ExtResource("2_k0s7t")]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+show_percentage = false
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+vertical_scroll_mode = 0
+
+[node name="Actionbar" type="HBoxContainer" parent="VBoxContainer2/ScrollContainer"]
+layout_mode = 2
+script = ExtResource("3_0kh2d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Researching: Nothing"
+horizontal_alignment = 1
+script = ExtResource("4_jeonu")
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("5_wvl28")
+
+[node name="MapButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Map"
+script = ExtResource("6_hpk6f")
+_scene = ExtResource("7_o115q")

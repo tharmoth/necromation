@@ -20,10 +20,10 @@ public partial class MapToFactoryButton : Button
         from.Visible = false;
         from.ProcessMode = ProcessModeEnum.Disabled;
 
-        Globals.Camera.Enabled = true;
+        Globals.FactoryCamera.Enabled = true;
         GUI.Instance.Visible = true;
         
         MapGui.Instance.Visible = false;
-        MapGlobals.Camera.Enabled = false;
+        Globals.MapCamera.Enabled = false;
     }
 }

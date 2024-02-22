@@ -20,10 +20,10 @@ public partial class BattleToMapButton : Button
 		hide.Visible = false;
 		hide.ProcessMode = ProcessModeEnum.Disabled;
 		
-		BattleGlobals.Camera.Enabled = false;
+		Globals.BattleCamera.Enabled = false;
 		BattleGlobals.GUI.Visible = false;
 		
 		MapGui.Instance.Visible = true;
-		MapGlobals.Camera.Enabled = true;
+		Globals.MapCamera.Enabled = true;
 	}
 }

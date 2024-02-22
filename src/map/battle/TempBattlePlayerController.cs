@@ -7,7 +7,7 @@ public partial class TempBattlePlayerController : Node2D
 	public override void _Ready()
 	{
 		base._Ready();
-		BattleGlobals.Camera = GetParent().GetNode<Camera2D>("Camera2D");
+		Globals.BattleCamera = GetParent().GetNode<Camera2D>("Camera2D");
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
