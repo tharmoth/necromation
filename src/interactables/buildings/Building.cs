@@ -43,16 +43,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		if (BuildingSize.X % 2 == 0) Sprite.GlobalPosition += new Vector2(16, 0);
 		if (BuildingSize.Y % 2 == 0) Sprite.GlobalPosition += new Vector2(0, 16);
 
-		// If the building is placed on top of another building, remove the other building. This should only happen for
-		// IRotateables as other buildings should not be able to be placed on top of each other.
 		var positions = GetOccupiedPositions(GlobalPosition);
-		positions.Select(pos => Globals.TileMap.GetEntities(pos, BuildingTileMap.Building))
-			.Select(entity => entity as Building)
-			.Where(entity => entity != null)
-			.Distinct()
-			.ToList()
-			.ForEach(building => building.Remove(Globals.PlayerInventory));
-		
 		positions.ForEach(pos => Globals.TileMap.AddEntity(pos, this, BuildingTileMap.Building));
 	}
 	
@@ -79,11 +70,21 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		_removeTween?.Kill();
 		_removeTween = null;
 	}
+	
+	public List<Vector2I> GetOccupiedPositions(Vector2 position)
+	{
+		position = Globals.TileMap.ToMap(position);
+		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
+		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
+		var topLeft = Globals.TileMap.GlobalToMap(position) - BuildingSize / 2;
 
-	/******************************************************************
-	 * Protected Methods                                              *
-	 ******************************************************************/
-	protected virtual void Remove(Inventory to)
+		var positions = (from x in Enumerable.Range(0, BuildingSize.X)
+			from y in Enumerable.Range(0, BuildingSize.Y)
+			select topLeft + new Vector2I(x, y)).ToList();
+		return positions;
+	}
+
+	public virtual void Remove(Inventory to)
 	{
 		if (this is ITransferTarget inputTarget)
 		{
@@ -97,20 +98,6 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		GUI.Instance.ProgressBar.Visible = false;
 	}
 
-	protected List<Vector2I> GetOccupiedPositions(Vector2 position)
-	{
-		position = Globals.TileMap.ToMap(position);
-		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
-		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
-		var topLeft = Globals.TileMap.GlobalToMap(position) - BuildingSize / 2;
-
-		var positions = (from x in Enumerable.Range(0, BuildingSize.X)
-			from y in Enumerable.Range(0, BuildingSize.Y)
-			select topLeft + new Vector2I(x, y)).ToList();
-		return positions;
-	}
-
-	
 	/******************************************************************
 	 * Abstract methods                                               *
 	 ******************************************************************/	

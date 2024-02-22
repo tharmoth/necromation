@@ -43,7 +43,7 @@ public partial class RecipePopup : Control
 			button.CustomMinimumSize = new Vector2(100, 30);
 			button.Pressed += () =>
 			{
-				GUI.Instance.Popup.Visible = false;
+				Visible = false;
 				SetRecipe(recipe);
 				GD.Print("Button pressed");
 			};

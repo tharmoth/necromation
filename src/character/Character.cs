@@ -11,7 +11,7 @@ public partial class Character : Node2D
 	private Tween _tween;
 	private Sprite2D _sprite;
 	
-	private Interactable _resource;
+	private Collectable _resource;
 	private Building _buildingBeingRemoved;
 
 	private int _rotationDegrees;
@@ -33,8 +33,8 @@ public partial class Character : Node2D
 	public override void _EnterTree()
 	{
 		base._EnterTree();
-		Globals.PlayerInventory = _inventory;
 		Globals.Player = this;
+		Globals.PlayerInventory = _inventory;
 	}
 
 	public override void _Ready()
@@ -45,17 +45,7 @@ public partial class Character : Node2D
 			.Select(recipe => recipe.Products.First().Key)
 			.ToList()
 			.ForEach(item => _inventory.Insert(item, 100));
-		
-		// _inventory.Insert("Stone", 500);
-		// _inventory.Insert("Mine", 3);
-		// _inventory.Insert("Stone Furnace", 100);
-		// _inventory.Insert("Stone Chest", 100);
-		// _inventory.Insert("Inserter", 100);
-		// _inventory.Insert("Assembler", 3);
-		// _inventory.Insert("Belt", 100);
-		// _inventory.Insert("Underground Belt", 100);
-		// _inventory.Insert("Double Belt", 100);
-		// _inventory.Insert("Research Lab", 100);
+
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
@@ -66,9 +56,7 @@ public partial class Character : Node2D
 	public override void _Process(double delta)
 	{
 		// Return if a gui is open
-		if (GUI.Instance.CrafterGui.Visible) return;
-		if (GUI.Instance.Popup.Visible) return;
-		if (GUI.Instance.ContainerGui.Visible) return;
+		if (GUI.Instance.IsAnyGUIOpen()) return;
 
 		// Process button presses
 		if (_buildingBeingRemoved == null)
@@ -81,7 +69,7 @@ public partial class Character : Node2D
 
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionPressed("close_gui") || Input.IsActionPressed("clear_selection")) Selected = null;
-		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact();
+		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();
@@ -165,6 +153,15 @@ public partial class Character : Node2D
 		
 		var position = GetGlobalMousePosition();
 		if (!building.CanPlaceAt(position)) return;
+
+		// Remove any buildings that are in the way. This should probably only happen for IRotatable buildings.
+		building.GetOccupiedPositions(position)
+			.Select(pos => Globals.TileMap.GetEntities(pos, BuildingTileMap.Building))
+			.Select(entity => entity as Building)
+			.Where(entity => entity != null)
+			.Distinct()
+			.ToList()
+			.ForEach(bldg => bldg.Remove(_inventory));
 		
 		_inventory.Remove(building.ItemType);
 
@@ -195,12 +192,12 @@ public partial class Character : Node2D
 
 	private void Mine()
 	{
-		if (Globals.TileMap.GetResourceAtMouse() is Interactable resource)
+		if (Globals.TileMap.GetResourceAtMouse() is Collectable resource)
 		{
 			if (resource == _resource && !_resource.CanInteract()) return;
 			_resource?.Cancel();
 			_resource = resource;
-			_resource.Interact();
+			_resource.Interact(_inventory);
 		}
 		else
 		{

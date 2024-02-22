@@ -43,13 +43,13 @@ public partial class CraftingListPopup : PanelContainer
 		GetNode<VBoxContainer>("%Rows").GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
 
-		SnapToScreen();
+		SnapToScreen(this);
 	}
 
 	public override void _Input(InputEvent @event)
 	{
 		base._Input(@event);
-		SnapToScreen();
+		SnapToScreen(this);
 	}
 
 	private void AddRow(string name, int amount)
@@ -69,25 +69,25 @@ public partial class CraftingListPopup : PanelContainer
 	/*
 	 * Adjusts the position of the popup so that it is always visible on the screen
 	 */
-	private void SnapToScreen()
+	private static void SnapToScreen(Control node)
 	{
-		ResetSize();
+		node.ResetSize();
 		
-		GlobalPosition = GetViewport().GetMousePosition() + new Vector2(40, 0);
+		node.GlobalPosition = node.GetViewport().GetMousePosition() + new Vector2(40, 0);
 		
 		// Ensure the PopupMenu is not partially off-screen
-		var screenSize = GetViewportRect().Size;
+		var screenSize = node.GetViewportRect().Size;
 		
 		// Check if the PopupMenu exceeds the right edge of the screen move it to the left of the cursor
-		if (GlobalPosition.X + Size.X > screenSize.X)
+		if (node.GlobalPosition.X + node.Size.X > screenSize.X)
 		{
-			GlobalPosition = new Vector2(GetViewport().GetMousePosition().X - Size.X - 40, GlobalPosition.Y);
+			node.GlobalPosition = new Vector2(node.GetViewport().GetMousePosition().X - node.Size.X - 40, node.GlobalPosition.Y);
 		}
 		
 		// Check if the PopupMenu exceeds the bottom edge of the screenmove it to the top of the cursor
-		if (GlobalPosition.Y + Size.Y > screenSize.Y)
+		if (node.GlobalPosition.Y + node.Size.Y > screenSize.Y)
 		{
-			GlobalPosition = new Vector2(GlobalPosition.X, screenSize.Y - Size.Y);
+			node.GlobalPosition = new Vector2(node.GlobalPosition.X, screenSize.Y - node.Size.Y);
 		}
 	}
 }

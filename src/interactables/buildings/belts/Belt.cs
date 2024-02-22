@@ -64,10 +64,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         MovePlayer(delta);
     }
     
-    /**************************************************************************
-     * Protected Overides Methods                                             *
-     **************************************************************************/
-    protected override void Remove(Inventory to)
+    public override void Remove(Inventory to)
     {
         var adjacent = GetAdjacent();
         base.Remove(to);
@@ -75,6 +72,9 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         UpdateInputOutput(null, adjacent);
     }
     
+    /**************************************************************************
+     * Protected Overides Methods                                             *
+     **************************************************************************/
     public override bool CanPlaceAt(Vector2 position)
     {
         return base.CanPlaceAt(position) 

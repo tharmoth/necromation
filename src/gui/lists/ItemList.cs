@@ -37,6 +37,7 @@ public partial class ItemList : VBoxContainer
 			
 			var itemLabel = GD.Load<PackedScene>("res://src/gui/item_label.tscn").Instantiate<ItemLabel>();
 			itemLabel.ItemType = item;
+			itemLabel.Inventory = Globals.PlayerInventory;
 			AddChild(itemLabel);
 		}
 	}

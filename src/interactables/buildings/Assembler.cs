@@ -52,15 +52,15 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     /**************************************************************************
 	 * IInteractable Methods                                                  *
 	 **************************************************************************/
-    public void Interact()
+    public void Interact(Inventory playerInventory)
     {
 	    if (_recipe == null)
 	    {
-		    GUI.Instance.Popup.DisplayPopup(this);
+		    GUI.Instance.Display(this);
 	    }
 	    else
 	    {
-		    GUI.Instance.CrafterGui.Display(this);
+		    GUI.Instance.Display(playerInventory, this);
 	    }
     }
     #endregion
