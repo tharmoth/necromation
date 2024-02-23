@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=20 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/Map.cs" id="1_muam7"]
 [ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_ri0bn"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://xn8iy0eq7nns" path="res://res/sprites/selection.png" id="10_kmmak"]
 [ext_resource type="Texture2D" uid="uid://beupnxnshoxcv" path="res://res/sprites/horse.png" id="10_vr2ig"]
 [ext_resource type="Script" path="res://src/map/gui/CommanderUnitList.cs" id="11_cy23s"]
+[ext_resource type="Texture2D" uid="uid://bgxp03y7s5ppl" path="res://res/sprites/Stone Furnace.png" id="17_jvur2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5kr02"]
 texture = ExtResource("1_ri0bn")
@@ -92,6 +93,7 @@ text = "Factory"
 script = ExtResource("7_ep6dt")
 
 [node name="BattleButton" type="Button" parent="MapGui/MainGui/Buttons"]
+visible = false
 layout_mode = 2
 text = "Battle"
 script = ExtResource("8_0ooys")
@@ -252,3 +254,8 @@ texture = ExtResource("10_kmmak")
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -100
+
+[node name="Castle" type="Sprite2D" parent="."]
+position = Vector2(23, 70)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("17_jvur2")

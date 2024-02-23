@@ -11,9 +11,9 @@ using Necromation.sk;
 public partial class Unit : Sprite2D, LayerTileMap.IEntity
 {
 	
-	public Vector2I TargetPosition = new Vector2I(0, 0);
+	public Vector2I TargetPosition = Vector2I.Zero;
 	private int _hp = 100;
-	private double _timestep = 0.1;
+	private double _timestep = 1;
 	private double _time = GD.RandRange(0, 1.0);
 	private Tween _jiggleTween;
 	private Tween _moveTween;
@@ -23,7 +23,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	public string Team = "Player";
 	private readonly Commander _commander;
 	
-	private Sprite2D _sprite = new();
+	protected Sprite2D Sprite = new();
 	
 	private static Texture2D _texture = new Database().GetTexture("warrior");
 
@@ -32,15 +32,15 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		_commander = commander;
 		_unitType = unitType;
 		var texture = _texture;
-		_sprite.Texture = texture;
-		_sprite.Scale = new Vector2(.5f, .5f);
-		AddChild(_sprite);
+		Sprite.Texture = texture;
+		Sprite.Scale = new Vector2(.5f, .5f);
+		AddChild(Sprite);
 	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_sprite.FlipH = Team == "Player";
+		Sprite.FlipH = Team == "Player";
 		AddToGroup("Units");
 	}
 
@@ -52,8 +52,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		if (_time < _timestep || _hp <= 0) return;
 		_time = 0;
 
-		if (AttackAdjacent()) return;
 		TargetClosestEnemy();
+		if (Attack()) return;
 
 		// If surrounded by 4 units, don't call the expensive pathfinding algorithm
 		if (GetAdjacent().Values.Count(unit => unit != null) == 4) return;
@@ -80,7 +80,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	/**************************************************************************
 	 * Private Methods                                                        *
 	 **************************************************************************/
-	private void Jiggle()
+	protected void Jiggle()
 	{
 		// jiggle the unit
 		if (_jiggleTween != null) return;
@@ -102,7 +102,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		TargetPosition = Globals.BattleScene.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
 	}
 	
-	private bool AttackAdjacent()
+	protected virtual bool Attack()
 	{
 		var adjacent = GetAdjacent();
 

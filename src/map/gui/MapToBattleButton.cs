@@ -8,15 +8,19 @@ public partial class MapToBattleButton : Button
 	public override void _Pressed()
 	{
 		base._Pressed();
-
+		ChangeScene();
+	}
+	
+	public static void ChangeScene()
+	{
 		Globals.BattleScene ??= GD.Load<PackedScene>("res://src/battle.tscn").Instantiate<Battle>();
-		if (Globals.BattleScene.GetParent() != GetTree().Root) GetTree().Root.AddChild(Globals.BattleScene);
+		if (Globals.BattleScene.GetParent() != Globals.MapScene.GetTree().Root) Globals.MapScene.GetTree().Root.AddChild(Globals.BattleScene);
 		
-		Node2D show = Globals.BattleScene;
+		var show = Globals.BattleScene;
 		show.Visible = true;
 		show.ProcessMode = ProcessModeEnum.Inherit;
         
-		Node2D hide = (Node2D)Globals.MapScene;
+		var hide = Globals.MapScene;
 		hide.Visible = false;
 		hide.ProcessMode = ProcessModeEnum.Disabled;
 

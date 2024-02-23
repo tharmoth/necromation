@@ -25,7 +25,7 @@ public partial class MapTileMap : SKTileMap
 			_provences.Add(location, provence);
 			Globals.MapScene.CallDeferred("add_child", provence);
 
-			InitProvence(provence, location == Vector2I.One ? "Player" : "Enemy");
+			InitProvence(provence, location == MapGlobals.FactoryPosition ? "Player" : "Enemy");
 		}
 	}
 
@@ -40,7 +40,7 @@ public partial class MapTileMap : SKTileMap
 		// Get the location of the provence
 		var pos = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
 		// for each unit distance away from (1, 1) add 10 warriors to the commander.
-		var distance = (pos - Vector2I.One).Length();
+		var distance = (pos - MapGlobals.FactoryPosition).Length();
 		if (team == "Player") distance = 2;
 		commander.Units.Insert("Warrior", (int)distance * 10);
 		Globals.MapScene.CallDeferred("add_child", commander);

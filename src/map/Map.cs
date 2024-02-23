@@ -19,6 +19,8 @@ public partial class Map : Node2D
 		
 		var provence = MapGlobals.TileMap.GetProvence(Vector2I.One);
 		SelectProvince(provence);
+		
+		VisibilityChanged += () => SelectProvince(MapGlobals.SelectedProvince);
 	}
 	
 	public override void _UnhandledInput(InputEvent @event)
@@ -38,7 +40,7 @@ public partial class Map : Node2D
 			SelectProvince(provence);
 		}
 	}
-	
+
 	private void SelectProvince(Province provence)
 	{
 		MapGlobals.SelectedProvince = provence;

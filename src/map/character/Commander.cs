@@ -24,6 +24,14 @@ public partial class Commander : Node2D, ITransferTarget
         AddChild(_sprite);
     }
     
+    // Deconstructor
+    public void Kill()
+    {
+        GetParent().RemoveChild(this);
+        _province.Commanders.Remove(this);
+        QueueFree();
+    }
+    
     public override void _Ready()
     {
         base._Ready();
@@ -31,7 +39,7 @@ public partial class Commander : Node2D, ITransferTarget
         
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
         _targetLocation = MapGlobals.TileMap.GetLocation(_province);
-        MapGlobals.TurnListeners.Add(OnTurnEnd);
+        MapGlobals.TurnListeners.Add(MoveCommander);
         
         if (Team != "Player") _sprite.Visible = false;
     }
@@ -52,7 +60,7 @@ public partial class Commander : Node2D, ITransferTarget
         _line.Points = new [] {GlobalPosition, MapGlobals.TileMap.MapToGlobal(_targetLocation)};
     }
     
-    public void OnTurnEnd()
+    private void MoveCommander()
     {
         _line.Points = new Vector2[] {};
         if (_targetLocation == MapGlobals.TileMap.GetLocation(_province)) return;
@@ -63,8 +71,12 @@ public partial class Commander : Node2D, ITransferTarget
         _province.Commanders.Add(this);
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
 
-        if (_province.Owner != Team) ;
-        _province.Owner = "Player";
+        if (_province.Owner != Team)
+        {
+            MapGlobals.SelectedProvince = _province;
+            MapToBattleButton.ChangeScene();
+            
+        }
     }
     
     #region ITransferTarget Implementation

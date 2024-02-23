@@ -14,4 +14,6 @@ public class MapGlobals
     public static Sprite2D SelectedSprite;
     public static Province SelectedProvince;
     public static Commander SelectedCommander;
+
+    public static Vector2I FactoryPosition => new(0, 2);
 }

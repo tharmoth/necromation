@@ -25,7 +25,7 @@ public partial class Province : Node2D, ITransferTarget
     
     public Province()
     {
-        MapGlobals.TurnListeners.Add(OnTurnEnd);
+        MapGlobals.TurnListeners.Add(Recruit);
         _flagSprite.Texture = MapUtils.GetTexture("Unclaimed Flag");
         _flagSprite.Scale = new Vector2(0.25f, 0.25f);
         AddChild(_flagSprite);
@@ -44,7 +44,7 @@ public partial class Province : Node2D, ITransferTarget
         RecruitQueue[type] = currentCount + 1;
     }
     
-    public void OnTurnEnd()
+    private void Recruit()
     {
         foreach (var (type, count) in RecruitQueue)
         {

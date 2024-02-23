@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.map.battle;
 using Necromation.map.character;
 
 public partial class UnitSpawner : Node2D
@@ -45,13 +46,18 @@ public partial class UnitSpawner : Node2D
 	private void LoadDefault()
 	{
 		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
+		// Enumerable.Range(0, _spawnCount).ToList()
+			// .ForEach(_ => AddUnit("Warrior"));
 		Enumerable.Range(0, _spawnCount).ToList()
-			.ForEach(_ => AddUnit("Warrior"));
+			.ForEach(_ => AddUnit("Archer"));
 	}
 
 	private void AddUnit(string unitType, Commander commander = null)
 	{
-		var newUnit = new Unit(unitType, commander);
+		Unit newUnit;
+		if (unitType == "Archer") newUnit = new Archer(commander);
+		else newUnit = new Unit(unitType, commander);
+		
 		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
 		newUnit.Position = Globals.BattleScene.TileMap.MapToGlobal(Globals.BattleScene.TileMap.GetNearestEmpty(position));
 		newUnit.Team = _team;
