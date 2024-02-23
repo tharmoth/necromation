@@ -6,7 +6,8 @@ using Necromation.gui;
 public partial class RecipePopup : Control
 {
 	[Export] private string _category = "None";
-
+	private Container RecipeList => GetNode<Container>("%RecipeList");
+	
 	private ICrafter _crafter;
 	
 	public void DisplayPopup(ICrafter crafter)
@@ -16,20 +17,17 @@ public partial class RecipePopup : Control
 		Visible = true;
 		_crafter = crafter;
 
-		GetNode("RecipeList").GetChildren().OfType<Button>().ToList().ForEach(button =>
+		RecipeList.GetChildren().OfType<Button>().ToList().ForEach(button =>
 		{
 			button.GetParent().RemoveChild(button);
 			button.QueueFree();
 		});
 		AddButtons();
+		
+		GUI.SnapToScreen(this);
 	}
-	
-	public void HidePopup()
-	{
-		Visible = false;
-	}
-	
-	public void SetRecipe(Recipe recipe)
+
+	private void SetRecipe(Recipe recipe)
 	{
 		Visible = false;
 		_crafter.SetRecipe(recipe);
@@ -45,10 +43,9 @@ public partial class RecipePopup : Control
 			{
 				Visible = false;
 				SetRecipe(recipe);
-				GD.Print("Button pressed");
 			};
 			button.Text = recipe.Name;
-			GetNode("RecipeList").AddChild(button);
+			RecipeList.AddChild(button);
 		}
 	}
 }

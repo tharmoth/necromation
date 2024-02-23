@@ -5,6 +5,7 @@ using System.Linq;
 using Necromation;
 using Necromation.character;
 using Necromation.map;
+using Necromation.map.character;
 using Necromation.sk;
 
 public partial class Unit : Sprite2D, LayerTileMap.IEntity
@@ -12,32 +13,34 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	
 	public Vector2I TargetPosition = new Vector2I(0, 0);
 	private int _hp = 100;
-	private double _timestep = 1.0;
+	private double _timestep = 0.1;
 	private double _time = GD.RandRange(0, 1.0);
 	private Tween _jiggleTween;
 	private Tween _moveTween;
 	private Tween _damageTween;
 	private string _unitName = MapUtils.GetRandomCommanderName();
+	private string _unitType;
 	public string Team = "Player";
+	private readonly Commander _commander;
 	
 	private Sprite2D _sprite = new();
+	
+	private static Texture2D _texture = new Database().GetTexture("warrior");
 
-	public Unit()
+	public Unit(string unitType, Commander commander = null)
 	{
-		var texture = new Database().GetTexture("warrior");
+		_commander = commander;
+		_unitType = unitType;
+		var texture = _texture;
 		_sprite.Texture = texture;
 		_sprite.Scale = new Vector2(.5f, .5f);
 		AddChild(_sprite);
 	}
 
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_sprite.FlipH = Team == "Player";
-		BattleGlobals.TempUnit ??= this;
-		BattleGlobals.TileMap.AddEntity(GlobalPosition, this, BattleTileMap.Unit);
-		GD.Print(_unitName);
 		AddToGroup("Units");
 	}
 
@@ -46,11 +49,14 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	{
 		// Every 0.5 seconds, move the unit one cell forward
 		_time += delta;
-		if (_time < _timestep) return;
+		if (_time < _timestep || _hp <= 0) return;
 		_time = 0;
 
-		TargetClosestEnemy();
 		if (AttackAdjacent()) return;
+		TargetClosestEnemy();
+
+		// If surrounded by 4 units, don't call the expensive pathfinding algorithm
+		if (GetAdjacent().Values.Count(unit => unit != null) == 4) return;
 		MoveToTarget();
 	}
 	
@@ -61,12 +67,13 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	{
 		_damageTween?.Kill();
 		_damageTween = CreateTween();
-		_damageTween.TweenProperty(this, "modulate", new Color(1, 0, 0), 0.1f);
-		_damageTween.TweenProperty(this, "modulate", Colors.White, 0.1f);
+		_damageTween.TweenProperty(this, "modulate", new Color(1, 0, 0), _timestep / 10);
+		_damageTween.TweenProperty(this, "modulate", Colors.White, _timestep / 10);
 		
 		_hp -= damage;
 		if (_hp > 0) return;
-		BattleGlobals.TileMap.RemoveEntity(this);
+		Globals.BattleScene.TileMap.RemoveEntity(this);
+		_commander?.Remove(_unitType);
 		QueueFree();
 	}
 	
@@ -80,8 +87,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		_jiggleTween = CreateTween();
 		_jiggleTween.SetTrans(Tween.TransitionType.Quad);
 		_jiggleTween.SetEase(Tween.EaseType.Out);
-		_jiggleTween.TweenProperty(this, "rotation_degrees", 10, 0.1f);
-		_jiggleTween.TweenProperty(this, "rotation_degrees", 0, 0.1f);
+		_jiggleTween.TweenProperty(this, "rotation_degrees", 10, _timestep / 10);
+		_jiggleTween.TweenProperty(this, "rotation_degrees", 0, _timestep / 10);
 		_jiggleTween.TweenCallback(Callable.From(() => _jiggleTween = null));
 	}
 	
@@ -91,8 +98,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 			.Where(unit => unit is Unit && unit != this)
 			.Select(unit => unit as Unit)
 			.Where(unit => unit.Team != Team)
-			.MinBy(unit => unit.GlobalPosition.DistanceTo(GlobalPosition));
-		TargetPosition = BattleGlobals.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
+			.MinBy(unit => unit.GlobalPosition.DistanceSquaredTo(GlobalPosition));
+		TargetPosition = Globals.BattleScene.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
 	}
 	
 	private bool AttackAdjacent()
@@ -111,24 +118,24 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	
 	private void MoveToTarget()
 	{
-		var position = BattleGlobals.TileMap.GetEntityPositions(this).First();
+		var position = Globals.BattleScene.TileMap.GetEntityPositions(this).First();
 		if (position == TargetPosition) return;
 		
-		var nextPosition = BattleGlobals.TileMap.GetNextPath(position, TargetPosition);
+		var nextPosition = Globals.BattleScene.TileMap.GetNextPath(position, TargetPosition);
 
-		if (!BattleGlobals.TileMap.IsEmpty(nextPosition)) return;
-		BattleGlobals.TileMap.RemoveEntity(this);
-		BattleGlobals.TileMap.AddEntity(nextPosition, this, BattleTileMap.Unit);
+		if (!Globals.BattleScene.TileMap.IsEmpty(nextPosition)) return;
+		Globals.BattleScene.TileMap.RemoveEntity(this);
+		Globals.BattleScene.TileMap.AddEntity(nextPosition, this, BattleTileMap.Unit);
 
 		_moveTween?.Kill();
 		_moveTween = CreateTween();
-		_moveTween.TweenProperty(this, "global_position", BattleGlobals.TileMap.MapToGlobal(nextPosition), 0.5f);
+		_moveTween.TweenProperty(this, "global_position", Globals.BattleScene.TileMap.MapToGlobal(nextPosition), _timestep / 10);
 	}
 
 	private Unit GetUnitInDirection(Vector2I direction)
 	{
-		var mapPos = BattleGlobals.TileMap.GetEntityPositions(this).First();
-		var entity = BattleGlobals.TileMap.GetEntities(mapPos + direction, BattleTileMap.Unit);
+		var mapPos = Globals.BattleScene.TileMap.GetEntityPositions(this).First();
+		var entity = Globals.BattleScene.TileMap.GetEntities(mapPos + direction, BattleTileMap.Unit);
 
 		return entity as Unit;
 	}

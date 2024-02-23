@@ -33,7 +33,7 @@ public class Globals
     public static Camera2D MapCamera;
     public static Camera2D BattleCamera;
 
-    public static Node FactoryScene;
-    public static Node MapScene;
-    public static Node BattleScene;
+    public static Node2D FactoryScene;
+    public static Node2D MapScene;
+    public static Battle BattleScene;
 }

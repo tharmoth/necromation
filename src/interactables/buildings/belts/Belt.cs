@@ -47,11 +47,14 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         AddChild(RightLine);
         LeftLine.Position = new Vector2(-8, 0);
         RightLine.Position = new Vector2(8, 0);
+        
+        Sprite.Hframes = 8;
     }
 
     public override void _Ready()
     {
         base._Ready();
+        Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/BeltAnimated.png");
         
         // When this belt is placed, update the input and output of all adjacent belts
         GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));
@@ -62,6 +65,9 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     {
         base._Process(delta);
         MovePlayer(delta);
+        var seconds = Time.GetTicksMsec() / 1000.0;
+        // Move the frame forward 8 times every .5333 seconds
+        Sprite.Frame = (int)(seconds / (_secondsPerItem / 32)) % Sprite.Hframes;
     }
     
     public override void Remove(Inventory to)
@@ -79,7 +85,11 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     {
         return base.CanPlaceAt(position) 
                || GetOccupiedPositions(position)
-                   .Any(pos => Globals.TileMap.GetEntities(pos, BuildingTileMap.Building) is Belt belt && belt.Orientation != Orientation);
+                   .Any(pos =>
+                   {
+                       return Globals.TileMap.GetEntities(pos, BuildingTileMap.Building) is Belt belt &&
+                              belt.Orientation != Orientation;
+                   });
     }
     
     /**************************************************************************

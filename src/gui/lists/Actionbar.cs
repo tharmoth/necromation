@@ -20,12 +20,14 @@ public partial class Actionbar : Control
 	
 	private void AddMissingItems()
 	{
+		int index = 1;
 		// Use the original recipe list for dumb sorting reasons.
 		foreach (var item in Globals.Database.Recipes.Where(recipe => recipe.Category == _category)
 			         .Where(recipe => Globals.Database.UnlockedRecipes.Contains(recipe)))
 		{
-			var button = new RecipeButton(item);
+			var button = new RecipeButton(item, index);
 			AddChild(button);
+			index++;
 		}
 	}
 }

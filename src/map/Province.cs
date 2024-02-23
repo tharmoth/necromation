@@ -29,7 +29,6 @@ public partial class Province : Node2D, ITransferTarget
         _flagSprite.Texture = MapUtils.GetTexture("Unclaimed Flag");
         _flagSprite.Scale = new Vector2(0.25f, 0.25f);
         AddChild(_flagSprite);
-        GD.Print("Province Created");
     }
 
     public override void _Ready()

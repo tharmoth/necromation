@@ -16,15 +16,15 @@ public partial class FactoryToMapButton : Button
 	{
 		var tree = GetTree();
 		
-		Globals.MapScene ??= _scene.Instantiate();
+		Globals.MapScene ??= _scene.Instantiate<Node2D>();
 		if (Globals.MapScene.GetParent() != tree.Root) tree.Root.AddChild(Globals.MapScene);
-		Globals.FactoryScene ??= GetTree().CurrentScene;
+		Globals.FactoryScene ??= (Node2D)GetTree().CurrentScene;
 		
-		Node2D fuck = (Node2D)Globals.MapScene;
+		var fuck = Globals.MapScene;
 		fuck.Visible = true;
 		fuck.ProcessMode = ProcessModeEnum.Inherit;
         
-		Node2D shit = (Node2D)Globals.FactoryScene;
+		var shit = Globals.FactoryScene;
 		shit.Visible = false;
 		shit.ProcessMode = ProcessModeEnum.Disabled;
 

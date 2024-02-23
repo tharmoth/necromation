@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.map.character;
 
 public partial class UnitSpawner : Node2D
 {
@@ -16,7 +17,7 @@ public partial class UnitSpawner : Node2D
 	}
 
 	private void _spawn() {
-		if (BattleGlobals.Provence != null)
+		if (Globals.BattleScene.Provence != null)
 		{
 			LoadFromCommanders();
 		}
@@ -28,34 +29,33 @@ public partial class UnitSpawner : Node2D
 
 	private void LoadFromCommanders()
 	{
-		var position = BattleGlobals.TileMap.GlobalToMap(GlobalPosition);
-		var index = 0;
-		BattleGlobals.Provence.Commanders
-			.Where(commander => commander.Team == _team)
-			.SelectMany(commander => commander.Units.Items.ToList()).ToList().ForEach(entry =>
+		foreach (var commander in Globals.BattleScene.Provence.Commanders
+			         .Where(commander => commander.Team == _team))
 		{
-			for (var i = 0; i < entry.Value; i++)
+			foreach (var entry in commander.Units.Items)
 			{
-				AddUnit(position + new Vector2I(0, index));
-				index++;
+				for (int i = 0; i < entry.Value; i++)
+				{
+					AddUnit(entry.Key, commander);
+				}	
 			}
-		});
+		}
 	}
 	
 	private void LoadDefault()
 	{
-		var position = BattleGlobals.TileMap.GlobalToMap(GlobalPosition);
-		for (var i = 0; i < _spawnCount; i++)
-		{
-			AddUnit(position + new Vector2I(0, i));
-		}
+		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
+		Enumerable.Range(0, _spawnCount).ToList()
+			.ForEach(_ => AddUnit("Warrior"));
 	}
 
-	private void AddUnit(Vector2I position)
+	private void AddUnit(string unitType, Commander commander = null)
 	{
-		var newUnit = new Unit();
-		newUnit.Position = BattleGlobals.TileMap.MapToGlobal(position);
+		var newUnit = new Unit(unitType, commander);
+		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
+		newUnit.Position = Globals.BattleScene.TileMap.MapToGlobal(Globals.BattleScene.TileMap.GetNearestEmpty(position));
 		newUnit.Team = _team;
+		Globals.BattleScene.TileMap.AddEntity(newUnit.Position, newUnit, BattleTileMap.Unit);
 		Globals.BattleScene.CallDeferred("add_child", newUnit);
 	}
 	

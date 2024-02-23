@@ -21,21 +21,29 @@ public partial class MapTileMap : SKTileMap
 		foreach (var location in GetUsedCells(0))
 		{
 			var provence = new Province();
+			
 			_provences.Add(location, provence);
 			Globals.MapScene.CallDeferred("add_child", provence);
+
+			InitProvence(provence, location == Vector2I.One ? "Player" : "Enemy");
 		}
-		
-		var prov = _provences[Vector2I.One];
-		prov.Owner = "Player";
+	}
 
-		MoveUnitsToFromFactory();
-
-		var commander = new Commander(prov);
-		commander.Team = "Player";
-		prov.Commanders.Add(commander);
-		
+	private  void InitProvence(Province provence, string team)
+	{
+		provence.Owner = team;
+		var commander = new Commander(provence)
+		{
+			Team = team
+		};
+		provence.Commanders.Add(commander);
+		// Get the location of the provence
+		var pos = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
+		// for each unit distance away from (1, 1) add 10 warriors to the commander.
+		var distance = (pos - Vector2I.One).Length();
+		if (team == "Player") distance = 2;
+		commander.Units.Insert("Warrior", (int)distance * 10);
 		Globals.MapScene.CallDeferred("add_child", commander);
-
 	}
 
 	public void MoveUnitsToFromFactory()

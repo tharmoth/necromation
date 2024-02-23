@@ -9,14 +9,14 @@ public partial class MapToFactoryButton : Button
     {
         base._Pressed();
         
-        Globals.FactoryScene ??= GD.Load<PackedScene>("res://src/main.tscn").Instantiate();
+        Globals.FactoryScene ??= GD.Load<PackedScene>("res://src/main.tscn").Instantiate<Node2D>();
         if (Globals.FactoryScene.GetParent() != GetTree().Root) GetTree().Root.AddChild(Globals.FactoryScene);
         
-        Node2D to = (Node2D)Globals.FactoryScene;
+        var to = Globals.FactoryScene;
         to.Visible = true;
         to.ProcessMode = ProcessModeEnum.Inherit;
         
-        Node2D from = (Node2D)Globals.MapScene;
+        var from = Globals.MapScene;
         from.Visible = false;
         from.ProcessMode = ProcessModeEnum.Disabled;
 

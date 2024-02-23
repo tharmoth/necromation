@@ -9,10 +9,10 @@ public partial class MapToBattleButton : Button
 	{
 		base._Pressed();
 
-		Globals.BattleScene ??= GD.Load<PackedScene>("res://src/battle.tscn").Instantiate();
+		Globals.BattleScene ??= GD.Load<PackedScene>("res://src/battle.tscn").Instantiate<Battle>();
 		if (Globals.BattleScene.GetParent() != GetTree().Root) GetTree().Root.AddChild(Globals.BattleScene);
 		
-		Node2D show = (Node2D)Globals.BattleScene;
+		Node2D show = Globals.BattleScene;
 		show.Visible = true;
 		show.ProcessMode = ProcessModeEnum.Inherit;
         
@@ -21,9 +21,9 @@ public partial class MapToBattleButton : Button
 		hide.ProcessMode = ProcessModeEnum.Disabled;
 
 		Globals.BattleCamera.Enabled = true;
-		BattleGlobals.GUI.Visible = true;
+		Globals.BattleScene.GUI.Visible = true;
 		
-		BattleGlobals.Provence = MapGlobals.SelectedProvince;
+		Globals.BattleScene.Provence = MapGlobals.SelectedProvince;
         
 		MapGui.Instance.Visible = false;
 		Globals.MapCamera.Enabled = false;

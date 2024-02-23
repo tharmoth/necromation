@@ -21,12 +21,6 @@ public partial class LayerTileMap : SKTileMap
 	public virtual bool AddEntity(Vector2I position, IEntity entity, string layerName){
 		if (!_layers.ContainsKey(layerName)) return false;
 		_layers[layerName].Add(position, entity);
-
-		// DEPRECATED
-		if (entity is not Node2D buildingNode || buildingNode.GetParent() != null) return true;
-		// buildingNode.GlobalPosition = MapToGlobal(position);
-		Globals.FactoryScene.AddChild(buildingNode);
-		// GD.Print("Setting parent to root");
 		return true;
 	}
 	
@@ -39,13 +33,6 @@ public partial class LayerTileMap : SKTileMap
 		if (!_layers[layerName].ContainsKey(position)) return false;
 		var entity = _layers[layerName][position];
 		_layers[layerName].Remove(position);
-		
-		if (entity is not Node2D buildingNode) return false;
-		if (buildingNode.GetParent() == Globals.FactoryScene)
-		{
-			Globals.FactoryScene.RemoveChild(buildingNode);
-			// GD.Print("Removing parent from root");
-		}
 		return true;
 	}
 
@@ -64,6 +51,11 @@ public partial class LayerTileMap : SKTileMap
 		}
 
 		return removed;
+	}
+	
+	public List<IEntity> GetEntities(string layerName)
+	{
+		return _layers.TryGetValue(layerName, out var layer) ? layer.Values.ToList() : new List<IEntity>();
 	}
 	
 	public IEntity GetEntities(Vector2 position, string layerName)

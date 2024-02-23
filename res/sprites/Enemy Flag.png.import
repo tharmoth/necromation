@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgxp03y7s5ppl"
-path="res://.godot/imported/Stone Furnace.png-283b1ef4dae9a1300c31e686023b16d6.ctex"
+uid="uid://b1q7wwveshjuv"
+path="res://.godot/imported/Enemy Flag.png-8293c8e200afd83d7f6275c62bb84214.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Stone Furnace.png"
-dest_files=["res://.godot/imported/Stone Furnace.png-283b1ef4dae9a1300c31e686023b16d6.ctex"]
+source_file="res://res/sprites/Enemy Flag.png"
+dest_files=["res://.godot/imported/Enemy Flag.png-8293c8e200afd83d7f6275c62bb84214.ctex"]
 
 [params]
 

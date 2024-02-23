@@ -33,7 +33,7 @@ public partial class UndergroundBelt : Belt
 
     public override void _Ready()
     {
-        // Look for belts that might be the enterance to this one.
+        // Look for belts that might be the enterance to this one. do this before belt._Ready() is called and rotates things.
         for (var i = 1; i <= Range; i++)
         {
             var position = MapPosition + TargetDirectionGlobal * i;
@@ -47,6 +47,10 @@ public partial class UndergroundBelt : Belt
         }
         
         base._Ready();
+        
+        // TODO: Resetting the texture to the correct one. Belt does animation things. This is bad and should be refactored.
+        Sprite.Texture = Globals.Database.GetTexture(ItemType);
+        Sprite.Hframes = 1;
 
         Globals.Player.RotateSelection();
         Globals.Player.RotateSelection();

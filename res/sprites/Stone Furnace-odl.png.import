@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgxp03y7s5ppl"
-path="res://.godot/imported/Stone Furnace.png-283b1ef4dae9a1300c31e686023b16d6.ctex"
+uid="uid://bfcobkm7738ow"
+path="res://.godot/imported/Stone Furnace-odl.png-f4023a2407993e3291d3e18d9b46599c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Stone Furnace.png"
-dest_files=["res://.godot/imported/Stone Furnace.png-283b1ef4dae9a1300c31e686023b16d6.ctex"]
+source_file="res://res/sprites/Stone Furnace-odl.png"
+dest_files=["res://.godot/imported/Stone Furnace-odl.png-f4023a2407993e3291d3e18d9b46599c.ctex"]
 
 [params]
 

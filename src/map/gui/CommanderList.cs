@@ -21,7 +21,7 @@ public partial class CommanderList : VBoxContainer
 			button.QueueFree();
 		});
 
-		foreach (var commander in provence.Commanders)
+		foreach (var commander in provence.Commanders.Where(commander => commander.Team == "Player"))
 		{
 			var button = new Button();
 			button.Text = commander.Name;

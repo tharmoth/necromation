@@ -68,7 +68,7 @@ public partial class Character : Node2D
 		}
 
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Input.IsActionPressed("close_gui") || Input.IsActionPressed("clear_selection")) Selected = null;
+		if (Input.IsActionPressed("close_gui") || Input.IsActionPressed("clear_selection")) Selected = Globals.TileMap.GetBuildingAtMouse() is Building building ? building.ItemType : null;
 		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
@@ -80,13 +80,6 @@ public partial class Character : Node2D
 		if (Selected != null) SelectedPreview();
 		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition(), BuildingTileMap.Building) != null) MouseoverEntity();
 		else _sprite.Visible = false;
-	}
-
-	public override void _UnhandledInput(InputEvent @event)
-	{
-		base._UnhandledInput(@event);
-		// if (Input.IsActionJustReleased("MWU")) GetNode<Camera2D>("Camera2D").Zoom *= 1.1f;
-		// if (Input.IsActionJustReleased("MWD")) GetNode<Camera2D>("Camera2D").Zoom /= 1.1f;
 	}
 
 	/******************************************************************
@@ -152,6 +145,9 @@ public partial class Character : Node2D
 		}
 		
 		var position = GetGlobalMousePosition();
+		if (building is IRotatable rotatable)
+			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
+		
 		if (!building.CanPlaceAt(position)) return;
 
 		// Remove any buildings that are in the way. This should probably only happen for IRotatable buildings.
@@ -165,8 +161,6 @@ public partial class Character : Node2D
 		
 		_inventory.Remove(building.ItemType);
 
-		if (building is IRotatable rotatable)
-			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 
 		building.GlobalPosition = position;
 		Globals.FactoryScene.AddChild(building);

@@ -94,6 +94,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		to.Insert(ItemType);
 		Globals.TileMap.RemoveEntity(this);
 		RemovePercent = 100;
+		QueueFree();
 	}
 
 	/******************************************************************

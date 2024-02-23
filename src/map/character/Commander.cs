@@ -20,6 +20,7 @@ public partial class Commander : Node2D, ITransferTarget
         _province = province;
         _sprite.Texture = GD.Load<Texture2D>("res://res/sprites/player.png");
         _sprite.Scale = new Vector2(0.25f, 0.25f);
+        
         AddChild(_sprite);
     }
     
@@ -31,6 +32,8 @@ public partial class Commander : Node2D, ITransferTarget
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
         _targetLocation = MapGlobals.TileMap.GetLocation(_province);
         MapGlobals.TurnListeners.Add(OnTurnEnd);
+        
+        if (Team != "Player") _sprite.Visible = false;
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -59,7 +62,8 @@ public partial class Commander : Node2D, ITransferTarget
         if (_province == null) return;
         _province.Commanders.Add(this);
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
-        
+
+        if (_province.Owner != Team) ;
         _province.Owner = "Player";
     }
     
