@@ -1,14 +1,32 @@
 ﻿{
   "technology": [
     {
-      "name": "automation",
-      "count": 20,
+      "name": "Automation",
+      "count": 1,
       "ingredients": [
           "experiment"
       ],
       "unlocks" : [
-        
-      ]
+        "Underground Belt"
+      ],
+      "prerequisites" : [
+
+      ],
+      "description" : "Allows the crafting of more advanced belts."
+    },
+    {
+      "name": "Forever",
+      "count": 1000000,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+
+      ],
+      "prerequisites" : [
+        "Automation"
+      ],
+      "description" : "Test technology that never ends."
     }
   ]
 }

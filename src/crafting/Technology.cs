@@ -12,6 +12,7 @@ public class Technology
     public IReadOnlyList<string> Ingredients { get; }
     public IReadOnlyList<string> Unlocks { get; }
     public IReadOnlyList<string> Prerequisites { get; }
+    public string Description { get; }
     public bool Researched = false;
     private double _progress = 0;
 
@@ -36,7 +37,8 @@ public class Technology
         int count,
         IReadOnlyList<string> ingredients,
         IReadOnlyList<string> unlocks,
-        IReadOnlyList<string> prerequisites
+        IReadOnlyList<string> prerequisites,
+        string description = ""
     )
     {
         Name = name;
@@ -44,5 +46,6 @@ public class Technology
         Ingredients = ingredients;
         Unlocks = unlocks;
         Prerequisites = prerequisites;
+        Description = description;
     }
 }

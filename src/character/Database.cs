@@ -85,11 +85,12 @@ public class Database
         var unlocks = recipeDict["unlocks"]
             .As<Godot.Collections.Array<string>>()
             .ToList();
-        var prerequisites = recipeDict["unlocks"]
+        var prerequisites = recipeDict["prerequisites"]
             .As<Godot.Collections.Array<string>>()
             .ToList();
+        var description = recipeDict.TryGetValue("description", out var descriptionVariant) ? descriptionVariant.As<string>() : "None";
 
-        return new Technology(name, count, ingredients, unlocks, prerequisites);
+        return new Technology(name, count, ingredients, unlocks, prerequisites, description);
     }
 
     public Texture2D GetTexture(string name)

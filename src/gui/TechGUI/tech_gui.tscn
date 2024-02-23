@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cgevopavei0g0"]
+[gd_scene load_steps=6 format=3 uid="uid://cgevopavei0g0"]
 
 [ext_resource type="Script" path="res://src/gui/TechGUI/TechGUI.cs" id="1_1wudm"]
 [ext_resource type="PackedScene" uid="uid://dym3bw8at8qt1" path="res://src/gui/TechGUI/tech_panel.tscn" id="1_3eie5"]
 [ext_resource type="Script" path="res://src/gui/buttons/HideButton.cs" id="2_1rpkb"]
-[ext_resource type="Script" path="res://src/gui/TechGUI/TechPanel.cs" id="2_xqldy"]
 [ext_resource type="Texture2D" uid="uid://dtym36gpw8e7c" path="res://res/sprites/Check Mark.png" id="3_hw6jm"]
 [ext_resource type="Texture2D" uid="uid://bibd4p41sh314" path="res://res/sprites/Experiment.png" id="4_0jn0e"]
 
@@ -63,7 +62,6 @@ size_flags_vertical = 3
 
 [node name="TechPanel" parent="MarginContainer/VBoxContainer/ScrollContainer/TechList" instance=ExtResource("1_3eie5")]
 layout_mode = 2
-script = ExtResource("2_xqldy")
 
 [node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/TechList"]
 layout_mode = 2

@@ -9,6 +9,11 @@ public partial class FactoryToMapButton : Button
 	public override void _Pressed()
 	{
 		base._Pressed();
+		ChangeScene();
+	}
+
+	public void ChangeScene()
+	{
 		var tree = GetTree();
 		
 		Globals.MapScene ??= _scene.Instantiate();

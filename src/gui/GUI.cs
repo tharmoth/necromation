@@ -9,6 +9,7 @@ public partial class GUI : CanvasLayer
 	private CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
+	private FactoryToMapButton FactoryToMapButton => GetNode<FactoryToMapButton>("%FactoryToMapButton");
 	
 	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
 	
@@ -24,11 +25,12 @@ public partial class GUI : CanvasLayer
 	{
 		base._UnhandledInput(@event);
 		if (Input.IsActionJustPressed("open_technology")) TechGui.Display();
+		if (Input.IsActionJustPressed("open_map")) FactoryToMapButton.ChangeScene();
 	}
 	
 	public bool IsAnyGuiOpen()
 	{
-		return Popup.Visible || CrafterGui.Visible || ContainerGui.Visible;
+		return Popup.Visible || CrafterGui.Visible || ContainerGui.Visible || TechGui.Visible;
 	}
 
 	public void Display(ICrafter crafter)

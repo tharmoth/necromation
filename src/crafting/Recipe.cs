@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Godot;
 
 namespace Necromation.gui;
 
@@ -50,5 +52,10 @@ public class Recipe
         {
             outputInventory.Insert(type, amount);
         }
+    }
+    
+    public Texture2D GetTexture()
+    {
+        return Globals.Database.GetTexture(Products.Keys.First());
     }
 }
