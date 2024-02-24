@@ -20,21 +20,21 @@ public partial class BuildingTileMap : LayerTileMap
 
 	public bool IsBuildable(Vector2I mapPos)
 	{
-		return GetCellSourceId(0, mapPos) != -1 && Globals.TileMap.GetEntities(mapPos, Building) == null;
+		return GetCellSourceId(0, mapPos) != -1 && Globals.TileMap.GetEntity(mapPos, Building) == null;
 	}
 	
 	public bool IsResource(Vector2I mapPos)
 	{
-		return Globals.TileMap.GetEntities(mapPos, Resource) != null;
+		return Globals.TileMap.GetEntity(mapPos, Resource) != null;
 	}
 
 	public IEntity GetBuildingAtMouse()
 	{
-		return GetEntities(GetGlobalMousePosition(), Building);
+		return GetEntity(GetGlobalMousePosition(), Building);
 	}
 	
 	public IEntity GetResourceAtMouse()
 	{
-		return GetEntities(GetGlobalMousePosition(), Resource);
+		return GetEntity(GetGlobalMousePosition(), Resource);
 	}
 }

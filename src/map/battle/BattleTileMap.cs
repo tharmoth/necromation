@@ -29,7 +29,26 @@ public partial class BattleTileMap : LayerTileMap
 			for (int y = 0; y < Y; y++)
 			{
 				var coords = new Vector2I(x, y);
-				SetCell(0, coords, 0, Vector2I.Zero, 0);
+				
+				// GD.Print(GetCellAlternativeTile(0));
+				
+				// get a random vector between 0, 0 and 7, 3
+
+				Vector2I randomvec;
+				var random = GD.Randf();
+				if (random < 0.5)
+				{
+					randomvec = Vector2I.Zero;
+				} else if (random < 0.9)
+				{
+					randomvec = new Vector2I(GD.RandRange(0, 3), GD.RandRange(0, 3));
+				} else
+				{
+					randomvec = new Vector2I(GD.RandRange(4, 7), GD.RandRange(0, 3));
+				}
+				
+
+				SetCell(0, coords, 1, randomvec);
 				_grid.AddPoint(index, coords);
 				cells.Add(coords, index);
 				index++;
@@ -75,20 +94,17 @@ public partial class BattleTileMap : LayerTileMap
 
 	public Vector2I GetNextPath(Vector2I mapFrom, Vector2I mapTo)
 	{
+		var disabled = _grid.IsPointDisabled(cells[mapTo]);
 		_grid.SetPointDisabled(cells[mapFrom], false);
+		_grid.SetPointDisabled(cells[mapTo], false);
 		var path = _grid.GetPointPath(cells[mapFrom], cells[mapTo]);
-		if (!path.IsEmpty()) return path.Length < 2 ?  mapFrom : (Vector2I) path[1];
-		
-		mapTo = GetNearestEmpty(mapTo);
-		path = _grid.GetPointPath(cells[mapFrom], cells[mapTo]);
 		_grid.SetPointDisabled(cells[mapFrom], true);
+		_grid.SetPointDisabled(cells[mapTo], disabled);
 		return path.Length < 2 ?  mapFrom : (Vector2I) path[1];
 	}
 
 	public Vector2I GetNearestEmpty(Vector2I to)
 	{
-		if (!_grid.IsPointDisabled(cells[to])) return to;
-		// Perform a breadth-first search to find the nearest empty cell
 		// Do this by scanning in a spiral pattern over the grid
 		var radius = 1;
 		while (radius < 50)
@@ -113,4 +129,12 @@ public partial class BattleTileMap : LayerTileMap
 		GD.PrintErr("Failed to find near empty cell!");
 		return Vector2I.Zero;
 	}
-}
+
+	public List<Unit> GetUnitsInRange(Vector2I mapCenter, float mapRadius)
+	{
+		return GetTilesInRadius(mapCenter, mapRadius)
+			.Select(tile => GetEntity(tile, Unit))
+			.OfType<Unit>()
+			.ToList();
+	}
+ }

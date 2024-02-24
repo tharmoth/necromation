@@ -30,7 +30,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         _time = 0;
 
         var resource = Globals.TileMap.GetEntityPositions(this)
-            .Select(position => Globals.TileMap.GetEntities(position, BuildingTileMap.Resource))
+            .Select(position => Globals.TileMap.GetEntity(position, BuildingTileMap.Resource))
             .First(resource => resource is Collectable);
         
         if (resource is not Collectable collectable) return;

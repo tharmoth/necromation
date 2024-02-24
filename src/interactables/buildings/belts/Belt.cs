@@ -87,7 +87,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
                || GetOccupiedPositions(position)
                    .Any(pos =>
                    {
-                       return Globals.TileMap.GetEntities(pos, BuildingTileMap.Building) is Belt belt &&
+                       return Globals.TileMap.GetEntity(pos, BuildingTileMap.Building) is Belt belt &&
                               belt.Orientation != Orientation;
                    });
     }
@@ -141,7 +141,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     {
         var global = ToGlobal(direction * BuildingTileMap.TileSize);
         var map = Globals.TileMap.GlobalToMap(global);
-        var entity = Globals.TileMap.GetEntities(map, BuildingTileMap.Building);
+        var entity = Globals.TileMap.GetEntity(map, BuildingTileMap.Building);
 
         return entity is Belt belt && (belt.GetOutputBelt() == this || belt == GetOutputBelt()) ? belt : null;
     }
@@ -192,7 +192,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
     protected virtual Belt GetOutputBelt()
     {
-        return Globals.TileMap.GetEntities(Output, BuildingTileMap.Building) as Belt;
+        return Globals.TileMap.GetEntity(Output, BuildingTileMap.Building) as Belt;
     }
     
     protected virtual Belt GetBehindBelt()

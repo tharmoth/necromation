@@ -6,6 +6,8 @@ using Necromation.map;
 
 public partial class Battle : Node2D
 {
+	public const double TimeStep = .5;
+	
 	public BattleTileMap TileMap;
 	public CanvasLayer GUI;
 	public Province Provence;

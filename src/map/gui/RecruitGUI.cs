@@ -21,12 +21,12 @@ public partial class RecruitGUI : Control
 
 	private void RecruitSoldier()
 	{
-		Recruit("soldier");
+		Recruit("Warrior");
 	}
 
 	private void RecruitArcher()
 	{
-		Recruit("archer");
+		Recruit("Archer");
 	}
 
 	private void RecruitHorse()

@@ -78,7 +78,7 @@ public partial class Character : Node2D
 
 		// Process mouseover
 		if (Selected != null) SelectedPreview();
-		else if (Globals.TileMap.GetEntities(GetGlobalMousePosition(), BuildingTileMap.Building) != null) MouseoverEntity();
+		else if (Globals.TileMap.GetEntity(GetGlobalMousePosition(), BuildingTileMap.Building) != null) MouseoverEntity();
 		else _sprite.Visible = false;
 	}
 
@@ -152,7 +152,7 @@ public partial class Character : Node2D
 
 		// Remove any buildings that are in the way. This should probably only happen for IRotatable buildings.
 		building.GetOccupiedPositions(position)
-			.Select(pos => Globals.TileMap.GetEntities(pos, BuildingTileMap.Building))
+			.Select(pos => Globals.TileMap.GetEntity(pos, BuildingTileMap.Building))
 			.Select(entity => entity as Building)
 			.Where(entity => entity != null)
 			.Distinct()

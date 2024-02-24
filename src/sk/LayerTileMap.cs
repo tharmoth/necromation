@@ -58,18 +58,18 @@ public partial class LayerTileMap : SKTileMap
 		return _layers.TryGetValue(layerName, out var layer) ? layer.Values.ToList() : new List<IEntity>();
 	}
 	
-	public IEntity GetEntities(Vector2 position, string layerName)
+	public IEntity GetEntity(Vector2 position, string layerName)
 	{
-		return GetEntities(GlobalToMap(position), layerName);
+		return GetEntity(GlobalToMap(position), layerName);
 	}
 	
-	public IEntity GetEntities(Vector2I position, string layerName)
+	public IEntity GetEntity(Vector2I position, string layerName)
 	{
 		if (!_layers.TryGetValue(layerName, out var layer) 
 		    || !layer.TryGetValue(position, out var entity)) return null;
 		return entity;
 	}
-	
+
 	public List<IEntity> GetEntities(Vector2 position)
 	{
 		return GetEntities(GlobalToMap(position));

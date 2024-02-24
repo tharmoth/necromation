@@ -10,6 +10,7 @@ public partial class UnitSpawner : Node2D
 {
 	[Export] private int _spawnCount = 10;
 	[Export] private string _team = "Player";
+	[Export] private string _defaultUnit = "Warrior";
 	
 	public override void _Ready()
 	{
@@ -46,17 +47,13 @@ public partial class UnitSpawner : Node2D
 	private void LoadDefault()
 	{
 		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
-		// Enumerable.Range(0, _spawnCount).ToList()
-			// .ForEach(_ => AddUnit("Warrior"));
 		Enumerable.Range(0, _spawnCount).ToList()
-			.ForEach(_ => AddUnit("Archer"));
+			.ForEach(_ => AddUnit(_defaultUnit));
 	}
 
 	private void AddUnit(string unitType, Commander commander = null)
 	{
-		Unit newUnit;
-		if (unitType == "Archer") newUnit = new Archer(commander);
-		else newUnit = new Unit(unitType, commander);
+		Unit newUnit = new Unit(unitType, commander);
 		
 		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
 		newUnit.Position = Globals.BattleScene.TileMap.MapToGlobal(Globals.BattleScene.TileMap.GetNearestEmpty(position));

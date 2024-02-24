@@ -96,8 +96,8 @@ public partial class Inserter : Building, IRotatable
 
     private bool Transfer()
     {
-        var sourceEntity = Globals.TileMap.GetEntities(_input, BuildingTileMap.Building);
-        var targetEntity = Globals.TileMap.GetEntities(_output, BuildingTileMap.Building);
+        var sourceEntity = Globals.TileMap.GetEntity(_input, BuildingTileMap.Building);
+        var targetEntity = Globals.TileMap.GetEntity(_output, BuildingTileMap.Building);
         
         switch (sourceEntity, targetEntity)
         {
@@ -151,7 +151,7 @@ public partial class Inserter : Building, IRotatable
 
     private string GetSourceItem()
     {
-        var sourceEntity = Globals.TileMap.GetEntities(_input, BuildingTileMap.Building);
+        var sourceEntity = Globals.TileMap.GetEntity(_input, BuildingTileMap.Building);
         return sourceEntity switch
         {
             ITransferTarget building => building.GetFirstItem(),
