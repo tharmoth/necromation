@@ -23,6 +23,18 @@
       }
     },
     {
+      "name": "Long Inserter",
+      "time" : 1,
+      "ingredients": {
+        "Inserter": 1,
+        "Gear": 2,
+        "Iron Bar": 1
+      },
+      "products": {
+        "Long Inserter": 1
+      }
+    },
+    {
       "name": "Underground Belt",
       "time" : 1,
       "ingredients": {
@@ -175,6 +187,28 @@
       },
       "products": {
         "Barracks": 1
+      }
+    },
+    {
+      "name": "Farm",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Iron Bar": 5
+      },
+      "products": {
+        "Farm": 1
+      }
+    },
+    {
+      "name": "House",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Iron Bar": 5
+      },
+      "products": {
+        "House": 1
       }
     }
   ]

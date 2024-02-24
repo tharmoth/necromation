@@ -16,7 +16,6 @@ public partial class UnitAccepterPanel : PanelContainer
 		_inventory = inventory;
 	}
 
-	
 	public override void _GuiInput(InputEvent @event)
 	{
 		base._GuiInput(@event);

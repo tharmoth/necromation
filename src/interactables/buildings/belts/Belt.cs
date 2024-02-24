@@ -40,7 +40,8 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     private float Speed => BuildingTileMap.TileSize / _secondsPerItem;
     private Vector2I Output => MapPosition + TargetDirectionGlobal;
     private static Vector2I TargetDirectionLocal => new (0, -1);
-
+    private AudioStreamPlayer2D _audio = new();
+    
     public Belt()
     {
         AddChild(LeftLine);
@@ -49,6 +50,13 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         RightLine.Position = new Vector2(8, 0);
         
         Sprite.Hframes = 8;
+        
+        AddChild(_audio);
+        _audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_sport_treadmill_run_fast_no_one_on_22684.mp3");
+        _audio.Attenuation = 50.0f;
+        _audio.Autoplay = true;
+        _audio.VolumeDb = -30.0f;
+        _audio.Finished += () => _audio.Play();
     }
 
     public override void _Ready()

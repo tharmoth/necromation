@@ -20,10 +20,15 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			GUI.Instance.SetProgress(value);
 		}
 	}
+	
+	private AudioStreamPlayer2D _audio = new();
 
 	protected Building()
 	{
 		AddChild(Sprite);
+		AddChild(_audio);
+		
+		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 		
 		var progress = new ProgressTracker();
 		progress.NodeToTrack = this;
@@ -43,6 +48,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 
 		var positions = GetOccupiedPositions(GlobalPosition);
 		positions.ForEach(pos => Globals.TileMap.AddEntity(pos, this, BuildingTileMap.Building));
+		
+		_audio.Play();
 	}
 	
 	/******************************************************************
@@ -84,6 +91,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 
 	public virtual void Remove(Inventory to)
 	{
+		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3");
 		if (this is ITransferTarget inputTarget)
 		{
 			foreach (var from in inputTarget.GetInventories())
@@ -94,7 +102,9 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		to.Insert(ItemType);
 		Globals.TileMap.RemoveEntity(this);
 		RemovePercent = 100;
-		QueueFree();
+		Sprite.Visible = false;
+		_audio.Play();
+		_audio.Finished += QueueFree;
 	}
 
 	/******************************************************************
@@ -119,6 +129,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Stone Chest" => new StoneChest(),
 			"Assembler" => new Assembler(),
 			"Inserter" => new Inserter(),
+			"Long Inserter" => new Inserter(2),
 			"Belt" => new Belt(),
 			"Underground Belt" => new UndergroundBelt(),
 			"Research Lab" => new ResearchLab(),
@@ -140,6 +151,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Underground Belt" => true,
 			"Research Lab" => true,
 			"Barracks" => true,
+			"Long Inserter" => true,
 			_ => false
 		};
 	}

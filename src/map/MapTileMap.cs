@@ -41,7 +41,7 @@ public partial class MapTileMap : SKTileMap
 		var pos = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
 		// for each unit distance away from (1, 1) add 10 warriors to the commander.
 		var distance = (pos - MapGlobals.FactoryPosition).Length();
-		if (team == "Player") distance = 2;
+		if (team == "Player") distance = 20;
 		commander.Units.Insert("Warrior", (int)distance * 10);
 		Globals.MapScene.CallDeferred("add_child", commander);
 	}

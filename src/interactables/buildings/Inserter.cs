@@ -9,10 +9,11 @@ namespace Necromation;
 public partial class Inserter : Building, IRotatable
 {
     public override Vector2I BuildingSize => Vector2I.One;
-    public override string ItemType => "Inserter";
+    public override string ItemType => _range == 1 ? "Inserter" : "Long Inserter";
     private double _time = 0;
     private double _interval = .83;
     private Tween _tween;
+    private int _range;
     private Sprite2D SpriteInHand = new()
     {
         Scale = new Vector2(0.5f, 0.5f),
@@ -32,26 +33,35 @@ public partial class Inserter : Building, IRotatable
     }
     
     private Vector2I position => Globals.TileMap.GlobalToMap(GlobalPosition);
-    private Vector2I _input => position + Orientation switch {
+    private Vector2I _input => position + _range * Orientation switch {
         IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
         IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
         IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, 1),
         IRotatable.BuildingOrientation.WestEast => new Vector2I(-1, 0),
         _ => throw new ArgumentOutOfRangeException()
     };
-    private Vector2I _output => position + Orientation switch {
+    private Vector2I _output => position + _range * Orientation switch {
         IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, 1),
         IRotatable.BuildingOrientation.EastWest => new Vector2I(-1, 0),
         IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, -1),
         IRotatable.BuildingOrientation.WestEast => new Vector2I(1, 0),
         _ => throw new ArgumentOutOfRangeException()
     };
+    
+    private AudioStreamPlayer2D _audio = new();
 
-    public Inserter()
+    public Inserter(int range = 1)
     {
+        //TODO: too many hacks to add long inserter. Think about it
+        _range = range;
         SetNotifyTransform(true);
         Sprite.AddChild(SpriteInHand);
         Sprite.ZIndex = 2;
+        
+        AddChild(_audio);
+        _audio.Stream = GD.Load<AudioStream>("res://res/sfx/PM_MPRINTER_DPA4060_6_Printer_Printing_Individual_Cycle_Servo_Motor_Toner_Close_Perspectiv_328.mp3");
+        _audio.Attenuation = 25.0f;
+        _audio.VolumeDb = -10.0f;
     }
 
     public override void _Notification(int what)
@@ -63,7 +73,9 @@ public partial class Inserter : Building, IRotatable
     
     private void UpdateInputOutput()
     {
-        SpriteInHand.Position = -BuildingTileMap.TileSize * new Vector2I(0, 1);
+        SpriteInHand.Position = _range == 1 ? 
+            -BuildingTileMap.TileSize * _range * new Vector2I(0, 1) 
+            : -BuildingTileMap.TileSize * _range * new Vector2I(0, 1) + BuildingTileMap.TileSize * new Vector2I(0, 1) / 2;
     }
 
     public override void _Process(double delta)
@@ -75,6 +87,7 @@ public partial class Inserter : Building, IRotatable
 
         var item = GetSourceItem();
         if (!Transfer()) return;
+        _audio.Play();
         _time = 0;
     }
 

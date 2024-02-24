@@ -76,7 +76,16 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 			return;
 		}
 
-		TargetClosestEnemy();
+		var rand = GD.Randf();
+		if (rand < 0.25)
+		{
+			TargetRandomEnemy();
+		}
+		else if (rand < 0.5)
+		{
+			TargetClosestEnemy();
+		}
+
 		MoveToTarget();
 	}
 	
@@ -89,6 +98,17 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		_damageTween = CreateTween();
 		_damageTween.TweenProperty(this, "modulate", new Color(1, 0, 0), Battle.TimeStep / 5);
 		_damageTween.TweenProperty(this, "modulate", Colors.White, Battle.TimeStep /  5);
+
+		RichTextLabel damageText = new();
+		Globals.BattleScene.AddChild(damageText);
+		damageText.Text = "[color=red]" + damage.ToString() + "[/color]";
+		damageText.GlobalPosition = GlobalPosition;
+		damageText.CustomMinimumSize = new Vector2(100, 100);
+		damageText.BbcodeEnabled = true;
+
+		var labelTween = GetTree().CreateTween();
+		labelTween.TweenProperty(damageText, "global_position", damageText.GlobalPosition + new Vector2(0, -50), 1.0f);
+		labelTween.TweenCallback(Callable.From(() => damageText.QueueFree()));
 		
 		_hp -= damage;
 		if (_hp > 0) return;
@@ -113,24 +133,25 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	 **************************************************************************/
 	private void TargetClosestEnemy()
 	{
-		// var closest = enemies.MinBy(unit => unit.GlobalPosition.DistanceSquaredTo(GlobalPosition));
-		// TargetPosition = Globals.BattleScene.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
+		var closest = enemies.MinBy(unit => unit.GlobalPosition.DistanceSquaredTo(GlobalPosition));
+		TargetPosition = Globals.BattleScene.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
+	}
 
+	private void TargetRandomEnemy()
+	{
 		if (enemies.Count == 0)
 		{
 			TargetPosition = MapPosition;
 			return;
 		}
-		var closest  = enemies
-			.ElementAt(GD.RandRange(0, enemies.Count - 1));
+		var closest  = enemies.ElementAt(GD.RandRange(0, enemies.Count - 1));
 		TargetPosition = closest?.MapPosition ?? MapPosition;
-		
 	}
 
 	private void MoveToTarget()
 	{
 		if (MapPosition == TargetPosition) return;
-		if (IsSurrounded()) return;
+		if (Globals.BattleScene.TileMap.IsSurrounded(MapPosition)) return;
 		
 		// var nextPosition = Globals.BattleScene.TileMap.GetNextPath(MapPosition, TargetPosition);
 		var differance = TargetPosition - MapPosition;
@@ -168,10 +189,5 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		_moveTween = CreateTween();
 		_moveTween.TweenProperty(this, "global_position", Globals.BattleScene.TileMap.MapToGlobal(nextPosition), Battle.TimeStep /  5);
 		CachedPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
-	}
-
-	private bool IsSurrounded()
-	{
-		return Globals.BattleScene.TileMap.GetUnitsInRange(MapPosition, 1).Count == 5;
 	}
 }

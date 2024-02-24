@@ -8,6 +8,7 @@ using Necromation.sk;
 public partial class BattleTileMap : LayerTileMap
 {
 	public const string Unit = "unit";
+	public static Vector2I TileSize = new(32, 32);
 	
 	private readonly AStar2D _grid = new();
 	private Dictionary<Vector2I, int> cells = new();
@@ -105,6 +106,7 @@ public partial class BattleTileMap : LayerTileMap
 
 	public Vector2I GetNearestEmpty(Vector2I to)
 	{
+		if (!_grid.IsPointDisabled(cells[to])) return to;
 		// Do this by scanning in a spiral pattern over the grid
 		var radius = 1;
 		while (radius < 50)
@@ -136,5 +138,10 @@ public partial class BattleTileMap : LayerTileMap
 			.Select(tile => GetEntity(tile, Unit))
 			.OfType<Unit>()
 			.ToList();
+	}
+	
+	public bool IsSurrounded(Vector2I mapPos)
+	{
+		return Globals.BattleScene.TileMap.GetUnitsInRange(mapPos, 1).Count == 5;
 	}
  }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=21 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
@@ -18,8 +18,6 @@
 [ext_resource type="PackedScene" uid="uid://yhp2pgk86ofe" path="res://src/map.tscn" id="9_s1dys"]
 [ext_resource type="Script" path="res://src/gui/buttons/TechnologyButton.cs" id="10_rgtkm"]
 [ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
-[ext_resource type="PackedScene" uid="uid://i2urau85tyio" path="res://src/interactables/buildings/AnimatedBelt.tscn" id="19_eb6ww"]
-[ext_resource type="Texture2D" uid="uid://id0xiktpwf7d" path="res://res/sprites/Belt.png" id="20_eaya5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8qpuw"]
 texture = ExtResource("1_4vku0")
@@ -34,13 +32,6 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/1 = SubResource("TileSetAtlasSource_8qpuw")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_8xne8"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wpw4b"]
-width = 1024
-height = 1024
-noise = SubResource("FastNoiseLite_8xne8")
-
 [node name="Main" type="Node2D"]
 script = ExtResource("1_suggu")
 
@@ -54,6 +45,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 metadata/_edit_lock_ = true
 
 [node name="FactoryGUI" type="HBoxContainer" parent="GUI/Control"]
@@ -129,6 +121,7 @@ script = ExtResource("10_rgtkm")
 [node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]
 unique_name_in_owner = true
 layout_mode = 0
+offset_bottom = 200.0
 
 [node name="CrafterGUI" parent="GUI/Control" instance=ExtResource("7_ky81d")]
 unique_name_in_owner = true
@@ -175,6 +168,9 @@ region_rect = Rect2(64, 0, 32, 32)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 
+[node name="AudioListener2D" type="AudioListener2D" parent="Character"]
+current = true
+
 [node name="Stone Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(381, 372)
 
@@ -190,28 +186,6 @@ _resourceType = "Copper Ore"
 position = Vector2(864, 739)
 _resourceType = "Coal Ore"
 
-[node name="TextureRect" type="TextureRect" parent="."]
-visible = false
-modulate = Color(1, 1, 1, 0.0627451)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1024.0
-offset_top = -1024.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(2.5, 2.5)
-texture = SubResource("NoiseTexture2D_wpw4b")
-metadata/_edit_lock_ = true
-
 [node name="Bone Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(1353, 208)
 _resourceType = "Bone Ore"
-
-[node name="AnimatedSprite2D" parent="." instance=ExtResource("19_eb6ww")]
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(119, 100)
-texture = ExtResource("20_eaya5")
-hframes = 8
-frame = 7

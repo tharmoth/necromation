@@ -11,6 +11,7 @@ public partial class UnitSpawner : Node2D
 	[Export] private int _spawnCount = 10;
 	[Export] private string _team = "Player";
 	[Export] private string _defaultUnit = "Warrior";
+	private Queue<Unit> _units = new();
 	
 	public override void _Ready()
 	{
@@ -27,7 +28,33 @@ public partial class UnitSpawner : Node2D
 		{
 			LoadDefault();
 		}
+
+		PlaceUnitsInRectangle();
 	}
+
+	private void PlaceUnitsInRectangle()
+	{
+		var count = _units.Count;
+		var width = (int)Math.Ceiling(Math.Sqrt(count / 2.0f));
+		var height = width * 2;
+		for (var x = 0; x < width; x++)
+		{
+			for (var y = 0; y < height; y++)
+			{
+				_units.TryDequeue(out var unit);
+				if (unit == null) return;;
+				
+				var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
+				position.X += x;
+				position.Y += y;
+				unit.Position = Globals.BattleScene.TileMap.MapToGlobal(Globals.BattleScene.TileMap.GetNearestEmpty(position));
+				unit.Team = _team;
+				Globals.BattleScene.TileMap.AddEntity(unit.Position, unit, BattleTileMap.Unit);
+				Globals.BattleScene.CallDeferred("add_child", unit);
+			}
+		}
+	}
+	
 
 	private void LoadFromCommanders()
 	{
@@ -38,7 +65,7 @@ public partial class UnitSpawner : Node2D
 			{
 				for (int i = 0; i < entry.Value; i++)
 				{
-					AddUnit(entry.Key, commander);
+					_units.Enqueue(new Unit(entry.Key, commander));
 				}	
 			}
 		}
@@ -48,7 +75,7 @@ public partial class UnitSpawner : Node2D
 	{
 		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
 		Enumerable.Range(0, _spawnCount).ToList()
-			.ForEach(_ => AddUnit(_defaultUnit));
+			.ForEach(_ => _units.Enqueue(new Unit(_defaultUnit)));
 	}
 
 	private void AddUnit(string unitType, Commander commander = null)

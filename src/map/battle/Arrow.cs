@@ -7,7 +7,7 @@ public partial class Arrow : Sprite2D
     public Vector2I MapPosition => Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
     
     private const float Speed = 800;
-    private const float ArcHeight = 50;
+    private readonly float ArcHeight;
     
     private readonly Vector2 _startPosition;
     private readonly Vector2 _targetPosition;
@@ -28,6 +28,8 @@ public partial class Arrow : Sprite2D
         _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile);
         var distance = _startPosition.DistanceTo(Globals.BattleScene.TileMap.MapToGlobal(targetTile));
         _stepScale = Speed / distance;
+        
+        ArcHeight = distance / 4;
         
         GlobalPosition = _startPosition;
     }
@@ -52,5 +54,12 @@ public partial class Arrow : Sprite2D
             unit.Damage(_damage);
         }
         QueueFree();
+    }
+
+    public override void _Draw()
+    {
+        base._Draw();
+        DrawCircle(new Vector2(0, 0), 11, Colors.Black);
+        DrawCircle(new Vector2(0, 0), 10, Colors.Red);
     }
 }
