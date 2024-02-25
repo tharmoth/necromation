@@ -22,10 +22,11 @@ public partial class Actionbar : Control
 	{
 		int index = 1;
 		// Use the original recipe list for dumb sorting reasons.
-		foreach (var item in Globals.Database.Recipes.Where(recipe => recipe.Category == _category)
-			         .Where(recipe => Globals.Database.UnlockedRecipes.Contains(recipe)))
+		foreach (var recipe in Globals.Database.Recipes.Where(recipe => recipe.Category == _category)
+			         .Where(recipe => Globals.Database.UnlockedRecipes.Contains(recipe)).Where(recipe => Building.IsBuilding(recipe.Products.FirstOrDefault().Key)))
 		{
-			var button = new RecipeButton(item, index);
+			GD.Print(recipe.Name);
+			var button = new RecipeButton(recipe, index);
 			AddChild(button);
 			index++;
 		}

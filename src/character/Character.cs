@@ -68,18 +68,25 @@ public partial class Character : Node2D
 		}
 
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Input.IsActionPressed("close_gui") || Input.IsActionPressed("clear_selection")) Selected = Globals.TileMap.GetBuildingAtMouse() is Building building ? building.ItemType : null;
-		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
+		if (Input.IsActionPressed("clear_selection")) Selected =Globals.TileMap.GetBuildingAtMouse() is Building building ? building.ItemType : null;
+		if (Input.IsActionPressed("close_gui")) Selected = null;
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();
-		if (Input.IsMouseButtonPressed(MouseButton.Right)) Mine();
+		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.TileMap.GetBuildingAtMouse() == null) Mine();
 		else _resource?.Cancel();
 
 		// Process mouseover
 		if (Selected != null) SelectedPreview();
 		else if (Globals.TileMap.GetEntity(GetGlobalMousePosition(), BuildingTileMap.Building) != null) MouseoverEntity();
 		else _sprite.Visible = false;
+	}
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		base._UnhandledInput(@event);
+		if (GUI.Instance.IsAnyGuiOpen()) return;
+		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
 	}
 
 	/******************************************************************

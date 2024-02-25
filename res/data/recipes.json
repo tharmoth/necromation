@@ -91,15 +91,15 @@
     },
     {
       "name": "Research Lab",
-        "time" : 1,
-        "ingredients": {
-          "Circuit": 5,
-          "Iron Bar": 10,
-          "Gear": 5
-        },
-        "products": {
-          "Research Lab": 1
-        }
+      "time" : 1,
+      "ingredients": {
+        "Circuit": 5,
+        "Iron Bar": 10,
+        "Gear": 5
+      },
+      "products": {
+        "Research Lab": 1
+      }
     },
     {
       "name": "Gear",
@@ -168,17 +168,6 @@
       }
     },
     {
-      "name": "Warrior",
-      "time" : 10.0,
-      "ingredients": {
-        "Bone Ore": 1,
-        "Iron Bar": 1
-      },
-      "products": {
-        "Warrior": 1
-      }
-    },
-    {
       "name": "Barracks",
       "time" : 10.0,
       "ingredients": {
@@ -190,11 +179,22 @@
       }
     },
     {
-      "name": "Farm",
+      "name": "Armory",
       "time" : 10.0,
       "ingredients": {
         "Stone": 10,
         "Iron Bar": 5
+      },
+      "products": {
+        "Armory": 1
+      }
+    },
+    {
+      "name": "Farm",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Wood": 5
       },
       "products": {
         "Farm": 1
@@ -205,11 +205,112 @@
       "time" : 10.0,
       "ingredients": {
         "Stone": 10,
-        "Iron Bar": 5
+        "Wood": 5
       },
       "products": {
         "House": 1
       }
+    },
+    {
+      "name" : "Pawn",
+      "time" : 10.0,
+      "category": "population",
+      "ingredients": {
+        "Wheat": 10
+      },
+      "products": {
+        "Pawn": 1
+      }
+    },
+    {
+      "name" : "Wheat",
+      "time" : 3.0,
+      "category": "farming",
+      "ingredients": {
+
+      },
+      "products": {
+        "Wheat": 1
+      }
+    },
+    {
+      "name" : "Wood",
+      "time" : 3.0,
+      "category": "farming",
+      "ingredients": {
+
+      },
+      "products": {
+        "Wood": 1
+      }
+    },
+    {
+      "name" : "Spear",
+      "time" : 10.0,
+      "ingredients": {
+        "Wood": 1,
+        "Iron Bar": 1
+      },
+      "products": {
+        "Spear": 1
+      }
+    },
+    {
+      "name" : "Armor",
+        "time" : 10.0,
+        "ingredients": {
+          "Iron Bar": 5
+        },
+        "products": {
+          "Armor": 1
+        }
+    },
+    {
+      "name" : "Bow",
+      "time" : 10.0,
+      "ingredients": {
+        "Wood": 1
+      },
+      "products": {
+        "Bow": 1
+      }
+    },
+    {
+      "name" : "Arrow",
+      "time" : 1.0,
+      "ingredients": {
+        "Wood": 1,
+        "Iron Bar": 1
+      },
+      "products": {
+        "Arrow": 1
+      }
+    },
+    {
+      "name" : "Archer",
+        "time" : 10.0,
+      "category": "recruitment",
+        "ingredients": {
+          "Bow": 1,
+          "Arrow": 10,
+          "Pawn" : 1
+        },
+        "products": {
+          "Archer": 1
+        }
+    },
+    {
+      "name" : "Warrior",
+        "time" : 10.0,
+      "category": "recruitment",
+        "ingredients": {
+          "Spear": 1,
+          "Armor": 1,
+            "Pawn" : 1
+        },
+        "products": {
+          "Warrior": 1
+        }
     }
   ]
 }

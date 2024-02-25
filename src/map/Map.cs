@@ -12,12 +12,11 @@ public partial class Map : Node2D
 	
 	public override void _Ready()
 	{
-		
 		Globals.MapCamera = GetNode<Camera2D>("Camera2D");
 		MapGlobals.SelectedSprite = GetNode<Sprite2D>("%SelectedSprite");
 		MapGlobals.UpdateListeners.Add(UpdateLabel);
-		
-		var provence = MapGlobals.TileMap.GetProvence(Vector2I.One);
+
+		var provence = MapGlobals.TileMap.GetProvence(MapGlobals.FactoryPosition);
 		SelectProvince(provence);
 		
 		VisibilityChanged += () => SelectProvince(MapGlobals.SelectedProvince);

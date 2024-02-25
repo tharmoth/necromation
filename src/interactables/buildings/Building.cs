@@ -124,16 +124,19 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	{
 		return selectedItem switch
 		{
-			"Mine" => new Mine(),
-			"Stone Furnace" => new Furnace(),
-			"Stone Chest" => new StoneChest(),
-			"Assembler" => new Assembler(),
-			"Inserter" => new Inserter(),
-			"Long Inserter" => new Inserter(2),
 			"Belt" => new Belt(),
 			"Underground Belt" => new UndergroundBelt(),
+			"Inserter" => new Inserter(),
+			"Long Inserter" => new Inserter(2),
+			"Mine" => new Mine(),
+			"Stone Furnace" => new Furnace(),
+			"Assembler" => new Assembler("Assembler", "None"),
+			"Farm" => new Assembler("Farm", "farming"),
+			"Armory" => new Assembler("Armory", "recruitment"),
+			"House" => new Assembler("House", "population"),
 			"Research Lab" => new ResearchLab(),
 			"Barracks" => new Barracks(),
+			"Stone Chest" => new StoneChest(),
 			_ =>  throw new NotImplementedException()
 		};
 	}
@@ -142,16 +145,19 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	{
 		return selectedItem switch
 		{
-			"Mine" => true,
-			"Stone Furnace" => true,
-			"Stone Chest" => true,
-			"Assembler" => true,
-			"Inserter" => true,
 			"Belt" => true,
 			"Underground Belt" => true,
+			"Inserter" => true,
+			"Long Inserter" => true,
+			"Mine" => true,
+			"Stone Furnace" => true,
+			"Assembler" => true,
+			"Farm" => true,
+			"Armory" => true,
+			"House" => true,
 			"Research Lab" => true,
 			"Barracks" => true,
-			"Long Inserter" => true,
+			"Stone Chest" => true,
 			_ => false
 		};
 	}

@@ -10,11 +10,18 @@ namespace Necromation;
 public partial class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 {
 	public override Vector2I BuildingSize => Vector2I.One * 3;
-	public override string ItemType => "Assembler";
-    private Recipe _recipe;
+	public override string ItemType { get; }
+	private Recipe _recipe;
     private Inventory _inputInventory = new();
     private Inventory _outputInventory = new();
     private float _time;
+	private readonly string _category;
+
+	public Assembler(string itemType, string category)
+	{
+		ItemType = itemType;
+	    _category = category;
+	}
 
     public override void _Process(double delta)
     {
@@ -73,7 +80,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     public void SetRecipe(Recipe recipe) => _recipe = recipe;
     public Inventory GetInputInventory() => _inputInventory;
     public Inventory GetOutputInventory() => _outputInventory;
-    public virtual string GetCategory() => "None";
+    public virtual string GetCategory() => _category;
     #endregion
     
     #region ITransferTarget Implementation
