@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://mglb0kkmg3ql"]
 
-[ext_resource type="Script" path="res://src/gui/buttons/RecipeButton.cs" id="1_p5ht2"]
+[ext_resource type="Script" path="res://src/gui/buttons/ActionBarButton.cs" id="1_p5ht2"]
 
 [node name="RecipeButton" type="PanelContainer"]
 script = ExtResource("1_p5ht2")

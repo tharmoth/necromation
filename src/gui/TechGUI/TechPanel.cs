@@ -42,7 +42,7 @@ public partial class TechPanel : PanelContainer
 			var recipe = Globals.Database.Recipes.First(recipe => recipe.Name == unlock);
 			var texture = new TextureRect
 			{
-				Texture = recipe.GetTexture(),
+				Texture = recipe.GetIcon(),
 			};
 			EffectsRow.AddChild(texture);
 			CraftingListPopup.Register(recipe, texture);

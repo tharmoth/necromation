@@ -12,7 +12,7 @@ public partial class CraftingListPopup : PanelContainer
 		control.MouseEntered += () =>
 		{
 			if (IsInstanceValid(popup)) return;
-			popup = CraftingListPopup.DisplayPopup(recipe);
+			popup = DisplayPopup(recipe);
 		};
 		control.MouseExited += () =>
 		{
@@ -25,7 +25,7 @@ public partial class CraftingListPopup : PanelContainer
 	{
 		var popup = (CraftingListPopup) GD.Load<PackedScene>("res://src/gui/lists/crafting_list_popup.tscn").Instantiate();
 		popup._recipe = recipe;
-		GUI.Instance.AddChild(popup);
+		FactoryGUI.Instance.AddChild(popup);
 		return popup;
 	}
 
@@ -43,13 +43,13 @@ public partial class CraftingListPopup : PanelContainer
 		GetNode<VBoxContainer>("%Rows").GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
 
-		GUI.SnapToScreen(this);
+		FactoryGUI.SnapToScreen(this);
 	}
 
 	public override void _Input(InputEvent @event)
 	{
 		base._Input(@event);
-		GUI.SnapToScreen(this);
+		FactoryGUI.SnapToScreen(this);
 	}
 
 	private void AddRow(string name, int amount)

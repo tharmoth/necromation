@@ -1,10 +1,12 @@
 using Godot;
+using Necromation;
 using Necromation.gui;
+using Necromation.shared.gui;
 
-public partial class GUI : CanvasLayer
+public partial class FactoryGUI : CanvasLayer, SceneGUI
 {
-	private static GUI _instance;
-	public static GUI Instance => _instance;
+	private static FactoryGUI _instance;
+	public static FactoryGUI Instance => _instance;
 	private RecipePopup Popup => GetNode<RecipePopup>("%Popup");
 	private CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
@@ -21,16 +23,27 @@ public partial class GUI : CanvasLayer
 		_instance = this;
 	}
 
+	private Control _openGui; 
+
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
+		if (Input.IsActionPressed("close_gui")) CloseGui();
 		if (Input.IsActionJustPressed("open_technology")) TechGui.Display();
+		if (Input.IsActionJustPressed("open_inventory") && _openGui != null) CloseGui();
+		else if (Input.IsActionJustPressed("open_inventory")) _openGui = InventoryGUI.Display(Globals.PlayerInventory);
 		if (Input.IsActionJustPressed("open_map")) FactoryToMapButton.ChangeScene();
+	}
+	
+	public void CloseGui()
+	{
+		_openGui?.QueueFree();
+		_openGui = null;
 	}
 	
 	public bool IsAnyGuiOpen()
 	{
-		return Popup.Visible || CrafterGui.Visible || ContainerGui.Visible || TechGui.Visible;
+		return Popup.Visible || CrafterGui.Visible || ContainerGui.Visible || TechGui.Visible || _openGui != null;
 	}
 
 	public void Display(ICrafter crafter)

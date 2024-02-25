@@ -1,8 +1,9 @@
 using Godot;
 using System.Linq;
 using Necromation.map;
+using Necromation.shared.gui;
 
-public partial class MapGui : CanvasLayer
+public partial class MapGui : CanvasLayer, SceneGUI
 {
 	public Label SelectedLabel  => GetNode<Label>("%Label");
 	public ArmySetup ArmySetup  => GetNode<ArmySetup>("%ArmySetup");
@@ -35,5 +36,20 @@ public partial class MapGui : CanvasLayer
 			listeners.ForEach(listener => listener());
 			MapGlobals.UpdateListeners.ForEach(listener => listener());
 		};
+	}
+
+	private Control _currentGui;
+	
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		if (Input.IsActionJustPressed("close_gui")) CloseGui();
+		if (Input.IsActionJustPressed("open_army_setup") && _currentGui == null) _currentGui = ArmyLayout.Display(MapGlobals.SelectedProvince);
+	}
+
+	public void CloseGui()
+	{
+		_currentGui?.QueueFree();
+		_currentGui = null;
 	}
 }

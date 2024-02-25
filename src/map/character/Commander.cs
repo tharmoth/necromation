@@ -14,6 +14,12 @@ public partial class Commander : Node2D, ITransferTarget
     
     private Vector2I _targetLocation;
     private Province _province;
+    
+    /*
+     * RPG Stats
+     */
+    public int CommandCap = 200;
+    public int SquadCap = 200;
 
     public Commander(Province province)
     {
@@ -90,6 +96,4 @@ public partial class Commander : Node2D, ITransferTarget
     public List<string> GetItems() => Units.GetItems();
     public List<Inventory> GetInventories() => Units.GetInventories();
     #endregion
-
-
 }

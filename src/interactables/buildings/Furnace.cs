@@ -56,7 +56,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-	    GUI.Instance.Display(playerInventory, this);
+	    FactoryGUI.Instance.Display(playerInventory, this);
     }
     #endregion
     

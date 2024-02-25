@@ -1,5 +1,6 @@
 using Godot;
 using System.Linq;
+using Necromation;
 
 public partial class TransferInventory : VBoxContainer
 {
@@ -28,6 +29,15 @@ public partial class TransferInventory : VBoxContainer
 		RemoveMissingItems();
 		AddButtons();
 		GetChildren().OfType<ItemButton>().ToList().ForEach(child => child.Update());
+		Sort();
+	}
+
+	private void Sort()
+	{
+		var buttons = GetChildren().OfType<ItemButton>().OrderBy(button => button.ItemType).ToList();
+		
+		buttons.ForEach(button => button.GetParent().RemoveChild(button));
+		buttons.ForEach(button => AddChild(button));
 	}
 	
 	private void RemoveMissingItems()
@@ -66,6 +76,8 @@ public partial class TransferInventory : VBoxContainer
 		
 		public ItemButton(string itemType, Inventory sourceInventory, Inventory targetInventory)
 		{
+			Icon = Globals.Database.GetTexture(itemType);
+			ExpandIcon = true;
 			this.ItemType = itemType;
 			this.SourceInventory = sourceInventory;
 			this.TargetInventory = targetInventory;

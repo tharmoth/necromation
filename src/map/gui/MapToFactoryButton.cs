@@ -32,7 +32,7 @@ public partial class MapToFactoryButton : Button
         from.ProcessMode = ProcessModeEnum.Disabled;
 
         Globals.FactoryCamera.Enabled = true;
-        GUI.Instance.Visible = true;
+        FactoryGUI.Instance.Visible = true;
         
         MapGui.Instance.Visible = false;
         Globals.MapCamera.Enabled = false;

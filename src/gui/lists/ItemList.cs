@@ -17,16 +17,15 @@ public partial class ItemList : VBoxContainer
 		RemoveMissingItems();
 		AddMissingItems();
 		GetChildren().OfType<ItemLabel>().ToList().ForEach(child => child.Update());
+		Sort();
 	}
 	
 	private void RemoveMissingItems()
 	{
-		foreach (var label in GetChildren().OfType<ItemLabel>().ToHashSet())
-		{
-			if (Globals.PlayerInventory.Items.ContainsKey(label.ItemType)) continue;
-			
-			label.QueueFree();
-		}
+		GetChildren().OfType<ItemLabel>().ToHashSet()
+			.Where(label => !Globals.PlayerInventory.Items.ContainsKey(label.ItemType))
+			.ToList()
+			.ForEach(label => label.QueueFree());
 	}
 
 	private void AddMissingItems()
@@ -40,5 +39,12 @@ public partial class ItemList : VBoxContainer
 			itemLabel.Inventory = Globals.PlayerInventory;
 			AddChild(itemLabel);
 		}
+	}
+	
+	private void Sort()
+	{
+		var components = GetChildren().OfType<ItemLabel>().OrderBy(button => button.ItemType).ToList();
+		components.ForEach(component => component.GetParent().RemoveChild(component));
+		components.ForEach(component => AddChild(component));
 	}
 }

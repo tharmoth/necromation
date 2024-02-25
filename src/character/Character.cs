@@ -56,7 +56,7 @@ public partial class Character : Node2D
 	public override void _Process(double delta)
 	{
 		// Return if a gui is open
-		if (GUI.Instance.IsAnyGuiOpen()) return;
+		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
 
 		// Process button presses
 		if (_buildingBeingRemoved == null)
@@ -85,7 +85,7 @@ public partial class Character : Node2D
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
-		if (GUI.Instance.IsAnyGuiOpen()) return;
+		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
 		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
 	}
 

@@ -1,17 +1,19 @@
 using Godot;
 using System;
 
-public partial class TechnologyButton : Button
+public partial class ActionButton : Button
 {
+	[Export] private string _action = "open_technology";
+	
 	public override void _Pressed()
 	{
 		base._Pressed();
 		var press = new InputEventAction();
-		press.Action = "open_technology";
+		press.Action = _action;
 		press.Pressed = true;
 		Input.ParseInputEvent(press);
 		var release = new InputEventAction();
-		release.Action = "open_technology";
+		release.Action = _action;
 		release.Pressed = false;
 		Input.ParseInputEvent(release);
 	}

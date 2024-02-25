@@ -1,0 +1,303 @@
+[gd_scene load_steps=5 format=3 uid="uid://cavx5whagemc5"]
+
+[ext_resource type="PackedScene" uid="uid://b0pcouetqfxom" path="res://src/gui/InventoryGUI/inventory_item.tscn" id="1_pw4cc"]
+[ext_resource type="Script" path="res://src/gui/InventoryGUI/InventoryGUI.cs" id="1_uyue2"]
+[ext_resource type="PackedScene" uid="uid://c2o1wg60o5paa" path="res://src/gui/InventoryGUI/recipe_button.tscn" id="2_0tnrs"]
+[ext_resource type="Script" path="res://src/gui/InventoryGUI/CloseButton.cs" id="2_ysflh"]
+
+[node name="Inventory" type="PanelContainer"]
+custom_minimum_size = Vector2(500, 400)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uyue2")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 0
+columns = 2
+
+[node name="CharacterTitle" type="HBoxContainer" parent="MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/GridContainer/CharacterTitle"]
+layout_mode = 2
+text = "Inventory"
+
+[node name="CraftingTitle" type="HBoxContainer" parent="MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/GridContainer/CraftingTitle"]
+layout_mode = 2
+text = "Crafting
+"
+
+[node name="Control" type="Control" parent="MarginContainer/GridContainer/CraftingTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="MarginContainer/GridContainer/CraftingTitle"]
+layout_mode = 2
+text = "X"
+script = ExtResource("2_ysflh")
+
+[node name="Character" type="VBoxContainer" parent="MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/GridContainer/Character"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="InventoryItemList" type="HFlowContainer" parent="MarginContainer/GridContainer/Character/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ItemContainer" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer2" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer3" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer4" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer5" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer6" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer7" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer8" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer9" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer10" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer11" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer12" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer13" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer14" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer15" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer16" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer17" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer18" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer19" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer20" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer21" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer22" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer23" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer24" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer25" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer26" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer27" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer28" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer29" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer30" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer31" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer32" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer33" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer34" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer35" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer36" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer37" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer38" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer39" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer40" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer41" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer42" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer43" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer44" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer45" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer46" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer47" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer48" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer49" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer50" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer51" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer52" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer53" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer54" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer55" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer56" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer57" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer58" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer59" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer60" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer61" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer62" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer63" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer64" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer65" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer66" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer67" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer68" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer69" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer70" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="ItemContainer71" parent="MarginContainer/GridContainer/Character/ScrollContainer/InventoryItemList" instance=ExtResource("1_pw4cc")]
+layout_mode = 2
+
+[node name="Crafting" type="VBoxContainer" parent="MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/GridContainer/Crafting"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RecipeButtonList" type="HFlowContainer" parent="MarginContainer/GridContainer/Crafting/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RecipeButton" parent="MarginContainer/GridContainer/Crafting/ScrollContainer/RecipeButtonList" instance=ExtResource("2_0tnrs")]
+layout_mode = 2

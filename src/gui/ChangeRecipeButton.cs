@@ -9,7 +9,7 @@ public partial class ChangeRecipeButton : Button
 	public override void _Pressed()
 	{
 		base._Pressed();
-		GUI.Instance.Display(Crafter);
+		FactoryGUI.Instance.Display(Crafter);
 		_nodeToHide.Visible = false;
 	}
 }

@@ -16,7 +16,7 @@ public partial class StoneChest : Building, ITransferTarget, IInteractable
      **************************************************************************/        
     public void Interact(Inventory playerInventory)
     {
-        GUI.Instance.Display(playerInventory, _inventory, ItemType);
+        FactoryGUI.Instance.Display(playerInventory, _inventory, ItemType);
     }
     #endregion
     

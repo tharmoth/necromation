@@ -17,7 +17,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		set
 		{
 			_removePercent = value;
-			GUI.Instance.SetProgress(value);
+			FactoryGUI.Instance.SetProgress(value);
 		}
 	}
 	

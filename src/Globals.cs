@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Godot;
 using Necromation.character;
 using Necromation.gui;
+using Necromation.shared.gui;
 
 namespace Necromation;
 
@@ -36,4 +37,7 @@ public class Globals
     public static Node2D FactoryScene;
     public static Node2D MapScene;
     public static Battle BattleScene;
+    
+    //TODO: make this actually the current gui. Maybe as a part of scene manager?
+    public static SceneGUI CurrentGUI => FactoryGUI.Instance;
 }

@@ -2,12 +2,13 @@ using Godot;
 using Necromation;
 using Necromation.gui;
 
-public partial class RecipeButton : PanelContainer
+public partial class ActionBarButton : PanelContainer
 {
 	private readonly string _itemType;
 	private readonly Recipe _recipe;
 	private readonly Button _button = new();
 	private readonly Label _countLabel = new();
+	private readonly Label _hotkeyLabel = new();
 	private readonly Label _nameLabel = new();
 	private readonly TextureRect _icon = new();
 	private readonly int _index;
@@ -18,7 +19,7 @@ public partial class RecipeButton : PanelContainer
 		Globals.PlayerInventory.Listeners.Remove(Update);
 	}
 
-	public RecipeButton(Recipe recipe, int index)
+	public ActionBarButton(Recipe recipe, int index)
 	{
 		_recipe = recipe;
 		_itemType = recipe.Name;
@@ -40,6 +41,12 @@ public partial class RecipeButton : PanelContainer
 		_countLabel.SizeFlagsVertical = SizeFlags.ShrinkBegin;
 		_countLabel.MouseFilter = MouseFilterEnum.Ignore;
 		
+		_hotkeyLabel.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
+		_hotkeyLabel.SizeFlagsVertical = SizeFlags.ShrinkBegin;
+		_hotkeyLabel.MouseFilter = MouseFilterEnum.Ignore;
+		_hotkeyLabel.Text = index.ToString();
+		if (index > 9) _hotkeyLabel.Visible = false;
+		
 		_icon.Texture = Globals.Database.GetTexture(_itemType);
 		_icon.StretchMode = TextureRect.StretchModeEnum.KeepAspect;
 		_icon.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
@@ -54,7 +61,11 @@ public partial class RecipeButton : PanelContainer
 		_nameLabel.HorizontalAlignment = HorizontalAlignment.Center;
 		_nameLabel.MouseFilter = MouseFilterEnum.Ignore;
 
-		vbox.AddChild(_countLabel);
+		var labels = new PanelContainer();
+		labels.AddChild(_countLabel);
+		labels.AddChild(_hotkeyLabel);
+		
+		vbox.AddChild(labels);
 		vbox.AddChild(_icon);
 		vbox.AddChild(_nameLabel);
 		

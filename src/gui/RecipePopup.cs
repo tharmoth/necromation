@@ -24,7 +24,7 @@ public partial class RecipePopup : Control
 		});
 		AddButtons();
 		
-		GUI.SnapToScreen(this);
+		FactoryGUI.SnapToScreen(this);
 	}
 
 	private void SetRecipe(Recipe recipe)

@@ -63,11 +63,11 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     {
 	    if (_recipe == null)
 	    {
-		    GUI.Instance.Display(this);
+		    FactoryGUI.Instance.Display(this);
 	    }
 	    else
 	    {
-		    GUI.Instance.Display(playerInventory, this);
+		    FactoryGUI.Instance.Display(playerInventory, this);
 	    }
     }
     #endregion

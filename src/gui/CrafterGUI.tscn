@@ -30,6 +30,7 @@ layout_mode = 2
 
 [node name="ChangeRecipeButton" type="Button" parent="VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("_nodeToHide")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Change Recipe"
 script = ExtResource("2_kcrb5")

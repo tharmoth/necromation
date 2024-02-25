@@ -16,7 +16,7 @@ public partial class Barracks : Building, IInteractable, ITransferTarget
      **************************************************************************/        
     public void Interact(Inventory playerInventory)
     {
-        GUI.Instance.Display(playerInventory, _inventory, ItemType);
+        FactoryGUI.Instance.Display(playerInventory, _inventory, ItemType);
     }
     #endregion
     
