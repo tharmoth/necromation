@@ -51,7 +51,7 @@ public partial class Inventory : Node, ITransferTarget
 		Listeners.ForEach(listener => listener());
 		return true;
 	}
-	public bool CanAcceptItems(string item, int count = 1) => true;
+	public virtual bool CanAcceptItems(string item, int count = 1) => true;
 	public string GetFirstItem() => _items.Keys.FirstOrDefault();
 	public List<string> GetItems() => _items.Keys.ToList();
 	public List<Inventory> GetInventories() => new() { this };

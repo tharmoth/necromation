@@ -76,435 +76,434 @@ text = "600
 layout_mode = 2
 text = "Units in Garrison"
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer"]
+[node name="ProvinceUnitBox" type="PanelContainer" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="UnitsBox" type="MarginContainer" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer"]
-unique_name_in_owner = true
+[node name="UnitsBox" type="MarginContainer" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_right = 32
 
-[node name="UnitList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox"]
-unique_name_in_owner = true
+[node name="UnitList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect3" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect4" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect4" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect5" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect5" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect6" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect6" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect7" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect7" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect8" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect8" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect9" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect9" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect10" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect10" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect11" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect11" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect12" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect12" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect13" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect13" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect14" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect14" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect15" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect15" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect16" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect16" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect17" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect17" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect18" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect18" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect19" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect19" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect20" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect20" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect21" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect21" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect22" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect22" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect23" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect23" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect24" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect24" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect25" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect25" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect26" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect26" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect27" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect27" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect28" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect28" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect29" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect29" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect30" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect30" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect31" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect31" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect32" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect32" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect33" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect33" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect34" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect34" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect35" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect35" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect36" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect36" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect37" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect37" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect38" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect38" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect39" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect39" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect40" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect40" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect41" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect41" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect42" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect42" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect43" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect43" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect44" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect44" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect45" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect45" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect46" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect46" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect47" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect47" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect48" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect48" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect49" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect49" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect50" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect50" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect51" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect51" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect52" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect52" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect53" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect53" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect54" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect54" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect55" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect55" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect56" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect56" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect57" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect57" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect58" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect58" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect59" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect59" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="TextureRect60" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/PanelContainer/UnitsBox/UnitList"]
+[node name="TextureRect60" type="TextureRect" parent="MarginContainer/VBoxContainer/Provence/HBoxContainer/VBoxContainer/ProvinceUnitBox/UnitsBox/UnitList"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("3_mgk4w")

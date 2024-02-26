@@ -453,6 +453,7 @@ expand_mode = 1
 stretch_mode = 3
 
 [node name="InfoPanel" type="PanelContainer" parent="SquadMargin/SquadRow"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 

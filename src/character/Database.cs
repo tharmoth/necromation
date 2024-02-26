@@ -15,6 +15,9 @@ public class Database
     public readonly List<Recipe> UnlockedRecipes = new();
     public readonly List<Recipe> ResearchedTechnologies = new();
     
+    private readonly Dictionary<string, Texture2D> _textureCache = new();
+
+    
     public Database()
     {
         List<string> lockedRecipes = new();
@@ -92,12 +95,15 @@ public class Database
 
         return new Technology(name, count, ingredients, unlocks, prerequisites, description);
     }
-
+    
     public Texture2D GetTexture(string name)
     {
+        if (_textureCache.TryGetValue(name, out var texture)) return texture;
+        
         var path = "res://res/sprites/" + name + ".png";
-        var texture = GD.Load<Texture2D>(path);
+        texture = GD.Load<Texture2D>(path);
         if (texture == null) throw new FileNotFoundException(path);
+        _textureCache[name] = texture;
         return texture;
     }
 

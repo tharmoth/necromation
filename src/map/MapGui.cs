@@ -6,25 +6,18 @@ using Necromation.shared.gui;
 public partial class MapGui : CanvasLayer, SceneGUI
 {
 	public Label SelectedLabel  => GetNode<Label>("%Label");
-	public ArmySetup ArmySetup  => GetNode<ArmySetup>("%ArmySetup");
-	private RecruitGUI _recruitGUI => GetNode<RecruitGUI>("%RecruitGUI");
+	private RecruitGUI RecruitGui => GetNode<RecruitGUI>("%RecruitGUI");
 	private Control MainGui => GetNode<Control>("%MainGui");
 
-	public bool GuiOpen
-	{
-		get
-		{
-			return ArmySetup.Visible || _recruitGUI.Visible;
-		}
-	}
+	public bool GuiOpen => RecruitGui.Visible || _currentGui != null;
 
-	private static MapGui _instance;
-	public static MapGui Instance => _instance;
+	public static MapGui Instance { get; private set; }
+
 	public override void _EnterTree(){
-		if(_instance != null){
+		if(Instance != null){
 			this.QueueFree(); // The Singleton is already loaded, kill this instance
 		}
-		_instance = this;
+		Instance = this;
 	}
 
 	public override void _Ready()
@@ -46,6 +39,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		base._Process(delta);
 		if (Input.IsActionJustPressed("close_gui")) CloseGui();
 		if (Input.IsActionJustPressed("open_army_setup") && _currentGui == null) _currentGui = ArmyLayout.Display(MapGlobals.SelectedProvince);
+		if (Input.IsActionJustPressed("open_recruit") && _currentGui == null) RecruitGui.Visible = true;
 	}
 
 	public void CloseGui()
@@ -53,8 +47,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		_currentGui?.QueueFree();
 		_currentGui = null;
 		
-		_recruitGUI.Visible = false;
-		ArmySetup.Visible = false;
+		RecruitGui.Visible = false;
 		MainGui.Visible = true;
 	}
 }

@@ -1,21 +1,14 @@
-[gd_scene load_steps=20 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=13 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/Map.cs" id="1_muam7"]
 [ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_ri0bn"]
 [ext_resource type="Script" path="res://src/map/MapTileMap.cs" id="2_xas5k"]
 [ext_resource type="Script" path="res://src/map/MapGui.cs" id="4_513oc"]
-[ext_resource type="Script" path="res://src/gui/buttons/ShowButton.cs" id="6_0uqa6"]
 [ext_resource type="Script" path="res://src/map/gui/RecruitGUI.cs" id="6_w0llc"]
 [ext_resource type="Script" path="res://src/map/gui/CommanderList.cs" id="7_60yos"]
 [ext_resource type="Script" path="res://src/map/gui/MapToFactoryButton.cs" id="7_ep6dt"]
-[ext_resource type="Script" path="res://src/map/gui/MapToBattleButton.cs" id="8_0ooys"]
-[ext_resource type="Script" path="res://src/map/gui/UnitsBox.cs" id="9_c3vao"]
-[ext_resource type="Script" path="res://src/map/gui/ArmySetup.cs" id="9_e04hp"]
-[ext_resource type="Script" path="res://src/map/gui/UnitAccepterPanel.cs" id="10_c0v4h"]
 [ext_resource type="Texture2D" uid="uid://xn8iy0eq7nns" path="res://res/sprites/selection.png" id="10_kmmak"]
 [ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="10_pbpxj"]
-[ext_resource type="Texture2D" uid="uid://beupnxnshoxcv" path="res://res/sprites/horse.png" id="10_vr2ig"]
-[ext_resource type="Script" path="res://src/map/gui/CommanderUnitList.cs" id="11_cy23s"]
 [ext_resource type="Texture2D" uid="uid://bgxp03y7s5ppl" path="res://res/sprites/Stone Furnace.png" id="17_jvur2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5kr02"]
@@ -74,30 +67,25 @@ size_flags_horizontal = 3
 [node name="Buttons" type="VBoxContainer" parent="MapGui/MainGui"]
 layout_mode = 2
 
-[node name="RecruitButton" type="Button" parent="MapGui/MainGui/Buttons" node_paths=PackedStringArray("_nodeToShow", "_nodesToHide")]
+[node name="RecruitButton" type="Button" parent="MapGui/MainGui/Buttons"]
 layout_mode = 2
-text = "Recruit"
-script = ExtResource("6_0uqa6")
-_nodeToShow = NodePath("../../../RecruitGUI")
-_nodesToHide = [NodePath("../..")]
+text = "Recruit (R)"
+alignment = 0
+script = ExtResource("10_pbpxj")
+_action = "open_recruit"
 
-[node name="ArmyButton" type="Button" parent="MapGui/MainGui/Buttons" node_paths=PackedStringArray("_nodeToShow", "_nodesToHide")]
+[node name="ArmyButton" type="Button" parent="MapGui/MainGui/Buttons"]
 layout_mode = 2
-text = "Army Setup"
-script = ExtResource("6_0uqa6")
-_nodeToShow = NodePath("../../../ArmySetup")
-_nodesToHide = [NodePath("../..")]
+text = "Army Setup (T)"
+alignment = 0
+script = ExtResource("10_pbpxj")
+_action = "open_army_setup"
 
 [node name="FactoryButton" type="Button" parent="MapGui/MainGui/Buttons"]
 layout_mode = 2
-text = "Factory"
+text = "Factory (M)"
+alignment = 0
 script = ExtResource("7_ep6dt")
-
-[node name="BattleButton" type="Button" parent="MapGui/MainGui/Buttons"]
-visible = false
-layout_mode = 2
-text = "Battle"
-script = ExtResource("8_0ooys")
 
 [node name="Control" type="Control" parent="MapGui/MainGui/Buttons"]
 layout_mode = 2
@@ -108,7 +96,10 @@ mouse_filter = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Next Turn"
+text = "End Turn (N)"
+alignment = 0
+script = ExtResource("10_pbpxj")
+_action = "end_turn"
 
 [node name="RecruitGUI" type="Control" parent="MapGui"]
 unique_name_in_owner = true
@@ -181,63 +172,6 @@ size_flags_vertical = 0
 unique_name_in_owner = true
 layout_mode = 2
 text = "Recruiting:"
-
-[node name="ArmySetup" type="PanelContainer" parent="MapGui"]
-unique_name_in_owner = true
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("9_e04hp")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MapGui/ArmySetup"]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MapGui/ArmySetup/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MapGui/ArmySetup/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Army Setup"
-
-[node name="Control" type="Control" parent="MapGui/ArmySetup/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ActionButton" type="Button" parent="MapGui/ArmySetup/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "X"
-script = ExtResource("10_pbpxj")
-_action = "close_gui"
-
-[node name="ProvinceContainer" type="PanelContainer" parent="MapGui/ArmySetup/VBoxContainer"]
-layout_mode = 2
-script = ExtResource("10_c0v4h")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MapGui/ArmySetup/VBoxContainer/ProvinceContainer"]
-layout_mode = 2
-vertical_scroll_mode = 0
-
-[node name="UnitsBox" type="HBoxContainer" parent="MapGui/ArmySetup/VBoxContainer/ProvinceContainer/ScrollContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-size_flags_horizontal = 3
-script = ExtResource("9_c3vao")
-
-[node name="TextureRect" type="TextureRect" parent="MapGui/ArmySetup/VBoxContainer/ProvinceContainer/ScrollContainer/UnitsBox"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-texture = ExtResource("10_vr2ig")
-stretch_mode = 3
-
-[node name="CommanderUnitList" type="VBoxContainer" parent="MapGui/ArmySetup/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-script = ExtResource("11_cy23s")
 
 [node name="Line2D" type="Line2D" parent="."]
 visible = false

@@ -11,7 +11,7 @@ public partial class ArmySetupCommander : PanelContainer
 	private Label SquadCountLabel => GetNode<Label>("%SquadCountLabel");
 	private Container SquadList => GetNode<Container>("%SquadList");
 
-	private Commander _commander = new();
+	private Commander _commander = new(new Province());
 	
 	public void Init(Commander commander)
 	{

@@ -8,29 +8,25 @@ public partial class Commander : Node2D, ITransferTarget
     public string Name { get; } = MapUtils.GetRandomCommanderName();
     public string Team { get; set; }
 
-    public readonly Inventory Units = new();
+    public readonly Inventory Units;
     private readonly Line2D _line = new();
     private readonly Sprite2D _sprite = new();
     
     private Vector2I _targetLocation;
     private Province _province;
-    
+
     /*
      * RPG Stats
      */
     public int CommandCap = 200;
     public int SquadCap = 3;
 
-    public Commander()
-    {
-        
-    }
-    
     public Commander(Province province)
     {
         _province = province;
         _sprite.Texture = GD.Load<Texture2D>("res://res/sprites/player.png");
         _sprite.Scale = new Vector2(0.25f, 0.25f);
+        Units = new CommanderInventory(this);
         
         AddChild(_sprite);
     }
@@ -87,6 +83,21 @@ public partial class Commander : Node2D, ITransferTarget
             MapGlobals.SelectedProvince = _province;
             MapToBattleButton.ChangeScene();
             
+        }
+    }
+    
+    private partial class CommanderInventory : Inventory
+    {
+        private readonly Commander _commander;
+        public CommanderInventory(Commander commander) : base()
+        {
+            _commander = commander;
+        }
+        
+        public override bool CanAcceptItems(string item, int count = 1)
+        {
+            if (CountItem(item) + count > _commander.CommandCap) return false;
+            return base.CanAcceptItems(item, count);
         }
     }
     

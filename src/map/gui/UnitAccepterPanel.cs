@@ -32,13 +32,13 @@ public partial class UnitAccepterPanel : PanelContainer
 			.FirstOrDefault();
 		if (unitContainer == null) return;
 		
-		var units = MapGui.Instance.ArmySetup.GetAllSelected();
+		// var units = MapGui.Instance.ArmySetup.GetAllSelected();
 
-		foreach (var unit in units)
-		{
-			Inventory.TransferItem(unit.Inventory, unitContainer.GetInventory(), unit.UnitName, 1);
-		}
-		
-		MapGlobals.UpdateListeners.ForEach(listener => listener());
+		// foreach (var unit in units)
+		// {
+		// 	Inventory.TransferItem(unit.Inventory, unitContainer.GetInventory(), unit.UnitName, 1);
+		// }
+		//
+		// MapGlobals.UpdateListeners.ForEach(listener => listener());
 	}
 }
