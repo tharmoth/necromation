@@ -48,12 +48,6 @@ public partial class ArmySetupSquad : PanelContainer
 		base._ExitTree();
 		Squad.Listeners.Remove(Update);
 	}
-	
-	public override void _EnterTree()
-	{
-		base._EnterTree();
-		Update();
-	}
 
 	private void RemoveMissingUnits()
 	{

@@ -28,6 +28,12 @@ public partial class ArmyLayout : PanelContainer
 		return gui;
 	}
 	
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		_province.Units.Listeners.Remove(UpdateProvince);
+	}
+	
 	public override void _Ready()
 	{
 		base._Ready();
@@ -35,6 +41,7 @@ public partial class ArmyLayout : PanelContainer
 		UpdateCommanders();
 		UpdateProvince();
 		
+		_province.Units.Listeners.Add(UpdateProvince);
 		UnitsBox.GuiInput += @event =>
 		{
 			if (@event is not InputEventMouseButton mouseButton) return;
