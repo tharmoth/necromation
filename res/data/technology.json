@@ -2,7 +2,7 @@
   "technology": [
     {
       "name": "Automation",
-      "count": 1,
+      "count": 20,
       "ingredients": [
           "experiment"
       ],
@@ -13,6 +13,20 @@
 
       ],
       "description" : "Allows the crafting of more advanced belts."
+    },
+    {
+      "name": "Advanced Inserters",
+      "count": 20,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Long Inserter"
+      ],
+      "prerequisites" : [
+        "Automation"
+      ],
+      "description" : "Allows the crafting of more advanced inserters."
     },
     {
       "name": "Forever",

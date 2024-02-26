@@ -11,7 +11,6 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 	private CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
-	private FactoryToMapButton FactoryToMapButton => GetNode<FactoryToMapButton>("%FactoryToMapButton");
 	
 	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
 	

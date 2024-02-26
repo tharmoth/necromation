@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=17 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
@@ -11,10 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/gui/container_gui.tscn" id="7_cu3ym"]
 [ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/gui/CrafterGUI.tscn" id="7_ky81d"]
 [ext_resource type="Script" path="res://src/gui/ResearchProgressBar.cs" id="7_ohqwt"]
-[ext_resource type="Script" path="res://src/gui/buttons/FactoryToMapButton.cs" id="8_2ve8j"]
 [ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="8_r8bk1"]
 [ext_resource type="Script" path="res://src/BuildingTileMap.cs" id="8_rdg81"]
-[ext_resource type="PackedScene" uid="uid://yhp2pgk86ofe" path="res://src/map.tscn" id="9_s1dys"]
 [ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8qpuw"]
@@ -104,8 +102,8 @@ script = ExtResource("7_ohqwt")
 unique_name_in_owner = true
 layout_mode = 2
 text = "Map (M)"
-script = ExtResource("8_2ve8j")
-_scene = ExtResource("9_s1dys")
+script = ExtResource("8_r8bk1")
+_action = "open_map"
 
 [node name="TechnologyButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
 layout_mode = 2

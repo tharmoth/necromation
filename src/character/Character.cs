@@ -68,8 +68,8 @@ public partial class Character : Node2D
 		}
 
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Input.IsActionPressed("clear_selection")) Selected =Globals.TileMap.GetBuildingAtMouse() is Building building ? building.ItemType : null;
-		if (Input.IsActionPressed("close_gui")) Selected = null;
+		if (Input.IsActionJustPressed("clear_selection")) Selected =Globals.TileMap.GetBuildingAtMouse() is Building building && building.ItemType != Selected ? building.ItemType : null;
+		if (Input.IsActionJustPressed("close_gui")) Selected = null;
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();

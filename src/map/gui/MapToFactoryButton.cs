@@ -20,6 +20,9 @@ public partial class MapToFactoryButton : Button
 
     public static void ChangeScene()
     {
+        if (Globals.ChangingScene) return;
+        Globals.ChangingScene = true;
+        
         Globals.FactoryScene ??= GD.Load<PackedScene>("res://src/main.tscn").Instantiate<Node2D>();
         if (Globals.FactoryScene.GetParent() != Globals.MapScene.GetTree().Root) Globals.MapScene.GetTree().Root.AddChild(Globals.FactoryScene);
         
@@ -36,6 +39,11 @@ public partial class MapToFactoryButton : Button
         
         MapGui.Instance.Visible = false;
         Globals.MapCamera.Enabled = false;
+        
+        Globals.ChangingScene = false;
+        
+        // We need  to wait or this will be called again once the map loads and it sees inputjustpressed.
+        Globals.FactoryScene.GetTree().CreateTimer(.1).Timeout += () => Globals.ChangingScene = false;
     }
 
     private void Update()

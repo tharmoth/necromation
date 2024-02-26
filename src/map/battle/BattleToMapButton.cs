@@ -31,9 +31,7 @@ public partial class BattleToMapButton : Button
 		
 		MapGui.Instance.Visible = true;
 		Globals.MapCamera.Enabled = true;
-		
 
-		
 		var team = Globals.BattleScene.TileMap.GetEntities(BattleTileMap.Unit)
 			.Select(unit => unit as Unit)
 			.Where(unit => unit != null)
