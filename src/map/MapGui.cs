@@ -8,6 +8,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 	public Label SelectedLabel  => GetNode<Label>("%Label");
 	public ArmySetup ArmySetup  => GetNode<ArmySetup>("%ArmySetup");
 	private RecruitGUI _recruitGUI => GetNode<RecruitGUI>("%RecruitGUI");
+	private Control MainGui => GetNode<Control>("%MainGui");
 
 	public bool GuiOpen
 	{
@@ -51,5 +52,9 @@ public partial class MapGui : CanvasLayer, SceneGUI
 	{
 		_currentGui?.QueueFree();
 		_currentGui = null;
+		
+		_recruitGUI.Visible = false;
+		ArmySetup.Visible = false;
+		MainGui.Visible = true;
 	}
 }

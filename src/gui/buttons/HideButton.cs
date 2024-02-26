@@ -19,7 +19,7 @@ public partial class HideButton : Button
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
-		if (!Input.IsActionPressed("close_gui") || !_nodeToHide.Visible) return;
+		if (!Input.IsActionPressed("close_gui") || _nodeToHide == null || !_nodeToHide.Visible) return;
 		
 		_nodeToHide.Visible = false;
 		

@@ -1,10 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://dpxfdpb3aw7u1"]
+[gd_scene load_steps=5 format=3 uid="uid://dpxfdpb3aw7u1"]
 
 [ext_resource type="Texture2D" uid="uid://beupnxnshoxcv" path="res://res/sprites/horse.png" id="1_gbr46"]
+[ext_resource type="Script" path="res://src/map/gui/ArmySetup/ArmySetupCommander.cs" id="1_j7btm"]
 [ext_resource type="Texture2D" uid="uid://bac0sjonpetyy" path="res://res/sprites/dot.png" id="2_7m7x2"]
 [ext_resource type="PackedScene" uid="uid://dwudnowxsfswg" path="res://src/map/gui/ArmySetup/army_setup_squad.tscn" id="3_yyosu"]
 
 [node name="Commander" type="PanelContainer"]
+script = ExtResource("1_j7btm")
 
 [node name="CommanderMargin" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -35,7 +37,7 @@ layout_mode = 2
 texture = ExtResource("1_gbr46")
 stretch_mode = 3
 
-[node name="CommanderName" type="Label" parent="CommanderMargin/HBoxContainer/CommanderMargin/PanelContainer"]
+[node name="NameLabel" type="Label" parent="CommanderMargin/HBoxContainer/CommanderMargin/PanelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -44,7 +46,7 @@ text = "Azadel Corrandir"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="CommanderAction" type="Label" parent="CommanderMargin/HBoxContainer/CommanderMargin/PanelContainer"]
+[node name="ActionLabel" type="Label" parent="CommanderMargin/HBoxContainer/CommanderMargin/PanelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
@@ -109,13 +111,13 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "120/200"
 
-[node name="SquadRows" type="VBoxContainer" parent="CommanderMargin/HBoxContainer/SquadPanel"]
+[node name="SquadList" type="VBoxContainer" parent="CommanderMargin/HBoxContainer/SquadPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="SquadRow" parent="CommanderMargin/HBoxContainer/SquadPanel/SquadRows" instance=ExtResource("3_yyosu")]
+[node name="SquadRow" parent="CommanderMargin/HBoxContainer/SquadPanel/SquadList" instance=ExtResource("3_yyosu")]
 layout_mode = 2
 
-[node name="SquadRow2" parent="CommanderMargin/HBoxContainer/SquadPanel/SquadRows" instance=ExtResource("3_yyosu")]
+[node name="SquadRow2" parent="CommanderMargin/HBoxContainer/SquadPanel/SquadList" instance=ExtResource("3_yyosu")]
 layout_mode = 2

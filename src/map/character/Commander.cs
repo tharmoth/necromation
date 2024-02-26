@@ -19,8 +19,13 @@ public partial class Commander : Node2D, ITransferTarget
      * RPG Stats
      */
     public int CommandCap = 200;
-    public int SquadCap = 200;
+    public int SquadCap = 3;
 
+    public Commander()
+    {
+        
+    }
+    
     public Commander(Province province)
     {
         _province = province;
