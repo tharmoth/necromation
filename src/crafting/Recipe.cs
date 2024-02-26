@@ -27,7 +27,16 @@ public class Recipe
         Category = category;
         Time = time;
     }
-    
+
+    public Recipe()
+    {
+        Name = "Missing";
+        Ingredients = new Dictionary<string, int>();
+        Products = new Dictionary<string, int>();
+        Category = "None";
+        Time = 1.0f;
+    }
+
     public bool CanCraft(Inventory inventory)
     {
         foreach (var (type, amount) in Ingredients)

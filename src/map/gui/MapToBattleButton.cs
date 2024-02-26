@@ -13,7 +13,7 @@ public partial class MapToBattleButton : Button
 	
 	public static void ChangeScene()
 	{
-		Globals.BattleScene ??= GD.Load<PackedScene>("res://src/battle.tscn").Instantiate<Battle>();
+		Globals.BattleScene = GD.Load<PackedScene>("res://src/battle.tscn").Instantiate<Battle>();
 		if (Globals.BattleScene.GetParent() != Globals.MapScene.GetTree().Root) Globals.MapScene.GetTree().Root.AddChild(Globals.BattleScene);
 		
 		var show = Globals.BattleScene;

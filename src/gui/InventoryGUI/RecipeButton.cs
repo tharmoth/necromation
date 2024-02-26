@@ -8,10 +8,10 @@ public partial class RecipeButton : PanelContainer
 {
 	private TextureRect Icon => GetNode<TextureRect>("%RecipeIcon");
 	private Button Button => GetNode<Button>("%Button");
+
+	public Inventory TargetInventory { get; set; } = new();
 	
-	public Inventory TargetInventory { get; set; }
-	
-	private Recipe _recipe;
+	private Recipe _recipe = new();
 	public Recipe Recipe
 	{
 		get => _recipe;

@@ -38,8 +38,17 @@ public partial class MapGui : CanvasLayer, SceneGUI
 	{
 		base._Process(delta);
 		if (Input.IsActionJustPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_army_setup") && _currentGui == null) _currentGui = ArmyLayout.Display(MapGlobals.SelectedProvince);
-		if (Input.IsActionJustPressed("open_recruit") && _currentGui == null) RecruitGui.Visible = true;
+		if (Input.IsActionJustPressed("open_army_setup") && _currentGui == null) 
+		{
+			_currentGui = ArmyLayout.Display(MapGlobals.SelectedProvince);
+			MainGui.Visible = false;
+		}
+		if (Input.IsActionJustPressed("open_recruit") && _currentGui == null)
+		{
+			RecruitGui.Visible = true;
+			MainGui.Visible = false;
+		}
+		if (Input.IsActionJustPressed("open_map")) MapToFactoryButton.ChangeScene();
 	}
 
 	public void CloseGui()

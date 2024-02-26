@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Necromation;
 using Necromation.map;
-using Necromation.map.gui;
 
 public partial class ArmySetupSquad : PanelContainer
 {
