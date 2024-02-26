@@ -52,7 +52,7 @@ public partial class Province : Node2D, ITransferTarget
             {
                 for (var i = 0; i < count; i++)
                 {
-                    var commander = new Commander(this);
+                    var commander = new Commander(this, "Player");
                     Commanders.Add(commander);
                     Globals.MapScene.AddChild(commander);
                 }

@@ -1,18 +1,18 @@
 [gd_scene load_steps=6 format=3 uid="uid://ds5pr7oq43q52"]
 
-[ext_resource type="Script" path="res://src/map/gui/ArmySetup/ArmyLayout.cs" id="1_qrg77"]
+[ext_resource type="Script" path="res://src/map/gui/ArmySetup/ArmySetup.cs" id="1_gw7vd"]
 [ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="2_a6w3a"]
 [ext_resource type="Texture2D" uid="uid://bgxp03y7s5ppl" path="res://res/sprites/Stone Furnace.png" id="2_n76ui"]
 [ext_resource type="Texture2D" uid="uid://06j822t4q6qh" path="res://res/sprites/warrior.png" id="3_mgk4w"]
 [ext_resource type="PackedScene" uid="uid://dpxfdpb3aw7u1" path="res://src/map/gui/ArmySetup/army_setup_commander.tscn" id="4_tbptt"]
 
-[node name="ArmySetup2" type="PanelContainer"]
+[node name="ArmySetup" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_qrg77")
+script = ExtResource("1_gw7vd")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2

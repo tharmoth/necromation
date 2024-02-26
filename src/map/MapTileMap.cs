@@ -32,17 +32,19 @@ public partial class MapTileMap : SKTileMap
 	private  void InitProvence(Province provence, string team)
 	{
 		provence.Owner = team;
-		var commander = new Commander(provence)
-		{
-			Team = team
-		};
+		var commander = new Commander(provence, team);
 		provence.Commanders.Add(commander);
 		// Get the location of the provence
 		var pos = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
 		// for each unit distance away from (1, 1) add 10 warriors to the commander.
 		var distance = (pos - MapGlobals.FactoryPosition).Length();
 		if (team == "Player") distance = 20;
-		if (team == "Player") provence.Commanders.Add(new Commander(provence));
+		if (team == "Player")
+		{
+			var cool2 = new Commander(provence, "Player");
+			provence.Commanders.Add(cool2);
+			Globals.MapScene.CallDeferred("add_child", cool2);
+		}
 		commander.Units.Insert("Warrior", (int)distance * 10);
 		Globals.MapScene.CallDeferred("add_child", commander);
 	}
@@ -64,6 +66,11 @@ public partial class MapTileMap : SKTileMap
 	public Province GetProvence(Vector2I position)
 	{
 		return _provences.TryGetValue(position, out var provence) ? provence : null;
+	}
+	
+	public List<Province> GetProvinces()
+	{
+		return _provences.Values.ToList();
 	}
 	
 	public Vector2I GetLocation(Province provence)

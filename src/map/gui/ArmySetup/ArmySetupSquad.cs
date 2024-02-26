@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Necromation;
 using Necromation.map;
+using Necromation.map.character;
 
 public partial class ArmySetupSquad : PanelContainer
 {
@@ -11,13 +12,17 @@ public partial class ArmySetupSquad : PanelContainer
 	private Label UnitCountLabel => GetNode<Label>("%UnitCountLabel");
 	private Control UnitsBox => GetNode<Control>("%UnitsBox");
 	private Control InfoPanel => GetNode<Control>("%InfoPanel");
+	private TextureRect SquadPlacement => GetNode<TextureRect>("%SquadPlacement");
 	
 	private Inventory Squad = new();
 
-	public void Init(Inventory squad, bool showInfoPanel = true)
+	private Commander _commander;
+
+	public void Init(Inventory squad, bool showInfoPanel = true, Commander commander = null)
 	{
 		Squad = squad;
 		InfoPanel.Visible = showInfoPanel;
+		_commander = commander;
 	}
 
 	public override void _Ready()
@@ -32,10 +37,9 @@ public partial class ArmySetupSquad : PanelContainer
 		{
 			if (@event is not InputEventMouseButton mouseButton) return;
 			if (mouseButton.ButtonIndex != MouseButton.Left || !mouseButton.Pressed) return;
-			GD.Print("clickyboi");
 
-			var units = GetTree().GetNodesInGroup("SquadUnit")
-				.OfType<SquadUnit>()
+			var units = GetTree().GetNodesInGroup("ArmySetupUnit")
+				.OfType<ArmySetupUnit>()
 				.Where(unit => unit.Selected)
 				.ToList();
 			
@@ -46,6 +50,12 @@ public partial class ArmySetupSquad : PanelContainer
 			}
 			
 			units.ForEach(unit => unit.SetSelected(false));
+		};
+
+		SquadPlacement.GuiInput += (e) =>
+		{
+			if (e is not InputEventMouseButton mouseButton || !mouseButton.IsPressed()) return;
+			BoxDraw.Display(_commander);
 		};
 	}
 
@@ -59,7 +69,7 @@ public partial class ArmySetupSquad : PanelContainer
 	{
 		foreach (var (item, count) in Squad.Items)
 		{
-			var units = UnitList.GetChildren().OfType<SquadUnit>().Where(box => box.UnitName == item).ToList();
+			var units = UnitList.GetChildren().OfType<ArmySetupUnit>().Where(box => box.UnitName == item).ToList();
 			if (units.Count >= count) continue;
 			for (int i = 0; i < count - units.Count; i++)
 			{
@@ -71,11 +81,11 @@ public partial class ArmySetupSquad : PanelContainer
 	private void RemoveExtraUnits()
 	{
 		// Count how many of each type of unit is in the squad
-		var unitTypes =  UnitList.GetChildren().OfType<SquadUnit>().Select(unit => unit.UnitName).ToHashSet();
+		var unitTypes =  UnitList.GetChildren().OfType<ArmySetupUnit>().Select(unit => unit.UnitName).ToHashSet();
 		foreach (var item in unitTypes)
 		{
 			var count = Squad.CountItem(item);
-			var units = UnitList.GetChildren().OfType<SquadUnit>().Where(box => box.UnitName == item).ToList();
+			var units = UnitList.GetChildren().OfType<ArmySetupUnit>().Where(box => box.UnitName == item).ToList();
 			if (units.Count <= count) continue;
 			units.GetRange(count, units.Count - count).ForEach(unit => unit.QueueFree());
 		}
@@ -90,9 +100,9 @@ public partial class ArmySetupSquad : PanelContainer
 
 	private void AddUnit(String name)
 	{
-		var squadUnit = new SquadUnit(name, Squad);
+		var squadUnit = new ArmySetupUnit(name, Squad);
 		squadUnit.Texture = Globals.Database.GetTexture(name);
-		squadUnit.Listeners.Add(() => UnitList.GetChildren().OfType<SquadUnit>()
+		squadUnit.Listeners.Add(() => UnitList.GetChildren().OfType<ArmySetupUnit>()
 			.Where(unit => unit.UnitName == squadUnit.UnitName)
 			.ToList()
 			.ForEach(unit => unit.SetSelected(squadUnit.Selected)));

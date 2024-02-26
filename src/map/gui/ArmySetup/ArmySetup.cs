@@ -6,7 +6,7 @@ using Necromation;
 using Necromation.map;
 using Necromation.map.character;
 
-public partial class ArmyLayout : PanelContainer
+public partial class ArmySetup : PanelContainer
 {
 	private Container CommanderList => GetNode<Container>("%CommanderList");
 	
@@ -17,9 +17,9 @@ public partial class ArmyLayout : PanelContainer
 	private Label UnitCountLabel => GetNode<Label>("%UnitCountLabel");
 	private Control ProvinceUnitBox => GetNode<Control>("%ProvinceUnitBox");
 	
-	public static ArmyLayout Display(Province province)
+	public static ArmySetup Display(Province province)
 	{
-		var gui = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup.tscn").Instantiate<ArmyLayout>();
+		var gui = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup.tscn").Instantiate<ArmySetup>();
 		gui._province = province;
 		MapGui.Instance.AddChild(gui);
 		return gui;
@@ -63,6 +63,8 @@ public partial class ArmyLayout : PanelContainer
 
 	private void SetupProvince()
 	{
+		_province.Units.Listeners.Add(UpdateProvince);
+		
 		var parent = ProvinceUnitBox.GetParent();
 		ProvinceUnitBox.QueueFree();
 		

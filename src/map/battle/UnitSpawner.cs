@@ -9,26 +9,35 @@ using Necromation.map.character;
 public partial class UnitSpawner : Node2D
 {
 	[Export] private int _spawnCount = 10;
-	[Export] private string _team = "Player";
 	[Export] private string _defaultUnit = "Warrior";
 	private Queue<Unit> _units = new();
 	
+	private readonly Commander _commander;
+	private readonly string _team = "Player";
+
+	public UnitSpawner()
+	{
+
+	}
+	
+	public UnitSpawner(Commander commander, string team)
+	{
+		_commander = commander;
+		_team = team;
+	}
+	
 	public override void _Ready()
 	{
-		GetNode<Sprite2D>("Sprite2D").Visible = false;
+		if (GetNode<Sprite2D>("Sprite2D") is { } sprite2D)
+		{
+			sprite2D.Visible = false;
+		}
+		
 		CallDeferred("_spawn");
 	}
 
 	private void _spawn() {
-		if (Globals.BattleScene.Provence != null)
-		{
-			LoadFromCommanders();
-		}
-		else
-		{
-			LoadDefault();
-		}
-
+		LoadFromCommanders();
 		PlaceUnitsInRectangle();
 	}
 
@@ -58,24 +67,13 @@ public partial class UnitSpawner : Node2D
 
 	private void LoadFromCommanders()
 	{
-		foreach (var commander in Globals.BattleScene.Provence.Commanders
-			         .Where(commander => commander.Team == _team))
+		foreach (var entry in _commander.Units.Items)
 		{
-			foreach (var entry in commander.Units.Items)
+			for (int i = 0; i < entry.Value; i++)
 			{
-				for (int i = 0; i < entry.Value; i++)
-				{
-					_units.Enqueue(new Unit(entry.Key, commander));
-				}	
-			}
+				_units.Enqueue(new Unit(entry.Key, _commander));
+			}	
 		}
-	}
-	
-	private void LoadDefault()
-	{
-		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
-		Enumerable.Range(0, _spawnCount).ToList()
-			.ForEach(_ => _units.Enqueue(new Unit(_defaultUnit)));
 	}
 
 	private void AddUnit(string unitType, Commander commander = null)

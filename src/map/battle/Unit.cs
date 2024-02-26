@@ -13,7 +13,6 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 {
 	public Vector2I MapPosition => Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
 	public Vector2I TargetPosition = Vector2I.Zero;
-
 	public Vector2 CachedPosition;
 	
 	private readonly Commander _commander;

@@ -13,7 +13,7 @@ config_version=5
 config/name="Necromation"
 run/main_scene="res://src/map.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://res/sprites/Stone Furnace.png"
 
 [autoload]
 

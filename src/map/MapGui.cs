@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using System.Linq;
 using Necromation.map;
@@ -9,9 +10,12 @@ public partial class MapGui : CanvasLayer, SceneGUI
 	private RecruitGUI RecruitGui => GetNode<RecruitGUI>("%RecruitGUI");
 	private Control MainGui => GetNode<Control>("%MainGui");
 
-	public bool GuiOpen => RecruitGui.Visible || _currentGui != null;
-
+	public bool GuiOpen => RecruitGui.Visible || GuiStack.Count > 0;
+	
+	public readonly Stack<Control> GuiStack = new();
 	public static MapGui Instance { get; private set; }
+	
+	private Queue<Province> _battleQueue = new();
 
 	public override void _EnterTree(){
 		if(Instance != null){
@@ -19,42 +23,56 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		}
 		Instance = this;
 	}
-
-	public override void _Ready()
-	{
-		base._Ready();
-		GetNode<Button>("%NextTurn").Pressed += () =>
-		{
-			// Create a copy of the list as it may be modified during the loop
-			var listeners = MapGlobals.TurnListeners.ToList();
-			listeners.ForEach(listener => listener());
-			MapGlobals.UpdateListeners.ForEach(listener => listener());
-		};
-	}
-
-	private Control _currentGui;
 	
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		if (Input.IsActionJustPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_army_setup") && _currentGui == null) 
+		
+		if (_battleQueue.Count > 0)
 		{
-			_currentGui = ArmyLayout.Display(MapGlobals.SelectedProvince);
+			var province = _battleQueue.Dequeue();
+			MapGlobals.SelectedProvince = province;
+			MapToBattleButton.ChangeScene();
+		}
+		
+		if (Input.IsActionJustPressed("close_gui")) CloseGui();
+		if (Input.IsActionJustPressed("open_army_setup") && GuiStack.Count == 0) 
+		{
+			GuiStack.Push(ArmySetup.Display(MapGlobals.SelectedProvince));
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_recruit") && _currentGui == null)
+		if (Input.IsActionJustPressed("open_recruit") && GuiStack.Count == 0)
 		{
 			RecruitGui.Visible = true;
 			MainGui.Visible = false;
 		}
 		if (Input.IsActionJustPressed("open_map")) MapToFactoryButton.ChangeScene();
+		if (Input.IsActionJustPressed("end_turn")) EndTurn();
+	}
+
+	private void EndTurn()
+	{
+		// Create a copy of the list as it may be modified during the loop
+		var listeners = MapGlobals.TurnListeners.ToList();
+		listeners.ForEach(listener => listener());
+		
+		MapGlobals.TileMap.GetProvinces().ForEach(province =>
+		{
+			var teams = province.Commanders.GroupBy(leader => leader.Team).ToList();
+			
+			if (teams.Count > 1)
+			{
+				_battleQueue.Enqueue(province);
+			}
+		});
+
+		MapGlobals.UpdateListeners.ForEach(listener => listener());
 	}
 
 	public void CloseGui()
 	{
-		_currentGui?.QueueFree();
-		_currentGui = null;
+		GuiStack.TryPop(out var gui);
+		gui?.QueueFree();
 		
 		RecruitGui.Visible = false;
 		MainGui.Visible = true;

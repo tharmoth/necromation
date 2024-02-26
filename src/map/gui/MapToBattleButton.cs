@@ -14,6 +14,8 @@ public partial class MapToBattleButton : Button
 	public static void ChangeScene()
 	{
 		Globals.BattleScene = GD.Load<PackedScene>("res://src/battle.tscn").Instantiate<Battle>();
+		Globals.BattleScene.Provence = MapGlobals.SelectedProvince;		
+		
 		if (Globals.BattleScene.GetParent() != Globals.MapScene.GetTree().Root) Globals.MapScene.GetTree().Root.AddChild(Globals.BattleScene);
 		
 		var show = Globals.BattleScene;
@@ -26,9 +28,7 @@ public partial class MapToBattleButton : Button
 
 		Globals.BattleCamera.Enabled = true;
 		Globals.BattleScene.GUI.Visible = true;
-		
-		Globals.BattleScene.Provence = MapGlobals.SelectedProvince;
-        
+
 		MapGui.Instance.Visible = false;
 		Globals.MapCamera.Enabled = false;
 	}

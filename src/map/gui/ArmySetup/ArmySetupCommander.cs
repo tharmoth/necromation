@@ -11,7 +11,7 @@ public partial class ArmySetupCommander : PanelContainer
 	private Label SquadCountLabel => GetNode<Label>("%SquadCountLabel");
 	private Container SquadList => GetNode<Container>("%SquadList");
 
-	private Commander _commander = new(new Province());
+	private Commander _commander = new(new Province(), "Player");
 	
 	public void Init(Commander commander)
 	{
@@ -42,7 +42,7 @@ public partial class ArmySetupCommander : PanelContainer
 	private void AddSquad()
 	{
 		var squad = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup_squad.tscn").Instantiate<ArmySetupSquad>();
-		squad.Init(_commander.Units);
+		squad.Init(_commander.Units, true, _commander);
 		SquadList.AddChild(squad);
 	}
 }

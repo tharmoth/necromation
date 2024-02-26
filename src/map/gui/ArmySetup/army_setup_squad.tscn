@@ -24,20 +24,15 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 10
 
 [node name="UnitList" type="HBoxContainer" parent="SquadMargin/SquadRow/UnitsBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 theme_override_constants/separation = 0
-
-[node name="SquadUnit" type="TextureRect" parent="SquadMargin/SquadRow/UnitsBox/UnitList"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("1_dhty8")
-expand_mode = 1
-stretch_mode = 3
 
 [node name="TextureRect2" type="TextureRect" parent="SquadMargin/SquadRow/UnitsBox/UnitList"]
 layout_mode = 2
@@ -465,6 +460,8 @@ theme_override_constants/separation = 10
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture = ExtResource("2_g1jh6")
 
 [node name="SquadInfo" type="PanelContainer" parent="SquadMargin/SquadRow/InfoPanel/HBoxContainer"]
@@ -478,6 +475,7 @@ text = "60 Units"
 
 [node name="OrdersLabel" type="Label" parent="SquadMargin/SquadRow/InfoPanel/HBoxContainer/SquadInfo"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 8
 text = "<Set Battle Orders>"

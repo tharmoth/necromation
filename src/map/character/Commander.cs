@@ -5,6 +5,7 @@ namespace Necromation.map.character;
 
 public partial class Commander : Node2D, ITransferTarget
 {
+    public Vector2I MapPosition => MapGlobals.TileMap.GlobalToMap(GlobalPosition);
     public string Name { get; } = MapUtils.GetRandomCommanderName();
     public string Team { get; set; }
 
@@ -20,13 +21,15 @@ public partial class Commander : Node2D, ITransferTarget
      */
     public int CommandCap = 200;
     public int SquadCap = 3;
+    public Vector2I SpawnLocation = new(25, 25);
 
-    public Commander(Province province)
+    public Commander(Province province, string team)
     {
         _province = province;
         _sprite.Texture = GD.Load<Texture2D>("res://res/sprites/player.png");
         _sprite.Scale = new Vector2(0.25f, 0.25f);
         Units = new CommanderInventory(this);
+        Team = team;
         
         AddChild(_sprite);
     }
@@ -60,6 +63,9 @@ public partial class Commander : Node2D, ITransferTarget
         if (!Input.IsActionJustPressed("right_click")) return;
 
         _targetLocation = MapGlobals.TileMap.GlobalToMap(GetGlobalMousePosition());
+        
+        var diff = MapPosition - _targetLocation;
+        if (diff.Length() > 1) return;
 
         var provence = MapGlobals.TileMap.GetProvence(_targetLocation);
         if (provence == null) return;
@@ -77,13 +83,6 @@ public partial class Commander : Node2D, ITransferTarget
         if (_province == null) return;
         _province.Commanders.Add(this);
         GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
-
-        if (_province.Owner != Team)
-        {
-            MapGlobals.SelectedProvince = _province;
-            MapToBattleButton.ChangeScene();
-            
-        }
     }
     
     private partial class CommanderInventory : Inventory
