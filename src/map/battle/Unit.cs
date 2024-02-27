@@ -24,11 +24,13 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 
 	public double Cooldown = GD.RandRange(0, 1.0);
 	private Tween _jiggleTween;
+	private Tween _bobTween;
 	private Tween _moveTween;
 	private Tween _damageTween;
 
 	protected Sprite2D Sprite = new();
 	private List<Unit> enemies = null;
+	public AudioStreamPlayer2D Audio = new AudioStreamPlayer2D();
 
 	public Unit(string unitType, Commander commander = null)
 	{
@@ -41,16 +43,24 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 			_ => throw new NotImplementedException()
 		};
 
-		Sprite.Texture = Globals.Database.GetTexture(_unitType);
-		Sprite.Scale = new Vector2(.5f, .5f);
-		AddChild(Sprite);
+		// Sprite.Texture = Globals.Database.GetTexture(_unitType);
+		Sprite.Texture = unitType switch
+		{
+			"Archer" => GD.Load<Texture2D>("res://res/sprites/Archer.png"),
+			"Warrior" => GD.Load<Texture2D>("res://res/sprites/SpearMan.png"),
+			_ => throw new NotImplementedException()
+		};
+		Sprite.Scale = new Vector2(.125f, .125f);
+		// Sprite.Scale = new Vector2(.5f, .5f);
+		AddChild(Sprite); 
+		AddChild(Audio);
 	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		Sprite.FlipH = Team == "Player";
-		Sprite.Modulate = Team == "Player" ? new Color(.8f, .8f, 1) : new Color(1, .8f, .8f);
+		// Sprite.Modulate = Team == "Player" ? new Color(.8f, .8f, 1) : new Color(1, .8f, .8f);
 		AddToGroup("Units");
 		CachedPosition = GlobalPosition;
 	}
@@ -111,6 +121,10 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		
 		_hp -= damage;
 		if (_hp > 0) return;
+
+		PlayDeathAnimation();
+		PlayDeathSound();
+
 		Globals.BattleScene.TileMap.RemoveEntity(this);
 		_commander?.Remove(_unitType);
 		QueueFree();
@@ -186,7 +200,61 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 
 		_moveTween?.Kill();
 		_moveTween = CreateTween();
-		_moveTween.TweenProperty(this, "global_position", Globals.BattleScene.TileMap.MapToGlobal(nextPosition), Battle.TimeStep /  5);
+		_moveTween.TweenProperty(this, "global_position", Globals.BattleScene.TileMap.MapToGlobal(nextPosition), Battle.TimeStep);
+
+		_bobTween?.Kill();
+		_bobTween = CreateTween();
+		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, -5), Battle.TimeStep / 2);
+		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, 0), Battle.TimeStep / 2);
 		CachedPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
+	}
+	
+		
+	private void PlayDeathAnimation()
+	{
+		RemoveChild(Sprite);
+		Globals.BattleScene.AddChild(Sprite);
+
+		var randomPos = new Vector2(GD.RandRange(-16, 16), GD.RandRange(8, 16));
+		var target = GlobalPosition + randomPos;
+
+		float targetDegrees;
+		if (Team == "Player")
+		{
+			targetDegrees = randomPos.X > 0 ? -90 + GD.RandRange(-10, 10) : 90 + GD.RandRange(-10, 10);
+		}
+		else
+		{
+			targetDegrees = randomPos.X < 0 ? -90 + GD.RandRange(-10, 10) : 90 + GD.RandRange(-10, 10);
+		}
+
+		
+		Sprite.GlobalPosition = GlobalPosition;
+		Sprite.Modulate = new Color(.5f, .5f, .5f);
+		Sprite.ZIndex = -1;
+
+		var deathTween = GetTree().CreateTween();
+		deathTween.SetTrans(Tween.TransitionType.Sine);
+		deathTween.TweenProperty(Sprite, "global_position", target, Battle.TimeStep);
+		
+		var deathRotationTween = GetTree().CreateTween();
+		deathRotationTween.SetTrans(Tween.TransitionType.Quad);
+		deathRotationTween.SetEase(Tween.EaseType.In);
+		deathRotationTween.TweenProperty(Sprite, "rotation_degrees", targetDegrees, Battle.TimeStep);
+	}
+
+	private void PlayDeathSound()
+	{
+		var randomizer = new AudioStreamRandomizer();
+		var files = DirAccess.Open("res://res/sfx/death/").GetFiles().Where(file => file.GetExtension() == "wav")
+			.ToArray();
+		var file = files[GD.RandRange(0, files.Length - 1)];
+		randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/death/" + file));
+		
+		var audio = new AudioStreamPlayer2D();
+		audio.Stream = randomizer;
+		audio.VolumeDb = -40;
+		Sprite.AddChild(audio);
+		audio.Play();
 	}
 }

@@ -12,6 +12,17 @@ public class MeleeWeapon : Weapon
 
     protected override void Attack(Unit target)
     {
-        if (GD.Randf() > 0.5) target.Damage(Damage);
+        if (!(GD.Randf() > 0.5)) return;
+        target.Damage(Damage);
+        PlaySound(target);
+    }
+    
+    private void PlaySound(Unit target)
+    {
+        var randomizer = new AudioStreamRandomizer();
+        randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/zapsplat_warfare_sword_stab_into_body_flesh_light_squelch_93748.mp3"));
+        target.Audio.Stream = randomizer;
+        target.Audio.VolumeDb = -20;
+        target.Audio.Play();
     }
 }

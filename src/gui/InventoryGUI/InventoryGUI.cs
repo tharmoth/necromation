@@ -61,6 +61,7 @@ public partial class InventoryGUI : PanelContainer
 		RecipeButtonList.GetChildren().ToList().ForEach(child => child.QueueFree());
 		Globals.Database.UnlockedRecipes
 			.OrderBy(recipe => recipe.Name)
+			.Where(recipe => recipe.Category == "None")
 			.ToList().ForEach(AddRecipe);
 	}
 	

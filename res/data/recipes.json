@@ -71,7 +71,7 @@
       "name": "Assembler",
       "time" : 1,
       "ingredients": {
-        "Circuit": 3,
+        "Elemental Core": 3,
         "Iron Bar": 9,
         "Gear": 5
       },
@@ -93,7 +93,7 @@
       "name": "Research Lab",
       "time" : 1,
       "ingredients": {
-        "Circuit": 5,
+        "Elemental Core": 5,
         "Iron Bar": 10,
         "Gear": 5
       },
@@ -112,24 +112,24 @@
       }
     },
     {
-      "name": "Circuit",
+      "name": "Elemental Core",
       "time" : 1,
       "ingredients": {
-        "Copper Cable": 3,
+        "Copper Strand": 3,
         "Iron Bar": 1
       },
       "products": {
-        "Circuit": 1
+        "Elemental Core": 1
       }
     },
     {
-      "name": "Copper Cable",
+      "name": "Copper Strand",
       "time" : 1,
       "ingredients": {
         "Copper Bar": 1
       },
       "products": {
-        "Copper Cable": 2
+        "Copper Strand": 2
       }
     },
     {

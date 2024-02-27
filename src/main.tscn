@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=19 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
@@ -27,6 +27,11 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_1emfp"]
 tile_size = Vector2i(32, 32)
 sources/1 = SubResource("TileSetAtlasSource_8qpuw")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jvvem"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l3rd4"]
+noise = SubResource("FastNoiseLite_jvvem")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_suggu")
@@ -187,3 +192,8 @@ _resourceType = "Coal Ore"
 [node name="Bone Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(1353, 208)
 _resourceType = "Bone Ore"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("NoiseTexture2D_l3rd4")

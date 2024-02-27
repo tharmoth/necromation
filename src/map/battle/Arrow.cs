@@ -52,6 +52,12 @@ public partial class Arrow : Sprite2D
         if (hit is Unit unit)
         {
             unit.Damage(_damage);
+            
+            var randomizer = new AudioStreamRandomizer();
+            randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/zapsplat_warfare_arrow_incoming_whoosh_hit_body_squelch_blood_010_90731.mp3"));
+            unit.Audio.Stream = randomizer;
+            unit.Audio.VolumeDb = -20;
+            unit.Audio.Play();
         }
         QueueFree();
     }

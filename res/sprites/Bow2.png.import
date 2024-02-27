@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvcp24ukrtfte"
-path="res://.godot/imported/Copper Cable.png-a1f912f84594cfb15235061fee98f2c9.ctex"
+uid="uid://wjfakpsjwsf6"
+path="res://.godot/imported/Bow2.png-2cd56a8ef099a227656ce4d23ca97c96.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Copper Cable.png"
-dest_files=["res://.godot/imported/Copper Cable.png-a1f912f84594cfb15235061fee98f2c9.ctex"]
+source_file="res://res/sprites/Bow2.png"
+dest_files=["res://.godot/imported/Bow2.png-2cd56a8ef099a227656ce4d23ca97c96.ctex"]
 
 [params]
 
