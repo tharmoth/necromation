@@ -311,6 +311,28 @@
         "products": {
           "Warrior": 1
         }
+    },
+    {
+      "name": "Exporter",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Wood": 5
+      },
+      "products": {
+        "Exporter": 1
+      }
+    },
+    {
+      "name": "Importer",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Wood": 5
+      },
+      "products": {
+        "Importer": 1
+      }
     }
   ]
 }

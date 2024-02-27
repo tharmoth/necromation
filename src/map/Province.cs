@@ -7,6 +7,7 @@ namespace Necromation.map;
 
 public partial class Province : Node2D, ITransferTarget
 {
+    public Vector2I MapPosition => MapGlobals.TileMap.GetLocation(this);
     public string Name { get; } = MapUtils.GetRandomProvinceName();
     public readonly Dictionary<string, int> RecruitQueue = new();
     public readonly Inventory Units = new();

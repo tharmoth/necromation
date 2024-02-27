@@ -61,10 +61,12 @@ public partial class Character : Node2D
 		// Process button presses
 		if (_buildingBeingRemoved == null)
 		{
-			if (Input.IsActionPressed("right")) Position += new Vector2(Speed * (float)delta, 0);
-			if (Input.IsActionPressed("left")) Position += new Vector2(-Speed * (float)delta, 0);
-			if (Input.IsActionPressed("up")) Position += new Vector2(0, -Speed * (float)delta);
-			if (Input.IsActionPressed("down")) Position += new Vector2(0, Speed * (float)delta);
+			var newPosition = Position;
+			if (Input.IsActionPressed("right")) newPosition += new Vector2(Speed * (float)delta, 0);
+			if (Input.IsActionPressed("left")) newPosition += new Vector2(-Speed * (float)delta, 0);
+			if (Input.IsActionPressed("up")) newPosition += new Vector2(0, -Speed * (float)delta);
+			if (Input.IsActionPressed("down")) newPosition += new Vector2(0, Speed * (float)delta);
+			if (Globals.TileMap.IsOnMap(Globals.TileMap.GlobalToMap(newPosition))) Position = newPosition;
 		}
 
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();

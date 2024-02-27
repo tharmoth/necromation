@@ -7,6 +7,7 @@ using Necromation.interactables.belts;
 
 public abstract partial class Building : Node2D, BuildingTileMap.IEntity, ProgressTracker.IProgress
 {
+	public Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
 	protected readonly Sprite2D Sprite = new();
 	private Tween _removeTween;
 
@@ -137,6 +138,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Research Lab" => new ResearchLab(),
 			"Barracks" => new Barracks(),
 			"Stone Chest" => new StoneChest(),
+			"Exporter" => new TradeDepot("Exporter"),
+			"Importer" => new TradeDepot("Importer"),
 			_ =>  throw new NotImplementedException()
 		};
 	}
@@ -158,6 +161,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			"Research Lab" => true,
 			"Barracks" => true,
 			"Stone Chest" => true,
+			"Exporter" => true,
+			"Importer" => true,
 			_ => false
 		};
 	}
