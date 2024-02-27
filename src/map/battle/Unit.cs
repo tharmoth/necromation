@@ -123,7 +123,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		if (_hp > 0) return;
 
 		PlayDeathAnimation();
-		PlayDeathSound();
+		// PlayDeathSound();
 
 		Globals.BattleScene.TileMap.RemoveEntity(this);
 		_commander?.Remove(_unitType);

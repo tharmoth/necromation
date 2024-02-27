@@ -20,7 +20,9 @@ public class MeleeWeapon : Weapon
     private void PlaySound(Unit target)
     {
         var randomizer = new AudioStreamRandomizer();
-        randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/zapsplat_warfare_sword_stab_into_body_flesh_light_squelch_93748.mp3"));
+        randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/stab/zapsplat_warfare_sword_blade_tip_stab_dig_into_earth_soil_mud_009_93653.mp3"));
+        randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/stab/zapsplat_warfare_sword_stab_into_body_flesh_light_squelch_93748.mp3"));
+
         target.Audio.Stream = randomizer;
         target.Audio.VolumeDb = -20;
         target.Audio.Play();
