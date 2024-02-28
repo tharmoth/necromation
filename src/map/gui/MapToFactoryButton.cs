@@ -48,6 +48,6 @@ public partial class MapToFactoryButton : Button
 
     private void Update()
     {
-        Visible = MapGlobals.TileMap.GetLocation(MapGlobals.SelectedProvince) == MapGlobals.FactoryPosition;
+        Visible = MapGlobals.SelectedProvince.Owner == "Player";
     }
 }

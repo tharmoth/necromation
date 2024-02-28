@@ -27,18 +27,18 @@ public partial class Battle : Node2D
 		
 		if (Provence.Commanders.Count == 0)
 		{
-			var PlayerCommanderWarrior = new Commander(new Province(), "Player");
-			PlayerCommanderWarrior.Units.Insert("Warrior", 100);
-			Provence.Commanders.Add(PlayerCommanderWarrior);
+			var PlayerCommanderInfantry = new Commander(new Province(), "Player");
+			PlayerCommanderInfantry.Units.Insert("Elite Infantry", 100);
+			Provence.Commanders.Add(PlayerCommanderInfantry);
 			
-			var EnemyCommanderWarrior = new Commander(new Province(), "Enemy");
-			EnemyCommanderWarrior.Units.Insert("Warrior", 100);
-			Provence.Commanders.Add(EnemyCommanderWarrior);
+			var EnemyCommanderInfantry = new Commander(new Province(), "Enemy");
+			EnemyCommanderInfantry.Units.Insert("Barbarian", 1000);
+			Provence.Commanders.Add(EnemyCommanderInfantry);
 			
-			var PlayerCommanderArcher = new Commander(new Province(), "Player");
-			PlayerCommanderArcher.SpawnLocation = new Vector2I(0, 25);
-			PlayerCommanderArcher.Units.Insert("Archer", 100);
-			Provence.Commanders.Add(PlayerCommanderArcher);
+			// var PlayerCommanderArcher = new Commander(new Province(), "Player");
+			// PlayerCommanderArcher.SpawnLocation = new Vector2I(0, 25);
+			// PlayerCommanderArcher.Units.Insert("Archer", 100);
+			// Provence.Commanders.Add(PlayerCommanderArcher);
 			
 			var EnemyCommanderArcher = new Commander(new Province(), "Enemy");
 			EnemyCommanderArcher.SpawnLocation = new Vector2I(30, 25);

@@ -43,5 +43,7 @@ public partial class BattleToMapButton : Button
 		Globals.BattleScene.Provence.Commanders.Where(commander => commander.Team != team).ToList().ForEach(commander => commander.Kill());
 		Globals.BattleScene.QueueFree();
 		Globals.BattleScene = null;
+		
+		MapGlobals.UpdateListeners.ForEach(listener => listener());
 	}
 }

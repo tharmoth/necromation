@@ -46,7 +46,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 			RecruitGui.Visible = true;
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_map")) MapToFactoryButton.ChangeScene();
+		if (Input.IsActionJustPressed("open_map") && MapGlobals.SelectedProvince.Owner == "Player") MapToFactoryButton.ChangeScene();
 		if (Input.IsActionJustPressed("end_turn")) EndTurn();
 	}
 

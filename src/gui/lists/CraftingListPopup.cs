@@ -59,6 +59,8 @@ public partial class CraftingListPopup : PanelContainer
 		
 		var texture = new TextureRect();
 		texture.Texture = Globals.Database.GetTexture(name);
+		texture.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+		texture.CustomMinimumSize = new Vector2(32, 32);
 		
 		var row = new HBoxContainer();
 		row.AddChild(texture);

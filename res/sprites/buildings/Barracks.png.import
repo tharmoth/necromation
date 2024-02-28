@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drdncbngjpxgq"
-path="res://.godot/imported/Elemental Core.png-fe3eacdd229f6cdda49b1e04ec41240c.ctex"
+uid="uid://ckh80hmx2nrrt"
+path="res://.godot/imported/Barracks.png-10d3b63bcbd904a618c35f307b43e8fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/Elemental Core.png"
-dest_files=["res://.godot/imported/Elemental Core.png-fe3eacdd229f6cdda49b1e04ec41240c.ctex"]
+source_file="res://res/sprites/buildings/Barracks.png"
+dest_files=["res://.godot/imported/Barracks.png-10d3b63bcbd904a618c35f307b43e8fb.ctex"]
 
 [params]
 

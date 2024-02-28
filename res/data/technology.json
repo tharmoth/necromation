@@ -29,6 +29,21 @@
       "description" : "Allows the crafting of more advanced inserters."
     },
     {
+      "name": "Trade",
+      "count": 100,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Importer",
+        "Exporter"
+      ],
+      "prerequisites" : [
+        "Advanced Inserters"
+      ],
+      "description" : "Allows the movement of items between provinces."
+    },
+    {
       "name": "Forever",
       "count": 1000000,
       "ingredients": [

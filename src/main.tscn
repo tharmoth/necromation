@@ -242,18 +242,18 @@ current = true
 [node name="Stone Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(2289, 1512)
 
+[node name="Copper Spawner" parent="." instance=ExtResource("6_ummi6")]
+position = Vector2(989, 1540)
+_resourceType = "Copper Ore"
+
 [node name="Iron Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(1823, 1194)
 _resourceType = "Iron Ore"
 
-[node name="Copper Spawner" parent="." instance=ExtResource("6_ummi6")]
-position = Vector2(1379, 1576)
-_resourceType = "Copper Ore"
+[node name="Tin Spawner" parent="." instance=ExtResource("6_ummi6")]
+position = Vector2(7900, 1700)
+_resourceType = "Tin Ore"
 
 [node name="Coal Spawner" parent="." instance=ExtResource("6_ummi6")]
 position = Vector2(1802, 2037)
 _resourceType = "Coal Ore"
-
-[node name="Bone Spawner" parent="." instance=ExtResource("6_ummi6")]
-position = Vector2(1353, 208)
-_resourceType = "Bone Ore"

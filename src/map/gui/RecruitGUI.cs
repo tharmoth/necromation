@@ -21,7 +21,7 @@ public partial class RecruitGUI : Control
 
 	private void RecruitSoldier()
 	{
-		Recruit("Warrior");
+		Recruit("Infantry");
 	}
 
 	private void RecruitArcher()

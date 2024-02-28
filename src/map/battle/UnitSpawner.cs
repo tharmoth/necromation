@@ -9,7 +9,7 @@ using Necromation.map.character;
 public partial class UnitSpawner : Node2D
 {
 	[Export] private int _spawnCount = 10;
-	[Export] private string _defaultUnit = "Warrior";
+	[Export] private string _defaultUnit = "Infantry";
 	private Queue<Unit> _units = new();
 	
 	private readonly Commander _commander;

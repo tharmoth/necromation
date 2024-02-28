@@ -36,7 +36,7 @@ public partial class MapTileMap : SKTileMap
 		provence.Commanders.Add(commander);
 		// Get the location of the provence
 		var pos = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
-		// for each unit distance away from (1, 1) add 10 warriors to the commander.
+		// for each unit distance away from (1, 1) add 10 Infantrys to the commander.
 		var distance = (pos - MapGlobals.FactoryPosition).Length();
 		if (team == "Player") distance = 20;
 		if (team == "Player")
@@ -45,7 +45,7 @@ public partial class MapTileMap : SKTileMap
 			provence.Commanders.Add(cool2);
 			Globals.MapScene.CallDeferred("add_child", cool2);
 		}
-		commander.Units.Insert("Warrior", (int)distance * 10);
+		commander.Units.Insert("Infantry", (int)distance * 10);
 		Globals.MapScene.CallDeferred("add_child", commander);
 	}
 
@@ -57,9 +57,9 @@ public partial class MapTileMap : SKTileMap
 		foreach (var barracks in Globals.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
 		{
 			var inventory = barracks.GetInventories().First();
-			var count = inventory.CountItem("Warrior");
-			prov.Units.Insert("Warrior", count);
-			inventory.Remove("Warrior", count);
+			var count = inventory.CountItem("Infantry");
+			prov.Units.Insert("Infantry", count);
+			inventory.Remove("Infantry", count);
 		}
 	}
 

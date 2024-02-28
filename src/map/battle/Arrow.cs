@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 
 namespace Necromation.map.battle;
 
@@ -13,18 +14,18 @@ public partial class Arrow : Sprite2D
     private readonly Vector2 _targetPosition;
     
     private readonly float _stepScale;
-    private readonly int _damage;
     
     private float _progress;
     
     private static readonly Texture2D _texture2D = GD.Load<Texture2D>("res://res/sprites/Arrow.png");
+    private readonly Action<Unit> _damage;
 
-    public Arrow(Vector2I targetTile, Vector2I startTile, int damage = 5)
+    public Arrow(Vector2I startTile, Vector2I targetTile, Action<Unit> damage)
     {
         _damage = damage;
         Texture = _texture2D;
         Scale = new Vector2(0.25f, 0.25f);
-        _startPosition = Globals.BattleScene.TileMap.MapToGlobal(startTile);;
+        _startPosition = Globals.BattleScene.TileMap.MapToGlobal(startTile);
         _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile);
         var distance = _startPosition.DistanceTo(Globals.BattleScene.TileMap.MapToGlobal(targetTile));
         _stepScale = Speed / distance;
@@ -49,16 +50,7 @@ public partial class Arrow : Sprite2D
         if (!(nextPosition.DistanceTo(_targetPosition) < 10)) return;
 
         var hit = Globals.BattleScene.TileMap.GetEntity(MapPosition, BattleTileMap.Unit);
-        if (hit is Unit unit)
-        {
-            unit.Damage(_damage);
-            
-            var randomizer = new AudioStreamRandomizer();
-            randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/zapsplat_warfare_arrow_incoming_whoosh_hit_body_squelch_blood_010_90731.mp3"));
-            unit.Audio.Stream = randomizer;
-            unit.Audio.VolumeDb = -20;
-            unit.Audio.Play();
-        }
+        if (hit is Unit unit) _damage(unit);
         QueueFree();
     }
 

@@ -18,9 +18,10 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	private readonly Commander _commander;
 	public string Team = "Player";
 	private string _unitType;
-	private Weapon _weapon;
+	public readonly  List<Weapon> Weapons = new();
+	public readonly List<Armor> Armor = new();
 	
-	private int _hp = 100;
+	private int _hp = 10;
 
 	public double Cooldown = GD.RandRange(0, 1.0);
 	private Tween _jiggleTween;
@@ -31,25 +32,29 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	protected Sprite2D Sprite = new();
 	private List<Unit> enemies = null;
 	public AudioStreamPlayer2D Audio = new AudioStreamPlayer2D();
+	private Unit _target;
+	public int Ammo = 12;
+	public int Strength = 10;
+	
 
 	public Unit(string unitType, Commander commander = null)
 	{
 		_unitType = unitType;
 		_commander = commander;
-		_weapon = unitType switch
-		{
-			"Archer" => new RangedWeapon(this, 100, 49),
-			"Warrior" => new MeleeWeapon(this, 1, 52),
-			_ => throw new NotImplementedException()
-		};
 
-		// Sprite.Texture = Globals.Database.GetTexture(_unitType);
-		Sprite.Texture = unitType switch
+		var def = Globals.Database.Units.First(unit => unit.Name == unitType);
+		foreach (var weapon in def.Weapons)
 		{
-			"Archer" => GD.Load<Texture2D>("res://res/sprites/Archer.png"),
-			"Warrior" => GD.Load<Texture2D>("res://res/sprites/SpearMan.png"),
-			_ => throw new NotImplementedException()
-		};
+			Weapons.Add(Globals.Database.Equpment.OfType<Weapon>().First(weaponData => weaponData.Name == weapon));
+		}
+		Weapons.Add(new MeleeWeapon("Fist", 1, 1, 1, 1));
+		
+		foreach (var armor in def.Armor)
+		{
+			Armor.Add(Globals.Database.Equpment.OfType<Armor>().First(armorDef => armorDef.Name == armor));
+		}
+
+		Sprite.Texture = Globals.Database.GetTexture(_unitType);
 		Sprite.Scale = new Vector2(.125f, .125f);
 		// Sprite.Scale = new Vector2(.5f, .5f);
 		AddChild(Sprite); 
@@ -59,7 +64,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Sprite.FlipH = Team == "Player";
+		Sprite.FlipH = Team != "Player";
 		// Sprite.Modulate = Team == "Player" ? new Color(.8f, .8f, 1) : new Color(1, .8f, .8f);
 		AddToGroup("Units");
 		CachedPosition = GlobalPosition;
@@ -79,23 +84,34 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		if (Cooldown < Battle.TimeStep || _hp <= 0) return;
 		Cooldown = 0;
 
-		if (_weapon.CanAttack(enemies))
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttackDeclump(this, enemies)))
 		{
-			_weapon.Attack();
+			weapon.Attack(this);
 			return;
 		}
 
-		var rand = GD.Randf();
-		if (rand < 0.25)
+		if (!IsInstanceValid(_target))
 		{
-			TargetRandomEnemy();
-		}
-		else if (rand < 0.5)
-		{
-			TargetClosestEnemy();
+			var rand = GD.Randf();
+			if (rand < 0.25)
+			{
+				_target = TargetRandomEnemy();
+			}
+			else if (rand < 0.5)
+			{
+				_target = TargetClosestEnemy();
+			}
 		}
 
+		UpdateTargetPosition();
+
 		MoveToTarget();
+		
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, enemies)))
+		{
+			weapon.Attack(this);
+			return;
+		}
 	}
 	
 	/**************************************************************************
@@ -123,7 +139,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		if (_hp > 0) return;
 
 		PlayDeathAnimation();
-		// PlayDeathSound();
+		PlayDeathSound();
 
 		Globals.BattleScene.TileMap.RemoveEntity(this);
 		_commander?.Remove(_unitType);
@@ -144,21 +160,28 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	/**************************************************************************
 	 * Private Methods                                                        *
 	 **************************************************************************/
-	private void TargetClosestEnemy()
+	private Unit TargetClosestEnemy()
 	{
 		var closest = enemies.MinBy(unit => unit.GlobalPosition.DistanceSquaredTo(GlobalPosition));
 		TargetPosition = Globals.BattleScene.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
+		return closest;
 	}
 
-	private void TargetRandomEnemy()
+	private Unit TargetRandomEnemy()
 	{
 		if (enemies.Count == 0)
 		{
 			TargetPosition = MapPosition;
-			return;
+			return null;
 		}
 		var closest  = enemies.ElementAt(GD.RandRange(0, enemies.Count - 1));
 		TargetPosition = closest?.MapPosition ?? MapPosition;
+		return closest;
+	}
+
+	private void UpdateTargetPosition()
+	{
+		TargetPosition = !IsInstanceValid(_target) ? MapPosition : _target.MapPosition;
 	}
 
 	private void MoveToTarget()

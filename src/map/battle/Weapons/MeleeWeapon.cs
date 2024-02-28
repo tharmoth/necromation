@@ -1,23 +1,33 @@
 ﻿using System.Linq;
 using Godot;
+using Necromation.sk;
 
 namespace Necromation.map.battle.Weapons;
 
 public class MeleeWeapon : Weapon
 {
-    public MeleeWeapon(Unit wielder, int range, int damage) : base(wielder, range, damage, 1)
+    public MeleeWeapon(string name, int range, int damage, int hands, int cooldown) : base(name, range, damage, hands, cooldown)
     {
     }
 
-
-    protected override void Attack(Unit target)
+    protected override void Attack(Unit wielder, Unit target)
     {
         if (!(GD.Randf() > 0.5)) return;
-        target.Damage(Damage);
-        PlaySound(target);
+        
+        var armor = target.Armor.Sum(armor => armor.Protection);
+        var armorRoll = Utils.RollDice("2d6");
+        var damageRoll = Utils.RollDice("2d6");
+
+        var damage = Damage + Mathf.FloorToInt(wielder.Strength * (Hands == 2 ? 1.25 : 1));
+        var adjustedDamage = damage - armor + damageRoll - armorRoll;
+
+        if (adjustedDamage <= 0) return;
+        
+        target.Damage(adjustedDamage);
+        PlayHitSound(target);
     }
     
-    private void PlaySound(Unit target)
+    private void PlayHitSound(Unit target)
     {
         var randomizer = new AudioStreamRandomizer();
         randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/stab/zapsplat_warfare_sword_blade_tip_stab_dig_into_earth_soil_mud_009_93653.mp3"));
@@ -27,4 +37,7 @@ public class MeleeWeapon : Weapon
         target.Audio.VolumeDb = -20;
         target.Audio.Play();
     }
+
+
+
 }

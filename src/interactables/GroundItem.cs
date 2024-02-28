@@ -20,6 +20,7 @@ public partial class GroundItem : Node2D, BuildingTileMap.IEntity
     {
         base._Ready();
         _sprite.Texture = GD.Load<Texture2D>($"res://res/sprites/{ItemType}.png");
+        _sprite.Scale = new Vector2(16 / _sprite.Texture.GetSize().X, 16 / _sprite.Texture.GetSize().Y);
     }
     
     public bool AddToInventory(Inventory inventory)

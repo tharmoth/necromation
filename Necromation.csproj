@@ -8,6 +8,7 @@
     <Content Include="res\data\ProvinceNames.txt" />
     <Content Include="res\data\recipes.json" />
     <Content Include="res\data\technology.json" />
+    <Content Include="res\data\units.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\gui\buttons\" />

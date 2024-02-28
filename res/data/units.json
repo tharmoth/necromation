@@ -1,0 +1,161 @@
+﻿{
+  "units": [
+    {
+      "name": "Rabble",
+      "weapons" : [
+        "Stick"
+      ],
+      "armor" : [
+        
+      ]
+    },
+    {
+      "name": "Light Infantry",
+      "weapons" : [
+        "Copper Spear"
+      ],
+      "armor" : [
+        "Copper Ringmail"
+      ]
+    },
+    {
+      "name": "Infantry",
+      "weapons" : [
+        "Copper Spear"
+      ],
+      "armor" : [
+        "Copper Ringmail",
+        "Shield"
+      ]
+    },
+    {
+      "name": "Heavy Infantry",
+      "weapons" : [
+        "Bronze Spear"
+      ],
+      "armor" : [
+        "Bronze Breastplate",
+        "Shield"
+      ]
+    },
+    {
+      "name": "Elite Infantry",
+      "weapons" : [
+        "Bronze Warhammer"
+      ],
+      "armor" : [
+        "Bronze Breastplate",
+        "Shield"
+      ]
+    },
+    {
+      "name": "Barbarian",
+        "weapons" : [
+            "Copper Warhammer"
+        ],
+        "armor" : [
+          "Copper Ringmail"
+        ]
+    },
+    {
+      "name": "Archer",
+        "weapons" : [
+          "Long Bow"
+        ],
+        "armor" : [
+          "Leather Cuirass"
+        ]
+    },
+    {
+      "name": "Heavy Archer",
+      "weapons" : [
+        "Short Bow",
+        "Copper Spear"
+      ],
+      "armor" : [
+          "Copper Ringmail"
+      ]
+    }
+    ],
+  "equipment" : [
+    {
+      "name" : "Stick",
+      "damage" : 2,
+      "range" : 1,
+      "hands" : 1,
+      "type" : "melee"
+    },
+    {
+      "name" : "Copper Spear",
+      "damage" : 3,
+      "range" : 1,
+      "hands" : 1,
+      "type" : "melee"
+    },
+    {
+      "name" : "Bronze Spear",
+      "damage" : 4,
+      "range" : 1,
+      "hands" : 1,
+      "type" : "melee"
+    },
+    {
+      "name" : "Copper Warhammer",
+      "damage" : 9,
+      "range" : 1,
+      "hands" : 2,
+      "type" : "melee"
+    },
+    {
+      "name" : "Bronze Warhammer",
+      "damage" : 12,
+      "range" : 1,
+      "hands" : 2,
+      "type" : "melee"
+    },
+    {
+      "name" : "Short Bow",
+      "damage" : 6,
+      "range" : 35,
+      "hands" : 2,
+      "type" : "ranged"
+    },
+    {
+      "name" : "Long Bow",
+      "damage" : 9,
+      "range" : 35,
+      "hands" : 2,
+      "type" : "ranged"
+    },
+    {
+      "name" : "Cross Bow",
+      "damage" : 8,
+      "range" : 35,
+      "hands" : 2,
+      "type" : "ranged",
+      "traits": [
+        "armor piercing"
+      ]
+    },
+    {
+      "name" : "Leather Cuirass",
+      "protection" : 5,
+      "type" : "armor"
+    },
+    {
+      "name" : "Copper Ringmail",
+      "protection" : 10,
+      "type" : "armor"
+    },
+    {
+      "name" : "Bronze Breastplate",
+      "protection" : 15,
+      "type" : "armor"
+    },
+    {
+      "name" : "Shield",
+      "protection" : 4,
+      "type" : "armor"
+    }
+  ]
+}

@@ -16,6 +16,7 @@
       "time" : 1,
       "ingredients": {
         "Iron Bar": 1,
+        "Automation Core": 1,
         "Gear": 1
       },
       "products": {
@@ -71,7 +72,7 @@
       "name": "Assembler",
       "time" : 1,
       "ingredients": {
-        "Elemental Core": 3,
+        "Automation Core": 3,
         "Iron Bar": 9,
         "Gear": 5
       },
@@ -93,7 +94,7 @@
       "name": "Research Lab",
       "time" : 1,
       "ingredients": {
-        "Elemental Core": 5,
+        "Automation Core": 5,
         "Iron Bar": 10,
         "Gear": 5
       },
@@ -112,14 +113,14 @@
       }
     },
     {
-      "name": "Elemental Core",
+      "name": "Automation Core",
       "time" : 1,
       "ingredients": {
         "Copper Strand": 3,
         "Iron Bar": 1
       },
       "products": {
-        "Elemental Core": 1
+        "Automation Core": 1
       }
     },
     {
@@ -168,6 +169,31 @@
       }
     },
     {
+      "name": "Tin Bar",
+      "time" : 6.4,
+      "category": "smelting",
+      "ingredients": {
+        "Tin Ore": 2,
+        "Coal Ore": 1
+      },
+      "products": {
+        "Tin Bar": 2
+      }
+    },
+    {
+      "name": "Bronze Bar",
+      "time" : 6.4,
+      "category": "smelting",
+      "ingredients": {
+        "Copper Bar": 2,
+        "Tin Bar": 2,
+        "Coal Ore": 1
+      },
+      "products": {
+        "Bronze Bar": 4
+      }
+    },
+    {
       "name": "Barracks",
       "time" : 10.0,
       "ingredients": {
@@ -212,6 +238,28 @@
       }
     },
     {
+      "name": "Exporter",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Wood": 5
+      },
+      "products": {
+        "Exporter": 1
+      }
+    },
+    {
+      "name": "Importer",
+      "time" : 10.0,
+      "ingredients": {
+        "Stone": 10,
+        "Wood": 5
+      },
+      "products": {
+        "Importer": 1
+      }
+    },
+    {
       "name" : "Pawn",
       "time" : 10.0,
       "category": "population",
@@ -249,27 +297,29 @@
       "time" : 10.0,
       "ingredients": {
         "Wood": 1,
-        "Iron Bar": 1
+        "Copper Bar": 1
       },
       "products": {
         "Spear": 1
       }
     },
     {
-      "name" : "Armor",
-        "time" : 10.0,
-        "ingredients": {
-          "Iron Bar": 5
-        },
-        "products": {
-          "Armor": 1
-        }
+      "name" : "Bronze Warhammer",
+      "time" : 10.0,
+      "ingredients": {
+        "Wood": 1,
+        "Bronze Bar": 5
+      },
+      "products": {
+        "Bronze Warhammer": 1
+      }
     },
     {
       "name" : "Bow",
       "time" : 10.0,
       "ingredients": {
-        "Wood": 1
+        "Wood": 10,
+        "Copper Strand": 1
       },
       "products": {
         "Bow": 1
@@ -280,10 +330,42 @@
       "time" : 1.0,
       "ingredients": {
         "Wood": 1,
-        "Iron Bar": 1
+        "Copper Bar": 1,
+        "Copper Strand": 1
       },
       "products": {
         "Arrow": 1
+      }
+    },
+    {
+      "name" : "Shield",
+      "time" : 10.0,
+      "ingredients": {
+        "Wood": 1,
+        "Copper Bar": 1
+      },
+      "products": {
+        "Shield": 1
+      }
+    },
+    {
+      "name" : "Armor",
+        "time" : 10.0,
+        "ingredients": {
+          "Copper Bar": 5
+        },
+        "products": {
+          "Armor": 1
+        }
+    },
+    {
+      "name" : "Bronze Armor",
+      "time" : 10.0,
+      "ingredients": {
+        "Bronze Bar": 10
+      },
+      "products": {
+        "Bronze Armor": 1
       }
     },
     {
@@ -292,7 +374,7 @@
       "category": "recruitment",
         "ingredients": {
           "Bow": 1,
-          "Arrow": 10,
+          "Arrow": 12,
           "Pawn" : 1
         },
         "products": {
@@ -300,38 +382,95 @@
         }
     },
     {
-      "name" : "Warrior",
-        "time" : 10.0,
-      "category": "recruitment",
-        "ingredients": {
-          "Spear": 1,
-          "Armor": 1,
-            "Pawn" : 1
-        },
-        "products": {
-          "Warrior": 1
-        }
-    },
-    {
-      "name": "Exporter",
+      "name" : "Heavy Archer",
       "time" : 10.0,
+      "category": "recruitment",
       "ingredients": {
-        "Stone": 10,
-        "Wood": 5
+        "Bow": 1,
+        "Arrow": 12,
+        "Armor": 1,
+        "Pawn" : 1
       },
       "products": {
-        "Exporter": 1
+        "Archer": 1
       }
     },
     {
-      "name": "Importer",
+      "name" : "Rabble",
+        "time" : 10.0,
+      "category": "recruitment",
+        "ingredients": {
+          "Wood": 1,
+          "Pawn" : 1
+        },
+        "products": {
+          "Rabble": 1
+        }
+    },
+    {
+      "name" : "Light Infantry",
       "time" : 10.0,
+      "category": "recruitment",
       "ingredients": {
-        "Stone": 10,
-        "Wood": 5
+        "Spear": 1,
+        "Armor": 1,
+        "Pawn" : 1
       },
       "products": {
-        "Importer": 1
+        "Light Infantry": 1
+      }
+    },
+    {
+      "name" : "Infantry",
+      "time" : 10.0,
+      "category": "recruitment",
+      "ingredients": {
+        "Spear": 1,
+        "Armor": 1,
+        "Shield": 1,
+        "Pawn" : 1
+      },
+      "products": {
+        "Infantry": 1
+      }
+    },
+    {
+      "name" : "Heavy Infantry",
+      "time" : 10.0,
+      "category": "recruitment",
+      "ingredients": {
+        "Spear": 1,
+        "Shield": 1,
+        "Bronze Armor": 1,
+        "Pawn" : 1
+      },
+      "products": {
+        "Heavy Infantry": 1
+      }
+    },
+    {
+      "name" : "Barbarian",
+      "time" : 10.0,
+      "category": "recruitment",
+      "ingredients": {
+        "Bronze Warhammer": 1,
+        "Pawn" : 1
+      },
+      "products": {
+        "Barbarian": 1
+      }
+    },
+    {
+      "name" : "Elite Infantry",
+      "time" : 10.0,
+      "category": "recruitment",
+      "ingredients": {
+        "Spear": 1,
+        "Bronze Armor": 1,
+        "Pawn" : 1
+      },
+      "products": {
+        "Barbarian": 1
       }
     }
   ]

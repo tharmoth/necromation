@@ -16,7 +16,6 @@ public partial class Inserter : Building, IRotatable
     private int _range;
     private Sprite2D SpriteInHand = new()
     {
-        Scale = new Vector2(0.5f, 0.5f),
         Visible = false,
         ZIndex = 1
     };
@@ -95,6 +94,7 @@ public partial class Inserter : Building, IRotatable
     {
         SpriteInHand.Texture = GD.Load<Texture2D>($"res://res/sprites/{item}.png");
         SpriteInHand.Visible = true;
+        SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
         _tween?.Kill();
         _tween = GetTree().CreateTween();
         _tween.TweenProperty(Sprite, "rotation", Sprite.Rotation + Math.PI, _interval/2);

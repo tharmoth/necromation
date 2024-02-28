@@ -9,34 +9,44 @@ public abstract  class Weapon
 {
     protected readonly int Damage;
     protected readonly int Range;
-    protected readonly Unit Wielder;
     protected readonly double Cooldown = 1;
+    public readonly string Name;
+    public readonly int Hands = 1;
     
     private Unit _target;
 
-    protected Weapon(Unit wielder, int range, int damage, int cooldown)
+    protected Weapon(string name, int range, int damage, int hands, int cooldown)
     {
-        Wielder = wielder;
+        Name = name;
         Range = range;
         Damage = damage;
         Cooldown = cooldown;
+        Hands = hands;
     }
 
-    public void Attack()
+    public void Attack(Unit wielder)
     {
-        Attack(_target);
-        Wielder.Jiggle();
-        Wielder.Cooldown = -1 * Cooldown * Battle.TimeStep;
+        Attack(wielder, _target);
+        wielder.Jiggle();
+        wielder.Cooldown = -1 * Cooldown * Battle.TimeStep;
     }
-    protected abstract void Attack(Unit target);
-    public bool CanAttack(List<Unit> targets)
-    {
-        // _target = targets
-        //     .Where(unit => unit.GlobalPosition.DistanceTo(Wielder.GlobalPosition) < Range * 32)
-        //     .MinBy(unit => Guid.NewGuid());
+    
+    protected abstract void Attack(Unit wielder, Unit target);
 
+    public bool CanAttackDeclump(Unit wielder, List<Unit> targets)
+    {
+        return CanAttack(wielder, targets, Range > 5 ? Range - 5 : Range);
+    }
+    
+    public bool CanAttack(Unit wielder, List<Unit> targets)
+    {
+        return CanAttack(wielder, targets, Range);
+    }
+    
+    protected virtual bool CanAttack(Unit wielder, List<Unit> targets, int range)
+    {
         var targetCount = targets
-            .Count(unit => unit.CachedPosition.DistanceTo(Wielder.CachedPosition) <= Range * 32);
+            .Count(unit => unit.CachedPosition.DistanceTo(wielder.CachedPosition) <= range * 32);
         if (targetCount == 0)
         {
             _target = null;
@@ -44,7 +54,7 @@ public abstract  class Weapon
         else
         {
             _target = targets
-                .Where(unit => unit.CachedPosition.DistanceTo(Wielder.CachedPosition) <= Range * 32)
+                .Where(unit => unit.CachedPosition.DistanceTo(wielder.CachedPosition) <= range * 32)
                 .ElementAt(GD.RandRange(0, targetCount - 1));
         }
         

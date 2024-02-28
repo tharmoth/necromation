@@ -37,7 +37,7 @@ public partial class Commander : Node2D, ITransferTarget
     // Deconstructor
     public void Kill()
     {
-        GetParent().RemoveChild(this);
+        if (GetParent() is { } parent) parent.RemoveChild(this);
         _province.Commanders.Remove(this);
         QueueFree();
     }
@@ -52,6 +52,13 @@ public partial class Commander : Node2D, ITransferTarget
         MapGlobals.TurnListeners.Add(MoveCommander);
         
         if (Team != "Player") _sprite.Visible = false;
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        base._Input(@event);
+        _line.Width = MapGlobals.SelectedCommander == this ? 4 : 8;
+        _line.Modulate = MapGlobals.SelectedCommander == this ? Colors.White : new Color(1, 1, 1, 0.5f);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -95,8 +102,7 @@ public partial class Commander : Node2D, ITransferTarget
         
         public override bool CanAcceptItems(string item, int count = 1)
         {
-            if (CountItem(item) + count > _commander.CommandCap) return false;
-            return base.CanAcceptItems(item, count);
+            return CountItem(item) + count <= _commander.CommandCap && base.CanAcceptItems(item, count);
         }
     }
     
