@@ -29,6 +29,21 @@
       "description" : "Allows the crafting of more advanced inserters."
     },
     {
+      "name": "Farming",
+        "count": 10,
+        "ingredients": [
+          "experiment"
+        ],
+        "unlocks" : [
+          "Farm",
+          "Wheat"
+        ],
+        "prerequisites" : [
+          "Automation"
+        ],
+        "description" : "Grow food to feed our minions."
+    },
+    {
       "name": "Trade",
       "count": 100,
       "ingredients": [
@@ -39,23 +54,138 @@
         "Exporter"
       ],
       "prerequisites" : [
-        "Advanced Inserters"
+        "Warfare"
       ],
-      "description" : "Allows the movement of items between provinces."
+      "description" : "Movement of items between provinces."
     },
     {
-      "name": "Forever",
-      "count": 1000000,
+      "name": "Warfare",
+      "count": 10,
       "ingredients": [
         "experiment"
       ],
       "unlocks" : [
-
+        "Rabble",
+        "Commander",
+        "House",
+        "Barracks",
+        "Armory"
       ],
       "prerequisites" : [
-        "Automation"
+        "Farming"
       ],
-      "description" : "Test technology that never ends."
+      "description" : "Venture out in search of more resources"
+    },
+    {
+      "name": "Woodwork",
+      "count": 10,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Short Bow",
+        "Archer",
+        "Shield"
+      ],
+      "prerequisites" : [
+        "Warfare",
+        "Farming"
+      ],
+      "description" : "Craft wood into weapons and armor."
+    },
+    {
+      "name": "Copperwork",
+      "count": 10,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Copper Ringmail",
+        "Copper Spear",
+        "Light Infantry"
+      ],
+      "prerequisites" : [
+        "Warfare"
+      ],
+      "description" : "Forge copper into weapons and armor."
+    },
+    {
+      "name": "Copper Mastery",
+      "count": 10,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Infantry",
+        "Heavy Archer"
+      ],
+      "prerequisites" : [
+        "Copperwork",
+        "Woodwork"
+      ],
+      "description" : "Enhanced proficiency in copper-working."
+    },
+    {
+      "name": "Heavy Weaponry",
+      "count": 10,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Copper Warhammer",
+        "Barbarian"
+      ],
+      "prerequisites" : [
+        "Copperwork"
+      ],
+      "description" : "Build weapons to break through heavy armor"
+    },
+    {
+      "name": "Bronzework",
+      "count": 10,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Bronze Bar",
+        "Tin Bar"
+      ],
+      "prerequisites" : [
+        "Copperwork"
+      ],
+      "description" : "Alloying copper and tin to make bronze yields a stronger metal."
+    },
+    {
+      "name": "Bronze Metalworking",
+      "count": 100,
+      "ingredients": [
+        "experiment 2"
+      ],
+      "unlocks" : [
+        "Bronze Breastplate",
+        "Bronze Spear",
+        "Heavy Infantry"
+      ],
+      "prerequisites" : [
+        "Bronzework"
+      ],
+      "description" : "Forge bronze into weapons and armor."
+    },
+    {
+      "name": "Mastering Bronze",
+      "count": 250,
+      "ingredients": [
+        "experiment 2"
+      ],
+      "unlocks" : [
+        "Bronze Warhammer",
+        "Elite Infantry"
+      ],
+      "prerequisites" : [
+        "Bronze Metalworking",
+        "Heavy Weaponry"
+      ],
+      "description" : "Enhanced proficiency in bronze-working."
     }
   ]
 }

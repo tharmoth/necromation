@@ -63,11 +63,6 @@ public partial class BuildingTileMap : LayerTileMap
 		}
 	}
 
-	public bool IsOnMap(Vector2I mapPos)
-	{
-		return GetCellSourceId(0, mapPos) != -1;
-	}
-	
 	public bool IsBuildable(Vector2I mapPos)
 	{
 		return IsOnMap(mapPos) && Globals.TileMap.GetEntity(mapPos, Building) == null;

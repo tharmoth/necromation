@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wmmc3i3qhsag"
-path="res://.godot/imported/Pawn.png-1f609d13ebd6b54d1cf2c1f53f211914.ctex"
+uid="uid://ie2w3ln5i2b5"
+path="res://.godot/imported/Bronze Spear.png-514cb0134ecebee2d1434fe27ac9ae5a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Pawn.png"
-dest_files=["res://.godot/imported/Pawn.png-1f609d13ebd6b54d1cf2c1f53f211914.ctex"]
+source_file="res://res/sprites/items/Bronze Spear.png"
+dest_files=["res://.godot/imported/Bronze Spear.png-514cb0134ecebee2d1434fe27ac9ae5a.ctex"]
 
 [params]
 

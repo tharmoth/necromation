@@ -119,6 +119,11 @@ public partial class LayerTileMap : SKTileMap
 	{
 		return GetEntities(position).Count == 0;
 	}
+	
+	public bool IsOnMap(Vector2I mapPos)
+	{
+		return GetCellSourceId(0, mapPos) != -1;
+	}
 
 	public interface IEntity
 	{

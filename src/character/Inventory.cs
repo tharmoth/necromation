@@ -14,6 +14,8 @@ public partial class Inventory : Node, ITransferTarget
 	public int CountItem(string item) => _items.TryGetValue(item, out var count) ? count : 0;
 	public int CountAllItems() => _items.Values.Sum();
 	
+	public void Clear() => _items.Clear();
+	
 	/**************************************************************************
 	 * Utility Methods                                                        *
 	 **************************************************************************/

@@ -21,7 +21,6 @@ public partial class ArmySetupUnit : TextureRect
     {
         UnitName = unitName;
         Inventory = inventory;
-        Texture = Globals.Database.GetTexture(unitName);
     }
     
     public override void _Ready()

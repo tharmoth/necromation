@@ -31,7 +31,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
 
         var resource = Globals.TileMap.GetEntityPositions(this)
             .Select(position => Globals.TileMap.GetEntity(position, BuildingTileMap.Resource))
-            .First(resource => resource is Collectable);
+            .FirstOrDefault(resource => resource is Collectable);
         
         if (resource is not Collectable collectable) return;
         _inventory.Insert(collectable.ItemType);

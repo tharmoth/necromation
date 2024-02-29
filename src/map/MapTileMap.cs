@@ -32,21 +32,63 @@ public partial class MapTileMap : SKTileMap
 	private  void InitProvence(Province provence, string team)
 	{
 		provence.Owner = team;
-		var commander = new Commander(provence, team);
-		provence.Commanders.Add(commander);
-		// Get the location of the provence
-		var pos = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
-		// for each unit distance away from (1, 1) add 10 Infantrys to the commander.
-		var distance = (pos - MapGlobals.FactoryPosition).Length();
-		if (team == "Player") distance = 20;
+		if (team == "Player" && Globals.FactoryScene != null) return;
+		
+		var meleeCommander = new Commander(provence, team);
+		meleeCommander.Team = team;
+		provence.Commanders.Add(meleeCommander);
+		Globals.MapScene.CallDeferred("add_child", meleeCommander);
+		
+		var rangedCommander = new Commander(new Province(), "Enemy");
+		rangedCommander.Team = team;
+		rangedCommander.SpawnLocation = new Vector2I(30, 25);
+		provence.Commanders.Add(rangedCommander);
+		Globals.MapScene.CallDeferred("add_child", rangedCommander);
+
+		var provinceLocation = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
+		switch (provinceLocation.X)
+		{
+			case 0:
+				meleeCommander.Units.Insert("Rabble", 100);
+				break;
+			case 1:
+				meleeCommander.Units.Insert("Light Infantry", 100);
+				break;
+			case 2:
+				meleeCommander.Units.Insert("Infantry", 100);
+				rangedCommander.Units.Insert("Archer", 100);
+				break;
+			case 3:
+				meleeCommander.Units.Insert("Heavy Infantry", 50);
+				meleeCommander.Units.Insert("Infantry", 200);
+				rangedCommander.Units.Insert("Archer", 100);
+				break;
+			case 4:
+				meleeCommander.Units.Insert("Barbarian", 400);
+				break;
+			case 5:
+				meleeCommander.Units.Insert("Heavy Infantry", 200);
+				rangedCommander.Units.Insert("Archer", 100);
+				break;
+			case 6:
+				meleeCommander.Units.Insert("Heavy Infantry", 400);
+				rangedCommander.Units.Insert("Archer", 100);
+				break;
+			case 7:
+				meleeCommander.Units.Insert("Heavy Infantry", 500);
+				rangedCommander.Units.Insert("Archer", 250);
+				break;
+			case 8:
+				meleeCommander.Units.Insert("Elite Infantry", 1000);
+				rangedCommander.Units.Insert("Archer", 1000);
+				break;
+		}
+		
 		if (team == "Player")
 		{
-			var cool2 = new Commander(provence, "Player");
-			provence.Commanders.Add(cool2);
-			Globals.MapScene.CallDeferred("add_child", cool2);
+			meleeCommander.Units.Clear();
+			meleeCommander.Units.Insert("Elite Infantry", 1000);
 		}
-		commander.Units.Insert("Infantry", (int)distance * 10);
-		Globals.MapScene.CallDeferred("add_child", commander);
 	}
 
 	public void MoveUnitsToFromFactory()

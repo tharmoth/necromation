@@ -19,7 +19,7 @@ public partial class GroundItem : Node2D, BuildingTileMap.IEntity
     public override void _Ready()
     {
         base._Ready();
-        _sprite.Texture = GD.Load<Texture2D>($"res://res/sprites/{ItemType}.png");
+        _sprite.Texture = Globals.Database.GetTexture(ItemType);
         _sprite.Scale = new Vector2(16 / _sprite.Texture.GetSize().X, 16 / _sprite.Texture.GetSize().Y);
     }
     

@@ -47,16 +47,19 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 
 	public void Display(ICrafter crafter)
 	{
+		CloseGui();
 		Popup.DisplayPopup(crafter);
 	}
 	
 	public void Display(Inventory to, ICrafter crafter)
 	{
+		CloseGui();
 		CrafterGui.Display(to, crafter);
 	}
 	
 	public void Display(Inventory to, Inventory from, string title)
 	{
+		CloseGui();
 		ContainerGui.Display(to, from, title);
 	}
 

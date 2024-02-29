@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="Necromation"
-run/main_scene="res://src/battle.tscn"
+run/main_scene="res://src/main.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
-config/icon="res://res/sprites/Stone Furnace.png"
+config/icon="res://res/sprites/buildings/Stone Furnace.png"
 
 [autoload]
 

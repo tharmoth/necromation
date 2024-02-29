@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wmmc3i3qhsag"
-path="res://.godot/imported/Pawn.png-1f609d13ebd6b54d1cf2c1f53f211914.ctex"
+uid="uid://d2t8bk4sb70yg"
+path="res://.godot/imported/Short Bow.png-a6874395bda7fe53c90ab5be5e3c6a7f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Pawn.png"
-dest_files=["res://.godot/imported/Pawn.png-1f609d13ebd6b54d1cf2c1f53f211914.ctex"]
+source_file="res://res/sprites/items/Short Bow.png"
+dest_files=["res://.godot/imported/Short Bow.png-a6874395bda7fe53c90ab5be5e3c6a7f.ctex"]
 
 [params]
 

@@ -101,11 +101,21 @@ public partial class ArmySetupSquad : PanelContainer
 	private void AddUnit(String name)
 	{
 		var squadUnit = new ArmySetupUnit(name, Squad);
-		squadUnit.Texture = Globals.Database.GetTexture(name);
+		// squadUnit.Texture = Globals.Database.GetTexture(name);
 		squadUnit.Listeners.Add(() => UnitList.GetChildren().OfType<ArmySetupUnit>()
 			.Where(unit => unit.UnitName == squadUnit.UnitName)
 			.ToList()
 			.ForEach(unit => unit.SetSelected(squadUnit.Selected)));
+
+		var squadUnit2 = new TextureRect();
+		squadUnit2.Texture = Globals.Database.GetTexture(name);
+		squadUnit2.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+		squadUnit2.StretchMode = TextureRect.StretchModeEnum.KeepAspect;
+		squadUnit2.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		squadUnit2.SizeFlagsVertical = SizeFlags.ExpandFill;
+		squadUnit2.CustomMinimumSize = new Vector2(64, 64);
+		squadUnit.AddChild(squadUnit2);
+		
 		UnitList.AddChild(squadUnit);
 	}
 	

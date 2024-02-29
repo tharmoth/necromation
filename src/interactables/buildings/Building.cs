@@ -23,6 +23,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	}
 	
 	private AudioStreamPlayer2D _audio = new();
+	private ProgressTracker _progress = new();
 
 	protected Building()
 	{
@@ -31,17 +32,25 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		
 		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 		
-		var progress = new ProgressTracker();
-		progress.NodeToTrack = this;
-		progress.Size = new Vector2(128, 28);
-		progress.Scale = new Vector2(0.25f, 0.25f);
-		progress.Position = new Vector2(-16, 8);
-		// AddChild(progress);
+		_progress.NodeToTrack = this;
+		_progress.Scale = new Vector2(0.25f, 0.25f);
+		AddChild(_progress);
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
+		if (BuildingSize.X % 2 != 0)
+		{
+			_progress.Size = new Vector2(BuildingTileMap.TileSize * BuildingSize.X * 4 - 40, 28);
+			_progress.Position -= new Vector2(BuildingTileMap.TileSize * BuildingSize.X / 2.0f - 5, -BuildingTileMap.TileSize * BuildingSize.X / 2.0f + 28 / 4 + 10);
+		}
+		else
+		{
+			_progress.Size = new Vector2(256-8*8, 28);
+			_progress.Position -= new Vector2(16-8, -32);
+		}
+
 		Sprite.Texture = Globals.Database.GetTexture(ItemType);
 		GlobalPosition = Globals.TileMap.ToMap(GlobalPosition);
 		if (BuildingSize.X % 2 == 0) Sprite.GlobalPosition += new Vector2(16, 0);

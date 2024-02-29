@@ -92,14 +92,15 @@ public partial class Inserter : Building, IRotatable
 
     private void Animate(string item)
     {
-        SpriteInHand.Texture = GD.Load<Texture2D>($"res://res/sprites/{item}.png");
+        SpriteInHand.Texture =  Globals.Database.GetTexture(item);
         SpriteInHand.Visible = true;
         SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
+        GD.Print(Rotation + " " + (Rotation + Math.PI));
         _tween?.Kill();
         _tween = GetTree().CreateTween();
-        _tween.TweenProperty(Sprite, "rotation", Sprite.Rotation + Math.PI, _interval/2);
+        _tween.TweenProperty(Sprite, "rotation", Math.PI, _interval/2);
         _tween.TweenCallback(new Callable(this, "DropItem"));
-        _tween.TweenProperty(Sprite, "rotation", Sprite.Rotation, _interval/2);
+        _tween.TweenProperty(Sprite, "rotation", 0, _interval/2);
     }
 
     private void DropItem()

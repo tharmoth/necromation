@@ -19,10 +19,21 @@ public partial class CraftingListPopup : PanelContainer
 			if (!IsInstanceValid(popup)) return;
 			popup.QueueFree();
 		};
+		control.VisibilityChanged += () =>
+		{
+			if (!IsInstanceValid(popup)) return;
+			popup.QueueFree();
+		};
+		control.TreeExited += () =>
+		{
+			if (!IsInstanceValid(popup)) return;
+			popup.QueueFree();
+		};
 	}
 	
 	public static CraftingListPopup DisplayPopup(Recipe recipe)
 	{
+		FactoryGUI.Instance.GetChildren().OfType<CraftingListPopup>().ToList().ForEach(popup => popup.QueueFree());
 		var popup = (CraftingListPopup) GD.Load<PackedScene>("res://src/gui/lists/crafting_list_popup.tscn").Instantiate();
 		popup._recipe = recipe;
 		FactoryGUI.Instance.AddChild(popup);

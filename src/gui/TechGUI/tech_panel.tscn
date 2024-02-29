@@ -42,7 +42,7 @@ text = "x100"
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="EffectsRow" type="HBoxContainer" parent="VBoxContainer"]
+[node name="EffectsRow" type="HFlowContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -53,8 +53,18 @@ text = "Effects: "
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/EffectsRow"]
 visible = false
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = ExtResource("3_0yt3m")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/EffectsRow"]
+visible = false
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_0yt3m")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="DescriptionRow" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2

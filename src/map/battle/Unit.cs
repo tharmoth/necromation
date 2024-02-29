@@ -23,7 +23,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	
 	private int _hp = 10;
 
-	public double Cooldown = GD.RandRange(0, 1.0);
+	public double Cooldown = GD.RandRange(0, Battle.TimeStep);
 	private Tween _jiggleTween;
 	private Tween _bobTween;
 	private Tween _moveTween;
@@ -35,6 +35,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	private Unit _target;
 	public int Ammo = 12;
 	public int Strength = 10;
+	
+	public readonly List<Action> DeathCallbacks = new();
 	
 
 	public Unit(string unitType, Commander commander = null)
@@ -66,18 +68,26 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	{
 		Sprite.FlipH = Team != "Player";
 		// Sprite.Modulate = Team == "Player" ? new Color(.8f, .8f, 1) : new Color(1, .8f, .8f);
-		AddToGroup("Units");
+		AddToGroup(Team+"Units");
 		CachedPosition = GlobalPosition;
+	}
+
+	private void initEnemies()
+	{
+		enemies ??= GetTree()
+			.GetNodesInGroup(Team == "Player" ? "EnemyUnits" : "PlayerUnits")
+			.OfType<Unit>()
+			.ToList();
+		enemies.ForEach(unit =>
+		{
+			unit.DeathCallbacks.Add(() => enemies.Remove(unit));
+		});
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		enemies ??= GetTree()
-			.GetNodesInGroup("Units")
-			.OfType<Unit>()
-			.Where(unit => unit.Team != Team).ToList();
-		enemies.RemoveAll(unit => !IsInstanceValid(unit));
+		if (enemies == null) initEnemies();
 		
 		// Every 0.5 seconds, move the unit one cell forward
 		Cooldown += delta;
@@ -140,6 +150,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 
 		PlayDeathAnimation();
 		PlayDeathSound();
+		
+		DeathCallbacks.ForEach(callback => callback());
 
 		Globals.BattleScene.TileMap.RemoveEntity(this);
 		_commander?.Remove(_unitType);
@@ -190,30 +202,11 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		if (Globals.BattleScene.TileMap.IsSurrounded(MapPosition)) return;
 		
 		// var nextPosition = Globals.BattleScene.TileMap.GetNextPath(MapPosition, TargetPosition);
-		var differance = TargetPosition - MapPosition;
-		var nextPosition = MapPosition;
+		var nextPosition = getNextPosition();
 		
 		// nextPosition 
 		// nextPosition = Globals.BattleScene.TileMap.GetNextPath(MapPosition, TargetPosition);
-		if (nextPosition == MapPosition)
-		{
-			if (differance.X > 0 && Globals.BattleScene.TileMap.IsEmpty(MapPosition + new Vector2I(1, 0)))
-			{
-				nextPosition = (MapPosition + new Vector2I(1, 0));
-			}
-			else if (differance.X < 0 && Globals.BattleScene.TileMap.IsEmpty(MapPosition + new Vector2I(-1, 0)))
-			{
-				nextPosition = (MapPosition + new Vector2I(-1, 0));
-			}
-			else if (differance.Y > 0 && Globals.BattleScene.TileMap.IsEmpty(MapPosition + new Vector2I(0, 1)))
-			{
-				nextPosition = (MapPosition + new Vector2I(0, 1));
-			}
-			else if (differance.Y < 0 && Globals.BattleScene.TileMap.IsEmpty(MapPosition + new Vector2I(0, -1)))
-			{
-				nextPosition = (MapPosition + new Vector2I(0, -1));
-			}
-		}
+
 
 		if (nextPosition == MapPosition) return;
 
@@ -230,6 +223,82 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, -5), Battle.TimeStep / 2);
 		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, 0), Battle.TimeStep / 2);
 		CachedPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
+	}
+
+	private Vector2I getNextPosition()
+	{
+		var differance = TargetPosition - MapPosition;
+
+		var directions = new List<(Vector2I, bool)>
+		{
+			(new Vector2I(1, 0), differance.X >= 0),  // Right
+			(new Vector2I(-1, 0), differance.X <= 0), // Left
+			(new Vector2I(0, 1), differance.Y >= 0),  // Down
+			(new Vector2I(0, -1), differance.Y <= 0)  // Up
+		};
+		
+		// Try to move in the direction of the target that has the highest differnece.
+		// If the way forward is blocked try moving in the other direction.
+		if (Mathf.Abs(differance.X) > Mathf.Abs(differance.Y) || Mathf.Abs(differance.X) == Mathf.Abs(differance.Y))
+		{
+			if (directions[0].Item2 && IsEmpty(MapPosition + directions[0].Item1))
+			{
+				return MapPosition + directions[0].Item1;
+			} 
+			else if (directions[1].Item2 && IsEmpty(MapPosition + directions[1].Item1))
+			{
+				return MapPosition + directions[1].Item1;
+			}
+			else if (directions[2].Item2 && IsEmpty(MapPosition + directions[2].Item1))
+			{
+				return MapPosition + directions[2].Item1;
+			}
+			else if (directions[3].Item2 && IsEmpty(MapPosition + directions[3].Item1))
+			{
+				return MapPosition + directions[3].Item1;
+			} else if (IsEmpty(MapPosition + directions[2].Item1))
+			{
+				return MapPosition + directions[2].Item1;
+			} 
+			else if (IsEmpty(MapPosition + directions[3].Item1))
+			{
+				return MapPosition + directions[3].Item1;
+			}
+		}
+		else
+		{
+			if (directions[2].Item2 && IsEmpty(MapPosition + directions[2].Item1))
+			{
+				return MapPosition + directions[2].Item1;
+			}
+			else if (directions[3].Item2 && IsEmpty(MapPosition + directions[3].Item1))
+			{
+				return MapPosition + directions[3].Item1;
+			}
+			else if (directions[0].Item2 && IsEmpty(MapPosition + directions[0].Item1))
+			{
+				return MapPosition + directions[0].Item1;
+			} 
+			else if (directions[1].Item2 && IsEmpty(MapPosition + directions[1].Item1))
+			{
+				return MapPosition + directions[1].Item1;
+			}
+			else if (IsEmpty(MapPosition + directions[0].Item1))
+			{
+				return MapPosition + directions[0].Item1;
+			} 
+			else if (IsEmpty(MapPosition + directions[1].Item1))
+			{
+				return MapPosition + directions[1].Item1;
+			}
+		}
+
+		return MapPosition;
+	}
+
+	private bool IsEmpty(Vector2I mapPos)
+	{
+		return Globals.BattleScene.TileMap.IsEmpty(mapPos) && Globals.BattleScene.TileMap.IsOnMap(mapPos);
 	}
 	
 		

@@ -17,7 +17,7 @@ public partial class Arrow : Sprite2D
     
     private float _progress;
     
-    private static readonly Texture2D _texture2D = GD.Load<Texture2D>("res://res/sprites/Arrow.png");
+    private static readonly Texture2D _texture2D =  Globals.Database.GetTexture("Arrow");
     private readonly Action<Unit> _damage;
 
     public Arrow(Vector2I startTile, Vector2I targetTile, Action<Unit> damage)

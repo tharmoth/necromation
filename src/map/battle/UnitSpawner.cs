@@ -28,9 +28,9 @@ public partial class UnitSpawner : Node2D
 	
 	public override void _Ready()
 	{
-		if (GetNode<Sprite2D>("Sprite2D") is { } sprite2D)
+		if (HasNode("Sprite2D"))
 		{
-			sprite2D.Visible = false;
+			GetNode<Sprite2D>("Sprite2D").Visible = false;
 		}
 		
 		CallDeferred("_spawn");
@@ -46,14 +46,18 @@ public partial class UnitSpawner : Node2D
 		var count = _units.Count;
 		var width = (int)Math.Ceiling(Math.Sqrt(count / 2.0f));
 		var height = width * 2;
-		for (var x = 0; x < width; x++)
+		width *= 2;
+		height *= 2;
+		for (var x = 0; x < width; x += 2)
 		{
-			for (var y = 0; y < height; y++)
+			for (var y = 0; y < height; y += 2)
 			{
 				_units.TryDequeue(out var unit);
 				if (unit == null) return;;
 				
 				var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
+				position.X -= width / 2;
+				position.Y -= height / 2;
 				position.X += x;
 				position.Y += y;
 				unit.Position = Globals.BattleScene.TileMap.MapToGlobal(Globals.BattleScene.TileMap.GetNearestEmpty(position));

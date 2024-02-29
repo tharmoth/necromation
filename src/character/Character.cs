@@ -23,7 +23,7 @@ public partial class Character : Node2D
 		{
 			_selected = value;
 			_sprite.Texture = _selected == null
-				? GD.Load<Texture2D>("res://res/sprites/selection.png")
+				?  Globals.Database.GetTexture("Selection")
 				: Globals.Database.GetTexture(_selected);
 			
 			if (_selected == null) _rotationDegrees = 0;
@@ -45,11 +45,22 @@ public partial class Character : Node2D
 			.Select(recipe => recipe.Products.First().Key)
 			.ToList()
 			.ForEach(item => _inventory.Insert(item, 100));
-
+	
+		// _inventory.Insert("Mine", 100);	
+		// _inventory.Insert("Belt", 5000);
+		// _inventory.Insert("Underground Belt", 100);
+		// _inventory.Insert("Inserter", 500);
+		// _inventory.Insert("Long Inserter", 500);
+		// _inventory.Insert("Assembler", 100);
+		// _inventory.Insert("Research Lab", 5);
+		
+		// No other way to get wood right now.
+		_inventory.Insert("Wood", 5);
+		
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
 		_sprite.Visible = false;
-		_sprite.Texture = GD.Load<Texture2D>("res://res/sprites/selection.png");
+		_sprite.Texture =  Globals.Database.GetTexture("selection");
 		Globals.FactoryScene.CallDeferred("add_child", _sprite);
 	}
 	
@@ -70,7 +81,7 @@ public partial class Character : Node2D
 		}
 
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Input.IsActionJustPressed("clear_selection")) Selected =Globals.TileMap.GetBuildingAtMouse() is Building building && building.ItemType != Selected ? building.ItemType : null;
+		if (Input.IsActionJustPressed("clear_selection")) QPick();
 		if (Input.IsActionJustPressed("close_gui")) Selected = null;
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
@@ -185,6 +196,13 @@ public partial class Character : Node2D
 		if (entity is not Building building) return;
 		_buildingBeingRemoved = building;
 		building.StartRemoval(_inventory);
+	}
+
+	private void QPick()
+	{
+		Selected = Globals.TileMap.GetBuildingAtMouse() is Building building && building.ItemType != Selected && _inventory.Items.ContainsKey(building.ItemType)
+			? building.ItemType
+			: null;
 	}
 	
 	private void CancelRemoval()

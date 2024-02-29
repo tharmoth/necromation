@@ -271,6 +271,17 @@
       }
     },
     {
+      "name" : "Commander",
+      "time" : 100.0,
+      "category": "population",
+      "ingredients": {
+        "Wheat": 10
+      },
+      "products": {
+        "Pawn": 1
+      }
+    },
+    {
       "name" : "Wheat",
       "time" : 3.0,
       "category": "farming",
@@ -293,14 +304,36 @@
       }
     },
     {
-      "name" : "Spear",
+      "name" : "Copper Spear",
       "time" : 10.0,
       "ingredients": {
         "Wood": 1,
         "Copper Bar": 1
       },
       "products": {
-        "Spear": 1
+        "Copper Spear": 1
+      }
+    },
+    {
+      "name" : "Bronze Spear",
+      "time" : 10.0,
+      "ingredients": {
+        "Wood": 1,
+        "Bronze Bar": 5
+      },
+      "products": {
+        "Bronze Spear": 1
+      }
+    },
+    {
+      "name" : "Copper Warhammer",
+      "time" : 10.0,
+      "ingredients": {
+        "Wood": 1,
+        "Copper Bar": 5
+      },
+      "products": {
+        "Copper Warhammer": 1
       }
     },
     {
@@ -315,7 +348,7 @@
       }
     },
     {
-      "name" : "Bow",
+      "name" : "Short Bow",
       "time" : 10.0,
       "ingredients": {
         "Wood": 10,
@@ -341,7 +374,7 @@
       "name" : "Shield",
       "time" : 10.0,
       "ingredients": {
-        "Wood": 1,
+        "Wood": 3,
         "Copper Bar": 1
       },
       "products": {
@@ -349,23 +382,24 @@
       }
     },
     {
-      "name" : "Armor",
+      "name" : "Copper Ringmail",
         "time" : 10.0,
         "ingredients": {
-          "Copper Bar": 5
+          "Copper Strand": 10
         },
         "products": {
-          "Armor": 1
+          "Copper Ringmail": 1
         }
     },
     {
-      "name" : "Bronze Armor",
+      "name" : "Bronze Breastplate",
       "time" : 10.0,
       "ingredients": {
+        "Copper Strand": 5,
         "Bronze Bar": 10
       },
       "products": {
-        "Bronze Armor": 1
+        "Bronze Breastplate": 1
       }
     },
     {
@@ -373,7 +407,7 @@
         "time" : 10.0,
       "category": "recruitment",
         "ingredients": {
-          "Bow": 1,
+          "Short Bow": 1,
           "Arrow": 12,
           "Pawn" : 1
         },
@@ -386,13 +420,11 @@
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
-        "Bow": 1,
-        "Arrow": 12,
-        "Armor": 1,
-        "Pawn" : 1
+        "Archer" :  1,
+        "Copper Ringmail": 1
       },
       "products": {
-        "Archer": 1
+        "Heavy Archer": 1
       }
     },
     {
@@ -412,8 +444,8 @@
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
-        "Spear": 1,
-        "Armor": 1,
+        "Copper Spear": 1,
+        "Copper Ringmail": 1,
         "Pawn" : 1
       },
       "products": {
@@ -425,10 +457,8 @@
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
-        "Spear": 1,
-        "Armor": 1,
+        "Light Infantry": 1,
         "Shield": 1,
-        "Pawn" : 1
       },
       "products": {
         "Infantry": 1
@@ -439,9 +469,8 @@
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
-        "Spear": 1,
-        "Shield": 1,
-        "Bronze Armor": 1,
+        "Infantry": 1,
+        "Bronze Breastplate": 1,
         "Pawn" : 1
       },
       "products": {
@@ -453,7 +482,7 @@
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
-        "Bronze Warhammer": 1,
+        "Copper Warhammer": 1,
         "Pawn" : 1
       },
       "products": {
@@ -465,12 +494,11 @@
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
-        "Spear": 1,
-        "Bronze Armor": 1,
-        "Pawn" : 1
+        "Heavy Infantry": 1,
+        "Bronze Warhammer": 1
       },
       "products": {
-        "Barbarian": 1
+        "Elite Infantry": 1
       }
     }
   ]

@@ -16,11 +16,23 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     private Inventory _outputInventory = new();
     private float _time;
 	private readonly string _category;
+	private Sprite2D _recipeSprite = new()
+	{
+		ZIndex = 2
+	};
+	private Sprite2D _outlineSprite = new()
+	{
+		ZIndex = 1,
+		Visible = false,
+		Texture = Globals.Database.GetTexture("dark760")
+	};
 
 	public Assembler(string itemType, string category)
 	{
 		ItemType = itemType;
 	    _category = category;
+	    AddChild(_recipeSprite);
+	    AddChild(_outlineSprite);
 	}
 
     public override void _Process(double delta)
@@ -77,7 +89,17 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	 * ICrafter Methods                                                       *
 	 **************************************************************************/
     public Recipe GetRecipe() => _recipe;
-    public void SetRecipe(Recipe recipe) => _recipe = recipe;
+    public void SetRecipe(Recipe recipe)
+    {
+	    _outlineSprite.Visible = true;
+	    _outlineSprite.Scale = new Vector2(48 / _outlineSprite.Texture.GetSize().X, 48 / _outlineSprite.Texture.GetSize().Y);
+	    _outlineSprite.Position = new Vector2(0, -10);
+	    _recipeSprite.Texture = Globals.Database.GetTexture(recipe.Products.First().Key);
+	    _recipeSprite.Scale = new Vector2(32 / _recipeSprite.Texture.GetSize().X, 32 / _recipeSprite.Texture.GetSize().Y);
+	    _recipeSprite.Position = new Vector2(0, -10);
+	    _recipe = recipe;
+    }
+
     public Inventory GetInputInventory() => _inputInventory;
     public Inventory GetOutputInventory() => _outputInventory;
     public virtual string GetCategory() => _category;

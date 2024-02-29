@@ -11,7 +11,7 @@ public partial class TechPanel : PanelContainer
 	private Label DescriptionLabel => GetNode<Label>("%DescriptionLabel");
 	private Label UnlocksLabel => GetNode<Label>("%UnlocksLabel");
 	private RichTextLabel PrerequisitesLabel => GetNode<RichTextLabel>("%PrerequisitesLabel");
-	private HBoxContainer EffectsRow => GetNode<HBoxContainer>("%EffectsRow");
+	private Container EffectsRow => GetNode<Container>("%EffectsRow");
 	private TextureRect CostTexture => GetNode<TextureRect>("%CostTexture");
 	private Button SelectButton => GetNode<Button>("%SelectButton");
 
@@ -38,12 +38,18 @@ public partial class TechPanel : PanelContainer
 		
 		Tech.Unlocks.ToList().ForEach(unlock =>
 		{
-			GD.Print(unlock);
-			var recipe = Globals.Database.Recipes.First(recipe => recipe.Name == unlock);
-			var texture = new TextureRect
+			if (!Globals.Database.Recipes.Select(recipe => recipe.Name).Contains(unlock))
 			{
-				Texture = recipe.GetIcon(),
-			};
+				GD.PrintErr("Missing recipe for " + unlock);
+				return;
+			}
+
+			var recipe = Globals.Database.Recipes.First(recipe => recipe.Name == unlock);
+			var texture = new TextureRect();
+			texture.Texture = recipe.GetIcon();
+			texture.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+			texture.StretchMode = TextureRect.StretchModeEnum.KeepAspect;
+			texture.CustomMinimumSize = new Vector2(64, 64);
 			EffectsRow.AddChild(texture);
 			CraftingListPopup.Register(recipe, texture);
 		});

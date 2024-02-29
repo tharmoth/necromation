@@ -4,6 +4,11 @@ public partial class ProgressTracker : ProgressBar
 {
 	[Export] public Node NodeToTrack;
 
+	public ProgressTracker()
+	{
+		ShowPercentage = false;
+	}
+	
 	public override void _Process(double delta)
 	{
 		if (NodeToTrack is Building building && building.RemovePercent > 0.0f)

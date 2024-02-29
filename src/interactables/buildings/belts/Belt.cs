@@ -62,7 +62,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public override void _Ready()
     {
         base._Ready();
-        Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/BeltAnimated.png");
+        Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/buildings/BeltAnimated.png");
         
         // When this belt is placed, update the input and output of all adjacent belts
         GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));

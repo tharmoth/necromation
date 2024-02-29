@@ -15,7 +15,7 @@ public partial class Collectable : Node2D, LayerTileMap.IEntity
     {
         base._Ready();
         AddToGroup("resources");
-        GetNode<Sprite2D>("Sprite2D").Texture = GD.Load<Texture2D>($"res://res/sprites/{Type}.png");
+        GetNode<Sprite2D>("Sprite2D").Texture = Globals.Database.GetTexture(Type);
     }
     
     public void Interact(Inventory playerInventory)
