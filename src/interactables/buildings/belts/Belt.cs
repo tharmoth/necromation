@@ -15,7 +15,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public TransportLine RightLine { get; private set; } = new();
     
     private IRotatable.BuildingOrientation _orientation;
-    public IRotatable.BuildingOrientation Orientation
+    public override IRotatable.BuildingOrientation Orientation
     {
         get => _orientation;
         set
@@ -42,12 +42,14 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     private static Vector2I TargetDirectionLocal => new (0, -1);
     private AudioStreamPlayer2D _audio = new();
     
-    public Belt()
+    public Belt(IRotatable.BuildingOrientation orientation)
     {
+        _orientation = orientation;
+        
         AddChild(LeftLine);
         AddChild(RightLine);
-        LeftLine.Position = new Vector2(-8, 0);
-        RightLine.Position = new Vector2(8, 0);
+        LeftLine.Position = new Vector2(-4, 0);
+        RightLine.Position = new Vector2(4, 0);
         
         Sprite.Hframes = 8;
         
@@ -62,6 +64,8 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public override void _Ready()
     {
         base._Ready();
+        Orientation = _orientation;
+        RotationDegrees = IRotatable.GetDegreesFromOrientation(_orientation);
         Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/buildings/BeltAnimated.png");
         
         // When this belt is placed, update the input and output of all adjacent belts

@@ -35,12 +35,12 @@ public partial class TransportLine : Node2D, ITransferTarget
         for (var i = 0; i < _itemsOnBelt.Count; i++)
         {
             var groundItem = _itemsOnBelt[i];
-            var targetLocation = GetTargetLocation(i);
+            var targetLocation = ToGlobal(Position + GetTargetLocation(i));
             
             // Slide the item along the belt until it reaches the bottom of the belt.
-            if (!IsEqualApprox(groundItem.Position, targetLocation, .5f))
+            if (!IsEqualApprox(groundItem.GlobalPosition, targetLocation, 1.0f))
             {
-                groundItem.Position += -targetLocation.DirectionTo(groundItem.Position) * Speed * (float)delta;
+                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.GlobalPosition) * Speed * (float)delta;
                 continue;
             }
             
@@ -129,9 +129,16 @@ public partial class TransportLine : Node2D, ITransferTarget
     private void AddItem(GroundItem item)
     {
         _itemsOnBelt.Add(item);
-        if (item.GetParent() != null) item.GetParent().RemoveChild(item);
-        if (item.GetParent() != this) AddChild(item);
-        item.Position = GetTargetLocation(4);
+        var pos = item.GlobalPosition;
+        if (item.GetParent() == null) Globals.FactoryScene.AddChild(item);
+        if (IsEqualApprox(item.Position, Vector2.Zero, 1))
+        {
+            item.GlobalPosition = GlobalPosition + GetTargetLocation(4);
+        }
+        else
+        {
+            item.GlobalPosition = pos;
+        }
         item.GlobalRotation = 0;
     }
     
@@ -141,7 +148,7 @@ public partial class TransportLine : Node2D, ITransferTarget
         if (_itemsOnBelt.Count == 0) return null;
         var item = _itemsOnBelt[0];
         _itemsOnBelt.RemoveAt(0);
-        RemoveChild(item);
+        Globals.FactoryScene.RemoveChild(item);
         return item;
     }
 

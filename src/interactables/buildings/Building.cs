@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.gui;
 using Necromation.interactables.belts;
+using Necromation.interactables.interfaces;
 
 public abstract partial class Building : Node2D, BuildingTileMap.IEntity, ProgressTracker.IProgress
 {
@@ -35,6 +37,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		_progress.NodeToTrack = this;
 		_progress.Scale = new Vector2(0.25f, 0.25f);
 		AddChild(_progress);
+		
+		AddToGroup("Persist");
 	}
 
 	public override void _Ready()
@@ -61,7 +65,13 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		
 		_audio.Play();
 	}
-	
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		Globals.TileMap.RemoveEntity(this);
+	}
+
 	/******************************************************************
 	 * Public Methods                                                 *
 	 ******************************************************************/
@@ -101,7 +111,6 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 
 	public virtual void Remove(Inventory to)
 	{
-		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3");
 		if (this is ITransferTarget inputTarget)
 		{
 			foreach (var from in inputTarget.GetInventories())
@@ -113,8 +122,9 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		Globals.TileMap.RemoveEntity(this);
 		RemovePercent = 100;
 		Sprite.Visible = false;
-		_audio.Play();
-		_audio.Finished += QueueFree;
+		_progress.Visible = false;
+		FactoryGUI.Instance.BuildingRemoved();
+		QueueFree();
 	}
 
 	/******************************************************************
@@ -126,18 +136,20 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	{
 		return 0;
 	}
-
+	public virtual IRotatable.BuildingOrientation Orientation { get; set; }
+	
+	#region BuildingFactory
 	/******************************************************************
 	 * Building Factory                                               *
 	 ******************************************************************/
-	public static Building GetBuilding(string selectedItem)
+	public static Building GetBuilding(string selectedItem, IRotatable.BuildingOrientation orientation)
 	{
 		return selectedItem switch
 		{
-			"Belt" => new Belt(),
-			"Underground Belt" => new UndergroundBelt(),
-			"Inserter" => new Inserter(),
-			"Long Inserter" => new Inserter(2),
+			"Belt" => new Belt(orientation),
+			"Underground Belt" => new UndergroundBelt(orientation),
+			"Inserter" => new Inserter(orientation),
+			"Long Inserter" => new Inserter(orientation, 2),
 			"Mine" => new Mine(),
 			"Stone Furnace" => new Furnace(),
 			"Assembler" => new Assembler("Assembler", "None"),
@@ -175,4 +187,37 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			_ => false
 		};
 	}
+	#endregion
+
+	#region Save/Load
+	/******************************************************************
+	 * Save/Load                                                      *
+	 ******************************************************************/
+	public virtual Godot.Collections.Dictionary<string, Variant> Save()
+	{
+		return new Godot.Collections.Dictionary<string, Variant>()
+		{
+			{ "ItemType", ItemType },
+			{ "PosX", Position.X }, // Vector2 is not supported by JSON
+			{ "PosY", Position.Y },
+			{ "Orientation", Orientation.ToString() }
+		};
+	}
+	
+	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+	{
+		Enum.TryParse(nodeData["Orientation"].ToString(), true, out IRotatable.BuildingOrientation orientation);
+            
+		var building = Building.GetBuilding(nodeData["ItemType"].ToString(), orientation);
+		if (building is ICrafter crafter)
+		{
+			var recipeName = nodeData["Recipe"].ToString();
+			var recipe = Globals.Database.GetRecipe(recipeName);
+			crafter.SetRecipe(recipe);
+		}
+		
+		building.GlobalPosition = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);
+		Globals.FactoryScene.AddChild(building);
+	}
+	#endregion
 }

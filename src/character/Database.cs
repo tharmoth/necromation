@@ -61,6 +61,11 @@ public class Database
 
         return new Recipe(name, ingredients, products, category, time);
     }
+    
+    public Recipe GetRecipe(string name)
+    {
+        return Recipes.FirstOrDefault(recipe => recipe.Name == name);
+    }
     #endregion
 
     #region Technology
@@ -96,8 +101,7 @@ public class Database
         return new Technology(name, count, ingredients, unlocks, prerequisites, description);
     }
     #endregion
-
-
+    
     #region Equipment
     private static List<object> LoadEquipment()
     {
@@ -160,23 +164,19 @@ public class Database
             Armor = dict.TryGetValue("armor", out var armor) ? armor.As<Godot.Collections.Array<string>>().ToList() : new List<string>()
         };
     }
-
-    #endregion
-
+    
     public class UnitDef
     {
         public string Name;
         public List<string> Weapons;
         public List<string> Armor;
     }
-    
-    private static Godot.Collections.Dictionary<string, Variant> LoadJson(string path)
-    {
-        using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
-        var text = file.GetAsText();
-        return Json.ParseString(text).As<Godot.Collections.Dictionary<string, Variant>>();
-    }
+    #endregion
 
+
+    /******************************************************************
+     * Shared Functions                                               *
+     ******************************************************************/
     public Texture2D GetTexture(string name)
     {
         if (_textureCache.TryGetValue(name, out var texture)) return texture;
@@ -203,5 +203,11 @@ public class Database
         _textureCache[name] = texture;
         return texture;
     }
-
+    
+    private static Godot.Collections.Dictionary<string, Variant> LoadJson(string path)
+    {
+        using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
+        var text = file.GetAsText();
+        return Json.ParseString(text).As<Godot.Collections.Dictionary<string, Variant>>();
+    }
 }

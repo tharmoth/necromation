@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Necromation;
+using Resource = Necromation.Resource;
 
 public partial class Spawner : Node2D
 {
@@ -30,10 +31,8 @@ public partial class Spawner : Node2D
 				// Randomly skip some tiles with a frequency increasing closer to the edge
 				if (new Random().NextDouble() > 1.5 - Math.Sqrt(x * x + y * y) / _radius) continue;
 				
-				var spawn = _type.Instantiate<Collectable>();
-				spawn.Type = _resourceType;
+				var spawn = new Resource(_resourceType);
 				spawn.GlobalPosition = Globals.TileMap.MapToGlobal(mapPos + new Vector2I(x, y));
-				Globals.TileMap.AddEntity(mapPos + new Vector2I(x, y), spawn, BuildingTileMap.Resource);
 				Globals.FactoryScene.AddChild(spawn);
 			}
 		}

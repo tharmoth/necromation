@@ -11,7 +11,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 {
 	public override Vector2I BuildingSize => Vector2I.One * 3;
 	public override string ItemType { get; }
-	private Recipe _recipe;
+	public Recipe Recipe;
     private Inventory _inputInventory = new();
     private Inventory _outputInventory = new();
     private float _time;
@@ -39,7 +39,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     {
     	base._Process(delta);
     	
-    	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
+    	if (Recipe == null || !Recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
     	{
     		_time = 0;
     		return;
@@ -49,13 +49,13 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 
     	if (GetProgressPercent() < 1.0f) return;
     	_time = 0;
-    	_recipe.Craft(_inputInventory, _outputInventory);
+    	Recipe.Craft(_inputInventory, _outputInventory);
     }
         
     public override float GetProgressPercent()
     {
-	    if (_recipe == null) return 0;
-	    return _time / _recipe.Time;
+	    if (Recipe == null) return 0;
+	    return _time / Recipe.Time;
     }
 
 	/**************************************************************************
@@ -64,7 +64,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     
     protected virtual bool MaxOutputItemsReached()
     {
-	    return _outputInventory.CountItem(_recipe.Products.First().Key) > _recipe.Products.First().Value * 2;
+	    return _outputInventory.CountItem(Recipe.Products.First().Key) > Recipe.Products.First().Value * 2;
     }
     
     #region IInteractable Implementation
@@ -73,7 +73,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	 **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-	    if (_recipe == null)
+	    if (Recipe == null)
 	    {
 		    FactoryGUI.Instance.Display(this);
 	    }
@@ -88,7 +88,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	/**************************************************************************
 	 * ICrafter Methods                                                       *
 	 **************************************************************************/
-    public Recipe GetRecipe() => _recipe;
+    public Recipe GetRecipe() => Recipe;
     public void SetRecipe(Recipe recipe)
     {
 	    _outlineSprite.Visible = true;
@@ -97,7 +97,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	    _recipeSprite.Texture = Globals.Database.GetTexture(recipe.Products.First().Key);
 	    _recipeSprite.Scale = new Vector2(32 / _recipeSprite.Texture.GetSize().X, 32 / _recipeSprite.Texture.GetSize().Y);
 	    _recipeSprite.Position = new Vector2(0, -10);
-	    _recipe = recipe;
+	    Recipe = recipe;
     }
 
     public Inventory GetInputInventory() => _inputInventory;
@@ -124,4 +124,16 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
 
     #endregion
+    
+    public override Godot.Collections.Dictionary<string, Variant> Save()
+    {
+	    return new Godot.Collections.Dictionary<string, Variant>()
+	    {
+		    { "ItemType", ItemType },
+		    { "PosX", Position.X }, // Vector2 is not supported by JSON
+		    { "PosY", Position.Y },
+		    { "Orientation", Orientation.ToString() },
+		    { "Recipe", Recipe.Name}
+	    };
+    }
 }

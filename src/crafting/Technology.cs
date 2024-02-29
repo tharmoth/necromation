@@ -29,6 +29,7 @@ public class Technology
             Globals.Database.UnlockedRecipes.AddRange(unlockedRecipes);
             Globals.ResearchListeners.ForEach(listener => listener());
             Globals.CurrentTechnology = null;
+            FactoryGUI.Instance.TechnologyComplete();
         }
     }
 

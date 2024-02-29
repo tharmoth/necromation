@@ -25,7 +25,6 @@ public partial class Actionbar : Control
 		foreach (var recipe in Globals.Database.Recipes.Where(recipe => recipe.Category == _category)
 			         .Where(recipe => Globals.Database.UnlockedRecipes.Contains(recipe)).Where(recipe => Building.IsBuilding(recipe.Products.FirstOrDefault().Key)))
 		{
-			GD.Print(recipe.Name);
 			var button = new ActionBarButton(recipe, index);
 			AddChild(button);
 			index++;

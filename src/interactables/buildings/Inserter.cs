@@ -21,7 +21,7 @@ public partial class Inserter : Building, IRotatable
     };
     
     private IRotatable.BuildingOrientation _orientation;
-    public IRotatable.BuildingOrientation Orientation
+    public override IRotatable.BuildingOrientation Orientation
     {
         get => _orientation;
         set
@@ -49,8 +49,10 @@ public partial class Inserter : Building, IRotatable
     
     private AudioStreamPlayer2D _audio = new();
 
-    public Inserter(int range = 1)
+    public Inserter(IRotatable.BuildingOrientation orientation, int range = 1)
     {
+        _orientation = orientation;
+        
         //TODO: too many hacks to add long inserter. Think about it
         _range = range;
         SetNotifyTransform(true);
@@ -61,6 +63,12 @@ public partial class Inserter : Building, IRotatable
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/PM_MPRINTER_DPA4060_6_Printer_Printing_Individual_Cycle_Servo_Motor_Toner_Close_Perspectiv_328.mp3");
         _audio.Attenuation = 25.0f;
         _audio.VolumeDb = -10.0f;
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        Orientation = _orientation;
     }
 
     public override void _Notification(int what)
@@ -95,7 +103,6 @@ public partial class Inserter : Building, IRotatable
         SpriteInHand.Texture =  Globals.Database.GetTexture(item);
         SpriteInHand.Visible = true;
         SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
-        GD.Print(Rotation + " " + (Rotation + Math.PI));
         _tween?.Kill();
         _tween = GetTree().CreateTween();
         _tween.TweenProperty(Sprite, "rotation", Math.PI, _interval/2);

@@ -3,6 +3,7 @@ using Godot;
 using Necromation;
 using Necromation.interactables.interfaces;
 using IInteractable = Necromation.interfaces.IInteractable;
+using Resource = Necromation.Resource;
 
 public partial class Character : Node2D
 {
@@ -11,7 +12,7 @@ public partial class Character : Node2D
 	private Tween _tween;
 	private Sprite2D _sprite;
 	
-	private Collectable _resource;
+	private Resource _resource;
 	private Building _buildingBeingRemoved;
 
 	private int _rotationDegrees;
@@ -30,6 +31,8 @@ public partial class Character : Node2D
 		}
 	}
 	
+	public IRotatable.BuildingOrientation Orientation => IRotatable.GetOrientationFromDegrees(_rotationDegrees);
+	
 	public override void _EnterTree()
 	{
 		base._EnterTree();
@@ -46,13 +49,13 @@ public partial class Character : Node2D
 			.ToList()
 			.ForEach(item => _inventory.Insert(item, 100));
 	
-		// _inventory.Insert("Mine", 100);	
-		// _inventory.Insert("Belt", 5000);
-		// _inventory.Insert("Underground Belt", 100);
-		// _inventory.Insert("Inserter", 500);
-		// _inventory.Insert("Long Inserter", 500);
-		// _inventory.Insert("Assembler", 100);
-		// _inventory.Insert("Research Lab", 5);
+		_inventory.Insert("Mine", 100);	
+		_inventory.Insert("Belt", 5000);
+		_inventory.Insert("Underground Belt", 100);
+		_inventory.Insert("Inserter", 500);
+		_inventory.Insert("Long Inserter", 500);
+		_inventory.Insert("Assembler", 100);
+		_inventory.Insert("Research Lab", 5);
 		
 		// No other way to get wood right now.
 		_inventory.Insert("Wood", 5);
@@ -83,7 +86,7 @@ public partial class Character : Node2D
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
 		if (Input.IsActionJustPressed("close_gui")) Selected = null;
-		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build(Building.GetBuilding(Selected));
+		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build();
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.TileMap.GetBuildingAtMouse() == null) Mine();
@@ -91,7 +94,7 @@ public partial class Character : Node2D
 
 		// Process mouseover
 		if (Selected != null) SelectedPreview();
-		else if (Globals.TileMap.GetEntity(GetGlobalMousePosition(), BuildingTileMap.Building) != null) MouseoverEntity();
+		else if (Globals.TileMap.GetBuildingAtMouse() != null || Globals.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
 		else _sprite.Visible = false;
 	}
 
@@ -139,7 +142,7 @@ public partial class Character : Node2D
 		if (!Building.IsBuilding(Selected)) return;
 		
 		//TODO: making buildings every tick seems like a bad idea.
-		var buildingInHand = Building.GetBuilding(Selected);
+		var buildingInHand = Building.GetBuilding(Selected, Orientation);
 		
 		if (buildingInHand is IRotatable rotatable)
 			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
@@ -156,8 +159,9 @@ public partial class Character : Node2D
 	/******************************************************************
 	 * Player Actions                                                 *
 	 ******************************************************************/
-	private void Build(Building building)
+	private void Build()
 	{
+		var building = Building.GetBuilding(Selected, Orientation);
 		if (!_inventory.Items.ContainsKey(building.ItemType))
 		{
 			Selected = null;
@@ -165,11 +169,7 @@ public partial class Character : Node2D
 		}
 		
 		var position = GetGlobalMousePosition();
-		if (building is IRotatable rotatable)
-			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
-		
 		if (!building.CanPlaceAt(position)) return;
-
 		// Remove any buildings that are in the way. This should probably only happen for IRotatable buildings.
 		building.GetOccupiedPositions(position)
 			.Select(pos => Globals.TileMap.GetEntity(pos, BuildingTileMap.Building))
@@ -213,7 +213,7 @@ public partial class Character : Node2D
 
 	private void Mine()
 	{
-		if (Globals.TileMap.GetResourceAtMouse() is Collectable resource)
+		if (Globals.TileMap.GetResourceAtMouse() is Resource resource)
 		{
 			if (resource == _resource && !_resource.CanInteract()) return;
 			_resource?.Cancel();

@@ -123,4 +123,8 @@ public partial class UndergroundBelt : Belt
             beltRight.RightLine.OutputLine = rightLine;
         }
     }
+
+    public UndergroundBelt(IRotatable.BuildingOrientation orientation) : base(orientation)
+    {
+    }
 }

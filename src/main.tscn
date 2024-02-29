@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=21 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
@@ -13,7 +13,9 @@
 [ext_resource type="Script" path="res://src/gui/ResearchProgressBar.cs" id="7_ohqwt"]
 [ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="8_r8bk1"]
 [ext_resource type="Script" path="res://src/BuildingTileMap.cs" id="8_rdg81"]
+[ext_resource type="AudioStream" uid="uid://bchkfk8pny2se" path="res://res/sfx/jingles-pizzicato_14.ogg" id="11_p2cxa"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
+[ext_resource type="AudioStream" uid="uid://d2sv6kue0g7hw" path="res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3" id="12_ep3l7"]
 [ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
@@ -186,6 +188,18 @@ text = "Inventory (E)"
 script = ExtResource("8_r8bk1")
 _action = "open_inventory"
 
+[node name="SaveButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+layout_mode = 2
+text = "Save Factory"
+script = ExtResource("8_r8bk1")
+_action = "save"
+
+[node name="LoadButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+layout_mode = 2
+text = "Load Button"
+script = ExtResource("8_r8bk1")
+_action = "load"
+
 [node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]
 unique_name_in_owner = true
 layout_mode = 0
@@ -217,6 +231,14 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
+[node name="TechnologyCompleteAudio" type="AudioStreamPlayer" parent="GUI"]
+unique_name_in_owner = true
+stream = ExtResource("11_p2cxa")
+
+[node name="BuildingRemovedAudio" type="AudioStreamPlayer" parent="GUI"]
+unique_name_in_owner = true
+stream = ExtResource("12_ep3l7")
+
 [node name="TileMap" type="TileMap" parent="."]
 z_index = -5
 tile_set = SubResource("TileSet_1emfp")
@@ -226,6 +248,7 @@ script = ExtResource("8_rdg81")
 
 [node name="Character" type="Node2D" parent="."]
 z_index = 100
+position = Vector2(1661, 1586)
 script = ExtResource("2_vcqpu")
 
 [node name="Sprite2D" type="Sprite2D" parent="Character"]
@@ -247,7 +270,7 @@ position = Vector2(989, 1540)
 _resourceType = "Copper Ore"
 
 [node name="Iron Spawner" parent="." instance=ExtResource("6_ummi6")]
-position = Vector2(1823, 1194)
+position = Vector2(1910, 1246)
 _resourceType = "Iron Ore"
 
 [node name="Tin Spawner" parent="." instance=ExtResource("6_ummi6")]

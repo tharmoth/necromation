@@ -2,6 +2,7 @@ using Godot;
 using Necromation;
 using Necromation.gui;
 using Necromation.shared.gui;
+using Necromation.sk;
 
 public partial class FactoryGUI : CanvasLayer, SceneGUI
 {
@@ -13,6 +14,8 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
 	
 	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
+	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
+	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
 	
 	// Use _EnterTree to make sure the Singleton instance is avaiable in _Ready()
 	public override void _EnterTree(){
@@ -30,12 +33,23 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 		if (Input.IsActionPressed("close_gui")) CloseGui();
 		if (Input.IsActionJustPressed("open_technology")) TechGui.Display();
 		if (Input.IsActionJustPressed("open_inventory") && _openGui != null) CloseGui();
-		else if (Input.IsActionJustPressed("open_inventory")) _openGui = InventoryGUI.Display(Globals.PlayerInventory);
+		else if (Input.IsActionJustPressed("open_inventory"))
+		{
+			CloseGui();
+			_openGui = InventoryGUI.Display(Globals.PlayerInventory);
+		}
 		if (Input.IsActionJustPressed("open_map")) FactoryToMapButton.ChangeScene();
+
+		if (Input.IsActionPressed("save")) SKSaveLoad.SaveGame(this);
+		if (Input.IsActionPressed("load")) SKSaveLoad.LoadGame(this);
 	}
 	
 	public void CloseGui()
 	{
+		CrafterGui.Visible = false;
+		ContainerGui.Visible = false;
+		Popup.Visible = false;
+		TechGui.Visible = false;
 		_openGui?.QueueFree();
 		_openGui = null;
 	}
@@ -68,6 +82,16 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 		ProgressBar.Visible = true;
 		ProgressBar.Value = value * 100;
 		ProgressBar.Visible = value is < 1 and > 0;
+	}
+	
+	public void TechnologyComplete()
+	{
+		TechnologyCompleteAudio.Play();
+	}
+	
+	public void BuildingRemoved()
+	{
+		BuildingRemovedAudio.Play();
 	}
 	
 		
