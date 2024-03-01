@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using Necromation;
 using Necromation.gui;
+using Necromation.interactables.interfaces;
 using Necromation.interfaces;
 
 public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractable
@@ -24,10 +25,12 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 		    _recipe = Globals.Database.Recipes
 			    .Where(recipe => recipe.Category == GetCategory())
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
+		    tweenytwiney?.Kill();
     		return;
     	}
     	
     	_time += (float)delta;
+	    Animate();
 
     	if (GetProgressPercent() < 1.0f) return;
     	_time = 0;
@@ -40,6 +43,24 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    if (_recipe == null) return 0;
 	    return _time / _recipe.Time;
     }
+    
+    private Tween tweenytwiney;
+    
+    private void Animate()
+    {
+	    if (IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
+        
+	    // Get random position
+	    var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
+	    tweenytwiney?.Kill();
+	    tweenytwiney = GetTree().CreateTween();
+	    tweenytwiney.TweenProperty(Sprite, "scale", new Vector2(1.0f, .85f), 1f);
+	    tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, 1f);
+	    // tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, .5f);
+	    tweenytwiney.TweenCallback(Callable.From(() => tweenytwiney.Kill()));
+    }
+    
+
 
 	/**************************************************************************
 	 * Protected Methods                                                      *
@@ -90,6 +111,17 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public List<string> GetItems() => _outputInventory.GetItems();
     public string GetFirstItem() => _outputInventory.GetFirstItem();
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
+    public int GetMaxTransferAmount(string itemType)
+    {
+	    return Globals.Database.Recipes
+		    .Where(recipe => recipe.Category == GetCategory())
+		    .Where(recipe => recipe.Ingredients.ContainsKey(itemType))
+		    .Select(recipe => recipe.Ingredients)
+		    .Where(ingredient => ingredient.ContainsKey(itemType))
+		    .Select(_ => GetInputInventory().CountItem(itemType))
+		    .Select(count => 50 - count)
+		    .Max();
+    }
 
     #endregion
 }

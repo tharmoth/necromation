@@ -33,7 +33,11 @@ public partial class InventoryItem : PanelContainer
 		base._Ready();
 		Button.Pressed += () =>
 		{
-			if (TargetInventory == null || SourceInventory == null || !SourceInventory.CanAcceptItems(ItemType)) return;
+			if (TargetInventory == null || SourceInventory == null || !SourceInventory.CanAcceptItems(ItemType))
+			{
+				Globals.Player.Selected = ItemType;
+				return;
+			}
 			Inventory.TransferItem(SourceInventory, TargetInventory, ItemType);
 		};
 	}

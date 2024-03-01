@@ -123,6 +123,10 @@ load={
 "deadzone": 0.5,
 "events": []
 }
+add_squad={
+"deadzone": 0.5,
+"events": []
+}
 
 [rendering]
 

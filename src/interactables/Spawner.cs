@@ -5,18 +5,22 @@ using Resource = Necromation.Resource;
 
 public partial class Spawner : Node2D
 {
-	[Export] private PackedScene _type;
-	[Export] private string _resourceType = "Stone";
-	[Export] private int _radius = 3;
-	
-	private double _time;
+	private string _resourceType;
+	private int _radius;
+
+	public Spawner(string resourceType, int radius)
+	{
+		_resourceType = resourceType;
+		_radius = radius;
+	}
 
 	public override void _Ready()
 	{
 		base._Ready();
-		GetNode<Sprite2D>("Sprite2D").Visible = false;
 
 		CallDeferred("_spawn");
+		
+		QueueFree();
 	}
 
 	private void _spawn()

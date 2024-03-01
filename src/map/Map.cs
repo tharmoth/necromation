@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using System.Linq;
 using Necromation;
@@ -20,6 +21,11 @@ public partial class Map : Node2D
 		SelectProvince(provence);
 		
 		VisibilityChanged += () => SelectProvince(MapGlobals.SelectedProvince);
+		VisibilityChanged += () =>
+		{
+			if (Visible) MusicManager.PlayExploration();
+		};
+		MusicManager.PlayExploration();
 	}
 	
 	public override void _UnhandledInput(InputEvent @event)
@@ -51,12 +57,20 @@ public partial class Map : Node2D
 	{
 		var provence = MapGlobals.SelectedProvince;
 
-		var unit = provence.Units.CountAllItems() > 0 ? 
-			provence.Units.Items
-			.Select(unit => unit.Key + " x" + unit.Value)
-			.Aggregate((current, next) => current + "\n" + next) 
-			: "no units\n";
+		var units = new Dictionary<string, int>();
 
-		MapGui.Instance.SelectedLabel.Text = provence.Name + "\n" + unit;
+		foreach (var (unit, count) in provence.Commanders.SelectMany(commander => commander.Units.Items).ToList())
+		{
+				units.TryGetValue(unit, out var currentCount);
+				units[unit] = currentCount + count;
+		}
+
+		var unitString = "";
+		foreach (var (unit, count) in units)
+		{
+			unitString += unit + " x" + count + "\n";
+		}
+		if (unitString == "") unitString = "no units\n";
+		MapGui.Instance.SelectedLabel.Text = provence.Name + "\n" + unitString;
 	}
 }

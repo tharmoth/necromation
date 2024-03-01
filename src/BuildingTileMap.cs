@@ -11,22 +11,38 @@ public partial class BuildingTileMap : LayerTileMap
 	public const string Building = "building";
 	public const string Resource = "resource";
 	public const int TileSize = 32;
-	public const int ProvinceSize = 100;
+	public const int ProvinceSize = 20;
+	public const int ProvinceGap = 0;
+	private readonly Dictionary<Vector2I, Province> _provences = new();
 
-	private void AddProvence(Vector2I location)
+	public void AddProvence(Vector2I location)
 	{
-		var startpos = (location - MapGlobals.FactoryPosition) * TileSize * 200;
+		if (_provences.ContainsKey(location)) return;
+		_provences.Add(location, new Province());
 		
+		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
+		
+		var resources = new List<string> {"Bone Fragments"};
+		if ((location - MapGlobals.FactoryPosition).Length() != 0) 
+			resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
+		if ((location - MapGlobals.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
+		var resource = resources[GD.RandRange(0, resources.Count - 1)];
+
+		if (_provences.Count == 1) resource = "Bone Fragments";
+		if (_provences.Count == 2) resource = "Stone";
+		if (_provences.Count == 3) resource = "Coal Ore";
+		if (_provences.Count == 4) resource = "Copper Ore";
+		
+		var spawner = new Spawner(resource, 3);
+		spawner.GlobalPosition = ToGlobal(startpos + new Vector2I(ProvinceSize / 2, ProvinceSize / 2) * TileSize);
+		Globals.FactoryScene.CallDeferred("add_child", spawner);
+
 		for (int x = 0; x < ProvinceSize; x++)
 		{ 
 			for (int y = 0; y < ProvinceSize; y++)
 			{
 				var coords = new Vector2I(x, y) + GlobalToMap(startpos);
 				
-				// GD.Print(GetCellAlternativeTile(0));
-				
-				// get a random vector between 0, 0 and 7, 3
-
 				Vector2I randomvec;
 				var random = GD.Randf();
 				if (random < 0.5)
@@ -39,7 +55,6 @@ public partial class BuildingTileMap : LayerTileMap
 				{
 					randomvec = new Vector2I(GD.RandRange(4, 7), GD.RandRange(0, 3));
 				}
-				
 
 				SetCell(0, coords, 0, randomvec);
 			}
@@ -52,15 +67,8 @@ public partial class BuildingTileMap : LayerTileMap
 		// TODO: refactor this into a collision mask instead of discrete layers?
 		AddLayer(Building);
 		AddLayer(Resource);
-
-		// TODO: Only load this when needed
-		for (int x = 0; x < 9; x++)
-		{
-			for (int y = -2; y < 3; y++)
-			{
-				AddProvence(new Vector2I(x, y));
-			}
-		}
+		
+		AddProvence(MapGlobals.FactoryPosition);
 	}
 
 	public bool IsBuildable(Vector2I mapPos)

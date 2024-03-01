@@ -134,17 +134,20 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		_damageTween.TweenProperty(this, "modulate", new Color(1, 0, 0), Battle.TimeStep / 5);
 		_damageTween.TweenProperty(this, "modulate", Colors.White, Battle.TimeStep /  5);
 
-		RichTextLabel damageText = new();
-		Globals.BattleScene.AddChild(damageText);
-		damageText.Text = "[color=red]" + damage.ToString() + "[/color]";
-		damageText.GlobalPosition = GlobalPosition;
-		damageText.CustomMinimumSize = new Vector2(100, 100);
-		damageText.BbcodeEnabled = true;
+		RichTextLabel text = new();
+		Globals.BattleScene.AddChild(text);
+		text.Text = "[color=red]" + damage.ToString() + "[/color]";
+		text.GlobalPosition = GlobalPosition;
+		text.CustomMinimumSize = new Vector2(100, 100);
+		text.BbcodeEnabled = true;
 
 		var labelTween = GetTree().CreateTween();
-		labelTween.TweenProperty(damageText, "global_position", damageText.GlobalPosition + new Vector2(0, -50), 1.0f);
-		labelTween.TweenCallback(Callable.From(() => damageText.QueueFree()));
+		labelTween.TweenProperty(text, "global_position", text.GlobalPosition + new Vector2(0, -50), 1.0f);
+		labelTween.TweenCallback(Callable.From(() => text.QueueFree()));
 		
+		var textColorTween = GetTree().CreateTween();
+		textColorTween.TweenProperty(text, "modulate", new Color(1, 1, 1, 0), 1.0f);
+        
 		_hp -= damage;
 		if (_hp > 0) return;
 
@@ -338,11 +341,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	private void PlayDeathSound()
 	{
 		var randomizer = new AudioStreamRandomizer();
-		var files = DirAccess.Open("res://res/sfx/death/").GetFiles().Where(file => file.GetExtension() == "wav")
-			.ToArray();
-		var file = files[GD.RandRange(0, files.Length - 1)];
-		randomizer.AddStream(0, GD.Load<AudioStream>("res://res/sfx/death/" + file));
-		
+		randomizer.AddStream(0, Database.LoadAudioFileFromFolder("death"));
+
 		var audio = new AudioStreamPlayer2D();
 		audio.Stream = randomizer;
 		audio.VolumeDb = -40;

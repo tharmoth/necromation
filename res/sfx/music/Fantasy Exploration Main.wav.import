@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dbaxin5m1852"
+path="res://.godot/imported/Fantasy Exploration Main.wav-be0acb37b5aec091c15f6944f411a63f.sample"
+
+[deps]
+
+source_file="res://res/sfx/music/Fantasy Exploration Main.wav"
+dest_files=["res://.godot/imported/Fantasy Exploration Main.wav-be0acb37b5aec091c15f6944f411a63f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

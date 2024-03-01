@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=15 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/Map.cs" id="1_muam7"]
 [ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_ri0bn"]
@@ -7,8 +7,10 @@
 [ext_resource type="Script" path="res://src/map/gui/RecruitGUI.cs" id="6_w0llc"]
 [ext_resource type="Script" path="res://src/map/gui/CommanderList.cs" id="7_60yos"]
 [ext_resource type="Script" path="res://src/map/gui/MapToFactoryButton.cs" id="7_ep6dt"]
+[ext_resource type="Texture2D" uid="uid://mmc7pi4i3blc" path="res://res/sprites/Underground Belt.png" id="8_8ys6w"]
 [ext_resource type="Texture2D" uid="uid://xn8iy0eq7nns" path="res://res/sprites/selection.png" id="10_kmmak"]
 [ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="10_pbpxj"]
+[ext_resource type="AudioStream" uid="uid://dvunqv10vqhju" path="res://res/sfx/zapsplat_foley_dry_dead_leaf_crush_001_70766.mp3" id="12_brqa8"]
 [ext_resource type="Texture2D" uid="uid://bgxp03y7s5ppl" path="res://res/sprites/Stone Furnace.png" id="17_jvur2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5kr02"]
@@ -69,6 +71,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="RecruitButton" type="Button" parent="MapGui/MainGui/Buttons"]
+visible = false
 layout_mode = 2
 text = "Recruit (R)"
 alignment = 0
@@ -97,10 +100,16 @@ mouse_filter = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "End Turn (N)"
+text = "Move Squads (N)"
 alignment = 0
 script = ExtResource("10_pbpxj")
 _action = "end_turn"
+
+[node name="TextureRect2" type="TextureRect" parent="MapGui/MainGui"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("8_8ys6w")
+expand_mode = 1
 
 [node name="RecruitGUI" type="Control" parent="MapGui"]
 unique_name_in_owner = true
@@ -187,6 +196,9 @@ texture = ExtResource("10_kmmak")
 layer = -100
 
 [node name="Castle" type="Sprite2D" parent="."]
-position = Vector2(23, 70)
+position = Vector2(152, 70)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("17_jvur2")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_brqa8")

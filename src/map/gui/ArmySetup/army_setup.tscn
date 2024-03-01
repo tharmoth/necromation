@@ -510,6 +510,12 @@ texture = ExtResource("3_mgk4w")
 expand_mode = 1
 stretch_mode = 3
 
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Add Squad"
+script = ExtResource("2_a6w3a")
+_action = "add_squad"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

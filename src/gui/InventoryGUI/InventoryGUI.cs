@@ -5,13 +5,13 @@ using System.Linq;
 using Necromation;
 using Necromation.gui;
 
-public partial class InventoryGUI : PanelContainer
+public partial class InventoryGUI : Control
 {
 	
 	private Container InventoryItemList => GetNode<Container>("%InventoryItemList");
 	private Container RecipeButtonList => GetNode<Container>("%RecipeButtonList");
 	private Inventory _inventory;
-	
+
 	public static InventoryGUI Display(Inventory inventory)
 	{
 		var gui = GD.Load<PackedScene>("res://src/gui/InventoryGUI/inventory_gui.tscn").Instantiate<InventoryGUI>();
@@ -61,7 +61,7 @@ public partial class InventoryGUI : PanelContainer
 		RecipeButtonList.GetChildren().ToList().ForEach(child => child.QueueFree());
 		Globals.Database.UnlockedRecipes
 			.OrderBy(recipe => recipe.Name)
-			.Where(recipe => recipe.Category == "None")
+			.Where(recipe => recipe.Category is "None" or "hands")
 			.ToList().ForEach(AddRecipe);
 	}
 	
@@ -70,6 +70,7 @@ public partial class InventoryGUI : PanelContainer
 		var craftingItem = GD.Load<PackedScene>("res://src/gui/InventoryGUI/recipe_button.tscn").Instantiate<RecipeButton>();
 		craftingItem.Recipe = recipe;
 		craftingItem.TargetInventory = _inventory;
+		craftingItem.Button.Pressed += MusicManager.PlayCraft;
 		RecipeButtonList.AddChild(craftingItem);
 	}
 }

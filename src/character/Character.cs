@@ -2,6 +2,7 @@ using System.Linq;
 using Godot;
 using Necromation;
 using Necromation.interactables.interfaces;
+using Necromation.sk;
 using IInteractable = Necromation.interfaces.IInteractable;
 using Resource = Necromation.Resource;
 
@@ -22,6 +23,7 @@ public partial class Character : Node2D
 		get => _selected;
 		set
 		{
+			GD.Print(value);
 			_selected = value;
 			_sprite.Texture = _selected == null
 				?  Globals.Database.GetTexture("Selection")
@@ -48,17 +50,20 @@ public partial class Character : Node2D
 			.Select(recipe => recipe.Products.First().Key)
 			.ToList()
 			.ForEach(item => _inventory.Insert(item, 100));
-	
-		_inventory.Insert("Mine", 100);	
-		_inventory.Insert("Belt", 5000);
-		_inventory.Insert("Underground Belt", 100);
-		_inventory.Insert("Inserter", 500);
-		_inventory.Insert("Long Inserter", 500);
-		_inventory.Insert("Assembler", 100);
-		_inventory.Insert("Research Lab", 5);
+		
+		_inventory.Insert("Bone Fragments", 1000);
+		_inventory.Insert("Coal Ore", 1000);
+		//
+		// _inventory.Insert("Mine", 100);	
+		// _inventory.Insert("Bone Fragments", 5000);
+		// _inventory.Insert("Underground Belt", 100);
+		// _inventory.Insert("Inserter", 500);
+		// _inventory.Insert("Long Inserter", 500);
+		// _inventory.Insert("Assembler", 100);
+		// _inventory.Insert("Research Lab", 5);
 		
 		// No other way to get wood right now.
-		_inventory.Insert("Wood", 5);
+		_inventory.Insert("Barracks", 1);
 		
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 2;
@@ -87,6 +92,8 @@ public partial class Character : Node2D
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
 		if (Input.IsActionJustPressed("close_gui")) Selected = null;
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build();
+		
+		
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.TileMap.GetBuildingAtMouse() == null) Mine();
@@ -102,7 +109,18 @@ public partial class Character : Node2D
 	{
 		base._UnhandledInput(@event);
 		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
-		if (Input.IsActionJustPressed("left_click") && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
+		if (!string.IsNullOrEmpty(Selected) && Input.IsMouseButtonPressed(MouseButton.Left) && Input.IsKeyPressed(Key.Ctrl) &&
+		    Globals.TileMap.GetBuildingAtMouse() is ITransferTarget transfer && transfer.GetMaxTransferAmount(Selected) > 0)
+		{
+			InsertToBuilding(transfer);
+		}
+		else if (string.IsNullOrEmpty(Selected) && Input.IsMouseButtonPressed(MouseButton.Left) && Input.IsKeyPressed(Key.Ctrl) &&
+		    Globals.TileMap.GetBuildingAtMouse() is ITransferTarget transfer2 && transfer2.GetOutputInventory().CountAllItems() > 0)
+		{
+			RemoveFromBuilding(transfer2);
+		} 
+		else if (Input.IsActionJustPressed("left_click") && !Input.IsKeyPressed(Key.Ctrl) && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
+		
 	}
 
 	/******************************************************************
@@ -181,7 +199,6 @@ public partial class Character : Node2D
 		
 		_inventory.Remove(building.ItemType);
 
-
 		building.GlobalPosition = position;
 		Globals.FactoryScene.AddChild(building);
 		
@@ -225,5 +242,38 @@ public partial class Character : Node2D
 			_resource?.Cancel();
 			_resource = null;
 		}
+	}
+
+	private void InsertToBuilding(ITransferTarget transfer)
+	{
+		var count = 0;
+		
+		count = transfer.GetMaxTransferAmount(Selected);
+		Inventory.TransferItem(_inventory, transfer.GetInputInventory(), Selected, count);
+
+		var remaining = _inventory.CountItem(Selected);
+
+		SKFloatingLabel.Show("-" + count + " " + Selected + " (" + remaining + ")" , ((Node2D)transfer).GlobalPosition);
+			
+		if (remaining == 0) Selected = "";
+		
+		MusicManager.PlayCraft();
+	}
+	
+	private void RemoveFromBuilding(ITransferTarget transfer)
+	{
+
+		var from = transfer.GetOutputInventory();
+
+		var index = 0;
+		foreach (var item in from.GetItems())
+		{
+			var count = from.CountItem(item);
+			Inventory.TransferItem(from, _inventory, item, count);
+			var remaining = _inventory.CountItem(item);
+			SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", ((Node2D)transfer).GlobalPosition + new Vector2(0, index++ * 20));
+		}
+
+		MusicManager.PlayCraft();
 	}
 }

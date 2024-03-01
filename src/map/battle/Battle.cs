@@ -12,7 +12,7 @@ public partial class Battle : Node2D
 	public BattleTileMap TileMap;
 	public CanvasLayer GUI;
 	public Province Provence;
-	
+
 	public override void _EnterTree()
 	{
 		Globals.BattleScene = this;
@@ -22,7 +22,8 @@ public partial class Battle : Node2D
 	{
 		base._Ready();
 		Globals.BattleCamera = GetNode<Camera2D>("Camera2D");
-		
+		MusicManager.PlayBattleMusic();
+			
 		if (Provence == null) Provence = new Province();
 		
 		if (Provence.Commanders.Count == 0)

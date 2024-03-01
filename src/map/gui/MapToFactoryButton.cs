@@ -8,7 +8,6 @@ public partial class MapToFactoryButton : Button
     public override void _Ready()
     {
         base._Ready();
-        MapGlobals.UpdateListeners.Add(Update);
     }
 
     public override void _Pressed()
@@ -44,10 +43,5 @@ public partial class MapToFactoryButton : Button
         
         // We need  to wait or this will be called again once the map loads and it sees inputjustpressed.
         Globals.FactoryScene.GetTree().CreateTimer(.1).Timeout += () => Globals.ChangingScene = false;
-    }
-
-    private void Update()
-    {
-        Visible = MapGlobals.SelectedProvince.Owner == "Player";
     }
 }

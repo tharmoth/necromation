@@ -4,8 +4,8 @@
       "name": "Belt",
       "time" : 1,
       "ingredients": {
-        "Iron Bar": 1,
-        "Gear": 1
+        "Bone": 1,
+        "Skeleton": 1
       },
       "products": {
         "Belt": 2
@@ -15,9 +15,9 @@
       "name": "Inserter",
       "time" : 1,
       "ingredients": {
-        "Iron Bar": 1,
+        "Bone": 1,
         "Automation Core": 1,
-        "Gear": 1
+        "Skeleton": 1
       },
       "products": {
         "Inserter": 1
@@ -28,8 +28,8 @@
       "time" : 1,
       "ingredients": {
         "Inserter": 1,
-        "Gear": 2,
-        "Iron Bar": 1
+        "Skeleton": 2,
+        "Bone": 1
       },
       "products": {
         "Long Inserter": 1
@@ -39,7 +39,7 @@
       "name": "Underground Belt",
       "time" : 1,
       "ingredients": {
-        "Iron Bar": 10,
+        "Bone": 10,
         "Belt": 5
       },
       "products": {
@@ -61,8 +61,8 @@
       "time" : 1,
       "ingredients": {
         "Stone Furnace": 1,
-        "Iron Bar": 3,
-        "Gear": 3
+        "Bone": 3,
+        "Skeleton": 3
       },
       "products": {
         "Mine": 1
@@ -73,8 +73,8 @@
       "time" : 1,
       "ingredients": {
         "Automation Core": 3,
-        "Iron Bar": 9,
-        "Gear": 5
+        "Bone": 9,
+        "Skeleton": 5
       },
       "products": {
         "Assembler": 1
@@ -95,21 +95,21 @@
       "time" : 1,
       "ingredients": {
         "Automation Core": 5,
-        "Iron Bar": 10,
-        "Gear": 5
+        "Bone": 10,
+        "Skeleton": 5
       },
       "products": {
         "Research Lab": 1
       }
     },
     {
-      "name": "Gear",
+      "name": "Skeleton",
       "time" : 1,
       "ingredients": {
-        "Iron Bar": 2
+        "Bone": 2
       },
       "products": {
-        "Gear": 1
+        "Skeleton": 1
       }
     },
     {
@@ -117,7 +117,7 @@
       "time" : 1,
       "ingredients": {
         "Copper Strand": 3,
-        "Iron Bar": 1
+        "Bone": 1
       },
       "products": {
         "Automation Core": 1
@@ -138,22 +138,33 @@
       "time" : 1,
       "ingredients": {
         "Copper Bar": 1,
-        "Gear": 1
+        "Skeleton": 1
       },
       "products": {
         "Experiment": 1
       }
     },
     {
-      "name": "Iron Bar",
+      "name": "Bone",
       "time" : 6.4,
       "category": "smelting",
       "ingredients": {
-        "Iron Ore": 2,
+        "Bone Fragments": 2,
         "Coal Ore": 1
       },
       "products": {
-        "Iron Bar": 2
+        "Bone": 2
+      }
+    },
+    {
+      "name": "Bone By Hands",
+      "time" : 6.4,
+      "category": "hands",
+      "ingredients": {
+        "Bone Fragments": 4
+      },
+      "products": {
+        "Bone": 1
       }
     },
     {
@@ -198,116 +209,17 @@
       "time" : 10.0,
       "ingredients": {
         "Stone": 10,
-        "Iron Bar": 5
+        "Bone": 5
       },
       "products": {
         "Barracks": 1
       }
     },
     {
-      "name": "Armory",
-      "time" : 10.0,
-      "ingredients": {
-        "Stone": 10,
-        "Iron Bar": 5
-      },
-      "products": {
-        "Armory": 1
-      }
-    },
-    {
-      "name": "Farm",
-      "time" : 10.0,
-      "ingredients": {
-        "Stone": 10,
-        "Wood": 5
-      },
-      "products": {
-        "Farm": 1
-      }
-    },
-    {
-      "name": "House",
-      "time" : 10.0,
-      "ingredients": {
-        "Stone": 10,
-        "Wood": 5
-      },
-      "products": {
-        "House": 1
-      }
-    },
-    {
-      "name": "Exporter",
-      "time" : 10.0,
-      "ingredients": {
-        "Stone": 10,
-        "Wood": 5
-      },
-      "products": {
-        "Exporter": 1
-      }
-    },
-    {
-      "name": "Importer",
-      "time" : 10.0,
-      "ingredients": {
-        "Stone": 10,
-        "Wood": 5
-      },
-      "products": {
-        "Importer": 1
-      }
-    },
-    {
-      "name" : "Pawn",
-      "time" : 10.0,
-      "category": "population",
-      "ingredients": {
-        "Wheat": 10
-      },
-      "products": {
-        "Pawn": 1
-      }
-    },
-    {
-      "name" : "Commander",
-      "time" : 100.0,
-      "category": "population",
-      "ingredients": {
-        "Wheat": 10
-      },
-      "products": {
-        "Pawn": 1
-      }
-    },
-    {
-      "name" : "Wheat",
-      "time" : 3.0,
-      "category": "farming",
-      "ingredients": {
-
-      },
-      "products": {
-        "Wheat": 1
-      }
-    },
-    {
-      "name" : "Wood",
-      "time" : 3.0,
-      "category": "farming",
-      "ingredients": {
-
-      },
-      "products": {
-        "Wood": 1
-      }
-    },
-    {
       "name" : "Copper Spear",
       "time" : 10.0,
       "ingredients": {
-        "Wood": 1,
+        "Bone": 1,
         "Copper Bar": 1
       },
       "products": {
@@ -318,7 +230,7 @@
       "name" : "Bronze Spear",
       "time" : 10.0,
       "ingredients": {
-        "Wood": 1,
+        "Bone": 1,
         "Bronze Bar": 5
       },
       "products": {
@@ -329,7 +241,7 @@
       "name" : "Copper Warhammer",
       "time" : 10.0,
       "ingredients": {
-        "Wood": 1,
+        "Copper Spear": 1,
         "Copper Bar": 5
       },
       "products": {
@@ -340,7 +252,7 @@
       "name" : "Bronze Warhammer",
       "time" : 10.0,
       "ingredients": {
-        "Wood": 1,
+        "Bronze Spear": 1,
         "Bronze Bar": 5
       },
       "products": {
@@ -351,7 +263,7 @@
       "name" : "Short Bow",
       "time" : 10.0,
       "ingredients": {
-        "Wood": 10,
+        "Bone": 10,
         "Copper Strand": 1
       },
       "products": {
@@ -362,23 +274,12 @@
       "name" : "Arrow",
       "time" : 1.0,
       "ingredients": {
-        "Wood": 1,
+        "Bone": 1,
         "Copper Bar": 1,
         "Copper Strand": 1
       },
       "products": {
         "Arrow": 1
-      }
-    },
-    {
-      "name" : "Shield",
-      "time" : 10.0,
-      "ingredients": {
-        "Wood": 3,
-        "Copper Bar": 1
-      },
-      "products": {
-        "Shield": 1
       }
     },
     {
@@ -403,102 +304,51 @@
       }
     },
     {
-      "name" : "Archer",
+      "name" : "Skeleton Archer",
         "time" : 10.0,
-      "category": "recruitment",
         "ingredients": {
           "Short Bow": 1,
           "Arrow": 12,
-          "Pawn" : 1
+          "Skeleton" : 1
         },
         "products": {
-          "Archer": 1
+          "Skeleton Archer": 1
         }
     },
     {
-      "name" : "Heavy Archer",
+      "name" : "Skeleton Warrior",
       "time" : 10.0,
-      "category": "recruitment",
-      "ingredients": {
-        "Archer" :  1,
-        "Copper Ringmail": 1
-      },
-      "products": {
-        "Heavy Archer": 1
-      }
-    },
-    {
-      "name" : "Rabble",
-        "time" : 10.0,
-      "category": "recruitment",
-        "ingredients": {
-          "Wood": 1,
-          "Pawn" : 1
-        },
-        "products": {
-          "Rabble": 1
-        }
-    },
-    {
-      "name" : "Light Infantry",
-      "time" : 10.0,
-      "category": "recruitment",
       "ingredients": {
         "Copper Spear": 1,
         "Copper Ringmail": 1,
-        "Pawn" : 1
+        "Skeleton" : 1
       },
       "products": {
-        "Light Infantry": 1
+        "Skeleton Warrior": 1
       }
     },
     {
-      "name" : "Infantry",
+      "name" : "Skeleton Heavy Infantry",
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
-        "Light Infantry": 1,
-        "Shield": 1,
+        "Skeleton Warrior": 1,
+        "Bronze Breastplate": 1
       },
       "products": {
-        "Infantry": 1
+        "Skeleton Heavy Infantry": 1
       }
     },
     {
-      "name" : "Heavy Infantry",
-      "time" : 10.0,
-      "category": "recruitment",
-      "ingredients": {
-        "Infantry": 1,
-        "Bronze Breastplate": 1,
-        "Pawn" : 1
-      },
-      "products": {
-        "Heavy Infantry": 1
-      }
-    },
-    {
-      "name" : "Barbarian",
+      "name" : "Skeleton Barbarian",
       "time" : 10.0,
       "category": "recruitment",
       "ingredients": {
         "Copper Warhammer": 1,
-        "Pawn" : 1
+        "Skeleton" : 1
       },
       "products": {
-        "Barbarian": 1
-      }
-    },
-    {
-      "name" : "Elite Infantry",
-      "time" : 10.0,
-      "category": "recruitment",
-      "ingredients": {
-        "Heavy Infantry": 1,
-        "Bronze Warhammer": 1
-      },
-      "products": {
-        "Elite Infantry": 1
+        "Skeleton Barbarian": 1
       }
     }
   ]

@@ -15,5 +15,5 @@ public class MapGlobals
     public static Province SelectedProvince;
     public static Commander SelectedCommander;
 
-    public static Vector2I FactoryPosition => new(0, 2);
+    public static Vector2I FactoryPosition => new(4, 2);
 }

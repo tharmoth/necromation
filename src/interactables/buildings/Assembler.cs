@@ -12,7 +12,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	public override Vector2I BuildingSize => Vector2I.One * 3;
 	public override string ItemType { get; }
 	public Recipe Recipe;
-    private Inventory _inputInventory = new();
+    private Inventory _inputInventory;
     private Inventory _outputInventory = new();
     private float _time;
 	private readonly string _category;
@@ -33,6 +33,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	    _category = category;
 	    AddChild(_recipeSprite);
 	    AddChild(_outlineSprite);
+	    _inputInventory = new AssemblerInventory(this);
 	}
 
     public override void _Process(double delta)
@@ -46,6 +47,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     	}
     	
     	_time += (float)delta;
+	    Animate();
 
     	if (GetProgressPercent() < 1.0f) return;
     	_time = 0;
@@ -65,6 +67,40 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     protected virtual bool MaxOutputItemsReached()
     {
 	    return _outputInventory.CountItem(Recipe.Products.First().Key) > Recipe.Products.First().Value * 2;
+    }
+
+    private Tween tweenytwiney;
+    
+    private void Animate()
+    {
+	    if (IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
+        
+	    // Get random position
+	    var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
+	    tweenytwiney?.Kill();
+	    tweenytwiney = GetTree().CreateTween();
+	    tweenytwiney.TweenProperty(Sprite, "scale", new Vector2(.85f, .85f), 1f);
+	    tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, 1f);
+	    // tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, .5f);
+	    tweenytwiney.TweenCallback(Callable.From(() => tweenytwiney.Kill()));
+    }
+    
+    private partial class AssemblerInventory : Inventory
+    {
+	    private Assembler _assembler;
+
+	    public AssemblerInventory(Assembler assembler)
+	    {
+		    _assembler = assembler;
+	    }
+	    
+	    public override bool CanAcceptItems(string item, int count = 1)
+	    {
+		    if (_assembler.GetRecipe() == null) return false;
+		    var ingredients = _assembler.GetRecipe().Ingredients;
+		    var itemCount = CountItem(item);
+		    return ingredients.ContainsKey(item) && itemCount < 50;
+	    }
     }
     
     #region IInteractable Implementation

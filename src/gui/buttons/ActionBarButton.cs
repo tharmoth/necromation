@@ -45,6 +45,7 @@ public partial class ActionBarButton : PanelContainer
 		_hotkeyLabel.SizeFlagsVertical = SizeFlags.ShrinkBegin;
 		_hotkeyLabel.MouseFilter = MouseFilterEnum.Ignore;
 		_hotkeyLabel.Text = index.ToString();
+		_hotkeyLabel.AddThemeColorOverride("font_color", new Color(.5f, .5f, .5f));
 		if (index > 9) _hotkeyLabel.Visible = false;
 		
 		_icon.Texture = Globals.Database.GetTexture(_itemType);

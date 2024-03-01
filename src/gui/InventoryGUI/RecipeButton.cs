@@ -7,7 +7,7 @@ using Necromation.gui;
 public partial class RecipeButton : PanelContainer
 {
 	private TextureRect Icon => GetNode<TextureRect>("%RecipeIcon");
-	private Button Button => GetNode<Button>("%Button");
+	public Button Button => GetNode<Button>("%Button");
 
 	public Inventory TargetInventory { get; set; } = new();
 	

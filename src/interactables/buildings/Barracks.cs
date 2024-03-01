@@ -26,7 +26,7 @@ public partial class Barracks : Building, IInteractable, ITransferTarget
      **************************************************************************/
     public bool CanAcceptItems(string item, int count = 1)
     {
-        return item == "Infantry" || item == "Archer" && GetInventories().TrueForAll(inventory => inventory.CountItem(item) < 10);
+        return item.Contains("Skeleton") && GetInventories().TrueForAll(inventory => inventory.CountItem(item) < 10);
     }
     public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);

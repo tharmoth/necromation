@@ -38,6 +38,9 @@ public class Globals
     public static Node2D MapScene;
     public static Battle BattleScene;
 
+    
+    public static SceneTree Tree => FactoryScene?.GetTree() ?? MapScene?.GetTree() ?? BattleScene?.GetTree();
+
     public static bool ChangingScene = false;
     
     //TODO: make this actually the current gui. Maybe as a part of scene manager?

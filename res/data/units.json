@@ -74,6 +74,52 @@
       "armor" : [
           "Copper Ringmail"
       ]
+    },
+    {
+      "name": "Skeleton",
+        "weapons" : [
+
+        ],
+        "armor" : [
+          
+        ]
+    },
+    {
+      "name": "Skeleton Warrior",
+        "weapons" : [
+            "Copper Spear"
+        ],
+        "armor" : [
+          "Copper Ringmail"
+        ]
+    },
+    {
+      "name": "Skeleton Archer",
+        "weapons" : [
+          "Long Bow"
+        ],
+        "armor" : [
+          "Leather Cuirass"
+        ]
+    },
+    {
+      "name": "Skeleton Barbarian",
+        "weapons" : [
+            "Copper Warhammer"
+        ],
+        "armor" : [
+          "Copper Ringmail"
+        ]
+    },
+    {
+      "name": "Skeleton Heavy Infantry",
+        "weapons" : [
+            "Bronze Spear"
+        ],
+        "armor" : [
+          "Bronze Breastplate",
+          "Shield"
+        ]
     }
     ],
   "equipment" : [

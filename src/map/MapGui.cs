@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Godot;
 using System.Linq;
+using Necromation;
 using Necromation.map;
+using Necromation.map.character;
 using Necromation.shared.gui;
 
 public partial class MapGui : CanvasLayer, SceneGUI
@@ -36,18 +38,29 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		}
 		
 		if (Input.IsActionJustPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_army_setup") && GuiStack.Count == 0) 
+		if (Input.IsActionJustPressed("open_army_setup") && GuiStack.Count == 0 && MapGlobals.SelectedProvince.Owner == "Player") 
 		{
 			GuiStack.Push(ArmySetup.Display(MapGlobals.SelectedProvince));
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_recruit") && GuiStack.Count == 0)
+		if (Input.IsActionJustPressed("open_recruit") && GuiStack.Count == 0 && MapGlobals.SelectedProvince.Owner == "Player")
 		{
 			RecruitGui.Visible = true;
 			MainGui.Visible = false;
 		}
 		if (Input.IsActionJustPressed("open_map") && MapGlobals.SelectedProvince.Owner == "Player") MapToFactoryButton.ChangeScene();
 		if (Input.IsActionJustPressed("end_turn")) EndTurn();
+		if (Input.IsActionJustPressed("add_squad"))
+		{
+			var commander = new Commander(MapGlobals.SelectedProvince, "Player");
+			commander.GlobalPosition = MapGlobals.SelectedProvince.GlobalPosition;
+			MapGlobals.SelectedProvince.Commanders.Add(commander);
+			Globals.MapScene.AddChild(commander);
+			CloseGui();
+			MainGui.Visible = false;
+			GuiStack.Push(ArmySetup.Display(MapGlobals.SelectedProvince));
+			MapGlobals.UpdateListeners.ForEach(listener => listener());
+		};
 	}
 
 	private void EndTurn()

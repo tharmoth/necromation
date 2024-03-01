@@ -44,43 +44,35 @@ public partial class MapTileMap : SKTileMap
 		rangedCommander.SpawnLocation = new Vector2I(30, 25);
 		provence.Commanders.Add(rangedCommander);
 		Globals.MapScene.CallDeferred("add_child", rangedCommander);
-
 		var provinceLocation = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
-		switch (provinceLocation.X)
+		
+		var dis = Mathf.Abs(provinceLocation.X - MapGlobals.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - MapGlobals.FactoryPosition.Y);
+		
+		switch (dis)
 		{
 			case 0:
-				meleeCommander.Units.Insert("Rabble", 100);
 				break;
 			case 1:
-				meleeCommander.Units.Insert("Light Infantry", 100);
+				meleeCommander.Units.Insert("Rabble", 10);
 				break;
 			case 2:
-				meleeCommander.Units.Insert("Infantry", 100);
-				rangedCommander.Units.Insert("Archer", 100);
+				meleeCommander.Units.Insert("Infantry", 10);
+				rangedCommander.Units.Insert("Archer", 10);
 				break;
 			case 3:
-				meleeCommander.Units.Insert("Heavy Infantry", 50);
-				meleeCommander.Units.Insert("Infantry", 200);
-				rangedCommander.Units.Insert("Archer", 100);
+				meleeCommander.Units.Insert("Infantry", 100);
+				rangedCommander.Units.Insert("Archer", 50);
 				break;
 			case 4:
 				meleeCommander.Units.Insert("Barbarian", 400);
 				break;
 			case 5:
-				meleeCommander.Units.Insert("Heavy Infantry", 200);
-				rangedCommander.Units.Insert("Archer", 100);
-				break;
-			case 6:
 				meleeCommander.Units.Insert("Heavy Infantry", 400);
 				rangedCommander.Units.Insert("Archer", 100);
 				break;
-			case 7:
-				meleeCommander.Units.Insert("Heavy Infantry", 500);
-				rangedCommander.Units.Insert("Archer", 250);
-				break;
-			case 8:
-				meleeCommander.Units.Insert("Elite Infantry", 1000);
-				rangedCommander.Units.Insert("Archer", 1000);
+			case 6:
+				meleeCommander.Units.Insert("Elite Infantry", 400);
+				meleeCommander.Units.Insert("Barbarian", 400);
 				break;
 		}
 		
@@ -95,13 +87,11 @@ public partial class MapTileMap : SKTileMap
 	{
 		if (Globals.TileMap == null) return;
 		
-		var prov = _provences[Vector2I.One];
+		var prov = _provences[MapGlobals.FactoryPosition];
 		foreach (var barracks in Globals.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
 		{
 			var inventory = barracks.GetInventories().First();
-			var count = inventory.CountItem("Infantry");
-			prov.Units.Insert("Infantry", count);
-			inventory.Remove("Infantry", count);
+			Inventory.TransferAllTo(inventory, prov.Units);
 		}
 	}
 

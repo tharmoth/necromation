@@ -30,6 +30,7 @@ public class Database
             lockedRecipes.AddRange(technology.Unlocks);
         }
         UnlockedRecipes.AddRange(Recipes.Where(recipe => !lockedRecipes.Contains(recipe.Name)).ToList());
+        // UnlockedRecipes.AddRange(Recipes);
     }
 
     #region Recipes
@@ -209,5 +210,13 @@ public class Database
         using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         return Json.ParseString(text).As<Godot.Collections.Dictionary<string, Variant>>();
+    }
+
+    public static AudioStream LoadAudioFileFromFolder(string folder)
+    {
+        var files = DirAccess.Open("res://res/sfx/" + folder + "/").GetFiles().Where(file => file.GetExtension() == "wav" || file.GetExtension() == "mp3")
+            .ToArray();
+        var file = files[GD.RandRange(0, files.Length - 1)];
+        return GD.Load<AudioStream>("res://res/sfx/death/" + file);
     }
 }

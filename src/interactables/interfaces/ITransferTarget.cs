@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Necromation;
@@ -11,4 +12,19 @@ public interface ITransferTarget
     public List<string> GetItems();
     public string GetFirstItem();
     public List<Inventory> GetInventories();
+
+    public virtual int GetMaxTransferAmount(string itemType)
+    {
+        return int.MaxValue;
+    }
+
+    public Inventory GetInputInventory()
+    {
+        return GetInventories().First();
+    }
+    
+    public Inventory GetOutputInventory()
+    {
+        return GetInventories().Count > 1 ? GetInventories().Last() : GetInventories().First();
+    }
 }

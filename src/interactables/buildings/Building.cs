@@ -26,6 +26,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	
 	private AudioStreamPlayer2D _audio = new();
 	private ProgressTracker _progress = new();
+	private GpuParticles2D _particles;
 
 	protected Building()
 	{
@@ -39,11 +40,21 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		AddChild(_progress);
 		
 		AddToGroup("Persist");
+
+		_particles = GD.Load<PackedScene>("res://src/interactables/buildings/place_particles.tscn").Instantiate<GpuParticles2D>();
+		_particles.OneShot = true;
+		_particles.Emitting = true;
+		_particles.ZAsRelative = true;
+		_particles.ZIndex = -1;
+		AddChild(_particles);
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
+		var particleMaterial = (ParticleProcessMaterial)_particles.ProcessMaterial;
+		particleMaterial.EmissionBoxExtents = new Vector3(16 * BuildingSize.X, 16 * BuildingSize.Y, 0);
+		
 		if (BuildingSize.X % 2 != 0)
 		{
 			_progress.Size = new Vector2(BuildingTileMap.TileSize * BuildingSize.X * 4 - 40, 28);
@@ -53,12 +64,12 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		{
 			_progress.Size = new Vector2(256-8*8, 28);
 			_progress.Position -= new Vector2(16-8, -32);
+			_particles.Position += new Vector2(16, 16);
 		}
 
 		Sprite.Texture = Globals.Database.GetTexture(ItemType);
 		GlobalPosition = Globals.TileMap.ToMap(GlobalPosition);
-		if (BuildingSize.X % 2 == 0) Sprite.GlobalPosition += new Vector2(16, 0);
-		if (BuildingSize.Y % 2 == 0) Sprite.GlobalPosition += new Vector2(0, 16);
+		Sprite.GlobalPosition += GetSpriteOffset();
 
 		var positions = GetOccupiedPositions(GlobalPosition);
 		positions.ForEach(pos => Globals.TileMap.AddEntity(pos, this, BuildingTileMap.Building));
@@ -126,6 +137,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		FactoryGUI.Instance.BuildingRemoved();
 		QueueFree();
 	}
+
+	protected Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
 
 	/******************************************************************
 	 * Abstract methods                                               *
