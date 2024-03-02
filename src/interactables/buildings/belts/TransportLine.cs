@@ -36,7 +36,7 @@ public partial class TransportLine : Node2D, ITransferTarget
         int i = 0;
         _itemsOnBelt.ForEach(item =>
         {
-           item.GlobalPosition = GlobalPosition + GetTargetLocation(i++);
+           item.GlobalPosition = GlobalPosition + GetTargetLocation(4);
         });
     }
 
@@ -50,10 +50,10 @@ public partial class TransportLine : Node2D, ITransferTarget
             var targetLocation = ToGlobal(Position + GetTargetLocation(i));
             
             // Slide the item along the belt until it reaches the bottom of the belt.
-            if (!IsEqualApprox(groundItem.CachePosition, targetLocation, 1.0f))
+            if (!IsEqualApprox(groundItem.GlobalPosition, targetLocation, 1.0f))
             {
-                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.CachePosition) * Speed * (float)delta;
-                groundItem.CachePosition = groundItem.GlobalPosition;
+                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.GlobalPosition) * Speed * (float)delta;
+                groundItem.CachePosition = GlobalPosition;
                 continue;
             }
             
@@ -149,10 +149,12 @@ public partial class TransportLine : Node2D, ITransferTarget
         if (IsEqualApprox(item.Position, Vector2.Zero, 1))
         {
             item.GlobalPosition = GlobalPosition + GetTargetLocation(4);
+            item.CachePosition = GlobalPosition + GetTargetLocation(4);
         }
         else
         {
             item.GlobalPosition = pos;
+            item.CachePosition = pos;
         }
         item.GlobalRotation = 0;
     }
