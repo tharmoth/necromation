@@ -21,11 +21,10 @@ public partial class Map : Node2D
 		SelectProvince(provence);
 		
 		VisibilityChanged += () => SelectProvince(MapGlobals.SelectedProvince);
-		VisibilityChanged += () =>
-		{
-			if (Visible) MusicManager.PlayExploration();
-		};
-		MusicManager.PlayExploration();
+		// VisibilityChanged += () =>
+		// {
+		// 	if (Visible) MusicManager.PlayExploration();
+		// };
 	}
 	
 	public override void _UnhandledInput(InputEvent @event)

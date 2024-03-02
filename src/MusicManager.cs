@@ -57,7 +57,7 @@ public class MusicManager
     private static bool _explored = false;
     public static void PlayBattleMusic()
     {
-        if (_currentMusic == "battle") return;
+        if (_currentMusic == "battle" && MusicPlayer.Playing) return;
         _currentMusic = "battle";
         MusicPlayer.Stream = GD.Load<AudioStream>("res://res/sfx/music/Fantasy Suspense Main.wav");
         MusicPlayer.CallDeferred("play");

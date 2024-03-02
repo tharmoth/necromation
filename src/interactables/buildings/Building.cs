@@ -25,7 +25,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	}
 	
 	private AudioStreamPlayer2D _audio = new();
-	private ProgressTracker _progress = new();
+	private ProgressTracker _progress;
 	private GpuParticles2D _particles;
 
 	protected Building()
@@ -34,10 +34,11 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		AddChild(_audio);
 		
 		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
-		
+
+		_progress = new ProgressTracker(this);
 		_progress.NodeToTrack = this;
 		_progress.Scale = new Vector2(0.25f, 0.25f);
-		AddChild(_progress);
+		// AddChild(_progress);
 		
 		AddToGroup("Persist");
 
@@ -208,13 +209,25 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	 ******************************************************************/
 	public virtual Godot.Collections.Dictionary<string, Variant> Save()
 	{
-		return new Godot.Collections.Dictionary<string, Variant>()
+		var dict =  new Godot.Collections.Dictionary<string, Variant>()
 		{
 			{ "ItemType", ItemType },
 			{ "PosX", Position.X }, // Vector2 is not supported by JSON
 			{ "PosY", Position.Y },
 			{ "Orientation", Orientation.ToString() }
 		};
+		if (this is ICrafter crafter)
+		{
+			dict["Recipe"] = crafter.GetRecipe() != null ? crafter.GetRecipe().Name : "";
+		}
+		if (this is ITransferTarget transferTarget)
+		{
+			for (var i = 0; i < transferTarget.GetInventories().Count; i++)
+			{
+				dict["Inventory" + i] = transferTarget.GetInventories()[i].Save();
+			}
+		}
+		return dict;
 	}
 	
 	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
@@ -225,8 +238,19 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		if (building is ICrafter crafter)
 		{
 			var recipeName = nodeData["Recipe"].ToString();
-			var recipe = Globals.Database.GetRecipe(recipeName);
-			crafter.SetRecipe(recipe);
+			if (recipeName != "") 
+			{
+				var recipe = Globals.Database.GetRecipe(recipeName);
+				crafter.SetRecipe(recipe);
+			}
+		}
+		
+		if (building is ITransferTarget transferTarget)
+		{
+			for (var i = 0; i < transferTarget.GetInventories().Count; i++)
+			{
+				transferTarget.GetInventories()[i].Load((Godot.Collections.Dictionary)nodeData["Inventory" + i]);
+			}
 		}
 		
 		building.GlobalPosition = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);

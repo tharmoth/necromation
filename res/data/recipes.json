@@ -145,6 +145,17 @@
       }
     },
     {
+      "name": "Experiment 2",
+      "time" : 1,
+      "ingredients": {
+        "Skeleton Warrior": 1,
+        "Inserter": 1
+      },
+      "products": {
+        "Experiment": 1
+      }
+    },
+    {
       "name": "Bone",
       "time" : 6.4,
       "category": "smelting",
@@ -267,7 +278,7 @@
         "Copper Strand": 1
       },
       "products": {
-        "Bow": 1
+        "Short Bow": 1
       }
     },
     {
@@ -330,7 +341,6 @@
     {
       "name" : "Skeleton Heavy Infantry",
       "time" : 10.0,
-      "category": "recruitment",
       "ingredients": {
         "Skeleton Warrior": 1,
         "Bronze Breastplate": 1
@@ -342,7 +352,6 @@
     {
       "name" : "Skeleton Barbarian",
       "time" : 10.0,
-      "category": "recruitment",
       "ingredients": {
         "Copper Warhammer": 1,
         "Skeleton" : 1

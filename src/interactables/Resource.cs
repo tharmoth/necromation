@@ -39,6 +39,8 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
         
         _bonusAudio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_dry_dead_leaf_crush_001_70766.mp3");
         AddChild(_bonusAudio);
+
+        if (Type == "Stone") _duration = 1.0f;
     }
         
     public override void _Ready()

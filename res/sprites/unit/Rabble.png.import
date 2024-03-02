@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8evtabr3kds2"
-path="res://.godot/imported/Skeleton Warrior.png-50c2d50a7f775c313ad052b0db006462.ctex"
+uid="uid://dji7c2iuqebqq"
+path="res://.godot/imported/Rabble.png-371245fd09a62d28a654561354d0786e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/units/Skeleton Warrior.png"
-dest_files=["res://.godot/imported/Skeleton Warrior.png-50c2d50a7f775c313ad052b0db006462.ctex"]
+source_file="res://res/sprites/unit/Rabble.png"
+dest_files=["res://.godot/imported/Rabble.png-371245fd09a62d28a654561354d0786e.ctex"]
 
 [params]
 

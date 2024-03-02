@@ -17,7 +17,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	
 	private readonly Commander _commander;
 	public string Team = "Player";
-	private string _unitType;
+	public string UnitType;
 	public readonly  List<Weapon> Weapons = new();
 	public readonly List<Armor> Armor = new();
 	
@@ -36,12 +36,12 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	public int Ammo = 12;
 	public int Strength = 10;
 	
-	public readonly List<Action> DeathCallbacks = new();
+	public readonly List<Action<Unit>> DeathCallbacks = new();
 	
 
 	public Unit(string unitType, Commander commander = null)
 	{
-		_unitType = unitType;
+		UnitType = unitType;
 		_commander = commander;
 
 		var def = Globals.Database.Units.First(unit => unit.Name == unitType);
@@ -56,7 +56,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 			Armor.Add(Globals.Database.Equpment.OfType<Armor>().First(armorDef => armorDef.Name == armor));
 		}
 
-		Sprite.Texture = Globals.Database.GetTexture(_unitType);
+		Sprite.Texture = Globals.Database.GetTexture(UnitType, "unit");
 		Sprite.Scale = new Vector2(.125f, .125f);
 		// Sprite.Scale = new Vector2(.5f, .5f);
 		AddChild(Sprite); 
@@ -80,7 +80,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 			.ToList();
 		enemies.ForEach(unit =>
 		{
-			unit.DeathCallbacks.Add(() => enemies.Remove(unit));
+			unit.DeathCallbacks.Add((_) => enemies.Remove(unit));
 		});
 	}
 
@@ -127,7 +127,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	/**************************************************************************
 	 * Public Methods                                                         *
 	 **************************************************************************/
-	public void Damage(int damage)
+	public void Damage(Unit source, int damage)
 	{
 		_damageTween?.Kill();
 		_damageTween = CreateTween();
@@ -143,7 +143,11 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 
 		var labelTween = GetTree().CreateTween();
 		labelTween.TweenProperty(text, "global_position", text.GlobalPosition + new Vector2(0, -50), 1.0f);
-		labelTween.TweenCallback(Callable.From(() => text.QueueFree()));
+		labelTween.TweenCallback(Callable.From(() =>
+		{
+			if (!IsInstanceValid(text)) return;
+			text.QueueFree();
+		}));
 		
 		var textColorTween = GetTree().CreateTween();
 		textColorTween.TweenProperty(text, "modulate", new Color(1, 1, 1, 0), 1.0f);
@@ -154,10 +158,10 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		PlayDeathAnimation();
 		PlayDeathSound();
 		
-		DeathCallbacks.ForEach(callback => callback());
+		DeathCallbacks.ForEach(callback => callback(source));
 
 		Globals.BattleScene.TileMap.RemoveEntity(this);
-		_commander?.Remove(_unitType);
+		_commander?.Remove(UnitType);
 		QueueFree();
 	}
 	

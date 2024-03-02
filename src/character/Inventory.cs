@@ -34,7 +34,7 @@ public partial class Inventory : Node, ITransferTarget
 			TransferItem(from, to, item, count);
 		}
 	}
-	
+
 	#region ITransferTarget Implementation
 	/**************************************************************************
 	 * ITransferTarget Methods                                                *
@@ -58,4 +58,22 @@ public partial class Inventory : Node, ITransferTarget
 	public List<string> GetItems() => _items.Keys.ToList();
 	public List<Inventory> GetInventories() => new() { this };
 	#endregion
+
+	/**************************************************************************
+	 * Save/Load Methods                                                      *
+	 **************************************************************************/
+	public void Load(Godot.Collections.Dictionary dictionary)
+	{
+		_items.Clear();
+		foreach (var entry in dictionary)
+		{
+			_items.Add(entry.Key.ToString(), (int)entry.Value);
+		}
+		Listeners.ForEach(listener => listener());
+	}
+	
+	public virtual Godot.Collections.Dictionary<string, Variant> Save()
+	{
+		return new Godot.Collections.Dictionary<string, Variant>(Items.ToDictionary(pair => pair.Key, pair => (Variant)pair.Value));
+	}
 }

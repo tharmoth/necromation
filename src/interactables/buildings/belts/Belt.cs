@@ -67,6 +67,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         Orientation = _orientation;
         RotationDegrees = IRotatable.GetDegreesFromOrientation(_orientation);
         Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/buildings/BeltAnimated.png");
+        _audio.Play();
         
         // When this belt is placed, update the input and output of all adjacent belts
         GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));

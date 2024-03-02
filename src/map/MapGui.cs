@@ -68,7 +68,14 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		// Create a copy of the list as it may be modified during the loop
 		var listeners = MapGlobals.TurnListeners.ToList();
 		listeners.ForEach(listener => listener());
-		
+
+		Battle();
+
+		MapGlobals.UpdateListeners.ForEach(listener => listener());
+	}
+
+	public void Battle()
+	{
 		MapGlobals.TileMap.GetProvinces().ForEach(province =>
 		{
 			var teams = province.Commanders.GroupBy(leader => leader.Team).ToList();
@@ -78,8 +85,6 @@ public partial class MapGui : CanvasLayer, SceneGUI
 				_battleQueue.Enqueue(province);
 			}
 		});
-
-		MapGlobals.UpdateListeners.ForEach(listener => listener());
 	}
 
 	public void CloseGui()

@@ -1,6 +1,8 @@
+using System.Linq;
 using Godot;
 using Necromation;
 using Necromation.gui;
+using Necromation.map;
 using Necromation.shared.gui;
 using Necromation.sk;
 
@@ -12,6 +14,7 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 	private CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
+	private Label AttackLabel => GetNode<Label>("%AttackLabel");
 	
 	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
 	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
@@ -25,7 +28,21 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 		_instance = this;
 	}
 
-	private Control _openGui; 
+	private Control _openGui;
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		if (Globals.FactoryScene is Main { AttackTimer: not null } main)
+		{
+			AttackLabel.Visible = true;
+			AttackLabel.Text = $"You are being attacked at {main.AttackProvince.Name}!\nNext attack in {main.AttackTimer.TimeLeft:0.0} seconds";
+		}
+		else
+		{
+			AttackLabel.Visible = false;
+		}
+	}
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
@@ -93,7 +110,6 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 	{
 		BuildingRemovedAudio.Play();
 	}
-	
 		
 	/*
 	 * Adjusts the position of the popup so that it is always visible on the screen

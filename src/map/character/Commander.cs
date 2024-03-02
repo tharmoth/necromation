@@ -37,9 +37,7 @@ public partial class Commander : Node2D, ITransferTarget
     // Deconstructor
     public void Kill()
     {
-        if (IsInstanceValid(GetParent())) GetParent().RemoveChild(this);
         _province.Commanders.Remove(this);
-        QueueFree();
     }
     
     public override void _Ready()

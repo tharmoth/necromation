@@ -13,30 +13,22 @@ public partial class BuildingTileMap : LayerTileMap
 	public const int TileSize = 32;
 	public const int ProvinceSize = 20;
 	public const int ProvinceGap = 0;
-	private readonly Dictionary<Vector2I, Province> _provences = new();
+	private readonly List<Vector2I> _provences = new();
 
 	public void AddProvence(Vector2I location)
 	{
-		if (_provences.ContainsKey(location)) return;
-		_provences.Add(location, new Province());
+		AddProvence(location, true);
+	}
+	
+	private void AddProvence(Vector2I location, bool spawnResource)
+	{
+		if (_provences.Contains(location)) return;
+		_provences.Add(location);
 		
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
-		
-		var resources = new List<string> {"Bone Fragments"};
-		if ((location - MapGlobals.FactoryPosition).Length() != 0) 
-			resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
-		if ((location - MapGlobals.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
-		var resource = resources[GD.RandRange(0, resources.Count - 1)];
 
-		if (_provences.Count == 1) resource = "Bone Fragments";
-		if (_provences.Count == 2) resource = "Stone";
-		if (_provences.Count == 3) resource = "Coal Ore";
-		if (_provences.Count == 4) resource = "Copper Ore";
+		if (spawnResource) SpawnResource(location);
 		
-		var spawner = new Spawner(resource, 3);
-		spawner.GlobalPosition = ToGlobal(startpos + new Vector2I(ProvinceSize / 2, ProvinceSize / 2) * TileSize);
-		Globals.FactoryScene.CallDeferred("add_child", spawner);
-
 		for (int x = 0; x < ProvinceSize; x++)
 		{ 
 			for (int y = 0; y < ProvinceSize; y++)
@@ -59,6 +51,40 @@ public partial class BuildingTileMap : LayerTileMap
 				SetCell(0, coords, 0, randomvec);
 			}
 		}
+	}
+	
+	private void SpawnResource(Vector2I location)
+	{
+		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
+		
+		var resources = new List<string> {"Bone Fragments"};
+		if ((location - MapGlobals.FactoryPosition).Length() != 0) 
+			resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
+		if ((location - MapGlobals.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
+
+		
+		var resource = resources[GD.RandRange(0, resources.Count - 1)];
+
+		switch (_provences.Count)
+		{
+			case 1:
+				resource = "Bone Fragments";
+				break;
+			case 2:
+				resource = "Stone";
+				break;
+			case 3:
+				resource = "Coal Ore";
+				break;
+			case 4:
+				MusicManager.PlayExploration();
+				resource = "Copper Ore";
+				break;
+		}
+
+		var spawner = new Spawner(resource, 3);
+		spawner.GlobalPosition = ToGlobal(startpos + new Vector2I(ProvinceSize / 2, ProvinceSize / 2) * TileSize);
+		Globals.FactoryScene.CallDeferred("add_child", spawner);
 	}
 
 	public override void _EnterTree()
@@ -89,5 +115,31 @@ public partial class BuildingTileMap : LayerTileMap
 	public IEntity GetResourceAtMouse()
 	{
 		return GetEntity(GetGlobalMousePosition(), Resource);
+	}
+	
+	public virtual Godot.Collections.Dictionary<string, Variant> Save()
+	{
+		var dict =  new Godot.Collections.Dictionary<string, Variant>()
+		{
+			{ "ItemType", "BuildingTilemap" },
+		};
+		foreach (var provence in _provences)	
+		{
+			dict["Provence" + _provences.IndexOf(provence) + "X"] = provence.X;
+			dict["Provence" + _provences.IndexOf(provence) + "Y"] = provence.Y;
+		}
+		return dict;
+	}
+	
+	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+	{
+		for (var i = 0; i < nodeData.Count; i++)
+		{
+			if (!nodeData.ContainsKey("Provence" + i + "X")) continue;
+			var province = new Vector2I((int)nodeData["Provence" + i + "X"], (int)nodeData["Provence" + i + "Y"]);
+			MapGlobals.TileMap.GetProvence(province).Commanders.Clear();
+			MapGlobals.TileMap.GetProvence(province).Owner = "Player";
+			Globals.TileMap.AddProvence(province, false);
+		}
 	}
 }

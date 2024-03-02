@@ -46,23 +46,18 @@ public class SKSaveLoad
             var nodeData = new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
 
             if (Building.IsBuilding(nodeData["ItemType"].ToString())) Building.Load(nodeData);
-            else Resource.Load(nodeData);
-
-            // // Firstly, we need to create the object and add it to the tree and set its position.
-            // var newObjectScene = GD.Load<PackedScene>(nodeData["Filename"].ToString());
-            // var newObject = newObjectScene.Instantiate<Node>();
-            // baseNode.GetNode(nodeData["Parent"].ToString()).AddChild(newObject);
-            // newObject.Set(Node2D.PropertyName.Position, new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]));
-            //
-            // // Now we set the remaining variables.
-            // foreach (var (key, value) in nodeData)
-            // {
-            //     if (key == "Filename" || key == "Parent" || key == "PosX" || key == "PosY")
-            //     {
-            //         continue;
-            //     }
-            //     newObject.Set(key, value);
-            // }
+            else switch (nodeData["ItemType"].ToString())
+            {
+                case "Character":
+                    Character.Load(nodeData);
+                    break;
+                case "BuildingTilemap":
+                    BuildingTileMap.Load(nodeData);
+                    break;
+                default:
+                    Resource.Load(nodeData);
+                    break;
+            }
         }
     }
     
@@ -93,5 +88,13 @@ public class SKSaveLoad
             // Store the save dictionary as a new line in the save file.
             saveGame.StoreLine(jsonString);
         }
+
+        var playerData = Globals.Player.Save();
+        var playerJson = Json.Stringify(playerData);
+        saveGame.StoreLine(playerJson);
+
+        var mapData = Globals.TileMap.Save();
+        var mapJson = Json.Stringify(mapData);
+        saveGame.StoreLine(mapJson);
     }
 }

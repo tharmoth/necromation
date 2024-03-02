@@ -160,16 +160,4 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
 
     #endregion
-    
-    public override Godot.Collections.Dictionary<string, Variant> Save()
-    {
-	    return new Godot.Collections.Dictionary<string, Variant>()
-	    {
-		    { "ItemType", ItemType },
-		    { "PosX", Position.X }, // Vector2 is not supported by JSON
-		    { "PosY", Position.Y },
-		    { "Orientation", Orientation.ToString() },
-		    { "Recipe", Recipe.Name}
-	    };
-    }
 }

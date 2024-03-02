@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7ngqbqat1ohd"
-path="res://.godot/imported/Elite Infantry.png-ce9f5d5742091b64aa55a8b80291d1d8.ctex"
+uid="uid://dwdlv4dsemg4r"
+path="res://.godot/imported/Barbarian.png-07fa76626f67b82aba2add1e78ebb274.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/units/Elite Infantry.png"
-dest_files=["res://.godot/imported/Elite Infantry.png-ce9f5d5742091b64aa55a8b80291d1d8.ctex"]
+source_file="res://res/sprites/unit/Barbarian.png"
+dest_files=["res://.godot/imported/Barbarian.png-07fa76626f67b82aba2add1e78ebb274.ctex"]
 
 [params]
 

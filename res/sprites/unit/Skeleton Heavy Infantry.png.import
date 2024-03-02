@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cydvnvyew6tlj"
-path="res://.godot/imported/Archer.png-db4cec2eec697d7cd1c8aa6811b88114.ctex"
+uid="uid://blli4hrrmqhfa"
+path="res://.godot/imported/Skeleton Heavy Infantry.png-cefdd1726c41e5e20ce94fa1f8d791fa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/units/Archer.png"
-dest_files=["res://.godot/imported/Archer.png-db4cec2eec697d7cd1c8aa6811b88114.ctex"]
+source_file="res://res/sprites/unit/Skeleton Heavy Infantry.png"
+dest_files=["res://.godot/imported/Skeleton Heavy Infantry.png-cefdd1726c41e5e20ce94fa1f8d791fa.ctex"]
 
 [params]
 

@@ -29,6 +29,10 @@ public partial class Character : Node2D
 				?  Globals.Database.GetTexture("Selection")
 				: Globals.Database.GetTexture(_selected);
 			
+			_sprite.Scale = !Building.IsBuilding(_selected) ? 
+				new Vector2(32 / (float)_sprite.Texture.GetWidth(), 32 / (float)_sprite.Texture.GetHeight()) 
+				: new Vector2(1, 1);
+			
 			if (_selected == null) _rotationDegrees = 0;
 		}
 	}
@@ -51,22 +55,28 @@ public partial class Character : Node2D
 			.ToList()
 			.ForEach(item => _inventory.Insert(item, 100));
 		
-		_inventory.Insert("Bone Fragments", 1000);
-		_inventory.Insert("Coal Ore", 1000);
+		// _inventory.Insert("Bone Fragments", 1000);
+		// _inventory.Insert("Coal Ore", 1000);
 		//
-		// _inventory.Insert("Mine", 100);	
+		
 		// _inventory.Insert("Bone Fragments", 5000);
 		// _inventory.Insert("Underground Belt", 100);
 		// _inventory.Insert("Inserter", 500);
 		// _inventory.Insert("Long Inserter", 500);
-		// _inventory.Insert("Assembler", 100);
+		
 		// _inventory.Insert("Research Lab", 5);
+		
+		_inventory.Insert("Mine", 100);	
+		_inventory.Insert("Assembler", 10);
+		_inventory.Insert("Inserter", 100);
+		_inventory.Insert("Belt", 500);
+		_inventory.Insert("Skeleton", 200);
 		
 		// No other way to get wood right now.
 		_inventory.Insert("Barracks", 1);
 		
 		_sprite = new Sprite2D();
-		_sprite.ZIndex = 2;
+		_sprite.ZIndex = 100;
 		_sprite.Visible = false;
 		_sprite.Texture =  Globals.Database.GetTexture("selection");
 		Globals.FactoryScene.CallDeferred("add_child", _sprite);
@@ -74,6 +84,11 @@ public partial class Character : Node2D
 	
 	public override void _Process(double delta)
 	{
+		// Process mouseover
+		if (Selected != null) SelectedPreview();
+		else if (Globals.TileMap.GetBuildingAtMouse() != null || Globals.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
+		else _sprite.Visible = false;
+		
 		// Return if a gui is open
 		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
 
@@ -90,19 +105,14 @@ public partial class Character : Node2D
 
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
-		if (Input.IsActionJustPressed("close_gui")) Selected = null;
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build();
-		
 		
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.TileMap.GetBuildingAtMouse() == null) Mine();
 		else _resource?.Cancel();
 
-		// Process mouseover
-		if (Selected != null) SelectedPreview();
-		else if (Globals.TileMap.GetBuildingAtMouse() != null || Globals.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
-		else _sprite.Visible = false;
+
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -156,6 +166,7 @@ public partial class Character : Node2D
 		_sprite.Visible = true;
 		_sprite.RotationDegrees = _rotationDegrees;
 		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
+		_sprite.Modulate = Colors.White;
 		
 		if (!Building.IsBuilding(Selected)) return;
 		
@@ -169,8 +180,8 @@ public partial class Character : Node2D
 		if (buildingInHand.BuildingSize.Y % 2 == 0) _sprite.Position += new Vector2(0, 16);
 		
 		_sprite.Modulate = buildingInHand.CanPlaceAt(GetGlobalMousePosition())
-			? Colors.Green
-			: Colors.Red;
+			? new Color(0, 1, 0, 0.5f)
+			: new Color(1, 0, 0, 0.5f);
 	}
 
 
@@ -248,7 +259,7 @@ public partial class Character : Node2D
 	{
 		var count = 0;
 		
-		count = transfer.GetMaxTransferAmount(Selected);
+		count = Mathf.Min(transfer.GetMaxTransferAmount(Selected), _inventory.CountItem(Selected));
 		Inventory.TransferItem(_inventory, transfer.GetInputInventory(), Selected, count);
 
 		var remaining = _inventory.CountItem(Selected);
@@ -275,5 +286,23 @@ public partial class Character : Node2D
 		}
 
 		MusicManager.PlayCraft();
+	}
+	
+	public virtual Godot.Collections.Dictionary<string, Variant> Save()
+	{
+		var dict =  new Godot.Collections.Dictionary<string, Variant>()
+		{
+			{ "ItemType", "Character" },
+			{ "PosX", Position.X }, // Vector2 is not supported by JSON
+			{ "PosY", Position.Y },
+			{"Inventory0", _inventory.Save()}
+		};
+		return dict;
+	}
+	
+	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+	{
+		Globals.Player.Position = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);
+		Globals.Player._inventory.Load((Godot.Collections.Dictionary)nodeData["Inventory0"]);
 	}
 }

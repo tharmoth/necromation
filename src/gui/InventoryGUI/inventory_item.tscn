@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0pcouetqfxom"]
+[gd_scene load_steps=4 format=3 uid="uid://b0pcouetqfxom"]
 
 [ext_resource type="Texture2D" uid="uid://dk0ptvtw5i0tj" path="res://res/sprites/Bow.png" id="1_jqrnf"]
 [ext_resource type="Script" path="res://src/gui/InventoryGUI/InventoryItem.cs" id="1_uf47y"]
+[ext_resource type="FontFile" uid="uid://bpe44ydmxto45" path="res://res/fonts/TitilliumWeb-Regular.ttf" id="3_ekw1j"]
 
 [node name="InventoryItem" type="PanelContainer"]
 script = ExtResource("1_uf47y")
@@ -24,5 +25,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-theme_override_font_sizes/font_size = 10
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3_ekw1j")
+theme_override_font_sizes/font_size = 11
 text = "200"
+vertical_alignment = 2

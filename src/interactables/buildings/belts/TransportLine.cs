@@ -7,6 +7,8 @@ namespace Necromation.interactables.belts;
 
 public partial class TransportLine : Node2D, ITransferTarget
 {
+    private bool initalized = false;
+    
     /**************************************************************************
      * Data                                                                   *
      **************************************************************************/
@@ -28,6 +30,16 @@ public partial class TransportLine : Node2D, ITransferTarget
         _inventory.Listeners.Add(UpdateSprites);
     }
 
+    public override void _Ready()
+    {
+        base._Ready();
+        int i = 0;
+        _itemsOnBelt.ForEach(item =>
+        {
+           item.GlobalPosition = GlobalPosition + GetTargetLocation(i++);
+        });
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -38,9 +50,10 @@ public partial class TransportLine : Node2D, ITransferTarget
             var targetLocation = ToGlobal(Position + GetTargetLocation(i));
             
             // Slide the item along the belt until it reaches the bottom of the belt.
-            if (!IsEqualApprox(groundItem.GlobalPosition, targetLocation, 1.0f))
+            if (!IsEqualApprox(groundItem.CachePosition, targetLocation, 1.0f))
             {
-                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.GlobalPosition) * Speed * (float)delta;
+                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.CachePosition) * Speed * (float)delta;
+                groundItem.CachePosition = groundItem.GlobalPosition;
                 continue;
             }
             
@@ -51,6 +64,8 @@ public partial class TransportLine : Node2D, ITransferTarget
             BeltTransfer(OutputLine);
             i = 0;
         }
+        
+        initalized = true;
     }
 
     public int GetItemCount(string item = null)

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Necromation;
 using Necromation.map;
@@ -66,7 +67,5 @@ public partial class Battle : Node2D
 			
 			AddChild(spawner);
 		}
-
-
 	}
 }

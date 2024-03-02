@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://biyscljj05i1"]
+[gd_scene load_steps=10 format=3 uid="uid://biyscljj05i1"]
 
 [ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_2hsjy"]
 [ext_resource type="Script" path="res://src/map/battle/Battle.cs" id="1_nyo56"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://src/map/battle/BattleTileMap.cs" id="3_kgj4d"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="4_8x33n"]
 [ext_resource type="Script" path="res://src/map/battle/BattleGUI.cs" id="8_66t67"]
-[ext_resource type="Script" path="res://src/map/battle/BattleToMapButton.cs" id="8_y7rcu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7p67d"]
 texture = ExtResource("1_2hsjy")
@@ -120,27 +119,5 @@ size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/HBoxContainer"]
 layout_mode = 2
-
-[node name="ExitBattleButton" type="Button" parent="GUI/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Exit"
-script = ExtResource("8_y7rcu")
-
-[node name="BattleCompleteLabel" type="Label" parent="GUI"]
-unique_name_in_owner = true
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 100
-text = "Battle Complete!"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

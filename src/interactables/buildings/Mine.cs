@@ -18,7 +18,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     public Mine() 
     {
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_transport_bicycle_ride_gravel_onboard_pov_10530.mp3");
-        _audio.Attenuation = 25.0f;
+        _audio.Attenuation = 15.0f;
         _audio.Autoplay = true;
         _audio.VolumeDb = -20.0f;
         _audio.PitchScale = .5f;

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dji7c2iuqebqq"
-path="res://.godot/imported/Rabble.png-8548f6de6cdbc2ddcafc6fa9af3dee3c.ctex"
+uid="uid://cm3ko4ryphqqk"
+path="res://.godot/imported/Infantry.png-9cf20b4b1da21e820cf375422f3d30a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/units/Rabble.png"
-dest_files=["res://.godot/imported/Rabble.png-8548f6de6cdbc2ddcafc6fa9af3dee3c.ctex"]
+source_file="res://res/sprites/unit/Infantry.png"
+dest_files=["res://.godot/imported/Infantry.png-9cf20b4b1da21e820cf375422f3d30a2.ctex"]
 
 [params]
 

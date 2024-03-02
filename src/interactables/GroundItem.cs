@@ -6,6 +6,8 @@ public partial class GroundItem : Node2D, BuildingTileMap.IEntity
 {
     public string ItemType { get; set; }
     private Sprite2D _sprite;
+    public Vector2 CachePosition;
+    public int CacheIndex = -1;
 	
     public GroundItem(string itemType)
     {
@@ -21,6 +23,7 @@ public partial class GroundItem : Node2D, BuildingTileMap.IEntity
         base._Ready();
         _sprite.Texture = Globals.Database.GetTexture(ItemType);
         _sprite.Scale = new Vector2(16 / _sprite.Texture.GetSize().X, 16 / _sprite.Texture.GetSize().Y);
+        CachePosition = GlobalPosition;
     }
     
     public bool AddToInventory(Inventory inventory)

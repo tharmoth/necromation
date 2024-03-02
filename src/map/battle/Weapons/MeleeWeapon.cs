@@ -23,7 +23,7 @@ public class MeleeWeapon : Weapon
 
         if (adjustedDamage <= 0) return;
         
-        target.Damage(adjustedDamage);
+        target.Damage(wielder, adjustedDamage);
         PlayHitSound(target);
     }
     

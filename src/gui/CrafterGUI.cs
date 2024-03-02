@@ -21,7 +21,7 @@ public partial class CrafterGUI : Control
 		
 		GetNode<Label>("%Label").Text = crafter.GetRecipe()?.Name ?? "No Recipe";
 
-		if (crafter is Node progress)
+		if (crafter is ProgressTracker.IProgress progress)
 		{
 			GetNode<ProgressTracker>("%ProgressBar").NodeToTrack = progress;
 		}

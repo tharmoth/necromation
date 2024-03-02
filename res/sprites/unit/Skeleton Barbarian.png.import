@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwdlv4dsemg4r"
-path="res://.godot/imported/Barbarian.png-625e340eec157c1fdc6169d2f454bcc9.ctex"
+uid="uid://b68vxsrlg63xb"
+path="res://.godot/imported/Skeleton Barbarian.png-4e0c126b3f4f093168616d5c0695c9f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/units/Barbarian.png"
-dest_files=["res://.godot/imported/Barbarian.png-625e340eec157c1fdc6169d2f454bcc9.ctex"]
+source_file="res://res/sprites/unit/Skeleton Barbarian.png"
+dest_files=["res://.godot/imported/Skeleton Barbarian.png-4e0c126b3f4f093168616d5c0695c9f4.ctex"]
 
 [params]
 

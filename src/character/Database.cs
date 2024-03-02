@@ -178,11 +178,12 @@ public class Database
     /******************************************************************
      * Shared Functions                                               *
      ******************************************************************/
-    public Texture2D GetTexture(string name)
+    public Texture2D GetTexture(string name, string type="")
     {
-        if (_textureCache.TryGetValue(name, out var texture)) return texture;
+        if (_textureCache.TryGetValue(name+type, out var texture)) return texture;
 
         var path = "res://res/sprites/" + name + ".png";
+        if (type != "")  path = "res://res/sprites/" + type + "/" + name + ".png";
 
         if (!FileAccess.FileExists(path))
         {
@@ -201,7 +202,7 @@ public class Database
         }
         
         texture = GD.Load<Texture2D>(path);
-        _textureCache[name] = texture;
+        _textureCache[name+type] = texture;
         return texture;
     }
     

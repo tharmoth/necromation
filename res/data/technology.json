@@ -38,10 +38,12 @@
         "Copper Ringmail",
         "Copper Spear",
         "Skeleton Warrior",
-        "Skeleton Archer"
+        "Skeleton Archer",
+        "Short Bow",
+        "Arrow"
       ],
       "prerequisites" : [
-        "Warfare"
+        "Advanced Inserters", "Automation"
       ],
       "description" : "Forge copper into weapons and armor."
     },
@@ -49,7 +51,7 @@
       "name": "Heavy Weaponry",
       "count": 100,
       "ingredients": [
-        "experiment"
+        "experiment 2"
       ],
       "unlocks" : [
         "Copper Warhammer",
@@ -64,7 +66,7 @@
       "name": "Bronzework",
       "count": 100,
       "ingredients": [
-        "experiment"
+        "experiment 2"
       ],
       "unlocks" : [
         "Bronze Bar",
@@ -84,12 +86,13 @@
       "unlocks" : [
         "Bronze Breastplate",
         "Bronze Spear",
+        "Bronze Warhammer",
         "Skeleton Heavy Infantry"
       ],
       "prerequisites" : [
         "Bronzework"
       ],
       "description" : "Forge bronze into weapons and armor."
-    },
+    }
   ]
 }
