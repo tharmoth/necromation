@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=20 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
@@ -16,7 +16,6 @@
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
 [ext_resource type="AudioStream" uid="uid://d2sv6kue0g7hw" path="res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3" id="12_ep3l7"]
 [ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
-[ext_resource type="Script" path="res://src/character/Cursor.cs" id="17_8pe5h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
 texture = ExtResource("11_q1hir")
@@ -144,13 +143,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/FactoryGUI/VBoxContainer2"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-show_percentage = false
-
 [node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -160,6 +152,13 @@ vertical_scroll_mode = 0
 [node name="Actionbar" type="HBoxContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2/ScrollContainer"]
 layout_mode = 2
 script = ExtResource("5_jpmfq")
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/FactoryGUI"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+show_percentage = false
 
 [node name="Buttons" type="VBoxContainer" parent="GUI/Control/FactoryGUI"]
 layout_mode = 2
@@ -249,6 +248,7 @@ stream = ExtResource("11_p2cxa")
 [node name="BuildingRemovedAudio" type="AudioStreamPlayer" parent="GUI"]
 unique_name_in_owner = true
 stream = ExtResource("12_ep3l7")
+volume_db = -15.0
 
 [node name="TileMap" type="TileMap" parent="."]
 z_index = -5
@@ -271,6 +271,3 @@ region_rect = Rect2(64, 0, 32, 32)
 
 [node name="AudioListener2D" type="AudioListener2D" parent="Character"]
 current = true
-
-[node name="Cursor" type="Sprite2D" parent="."]
-script = ExtResource("17_8pe5h")

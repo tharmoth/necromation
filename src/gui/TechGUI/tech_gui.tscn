@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://src/gui/TechGUI/TechGUI.cs" id="1_1wudm"]
 [ext_resource type="PackedScene" uid="uid://dym3bw8at8qt1" path="res://src/gui/TechGUI/tech_panel.tscn" id="1_3eie5"]
 [ext_resource type="Script" path="res://src/gui/buttons/HideButton.cs" id="2_1rpkb"]
-[ext_resource type="Texture2D" uid="uid://dtym36gpw8e7c" path="res://res/sprites/Check Mark.png" id="3_hw6jm"]
-[ext_resource type="Texture2D" uid="uid://bibd4p41sh314" path="res://res/sprites/Experiment.png" id="4_0jn0e"]
+[ext_resource type="Texture2D" uid="uid://d3tkyt42kfr3" path="res://res/sprites/Check Mark.png" id="3_hw6jm"]
+[ext_resource type="Texture2D" uid="uid://egikjt8vcqsa" path="res://res/sprites/items/Experiment.png" id="5_b6c1u"]
 
 [node name="TechGUI" type="PanelContainer"]
 custom_minimum_size = Vector2(500, 400)
@@ -79,7 +79,7 @@ text = "Iron Smelting"
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ScrollContainer/TechList/PanelContainer2/HBoxContainer"]
 layout_mode = 2
-texture = ExtResource("4_0jn0e")
+texture = ExtResource("5_b6c1u")
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/TechList/PanelContainer2/HBoxContainer"]
 layout_mode = 2

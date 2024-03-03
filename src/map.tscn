@@ -1,26 +1,25 @@
-[gd_scene load_steps=15 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=14 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/Map.cs" id="1_muam7"]
-[ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_ri0bn"]
+[ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="2_12t4y"]
 [ext_resource type="Script" path="res://src/map/MapTileMap.cs" id="2_xas5k"]
 [ext_resource type="Script" path="res://src/map/MapGui.cs" id="4_513oc"]
 [ext_resource type="Script" path="res://src/map/gui/RecruitGUI.cs" id="6_w0llc"]
 [ext_resource type="Script" path="res://src/map/gui/CommanderList.cs" id="7_60yos"]
 [ext_resource type="Script" path="res://src/map/gui/MapToFactoryButton.cs" id="7_ep6dt"]
-[ext_resource type="Texture2D" uid="uid://mmc7pi4i3blc" path="res://res/sprites/Underground Belt.png" id="8_8ys6w"]
-[ext_resource type="Texture2D" uid="uid://xn8iy0eq7nns" path="res://res/sprites/selection.png" id="10_kmmak"]
+[ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="9_w144y"]
 [ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="10_pbpxj"]
+[ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="11_8qgol"]
 [ext_resource type="AudioStream" uid="uid://dvunqv10vqhju" path="res://res/sfx/zapsplat_foley_dry_dead_leaf_crush_001_70766.mp3" id="12_brqa8"]
-[ext_resource type="Texture2D" uid="uid://bgxp03y7s5ppl" path="res://res/sprites/Stone Furnace.png" id="17_jvur2"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5kr02"]
-texture = ExtResource("1_ri0bn")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vg77j"]
+texture = ExtResource("2_12t4y")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_w7poh"]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_5kr02")
+sources/0 = SubResource("TileSetAtlasSource_vg77j")
 
 [node name="Map" type="Node2D"]
 position = Vector2(8, -2)
@@ -30,7 +29,7 @@ script = ExtResource("1_muam7")
 tile_set = SubResource("TileSet_w7poh")
 cell_quadrant_size = 32
 format = 2
-layer_0/tile_data = PackedInt32Array(0, 1, 0, 2, 1, 0, 1, 1, 0, 65537, 1, 0, 65536, 1, 0, 65538, 1, 0, 131074, 1, 0, 131073, 1, 0, 131072, 1, 0, 3, 1, 0, 65539, 1, 0, 131075, 1, 0, 196611, 1, 0, 196610, 1, 0, 196609, 1, 0, 196608, 1, 0, 262144, 1, 0, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 1, 0, 262151, 1, 0, 262152, 1, 0, 196616, 1, 0, 131080, 1, 0, 65544, 1, 0, 8, 1, 0, 7, 1, 0, 6, 1, 0, 5, 1, 0, 4, 1, 0, 65540, 1, 0, 131076, 1, 0, 196612, 1, 0, 196613, 1, 0, 196614, 1, 0, 196615, 1, 0, 131079, 1, 0, 65543, 1, 0, 65542, 1, 0, 65541, 1, 0, 131077, 1, 0, 131078, 1, 0)
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 2, 0, 0, 1, 0, 0, 65537, 0, 0, 65536, 0, 0, 65538, 0, 0, 131074, 0, 0, 131073, 0, 0, 131072, 0, 0, 3, 0, 0, 65539, 0, 0, 131075, 0, 0, 196611, 0, 0, 196610, 0, 0, 196609, 0, 0, 196608, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 196616, 0, 0, 131080, 0, 0, 65544, 0, 0, 8, 0, 0, 7, 0, 0, 6, 0, 0, 5, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 196612, 0, 0, 196613, 0, 0, 196614, 0, 0, 196615, 0, 0, 131079, 0, 0, 65543, 0, 0, 65542, 0, 0, 65541, 0, 0, 131077, 0, 0, 131078, 0, 0)
 script = ExtResource("2_xas5k")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -104,12 +103,6 @@ text = "Move Squads (N)"
 alignment = 0
 script = ExtResource("10_pbpxj")
 _action = "end_turn"
-
-[node name="TextureRect2" type="TextureRect" parent="MapGui/MainGui"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-texture = ExtResource("8_8ys6w")
-expand_mode = 1
 
 [node name="RecruitGUI" type="Control" parent="MapGui"]
 unique_name_in_owner = true
@@ -190,7 +183,7 @@ width = 8.0
 
 [node name="SelectedSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-texture = ExtResource("10_kmmak")
+texture = ExtResource("9_w144y")
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -100
@@ -198,7 +191,7 @@ layer = -100
 [node name="Castle" type="Sprite2D" parent="."]
 position = Vector2(152, 70)
 scale = Vector2(0.25, 0.25)
-texture = ExtResource("17_jvur2")
+texture = ExtResource("11_8qgol")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_brqa8")

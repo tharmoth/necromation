@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://d04gyqxbtve6"]
 
 [ext_resource type="Script" path="res://src/map/battle/gui/Summary/UnitRow.cs" id="1_sqqum"]
-[ext_resource type="Texture2D" uid="uid://dwrf8ond3i6rb" path="res://res/sprites/items/Copper Spear.png" id="2_83qg0"]
-[ext_resource type="Texture2D" uid="uid://btbfpixiseynr" path="res://res/sprites/unit/Skeleton.png" id="2_pg486"]
-[ext_resource type="Texture2D" uid="uid://nor5xe3al07c" path="res://res/sprites/items/Bone.png" id="3_fi8rj"]
+[ext_resource type="Texture2D" uid="uid://b23jb3wfljywk" path="res://res/sprites/items/Copper Spear.png" id="2_83qg0"]
+[ext_resource type="Texture2D" uid="uid://b6bqgdvwlagdg" path="res://res/sprites/unit/Skeleton.png" id="2_pg486"]
+[ext_resource type="Texture2D" uid="uid://0w0me837o6w1" path="res://res/sprites/items/Bone.png" id="3_fi8rj"]
 
 [node name="Unitrow" type="HBoxContainer"]
 script = ExtResource("1_sqqum")

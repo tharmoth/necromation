@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dni4wkb4fihf0"]
 
-[ext_resource type="Texture2D" uid="uid://cmg4w5drxpwek" path="res://res/sprites/dust.png" id="1_nb7m4"]
+[ext_resource type="Texture2D" uid="uid://dpvphvys2w4cd" path="res://res/sprites/Dust.png" id="1_g17vu"]
 
 [sub_resource type="Gradient" id="Gradient_8tsa2"]
 offsets = PackedFloat32Array(0.011194, 0.996269)
@@ -26,7 +26,7 @@ z_as_relative = false
 emitting = false
 amount = 100
 process_material = SubResource("ParticleProcessMaterial_qr8sd")
-texture = ExtResource("1_nb7m4")
+texture = ExtResource("1_g17vu")
 lifetime = 0.75
 speed_scale = 2.0
 explosiveness = 1.0

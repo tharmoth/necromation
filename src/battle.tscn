@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://biyscljj05i1"]
 
-[ext_resource type="Texture2D" uid="uid://bwq1gsr03fpq4" path="res://res/sprites/world-map-tile.png" id="1_2hsjy"]
+[ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="1_2hsjy"]
 [ext_resource type="Script" path="res://src/map/battle/Battle.cs" id="1_nyo56"]
 [ext_resource type="Script" path="res://src/sk/pan_camera.gd" id="2_rgifv"]
 [ext_resource type="Script" path="res://src/map/battle/BattleTileMap.cs" id="3_kgj4d"]

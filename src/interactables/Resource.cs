@@ -34,7 +34,7 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
         stream.AddStream(1, GD.Load<AudioStream>("res://res/sfx/zapsplat_industrial_pick_axe_single_hit_on_rock_010_103435.mp3"));
         _audio.Stream = stream;
         _audio.PitchScale = .9f;
-        _audio.VolumeDb = -5;
+        _audio.VolumeDb = -15;
         AddChild(_audio);
         
         _bonusAudio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_dry_dead_leaf_crush_001_70766.mp3");

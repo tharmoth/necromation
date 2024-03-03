@@ -50,10 +50,10 @@ public partial class Character : Node2D
 	{
 		AddToGroup("player");
 		
-		Globals.Database.Recipes
-			.Select(recipe => recipe.Products.First().Key)
-			.ToList()
-			.ForEach(item => _inventory.Insert(item, 100));
+		// Globals.Database.Recipes
+		// 	.Select(recipe => recipe.Products.First().Key)
+		// 	.ToList()
+		// 	.ForEach(item => _inventory.Insert(item, 100));
 		
 		// _inventory.Insert("Bone Fragments", 1000);
 		// _inventory.Insert("Coal Ore", 1000);
@@ -65,12 +65,12 @@ public partial class Character : Node2D
 		// _inventory.Insert("Long Inserter", 500);
 		
 		// _inventory.Insert("Research Lab", 5);
-		
-		_inventory.Insert("Mine", 100);	
-		_inventory.Insert("Assembler", 10);
-		_inventory.Insert("Inserter", 100);
-		_inventory.Insert("Belt", 500);
-		_inventory.Insert("Skeleton", 200);
+		//
+		// _inventory.Insert("Mine", 100);	
+		// _inventory.Insert("Assembler", 10);
+		// _inventory.Insert("Inserter", 100);
+		// _inventory.Insert("Belt", 500);
+		// _inventory.Insert("Skeleton", 200);
 		
 		// No other way to get wood right now.
 		_inventory.Insert("Barracks", 1);
@@ -78,7 +78,7 @@ public partial class Character : Node2D
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 100;
 		_sprite.Visible = false;
-		_sprite.Texture =  Globals.Database.GetTexture("selection");
+		_sprite.Texture =  Globals.Database.GetTexture("Selection");
 		Globals.FactoryScene.CallDeferred("add_child", _sprite);
 	}
 	

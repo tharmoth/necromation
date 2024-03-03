@@ -180,17 +180,18 @@ public class Database
      ******************************************************************/
     public Texture2D GetTexture(string name, string type="")
     {
+        // We have to look for the .import for dumb build reasons.
         if (_textureCache.TryGetValue(name+type, out var texture)) return texture;
 
-        var path = "res://res/sprites/" + name + ".png";
-        if (type != "")  path = "res://res/sprites/" + type + "/" + name + ".png";
+        var path = "res://res/sprites/" + name + ".png.import";
+        if (type != "")  path = "res://res/sprites/" + type + "/" + name + ".png.import";
 
         if (!FileAccess.FileExists(path))
         {
             var dirs = DirAccess.Open("res://res/sprites/");
             foreach (var directory in dirs.GetDirectories())
             {
-                path = "res://res/sprites/" + directory + "/" + name + ".png";
+                path = "res://res/sprites/" + directory + "/" + name + ".png.import";
                 if (FileAccess.FileExists(path)) break;
             }
         }
@@ -201,7 +202,7 @@ public class Database
             return new Texture2D();
         }
         
-        texture = GD.Load<Texture2D>(path);
+        texture = GD.Load<Texture2D>(path.Replace(".import", ""));
         _textureCache[name+type] = texture;
         return texture;
     }
@@ -215,9 +216,15 @@ public class Database
 
     public static AudioStream LoadAudioFileFromFolder(string folder)
     {
-        var files = DirAccess.Open("res://res/sfx/" + folder + "/").GetFiles().Where(file => file.GetExtension() == "wav" || file.GetExtension() == "mp3")
+        // We have to look for the .import for dumb build reasons.
+        var files = DirAccess.Open("res://res/sfx/" + folder + "/").GetFiles().Where(filey => filey.Contains("wav.import") || filey.Contains("mp3.import"))
             .ToArray();
-        var file = files[GD.RandRange(0, files.Length - 1)];
+        foreach (var file2 in files)
+        {
+            GD.Print(file2);
+        }
+        
+        var file = files[GD.RandRange(0, files.Length - 1)].Replace(".import", "");
         return GD.Load<AudioStream>("res://res/sfx/death/" + file);
     }
 }

@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dvji4s2e7iexm"]
 
 [ext_resource type="Script" path="res://src/gui/lists/CraftingListPopup.cs" id="1_wx3hn"]
-[ext_resource type="Texture2D" uid="uid://e6kw3j25kq2m" path="res://res/sprites/Circuit.png" id="2_vnoaw"]
-[ext_resource type="Texture2D" uid="uid://dxo6j52ka5uu1" path="res://res/sprites/Gear.png" id="3_trl6m"]
-[ext_resource type="Texture2D" uid="uid://cjjyn7cm7kybq" path="res://res/sprites/Iron Bar.png" id="4_w0hhy"]
+[ext_resource type="Texture2D" uid="uid://otk10dlw6m1x" path="res://res/sprites/old/Circuit.png" id="2_7h1vi"]
+[ext_resource type="Texture2D" uid="uid://bm3v4xaf4n7dg" path="res://res/sprites/items/Gear.png" id="3_ciq8s"]
+[ext_resource type="Texture2D" uid="uid://bkp0ssod7ugep" path="res://res/sprites/items/Iron Bar.png" id="4_t7i8j"]
 
 [node name="CraftingListPopup" type="PanelContainer"]
 offset_left = 5.0
@@ -44,7 +44,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row"]
 layout_mode = 2
-texture = ExtResource("2_vnoaw")
+texture = ExtResource("2_7h1vi")
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row"]
 layout_mode = 2
@@ -56,7 +56,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row2"]
 layout_mode = 2
-texture = ExtResource("3_trl6m")
+texture = ExtResource("3_ciq8s")
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row2"]
 layout_mode = 2
@@ -68,7 +68,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row3"]
 layout_mode = 2
-texture = ExtResource("4_w0hhy")
+texture = ExtResource("4_t7i8j")
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row3"]
 layout_mode = 2

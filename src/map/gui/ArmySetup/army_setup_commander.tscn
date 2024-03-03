@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dpxfdpb3aw7u1"]
 
 [ext_resource type="Script" path="res://src/map/gui/ArmySetup/ArmySetupCommander.cs" id="1_j7btm"]
-[ext_resource type="Texture2D" uid="uid://bac0sjonpetyy" path="res://res/sprites/dot.png" id="2_7m7x2"]
+[ext_resource type="Texture2D" uid="uid://c2lvsbtr85b8u" path="res://res/sprites/Dot.png" id="2_hscx0"]
 [ext_resource type="PackedScene" uid="uid://dwudnowxsfswg" path="res://src/map/gui/ArmySetup/army_setup_squad.tscn" id="3_yyosu"]
 
 [node name="Commander" type="PanelContainer"]
@@ -54,7 +54,6 @@ text = "Move"
 text_overrun_behavior = 3
 
 [node name="CommanderPlacementMargin" type="MarginContainer" parent="CommanderMargin/HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -64,11 +63,12 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="CommanderPlacementTexture" type="TextureRect" parent="CommanderMargin/HBoxContainer/CommanderPlacementMargin"]
+visible = false
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = ExtResource("2_7m7x2")
+texture = ExtResource("2_hscx0")
 
 [node name="SquadPanel" type="VBoxContainer" parent="CommanderMargin/HBoxContainer"]
 layout_mode = 2

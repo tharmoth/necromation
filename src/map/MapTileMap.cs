@@ -60,14 +60,16 @@ public partial class MapTileMap : SKTileMap
 				rangedCommander.Units.Insert("Archer", 10);
 				break;
 			case 3:
+				meleeCommander.Units.Insert("Infantry", 50);
+				rangedCommander.Units.Insert("Archer", 25);
+				break;
+			case 4:
 				meleeCommander.Units.Insert("Infantry", 100);
 				rangedCommander.Units.Insert("Archer", 50);
 				break;
-			case 4:
-				meleeCommander.Units.Insert("Barbarian", 400);
-				break;
 			case 5:
-				meleeCommander.Units.Insert("Heavy Infantry", 400);
+				meleeCommander.Units.Insert("Barbarian", 200);
+				meleeCommander.Units.Insert("Heavy Infantry", 50);
 				rangedCommander.Units.Insert("Archer", 100);
 				break;
 			case 6:
