@@ -11,8 +11,8 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     // Public fields
     public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Belt";
-    public TransportLine LeftLine { get; private set; } = new();
-    public TransportLine RightLine { get; private set; } = new();
+    public TransportLine LeftLine { get; private set; }
+    public TransportLine RightLine { get; private set; }
     
     private IRotatable.BuildingOrientation _orientation;
     public override IRotatable.BuildingOrientation Orientation
@@ -45,12 +45,14 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public Belt(IRotatable.BuildingOrientation orientation)
     {
         _orientation = orientation;
-        
+
+        LeftLine = new TransportLine();
+        RightLine = new TransportLine();
+
         AddChild(LeftLine);
         AddChild(RightLine);
-        LeftLine.Position = new Vector2(-4, 0);
-        RightLine.Position = new Vector2(4, 0);
-        
+
+
         Sprite.Hframes = 8;
         
         AddChild(_audio);
@@ -69,6 +71,12 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/buildings/BeltAnimated.png");
         _audio.Play();
         
+        LeftLine.TargetDirectionGlobal = TargetDirectionGlobal;
+        RightLine.TargetDirectionGlobal = TargetDirectionGlobal;
+        
+        LeftLine.Position = new Vector2(-8, 0);
+        RightLine.Position = new Vector2(8, 0);
+        
         // When this belt is placed, update the input and output of all adjacent belts
         GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));
         UpdateInputOutput(this, GetAdjacent());
@@ -78,9 +86,12 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     {
         base._Process(delta);
         MovePlayer(delta);
-        var seconds = Time.GetTicksMsec() / 1000.0;
+        
         // Move the frame forward 8 times every .5333 seconds
-        Sprite.Frame = (int)(seconds / (_secondsPerItem / 32)) % Sprite.Hframes;
+        var seconds = Time.GetTicksMsec() / 1000.0;
+        var frame = (int)(seconds / (_secondsPerItem / 32)) % Sprite.Hframes;
+        if (Sprite.Frame != frame) Sprite.Frame = frame;
+        
     }
     
     public override void Remove(Inventory to)

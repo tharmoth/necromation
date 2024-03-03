@@ -219,11 +219,6 @@ public class Database
         // We have to look for the .import for dumb build reasons.
         var files = DirAccess.Open("res://res/sfx/" + folder + "/").GetFiles().Where(filey => filey.Contains("wav.import") || filey.Contains("mp3.import"))
             .ToArray();
-        foreach (var file2 in files)
-        {
-            GD.Print(file2);
-        }
-        
         var file = files[GD.RandRange(0, files.Length - 1)].Replace(".import", "");
         return GD.Load<AudioStream>("res://res/sfx/death/" + file);
     }

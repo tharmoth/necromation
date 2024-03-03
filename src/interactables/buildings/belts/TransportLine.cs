@@ -8,6 +8,8 @@ namespace Necromation.interactables.belts;
 public partial class TransportLine : Node2D, ITransferTarget
 {
     private bool initalized = false;
+    private Vector2 _cachePosition;
+    public Vector2I TargetDirectionGlobal { get; set; }
     
     /**************************************************************************
      * Data                                                                   *
@@ -34,26 +36,26 @@ public partial class TransportLine : Node2D, ITransferTarget
     {
         base._Ready();
         int i = 0;
+        _cachePosition = GlobalPosition;
         _itemsOnBelt.ForEach(item =>
         {
-           item.GlobalPosition = GlobalPosition + GetTargetLocation(4);
+           item.CachePosition = _cachePosition + GetTargetLocation(4);
         });
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-
+        _cachePosition = GlobalPosition;
         for (var i = 0; i < _itemsOnBelt.Count; i++)
         {
             var groundItem = _itemsOnBelt[i];
-            var targetLocation = ToGlobal(Position + GetTargetLocation(i));
+            var targetLocation = _cachePosition + GetTargetLocation(i);
             
             // Slide the item along the belt until it reaches the bottom of the belt.
-            if (!IsEqualApprox(groundItem.GlobalPosition, targetLocation, 1.0f))
+            if (!IsEqualApprox(groundItem.CachePosition, targetLocation, 1.0f))
             {
-                groundItem.GlobalPosition += -targetLocation.DirectionTo(groundItem.GlobalPosition) * Speed * (float)delta;
-                groundItem.CachePosition = GlobalPosition;
+                groundItem.CachePosition += -targetLocation.DirectionTo(groundItem.CachePosition) * Speed * (float)delta;
                 continue;
             }
             
@@ -81,11 +83,11 @@ public partial class TransportLine : Node2D, ITransferTarget
     {
         return index switch
         {
-            0 => new Vector2I(0, -1) * 16,
-            1 => new Vector2I(0, -1) * 8,
-            2 => new Vector2I(0, -1) * 0,
-            3 => new Vector2I(0, -1) * -8,
-            4 => new Vector2I(0, -1) * -16,
+            0 => TargetDirectionGlobal * 16,
+            1 => TargetDirectionGlobal * 8,
+            2 => TargetDirectionGlobal * 0,
+            3 => TargetDirectionGlobal * -8,
+            4 => TargetDirectionGlobal * -16,
             _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
         };
     }
@@ -144,19 +146,16 @@ public partial class TransportLine : Node2D, ITransferTarget
     private void AddItem(GroundItem item)
     {
         _itemsOnBelt.Add(item);
-        var pos = item.GlobalPosition;
+        var pos = item.CachePosition;
         if (item.GetParent() == null) Globals.FactoryScene.AddChild(item);
         if (IsEqualApprox(item.Position, Vector2.Zero, 1))
         {
-            item.GlobalPosition = GlobalPosition + GetTargetLocation(4);
-            item.CachePosition = GlobalPosition + GetTargetLocation(4);
+            item.CachePosition = _cachePosition + GetTargetLocation(4);
         }
         else
         {
-            item.GlobalPosition = pos;
             item.CachePosition = pos;
         }
-        item.GlobalRotation = 0;
     }
     
     private GroundItem RemoveItem()

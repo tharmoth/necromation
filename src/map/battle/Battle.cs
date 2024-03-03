@@ -30,11 +30,11 @@ public partial class Battle : Node2D
 		if (Provence.Commanders.Count == 0)
 		{
 			var PlayerCommanderInfantry = new Commander(new Province(), "Player");
-			PlayerCommanderInfantry.Units.Insert("Elite Infantry", 100);
+			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 1000);
 			Provence.Commanders.Add(PlayerCommanderInfantry);
 			
 			var EnemyCommanderInfantry = new Commander(new Province(), "Enemy");
-			EnemyCommanderInfantry.Units.Insert("Barbarian", 1000);
+			EnemyCommanderInfantry.Units.Insert("Heavy Infantry", 100);
 			Provence.Commanders.Add(EnemyCommanderInfantry);
 			
 			// var PlayerCommanderArcher = new Commander(new Province(), "Player");
@@ -42,10 +42,10 @@ public partial class Battle : Node2D
 			// PlayerCommanderArcher.Units.Insert("Archer", 100);
 			// Provence.Commanders.Add(PlayerCommanderArcher);
 			
-			var EnemyCommanderArcher = new Commander(new Province(), "Enemy");
-			EnemyCommanderArcher.SpawnLocation = new Vector2I(30, 25);
-			EnemyCommanderArcher.Units.Insert("Archer", 100);
-			Provence.Commanders.Add(EnemyCommanderArcher);
+			// var EnemyCommanderArcher = new Commander(new Province(), "Enemy");
+			// EnemyCommanderArcher.SpawnLocation = new Vector2I(30, 25);
+			// EnemyCommanderArcher.Units.Insert("Archer", 100);
+			// Provence.Commanders.Add(EnemyCommanderArcher);
 		}
 		
 		foreach(var commander in Provence.Commanders)

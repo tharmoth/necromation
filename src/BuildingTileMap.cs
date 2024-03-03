@@ -1,8 +1,11 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
+using Godot.Collections;
 using Necromation;
+using Necromation.character;
 using Necromation.map;
 using Necromation.sk;
 
@@ -51,6 +54,21 @@ public partial class BuildingTileMap : LayerTileMap
 				SetCell(0, coords, 0, randomvec);
 			}
 		}
+		
+		Sprite2D sprite = new();
+		sprite.Texture = Globals.Database.GetTexture("soil2");
+		var scaler = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
+		sprite.Scale = new Vector2(scaler, scaler);
+		sprite.GlobalPosition = startpos;
+		sprite.Centered = false;
+		sprite.ZIndex = -2;
+		Globals.FactoryScene.CallDeferred("add_child", sprite);
+
+		var grassTexture = Globals.Database.GetTexture("grass2");
+		var grassTexture2 = Globals.Database.GetTexture("grass5");
+		PropSpawner spawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .5f);
+		spawner.GlobalPosition = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
+		Globals.FactoryScene.CallDeferred("add_child", spawner);
 	}
 	
 	private void SpawnResource(Vector2I location)
@@ -61,10 +79,9 @@ public partial class BuildingTileMap : LayerTileMap
 		if ((location - MapGlobals.FactoryPosition).Length() != 0) 
 			resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
 		if ((location - MapGlobals.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
-
 		
 		var resource = resources[GD.RandRange(0, resources.Count - 1)];
-
+		if ((location - MapGlobals.FactoryPosition).Length() > 3) resource = "Tin Ore";
 		switch (_provences.Count)
 		{
 			case 1:
@@ -81,9 +98,12 @@ public partial class BuildingTileMap : LayerTileMap
 				resource = "Copper Ore";
 				break;
 		}
+		
+		var spawnerX = GD.RandRange(4, ProvinceSize - 4) * TileSize;
+		var spawnerY = GD.RandRange(4, ProvinceSize - 4) * TileSize;
 
 		var spawner = new Spawner(resource, 3);
-		spawner.GlobalPosition = ToGlobal(startpos + new Vector2I(ProvinceSize / 2, ProvinceSize / 2) * TileSize);
+		spawner.GlobalPosition = ToGlobal(startpos + new Vector2(spawnerX, spawnerY));
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
 	}
 

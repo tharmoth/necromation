@@ -6,9 +6,17 @@ public partial class GroundItem : Node2D, BuildingTileMap.IEntity
 {
     public string ItemType { get; set; }
     private Sprite2D _sprite;
-    public Vector2 CachePosition;
-    public int CacheIndex = -1;
-	
+    private Vector2 _cachePosition;
+    public Vector2 CachePosition
+    {
+        get => _cachePosition;
+        set
+        {
+            _cachePosition = value;
+            GlobalPosition = _cachePosition;
+        }
+    }
+
     public GroundItem(string itemType)
     {
         ItemType = itemType;

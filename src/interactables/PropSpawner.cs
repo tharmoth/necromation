@@ -1,39 +1,59 @@
 using Godot;
 using System;
+using Godot.Collections;
+using Array = Godot.Collections.Array;
 
 public partial class PropSpawner : Node2D
 {
-	private enum RandomType
+	public enum RandomType
 	{
 		Random,
 		Simplex,
+		Cuboid,
 	}
 
-	[Export] private RandomType type = RandomType.Simplex;
-	[Export] private Texture2D _spriteTexture; 
+	[Export] private RandomType _type = RandomType.Simplex;
+	[Export] private Array<Texture2D> _spriteTextures = new();
 	[Export] private int _radius = 1000;
-	[Export] private int count = 100;
-	[Export] private float _opacity = 0.25f;
+	[Export] private float _scale = 0.25f;
+	[Export] private int _count = 100;
 
 	private double _time;
+
+	public PropSpawner()
+	{
+		
+	}
+	
+	public PropSpawner(RandomType type, Array<Texture2D> textures, int radius,float scale, int count = 100)
+	{
+		_type = type;
+		_spriteTextures = textures;
+		_radius = radius;
+		_scale = scale;
+		_count = count;
+	}
 
 	public override void _Ready()
 	{
 		base._Ready();
-		GetNode<Sprite2D>("Sprite2D").Visible = false;
+		// GetNode<Sprite2D>("Sprite2D").Visible = false;
 
 		CallDeferred("_spawn");
 	}
 
 	private void _spawn()
 	{
-		switch (type)
+		switch (_type)
 		{
 			case RandomType.Random:
 				PlacePropsRandom();
 				break;
 			case RandomType.Simplex:
 				PlacePropsSimplex();
+				break;
+			case RandomType.Cuboid:
+				PlacePropsCuboid();
 				break;
 			default:
 				throw new ArgumentOutOfRangeException();
@@ -45,32 +65,61 @@ public partial class PropSpawner : Node2D
 		var _noise = new FastNoiseLite();
 		_noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
 
-		for (var i = 0; i < count; i++)
+		for (var i = 0; i < _count; i++)
 		{
 			var x = _noise.GetNoise2D(i, 0) * _radius;
 			var y = _noise.GetNoise2D(0, i) * _radius;
-			PlaceProp(new Vector2(x, y));
+			PlaceProp(new Vector2(x, y), _scale);
 		}
 	}
 
 	private void PlacePropsRandom()
 	{
-		for (var i = 0; i < count; i++)
+		for (var i = 0; i < _count; i++)
 		{
 			var x = new Random().Next(-_radius, _radius);
 			var y = new Random().Next(-_radius, _radius);
-			PlaceProp(new Vector2(x, y));
+			PlaceProp(new Vector2(x, y), _scale);
 		}
 	}
 	
-	private void PlaceProp(Vector2 position)
+	private void PlacePropsCuboid()
+	{
+		for (var x = -_radius; x < _radius; x += 32)
+		{
+			for (var y = -_radius; y < _radius; y += 32)
+			{
+				if (GD.Randf() > .5)
+				{
+					FillCell(new Vector2(x, y));
+				}
+			}
+		}
+	}
+
+	private void FillCell(Vector2 globalPosition)
+	{
+		for (var x = 5; x < 32; x += 10)
+		{
+			for (var y = 5; y < 32; y += 10)
+			{
+				var scale = _scale * (float)GD.RandRange(.5f, 1f);
+				if (GD.Randf() > .25)
+				{
+					PlaceProp(globalPosition + new Vector2(x + GD.RandRange(-3, 3), y + GD.RandRange(-3, 3)), scale);
+				}
+			}
+		}
+	}
+	
+	private void PlaceProp(Vector2 position, float scale)
 	{
 		var spawn = new Sprite2D();
-		spawn.Texture = _spriteTexture;
+		spawn.Texture = _spriteTextures[new Random().Next(0, _spriteTextures.Count - 1)];
 		spawn.Position = position;
 		spawn.ZIndex = -1;
-		spawn.Modulate = new Color(1, 1, 1, _opacity);
 		spawn.RotationDegrees = new Random().Next(-10, 10);
+		spawn.Scale = new Vector2(scale, scale);
 		AddChild(spawn);
 	}
 }

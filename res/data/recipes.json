@@ -219,8 +219,7 @@
       "name": "Barracks",
       "time" : 10.0,
       "ingredients": {
-        "Stone": 10,
-        "Bone": 5
+        "Bone": 10
       },
       "products": {
         "Barracks": 1
