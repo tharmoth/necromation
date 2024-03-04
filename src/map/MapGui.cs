@@ -9,6 +9,8 @@ using Necromation.shared.gui;
 public partial class MapGui : CanvasLayer, SceneGUI
 {
 	public Label SelectedLabel  => GetNode<Label>("%Label");
+	private Button _factoryButton => GetNode<Button>("%FactoryButton");
+	private Button _armyButton => GetNode<Button>("%ArmyButton");
 	private RecruitGUI RecruitGui => GetNode<RecruitGUI>("%RecruitGUI");
 	private Control MainGui => GetNode<Control>("%MainGui");
 
@@ -25,7 +27,13 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		}
 		Instance = this;
 	}
-	
+
+	public override void _Ready()
+	{
+		base._Ready();
+		MapGlobals.UpdateListeners.Add(Update);
+	}
+
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
@@ -94,5 +102,29 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		
 		RecruitGui.Visible = false;
 		MainGui.Visible = true;
+	}
+
+	private void Update()
+	{
+		var provence = MapGlobals.SelectedProvince;
+
+		var units = new Dictionary<string, int>();
+
+		foreach (var (unit, count) in provence.Commanders.SelectMany(commander => commander.Units.Items).ToList())
+		{
+			units.TryGetValue(unit, out var currentCount);
+			units[unit] = currentCount + count;
+		}
+
+		var unitString = "";
+		foreach (var (unit, count) in units)
+		{
+			unitString += unit + " x" + count + "\n";
+		}
+		if (unitString == "") unitString = "no units\n";
+		MapGui.Instance.SelectedLabel.Text = provence.Name + "\n" + unitString;
+		
+		_factoryButton.Disabled = provence.Owner != "Player";
+		_armyButton.Disabled = provence.Owner != "Player";
 	}
 }

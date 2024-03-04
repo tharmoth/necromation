@@ -78,6 +78,7 @@ script = ExtResource("10_pbpxj")
 _action = "open_recruit"
 
 [node name="ArmyButton" type="Button" parent="MapGui/MainGui/Buttons"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Army Setup (T)"
 alignment = 0
@@ -85,6 +86,7 @@ script = ExtResource("10_pbpxj")
 _action = "open_army_setup"
 
 [node name="FactoryButton" type="Button" parent="MapGui/MainGui/Buttons"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Factory (M)"
 alignment = 0

@@ -15,8 +15,7 @@ public partial class Map : Node2D
 	{
 		Globals.MapCamera = GetNode<Camera2D>("Camera2D");
 		MapGlobals.SelectedSprite = GetNode<Sprite2D>("%SelectedSprite");
-		MapGlobals.UpdateListeners.Add(UpdateLabel);
-
+		
 		var provence = MapGlobals.TileMap.GetProvence(MapGlobals.FactoryPosition);
 		SelectProvince(provence);
 		
@@ -50,26 +49,5 @@ public partial class Map : Node2D
 		MapGlobals.SelectedProvince = provence;
 		MapGlobals.SelectedSprite.GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(provence));
 		MapGlobals.UpdateListeners.ForEach(listener => listener());
-	}
-
-	private void UpdateLabel()
-	{
-		var provence = MapGlobals.SelectedProvince;
-
-		var units = new Dictionary<string, int>();
-
-		foreach (var (unit, count) in provence.Commanders.SelectMany(commander => commander.Units.Items).ToList())
-		{
-				units.TryGetValue(unit, out var currentCount);
-				units[unit] = currentCount + count;
-		}
-
-		var unitString = "";
-		foreach (var (unit, count) in units)
-		{
-			unitString += unit + " x" + count + "\n";
-		}
-		if (unitString == "") unitString = "no units\n";
-		MapGui.Instance.SelectedLabel.Text = provence.Name + "\n" + unitString;
 	}
 }
