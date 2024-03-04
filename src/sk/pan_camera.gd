@@ -70,14 +70,14 @@ func move_camera(delta):
 #	elif mouse_near_bottom(threshold) or Input.is_action_pressed("ui_down"):
 #		new_target_velocity.y = step
 
-	if Input.is_action_pressed("ui_left"):
+	if Input.is_action_pressed("ui_left") or Input.is_action_pressed("left"):
 		new_target_velocity.x = -step
-	elif Input.is_action_pressed("ui_right"):
+	elif Input.is_action_pressed("ui_right") or Input.is_action_pressed("right"):
 		new_target_velocity.x = step
 
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_pressed("ui_up") or Input.is_action_pressed("up"):
 		new_target_velocity.y = -step
-	elif Input.is_action_pressed("ui_down"):
+	elif Input.is_action_pressed("ui_down") or Input.is_action_pressed("down"):
 		new_target_velocity.y = step
 		
 	if abs(new_target_velocity.x) > 0:
