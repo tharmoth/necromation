@@ -44,21 +44,41 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 		}
 	}
 
-	public override void _UnhandledInput(InputEvent @event)
+	public override void _UnhandledInput(InputEvent inputEvent)
 	{
-		base._UnhandledInput(@event);
-		if (Input.IsActionPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_technology")) TechGui.Display();
-		if (Input.IsActionJustPressed("open_inventory") && _openGui != null) CloseGui();
-		else if (Input.IsActionJustPressed("open_inventory"))
+		
+		base._UnhandledInput(inputEvent);
+		if (!inputEvent.IsPressed()) return;
+		
+		if (Input.IsActionJustPressed("close_gui")) CloseGui();
+		if (Input.IsActionJustPressed("open_technology"))
 		{
-			CloseGui();
-			_openGui = InventoryGUI.Display(Globals.PlayerInventory);
+			if (TechGui.Visible)
+			{
+				TechGui.Visible = false;
+			}
+			else
+			{
+				CloseGui();
+				TechGui.Display();
+			}
+		}
+		if (Input.IsActionJustPressed("open_inventory"))
+		{
+			if (_openGui != null)
+			{
+				CloseGui();
+			}
+			else
+			{
+				CloseGui();
+				_openGui = InventoryGUI.Display(Globals.PlayerInventory);
+			}
 		}
 		if (Input.IsActionJustPressed("open_map")) FactoryToMapButton.ChangeScene();
 
-		if (Input.IsActionPressed("save")) SKSaveLoad.SaveGame(this);
-		if (Input.IsActionPressed("load")) SKSaveLoad.LoadGame(this);
+		if (Input.IsActionJustPressed("save")) SKSaveLoad.SaveGame(this);
+		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);
 	}
 	
 	public void CloseGui()
