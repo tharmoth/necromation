@@ -106,22 +106,20 @@ public partial class Character : Node2D
 			if (Input.IsActionPressed("down")) newPosition += new Vector2(0, Speed * (float)delta);
 			if (Globals.TileMap.IsOnMap(Globals.TileMap.GlobalToMap(newPosition))) Position = newPosition;
 		}
-
-		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Input.IsActionJustPressed("clear_selection")) QPick();
-		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build();
 		
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.TileMap.GetBuildingAtMouse() == null) Mine();
 		else _resource?.Cancel();
-
-
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
+		if (Input.IsActionJustPressed("rotate")) RotateSelection();
+		if (Input.IsActionJustPressed("clear_selection")) QPick();
+		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build();
+		
 		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
 		if (!string.IsNullOrEmpty(Selected) && Input.IsMouseButtonPressed(MouseButton.Left) && Input.IsKeyPressed(Key.Ctrl) &&
 		    Globals.TileMap.GetBuildingAtMouse() is ITransferTarget transfer && transfer.GetMaxTransferAmount(Selected) > 0)
@@ -133,7 +131,10 @@ public partial class Character : Node2D
 		{
 			RemoveFromBuilding(transfer2);
 		} 
-		else if (Input.IsActionJustPressed("left_click") && !Input.IsKeyPressed(Key.Ctrl) && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
+		else if (Input.IsActionJustPressed("left_click") 
+		         && !Building.IsBuilding(Selected)
+		         && !Input.IsKeyPressed(Key.Ctrl) 
+		         && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
 		
 	}
 
