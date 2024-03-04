@@ -117,7 +117,7 @@ public partial class PropSpawner : Node2D
 		var spawn = new Sprite2D();
 		spawn.Texture = _spriteTextures[new Random().Next(0, _spriteTextures.Count - 1)];
 		spawn.Position = position;
-		spawn.ZIndex = -1;
+		spawn.ZIndex = -98;
 		spawn.RotationDegrees = new Random().Next(-10, 10);
 		spawn.Scale = new Vector2(scale, scale);
 		AddChild(spawn);

@@ -7,8 +7,15 @@ namespace Necromation.interactables.belts;
 
 public partial class TransportLine : Node2D, ITransferTarget
 {
+    
+    /*
+     * Performance
+     */
     private bool initalized = false;
     private Vector2 _cachePosition;
+    private int _itemCount;
+    
+    
     public Vector2I TargetDirectionGlobal { get; set; }
     
     /**************************************************************************
@@ -43,10 +50,18 @@ public partial class TransportLine : Node2D, ITransferTarget
         });
     }
 
+    private bool initialized = false;
+    
     public override void _Process(double delta)
     {
         base._Process(delta);
-        _cachePosition = GlobalPosition;
+        if (!initialized)
+        {
+            initialized = true;
+            _cachePosition = GlobalPosition;
+            _itemCount = _inventory.CountAllItems();
+        }
+        
         for (var i = 0; i < _itemsOnBelt.Count; i++)
         {
             var groundItem = _itemsOnBelt[i];
@@ -170,13 +185,27 @@ public partial class TransportLine : Node2D, ITransferTarget
 
     public static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance = .001f) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
     public static bool IsEqualApprox(float a, float b, float tolerance = .001f) => Mathf.Abs(a - b) < tolerance;
+    
+    
+    
     #region ITransferTarget Implementation/
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item,  int count = 1) => _inventory.CountAllItems() + count < 5;
-    public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
-    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
+    public bool CanAcceptItems(string item,  int count = 1) => _itemCount + count < 5;
+    public void Insert(string item, int count = 1)
+    {
+        _itemCount += count;
+        _inventory.Insert(item, count);
+    }
+
+    public bool Remove(string item, int count = 1)
+    {
+        
+        _itemCount -= count;
+        return _inventory.Remove(item, count);
+    }
+
     public string GetFirstItem() => _inventory.GetFirstItem();
     public List<string> GetItems() => _inventory.GetItems();
     public List<Inventory> GetInventories() => _inventory.GetInventories();

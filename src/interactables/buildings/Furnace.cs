@@ -15,6 +15,15 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     private Inventory _outputInventory = new();
     private float _time;
 
+    private GpuParticles2D _particles = GD.Load<PackedScene>("res://src/interactables/buildings/smoke.tscn")
+	    .Instantiate<GpuParticles2D>();
+
+    public override void _Ready()
+    {
+	    base._Ready();
+	    CallDeferred("add_child", _particles);
+    }
+
     public override void _Process(double delta)
     {
     	base._Process(delta);
@@ -26,9 +35,11 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 			    .Where(recipe => recipe.Category == GetCategory())
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
 		    tweenytwiney?.Kill();
+		    _particles.Emitting = false;
     		return;
     	}
     	
+	    _particles.Emitting = true;
     	_time += (float)delta;
 	    Animate();
 

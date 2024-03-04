@@ -14,6 +14,13 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
     private bool _isResearching;
     private double _researchedAmount = 0;
 
+    public override void _Ready()
+    {
+        base._Ready();
+        CallDeferred("add_child",
+            GD.Load<PackedScene>("res://src/interactables/buildings/soul_storm.tscn").Instantiate<GpuParticles2D>());
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);

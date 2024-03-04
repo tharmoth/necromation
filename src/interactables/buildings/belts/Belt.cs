@@ -55,7 +55,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
         Sprite.Hframes = 8;
         
-        AddChild(_audio);
+        // AddChild(_audio);
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_sport_treadmill_run_fast_no_one_on_22684.mp3");
         _audio.Attenuation = 50.0f;
         _audio.Autoplay = true;
@@ -69,7 +69,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         Orientation = _orientation;
         RotationDegrees = IRotatable.GetDegreesFromOrientation(_orientation);
         Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/buildings/BeltAnimated.png");
-        _audio.Play();
+        // _audio.Play();
         
         LeftLine.TargetDirectionGlobal = TargetDirectionGlobal;
         RightLine.TargetDirectionGlobal = TargetDirectionGlobal;
@@ -85,7 +85,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public override void _Process(double delta)
     {
         base._Process(delta);
-        MovePlayer(delta);
         
         // Move the frame forward 8 times every .5333 seconds
         var seconds = Time.GetTicksMsec() / 1000.0;
@@ -119,10 +118,10 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     /**************************************************************************
      * Private Methods                                                        *
      **************************************************************************/
-    private void MovePlayer(double delta)
+    public void MovePlayer(Character player, double delta)
     {
-        if (Globals.TileMap.GlobalToMap(Globals.Player.GlobalPosition) != MapPosition) return;
-        Globals.Player.GlobalPosition += -GetTargetLocation(0).DirectionTo(Globals.Player.GlobalPosition) * Speed * (float)delta;
+        if (Globals.TileMap.GlobalToMap(player.GlobalPosition) != MapPosition) return;
+        player.GlobalPosition += -GetTargetLocation(0).DirectionTo(player.GlobalPosition) * Speed * (float)delta;
     }
     
     private Vector2 GetTargetLocation(int index)

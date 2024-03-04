@@ -24,7 +24,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	{
 		ZIndex = 1,
 		Visible = false,
-		Texture = Globals.Database.GetTexture("dark760")
+		Texture = Globals.Database.GetTexture("Dark760")
 	};
 
 	public Assembler(string itemType, string category)

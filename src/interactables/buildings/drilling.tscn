@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://p6fvu5bol3to"]
+
+[ext_resource type="Texture2D" uid="uid://c2lvsbtr85b8u" path="res://res/sprites/Dot.png" id="1_i2ly5"]
+
+[sub_resource type="Gradient" id="Gradient_qkxta"]
+colors = PackedColorArray(0.720467, 0.720468, 0.720467, 1, 0.733005, 0.733005, 0.733005, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rw76p"]
+gradient = SubResource("Gradient_qkxta")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5i1po"]
+particle_flag_disable_z = true
+direction = Vector3(0, -20, 0)
+spread = 60.0
+gravity = Vector3(0, 30, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 100.0
+angular_velocity_max = 20.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_max = 360.0
+scale_max = 5.0
+color_ramp = SubResource("GradientTexture1D_rw76p")
+
+[node name="GPUParticles2D" type="GPUParticles2D"]
+z_index = 1
+position = Vector2(0, 30)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_5i1po")
+texture = ExtResource("1_i2ly5")
+lifetime = 0.5

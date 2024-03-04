@@ -47,7 +47,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		_particles.Emitting = true;
 		_particles.ZAsRelative = true;
 		_particles.ZIndex = -1;
-		AddChild(_particles);
+		CallDeferred("add_child", _particles);
 	}
 
 	public override void _Ready()

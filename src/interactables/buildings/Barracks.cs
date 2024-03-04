@@ -9,7 +9,14 @@ public partial class Barracks : Building, IInteractable, ITransferTarget
     private Inventory _inventory = new();
     public override Vector2I BuildingSize => Vector2I.One * 3;
     public override string ItemType => "Barracks";
-    
+
+    public override void _Ready()
+    {
+        base._Ready();
+        CallDeferred("add_child",
+            GD.Load<PackedScene>("res://src/interactables/buildings/soul_storm.tscn").Instantiate<GpuParticles2D>());
+    }
+
     #region IInteractable Implementation
     /**************************************************************************
      * IInteractable Methods                                                  *

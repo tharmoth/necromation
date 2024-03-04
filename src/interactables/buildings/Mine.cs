@@ -12,6 +12,8 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     private float _time;
     private float _miningSpeed = 2.0f;
     private AudioStreamPlayer2D _audio = new();
+    private GpuParticles2D _particles = GD.Load<PackedScene>("res://src/interactables/buildings/drilling.tscn")
+        .Instantiate<GpuParticles2D>();
 
     public override string ItemType => "Mine";
     
@@ -24,6 +26,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         _audio.PitchScale = .5f;
         _audio.Finished += () => _audio.Play();
         AddChild(_audio);
+        Sprite.AddChild(_particles);
     }
 
     public override void _Ready()
@@ -41,9 +44,11 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         {
             if (_audio.Playing) _audio.Stop();
             _time = 0;
+            _particles.Emitting = false;
             return;
         }
 
+        _particles.Emitting = true;
         _time += (float)delta;
         Animate();
 

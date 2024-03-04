@@ -1,6 +1,7 @@
 using System.Linq;
 using Godot;
 using Necromation;
+using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
 using Necromation.sk;
 using IInteractable = Necromation.interfaces.IInteractable;
@@ -8,6 +9,7 @@ using Resource = Necromation.Resource;
 
 public partial class Character : Node2D
 {
+	public Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
 	private const float Speed = 200;
 	private readonly Inventory _inventory = new();
 	private Tween _tween;
@@ -50,10 +52,10 @@ public partial class Character : Node2D
 	{
 		AddToGroup("player");
 		
-		// Globals.Database.Recipes
-		// 	.Select(recipe => recipe.Products.First().Key)
-		// 	.ToList()
-		// 	.ForEach(item => _inventory.Insert(item, 100));
+		Globals.Database.Recipes
+			.Select(recipe => recipe.Products.First().Key)
+			.ToList()
+			.ForEach(item => _inventory.Insert(item, 100));
 		
 		// _inventory.Insert("Bone Fragments", 1000);
 		// _inventory.Insert("Coal Ore", 1000);
@@ -88,6 +90,8 @@ public partial class Character : Node2D
 		if (Selected != null) SelectedPreview();
 		else if (Globals.TileMap.GetBuildingAtMouse() != null || Globals.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
 		else _sprite.Visible = false;
+
+		if (Globals.TileMap.GetEntity(MapPosition, BuildingTileMap.Building) is Belt belt) belt.MovePlayer(this, delta);
 		
 		// Return if a gui is open
 		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
