@@ -9,7 +9,9 @@ using Resource = Necromation.Resource;
 
 public partial class Character : Node2D
 {
+	public IRotatable.BuildingOrientation Orientation => IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 	public Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
+	
 	private const float Speed = 200;
 	private readonly Inventory _inventory = new();
 	private Tween _tween;
@@ -35,11 +37,9 @@ public partial class Character : Node2D
 				new Vector2(32 / (float)_sprite.Texture.GetWidth(), 32 / (float)_sprite.Texture.GetHeight()) 
 				: new Vector2(1, 1);
 			
-			if (_selected == null) _rotationDegrees = 0;
+			if (_selected == null || Building.GetBuilding(_selected, Orientation) is not IRotatable) _rotationDegrees = 0;
 		}
 	}
-	
-	public IRotatable.BuildingOrientation Orientation => IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 	
 	public override void _EnterTree()
 	{
@@ -143,6 +143,7 @@ public partial class Character : Node2D
 	 ******************************************************************/
 	public void RotateSelection()
 	{
+		if (Building.GetBuilding(_selected, Orientation) is not IRotatable) return;
 		_rotationDegrees += 90;
 		if (_rotationDegrees == 360) _rotationDegrees = 0;
 	}
