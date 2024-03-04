@@ -17,10 +17,18 @@ public partial class ArmySetupCommander : PanelContainer
 	{
 		_commander = commander;
 	}
-	
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		_commander.Units.Listeners.Remove(Update);
+	}
+
 	public override void _Ready()
 	{
 		base._Ready();
+		_commander.Units.Listeners.Add(Update);
+		UpdateSquads();
 		Update();
 	}
 
@@ -29,8 +37,6 @@ public partial class ArmySetupCommander : PanelContainer
 		NameLabel.Text = _commander.Name;
 		UnitCountLabel.Text = _commander.Units.CountAllItems() + "/" + _commander.CommandCap;
 		SquadCountLabel.Text = "1/" + _commander.SquadCap;
-
-		UpdateSquads();
 	}
 
 	private void UpdateSquads()
