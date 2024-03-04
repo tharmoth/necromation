@@ -6,6 +6,7 @@ using Necromation;
 using Necromation.gui;
 using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
+using Necromation.sk;
 
 public abstract partial class Building : Node2D, BuildingTileMap.IEntity, ProgressTracker.IProgress
 {
@@ -123,20 +124,30 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 
 	public virtual void Remove(Inventory to)
 	{
+		int index = 0;
 		if (this is ITransferTarget inputTarget)
 		{
 			foreach (var from in inputTarget.GetInventories())
 			{
-				Inventory.TransferAllTo(from, to);
+				foreach (var item in from.GetItems())
+				{
+					var count = from.CountItem(item);
+					Inventory.TransferItem(from, to, item, count);
+					var remaining = to.CountItem(item);
+					SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", GlobalPosition + new Vector2(0, index++ * 20));
+				}
 			}
 		}
 		to.Insert(ItemType);
 		Globals.TileMap.RemoveEntity(this);
+		SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", GlobalPosition + new Vector2(0, index++ * 20));
+
 		RemovePercent = 100;
 		Sprite.Visible = false;
 		_progress.Visible = false;
 		FactoryGUI.Instance.BuildingRemoved();
 		QueueFree();
+
 	}
 
 	protected Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
