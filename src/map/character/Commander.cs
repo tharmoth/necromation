@@ -68,14 +68,14 @@ public partial class Commander : Node2D, ITransferTarget
 
         if (!Input.IsActionJustPressed("right_click")) return;
 
-        _targetLocation = MapGlobals.TileMap.GlobalToMap(GetGlobalMousePosition());
+        var newTarget = MapGlobals.TileMap.GlobalToMap(GetGlobalMousePosition());
+        var diff = MapPosition - newTarget;
+        if (diff.Length() > 1.5) return;
         
-        var diff = MapPosition - _targetLocation;
-        if (diff.Length() > 1) return;
-
-        var provence = MapGlobals.TileMap.GetProvence(_targetLocation);
+        var provence = MapGlobals.TileMap.GetProvence(newTarget);
         if (provence == null) return;
 
+        _targetLocation = newTarget;
         _line.Points = new [] {GlobalPosition, MapGlobals.TileMap.MapToGlobal(_targetLocation)};
     }
     
