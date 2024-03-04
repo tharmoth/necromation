@@ -48,8 +48,11 @@ public partial class CraftingListPopup : PanelContainer
 
 		Size = Vector2.Zero;
 
-		GetNode<Label>("%RecipeNameLabel").Text = _recipe.Name;
+		
+		_recipe.Products.First().Deconstruct(out var product, out var amount);
+		GetNode<Label>("%RecipeNameLabel").Text = product + (amount == 1 ? "" : " x" + amount);
 		GetNode<Label>("%CraftingTimeLabel").Text = _recipe.Time + "s Crafting Time";
+		
 		
 		GetNode<VBoxContainer>("%Rows").GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
