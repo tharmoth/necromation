@@ -44,7 +44,8 @@ public partial class ArmySetup : PanelContainer
 	{
 		CommanderList.GetChildren().ToList().ForEach(child => child.QueueFree());
 		_province.Commanders
-			.OrderBy(recipe => recipe.Name)
+			.Where(commander => commander.Team == "Player")
+			.OrderBy(commander => commander.Name)
 			.ToList().ForEach(AddCommander);
 	}
 	
