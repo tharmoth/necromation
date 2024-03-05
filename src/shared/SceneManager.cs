@@ -20,21 +20,21 @@ public class SceneManager
 
 	public static FactoryScene FactoryScene
 	{
-		get => _factoryScene ??= LoadScene("res://src/main.tscn") as FactoryScene;
+		get => _factoryScene ??= LoadScene("res://src/factory/factory.tscn") as FactoryScene;
 	}
 
 	private static MapScene _mapSceneScene;
 
 	public static MapScene MapScene
 	{
-		get => _mapSceneScene ??= LoadScene("res://src/map.tscn") as MapScene;
+		get => _mapSceneScene ??= LoadScene("res://src/map/map.tscn") as MapScene;
 	}
 
 	private static BattleScene _battleSceneScene;
 
 	public static BattleScene BattleScene
 	{
-		get => _battleSceneScene ??= LoadScene("res://src/battle.tscn") as BattleScene;
+		get => _battleSceneScene ??= LoadScene("res://src/battle/battle.tscn") as BattleScene;
 	}
 	
 	private static Scene _currentScene;
@@ -68,15 +68,15 @@ public class SceneManager
 		switch (scene)
 		{
 			case SceneEnum.Factory:
-				if (!GodotObject.IsInstanceValid(_factoryScene)) _factoryScene = LoadScene("res://src/main.tscn") as FactoryScene;
+				if (!GodotObject.IsInstanceValid(_factoryScene)) _factoryScene = LoadScene("res://src/factory/factory.tscn") as FactoryScene;
 				ChangeScene(_factoryScene);
 				break;
 			case SceneEnum.Map:
-				if (!GodotObject.IsInstanceValid(_mapSceneScene)) _mapSceneScene = LoadScene("res://src/map.tscn") as MapScene;
+				if (!GodotObject.IsInstanceValid(_mapSceneScene)) _mapSceneScene = LoadScene("res://src/map/map.tscn") as MapScene;
 				ChangeScene(_mapSceneScene);
 				break;
 			case SceneEnum.Battle:
-				if (!GodotObject.IsInstanceValid(_battleSceneScene)) _battleSceneScene = LoadScene("res://src/battle.tscn") as BattleScene;
+				if (!GodotObject.IsInstanceValid(_battleSceneScene)) _battleSceneScene = LoadScene("res://src/battle/battle.tscn") as BattleScene;
 				ChangeScene(_battleSceneScene);
 				break;
 			default:
@@ -84,7 +84,7 @@ public class SceneManager
 		}
 
 		// We need  to wait or this will be called again once the map loads and it sees inputjustpressed.
-		Globals.FactoryScene.GetTree().CreateTimer(.1).Timeout += () => _changingScene = false;
+		SceneTree.CreateTimer(.1).Timeout += () => _changingScene = false;
 	}
 	
 	private static Scene LoadScene(string path)

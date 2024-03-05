@@ -18,20 +18,17 @@ public partial class CheatCodes : Node
 	public override void _UnhandledKeyInput(InputEvent @event)
 	{
 		base._UnhandledKeyInput(@event);
-		if (@event is InputEventKey { Pressed: true } keyEvent)
-		{
-			var key = keyEvent.KeyLabel.ToString();
-			GD.Print(key);
-			if (key == "Quoteleft") key = "`";
-			if (key == "Space") key = " ";
-			_keys.Enqueue(key);
+		if (@event is not InputEventKey { Pressed: true } keyEvent) return;
+		
+		var key = keyEvent.KeyLabel.ToString();
+		if (key == "Quoteleft") key = "`";
+		if (key == "Space") key = " ";
+		_keys.Enqueue(key);
 			
-			if (_keys.Count > 16) _keys.Dequeue();
+		if (_keys.Count > 16) _keys.Dequeue();
 
-			var enteredString = _keys.Aggregate("", (s, s1) => s + s1);
-			ProcessCheatCodes(enteredString);
-			GD.Print(enteredString);
-		}
+		var enteredString = _keys.Aggregate("", (s, s1) => s + s1);
+		ProcessCheatCodes(enteredString);
 	}
 
 	private void ProcessCheatCodes(string entered)
@@ -59,7 +56,7 @@ public partial class CheatCodes : Node
 				.ForEach(item => Globals.PlayerInventory.Insert(item, 100));
 		}
 		
-		if (entered.EndsWith("``SHERIFF OF NOTTINGHAM"))
+		if (entered.EndsWith("``SHERIFF"))
 		{
 			GD.Print("ROBIN HOOD");
 			Globals.PlayerInventory.Clear();
@@ -75,6 +72,11 @@ public partial class CheatCodes : Node
 		{
 			GD.Print("GOLDEN AGE");
 			Database.Instance.Technologies.ToList().ForEach(tech => tech.Lock());
+		}
+		
+		if (entered.EndsWith("``FPS"))
+		{
+			Globals.FactoryScene.Gui.ToggleFps();
 		}
 	}
 }

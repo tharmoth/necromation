@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://ds5pr7oq43q52"]
 
 [ext_resource type="Script" path="res://src/map/gui/ArmySetup/ArmySetup.cs" id="1_gw7vd"]
-[ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="2_a6w3a"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="2_a6w3a"]
 [ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="3_of83w"]
 [ext_resource type="PackedScene" uid="uid://dpxfdpb3aw7u1" path="res://src/map/gui/ArmySetup/army_setup_commander.tscn" id="4_tbptt"]
 

@@ -1,0 +1,293 @@
+[gd_scene load_steps=22 format=3 uid="uid://5frwg0ceb1di"]
+
+[ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
+[ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
+[ext_resource type="Script" path="res://src/factory/gui/FactoryGUI.cs" id="2_pkiw0"]
+[ext_resource type="Script" path="res://src/factory/character/Character.cs" id="2_vcqpu"]
+[ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="3_fy5x1"]
+[ext_resource type="Script" path="res://src/factory/gui/ActionBarGUI/Actionbar.cs" id="5_jpmfq"]
+[ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
+[ext_resource type="PackedScene" uid="uid://cgfjtesm7s5bm" path="res://src/factory/gui/RecipeChooserGUI/popup.tscn" id="6_pwh8y"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
+[ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/factory/gui/ContainerGUI/container_gui.tscn" id="7_cu3ym"]
+[ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/factory/gui/CrafterGUI/CrafterGUI.tscn" id="7_ky81d"]
+[ext_resource type="Script" path="res://src/factory/gui/ResearchProgressBar.cs" id="7_ohqwt"]
+[ext_resource type="AudioStream" uid="uid://bchkfk8pny2se" path="res://res/sfx/jingles-pizzicato_14.ogg" id="11_p2cxa"]
+[ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
+[ext_resource type="AudioStream" uid="uid://d2sv6kue0g7hw" path="res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3" id="12_ep3l7"]
+[ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/factory/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
+[ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
+[ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
+texture = ExtResource("11_q1hir")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+7:7/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8qpuw"]
+texture = ExtResource("1_4vku0")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_1emfp"]
+tile_size = Vector2i(32, 32)
+sources/1 = SubResource("TileSetAtlasSource_8qpuw")
+sources/0 = SubResource("TileSetAtlasSource_adiq0")
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_4xbbd")
+
+[node name="GUI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_pkiw0")
+
+[node name="Control" type="Control" parent="GUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+metadata/_edit_lock_ = true
+
+[node name="FactoryGUI" type="HBoxContainer" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/FactoryGUI"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control/FactoryGUI/VBoxContainer"]
+layout_mode = 2
+
+[node name="AttackLabel" type="Label" parent="GUI/Control/FactoryGUI/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Attack Incoming"
+
+[node name="FpsLabel" type="Label" parent="GUI/Control/FactoryGUI/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "FPS: "
+script = ExtResource("3_fy5x1")
+
+[node name="Spacer" type="Control" parent="GUI/Control/FactoryGUI/VBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/Control/FactoryGUI"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/FactoryGUI/VBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+show_percentage = false
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+vertical_scroll_mode = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2/ScrollContainer"]
+layout_mode = 2
+
+[node name="Actionbar" type="HBoxContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2/ScrollContainer/PanelContainer"]
+layout_mode = 2
+alignment = 1
+script = ExtResource("5_jpmfq")
+
+[node name="Buttons" type="VBoxContainer" parent="GUI/Control/FactoryGUI"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/FactoryGUI/Buttons"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/FactoryGUI/Buttons/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/Control/FactoryGUI/Buttons/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Researching: Nothing"
+horizontal_alignment = 1
+script = ExtResource("6_lnhcn")
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/FactoryGUI/Buttons/PanelContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("7_ohqwt")
+
+[node name="FactoryToMapButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Map (M)"
+script = ExtResource("7_04mnd")
+_action = "open_map"
+
+[node name="TechnologyButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+layout_mode = 2
+text = "Technology (T)"
+script = ExtResource("7_04mnd")
+
+[node name="InventoryButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+layout_mode = 2
+text = "Inventory (E)"
+script = ExtResource("7_04mnd")
+_action = "open_inventory"
+
+[node name="SaveButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+layout_mode = 2
+text = "Save Factory"
+script = ExtResource("7_04mnd")
+_action = "save"
+
+[node name="LoadButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+layout_mode = 2
+text = "Load Button"
+script = ExtResource("7_04mnd")
+_action = "load"
+
+[node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_bottom = 200.0
+
+[node name="CrafterGUI" parent="GUI/Control" instance=ExtResource("7_ky81d")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ContainerGUI" parent="GUI/Control" instance=ExtResource("7_cu3ym")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="TechGUI" parent="GUI/Control" instance=ExtResource("13_jc62p")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="TechnologyCompleteAudio" type="AudioStreamPlayer" parent="GUI"]
+unique_name_in_owner = true
+stream = ExtResource("11_p2cxa")
+
+[node name="BuildingRemovedAudio" type="AudioStreamPlayer" parent="GUI"]
+unique_name_in_owner = true
+stream = ExtResource("12_ep3l7")
+volume_db = -15.0
+
+[node name="TileMap" type="TileMap" parent="."]
+unique_name_in_owner = true
+z_index = -5
+tile_set = SubResource("TileSet_1emfp")
+format = 2
+layer_0/z_index = -100
+layer_0/tile_data = PackedInt32Array(0, 1, 0, 65536, 1, 0, 131072, 1, 0, 196608, 1, 0, 262144, 1, 0, 327680, 1, 0, 393216, 1, 0, 458752, 1, 0, 524288, 1, 0, 589824, 1, 0, 655360, 1, 0, 1, 1, 0, 65537, 1, 0, 131073, 1, 0, 196609, 1, 0, 262145, 1, 0, 327681, 1, 0, 393217, 1, 0, 458753, 1, 0, 524289, 1, 0, 589825, 1, 0, 655361, 1, 0, 2, 1, 0, 65538, 1, 0, 131074, 1, 0, 196610, 1, 0, 262146, 1, 0, 327682, 1, 0, 393218, 1, 0, 458754, 1, 0, 524290, 1, 0, 589826, 1, 0, 655362, 1, 0, 3, 1, 0, 65539, 1, 0, 131075, 1, 0, 196611, 1, 0, 262147, 1, 0, 327683, 1, 0, 393219, 1, 0, 458755, 1, 0, 524291, 1, 0, 589827, 1, 0, 655363, 1, 0, 4, 1, 0, 65540, 1, 0, 131076, 1, 0, 196612, 1, 0, 262148, 1, 0, 327684, 1, 0, 393220, 1, 0, 458756, 1, 0, 524292, 1, 0, 589828, 1, 0, 655364, 1, 0, 5, 1, 0, 65541, 1, 0, 131077, 1, 0, 196613, 1, 0, 262149, 1, 0, 327685, 1, 0, 393221, 1, 0, 458757, 1, 0, 524293, 1, 0, 589829, 1, 0, 655365, 1, 0, 6, 1, 0, 65542, 1, 0, 131078, 1, 0, 196614, 1, 0, 262150, 1, 0, 327686, 1, 0, 393222, 1, 0, 458758, 1, 0, 524294, 1, 0, 589830, 1, 0, 655366, 1, 0, 7, 1, 0, 65543, 1, 0, 131079, 1, 0, 196615, 1, 0, 262151, 1, 0, 327687, 1, 0, 393223, 1, 0, 458759, 1, 0, 524295, 1, 0, 589831, 1, 0, 655367, 1, 0, 8, 1, 0, 65544, 1, 0, 131080, 1, 0, 196616, 1, 0, 262152, 1, 0, 327688, 1, 0, 393224, 1, 0, 458760, 1, 0, 524296, 1, 0, 589832, 1, 0, 655368, 1, 0, 9, 1, 0, 65545, 1, 0, 131081, 1, 0, 196617, 1, 0, 262153, 1, 0, 327689, 1, 0, 393225, 1, 0, 458761, 1, 0, 524297, 1, 0, 589833, 1, 0, 655369, 1, 0, 10, 1, 0, 65546, 1, 0, 131082, 1, 0, 196618, 1, 0, 262154, 1, 0, 327690, 1, 0, 393226, 1, 0, 458762, 1, 0, 524298, 1, 0, 589834, 1, 0, 655370, 1, 0)
+script = ExtResource("16_o18cr")
+
+[node name="Character" type="Node2D" parent="."]
+z_index = 99
+script = ExtResource("2_vcqpu")
+
+[node name="Sprite2D" type="Sprite2D" parent="Character"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_4vku0")
+region_enabled = true
+region_rect = Rect2(64, 0, 32, 32)
+
+[node name="Camera2D" type="Camera2D" parent="Character"]
+unique_name_in_owner = true
+
+[node name="AudioListener2D" type="AudioListener2D" parent="Character"]
+current = true
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("18_nrhn7")

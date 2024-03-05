@@ -220,9 +220,11 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		Globals.BattleScene.TileMap.RemoveEntity(this);
 		Globals.BattleScene.TileMap.AddEntity(nextPosition, this, BattleTileMap.Unit);
 
+		var nextPositionGlobal = Globals.BattleScene.TileMap.MapToGlobal(nextPosition) + new Vector2((float)GD.RandRange(-5.0, 5.0), (float)GD.RandRange(-5.0, 5.0));
+		
 		_moveTween?.Kill();
 		_moveTween = CreateTween();
-		_moveTween.TweenProperty(this, "global_position", Globals.BattleScene.TileMap.MapToGlobal(nextPosition), BattleScene.TimeStep);
+		_moveTween.TweenProperty(this, "global_position", nextPositionGlobal, BattleScene.TimeStep);
 
 		_bobTween?.Kill();
 		_bobTween = CreateTween();

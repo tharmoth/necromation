@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/battle/gui/Summary/Summary.cs" id="1_2dc4n"]
 [ext_resource type="PackedScene" uid="uid://d04gyqxbtve6" path="res://src/battle/gui/Summary/unitrow.tscn" id="2_gece4"]
-[ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="3_bsbyi"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_junyw"]
 
 [node name="Summary" type="Control"]
 layout_mode = 3
@@ -58,12 +58,12 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Return to Map"
-script = ExtResource("3_bsbyi")
+script = ExtResource("3_junyw")
 _action = "return_to_map"
 
 [node name="ReturnToFactoryButton" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Return to Factory"
-script = ExtResource("3_bsbyi")
+script = ExtResource("3_junyw")
 _action = "return_to_factory"

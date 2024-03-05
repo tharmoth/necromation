@@ -4,9 +4,8 @@ using System.Linq;
 using Necromation;
 using Necromation.map;
 using Necromation.map.character;
-using Necromation.shared.gui;
 
-public partial class MapGui : CanvasLayer, SceneGUI
+public partial class MapGui : CanvasLayer
 {
 	public Label SelectedLabel  => GetNode<Label>("%Label");
 	private Button _factoryButton => GetNode<Button>("%FactoryButton");

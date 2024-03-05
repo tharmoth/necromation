@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2o1wg60o5paa"]
+
+[ext_resource type="Script" path="res://src/factory/gui/InventoryGUI/RecipeButton.cs" id="1_spl32"]
+[ext_resource type="Texture2D" uid="uid://ck7uxolv3shbr" path="res://res/sprites/items/Short Bow.png" id="2_g0mmu"]
+
+[node name="RecipeButton" type="PanelContainer"]
+script = ExtResource("1_spl32")
+
+[node name="Button" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="RecipeIcon" type="TextureRect" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_g0mmu")
+expand_mode = 1
+stretch_mode = 5
