@@ -7,6 +7,12 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
 {
     [Export] public string Type { get; set; } = "Stone";
     [Export] private float _duration = .33f;
+    
+    // The time in seconds between audio plays.
+    private double _timeBetweenAudio = 0.33;
+    // Timer used to play audio at a pleasing frequency.
+    private double _time = 0;
+    
     public string ItemType => Type;
 
     private Tween _progressTween;
@@ -15,6 +21,8 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     private ProgressBar _progressBar = new();
     private AudioStreamPlayer2D _audio = new();
     private AudioStreamPlayer2D _bonusAudio = new();
+    
+    private GpuParticles2D _particles = GD.Load<PackedScene>("res://src/interactables/buildings/drilling.tscn").Instantiate<GpuParticles2D>();
     
     public Resource(string itemType)
     {
@@ -39,8 +47,16 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
         
         _bonusAudio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_dry_dead_leaf_crush_001_70766.mp3");
         AddChild(_bonusAudio);
+        
+        _particles.Position = Vector2.Zero;
+        _particles.Emitting = false;
+        AddChild(_particles);
 
-        if (Type == "Stone") _duration = 1.0f;
+        if (Type == "Stone")
+        {
+            _duration = 1.0f;
+            _timeBetweenAudio = 0.5f;
+        }
     }
         
     public override void _Ready()
@@ -55,6 +71,15 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     {
         base._ExitTree();
         Globals.TileMap.RemoveEntity(this);
+    }
+    
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        _time += delta;
+        if (!Interacting() || !(_time > _timeBetweenAudio)) return;
+        _time = 0;
+        _audio.Play();
     }
 
     public void Interact(Inventory playerInventory)
@@ -71,11 +96,11 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
         
         _jiggleTween?.Kill();
         _jiggleTween = CreateTween();
-        _jiggleTween.TweenProperty(_sprite, "rotation_degrees", 5, 0.1f);
-        _jiggleTween.TweenProperty(_sprite, "rotation_degrees", -5, 0.1f);
+        _jiggleTween.TweenProperty(_sprite, "rotation_degrees", 10, 0.1f);
+        _jiggleTween.TweenProperty(_sprite, "rotation_degrees", -10, 0.1f);
         _jiggleTween.TweenProperty(_sprite, "rotation_degrees", 0, 0.1f);
-
-        _audio.Play();
+        
+        _particles.Emitting = true;
     }
 
     protected void Complete(Inventory playerInventory)
@@ -83,6 +108,7 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
         _progressTween = null;
         _progressBar.Value = 0;
         _progressBar.Visible = false;
+        _particles.Emitting = false;
 
         playerInventory.Insert(Type);
         var words = ItemType + " " + Globals.PlayerInventory.CountItem(ItemType);
@@ -113,6 +139,7 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
         _progressTween = null;
         _progressBar.Value = 0;
         _progressBar.Visible = false;
+        _particles.Emitting = false;
     }
 
     public bool CanRemove()
