@@ -48,7 +48,7 @@ public partial class ActionBarButton : PanelContainer
 		_hotkeyLabel.AddThemeColorOverride("font_color", new Color(.5f, .5f, .5f));
 		if (index > 9) _hotkeyLabel.Visible = false;
 		
-		_icon.Texture = Globals.Database.GetTexture(_itemType);
+		_icon.Texture = Database.Instance.GetTexture(_itemType);
 		_icon.StretchMode = TextureRect.StretchModeEnum.KeepAspect;
 		_icon.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
 		_icon.SizeFlagsVertical = SizeFlags.ShrinkCenter;

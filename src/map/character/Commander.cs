@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Godot;
-using Necromation.character;
 
 namespace Necromation.map.character;
 
@@ -27,7 +26,7 @@ public partial class Commander : Node2D, ITransferTarget
     public Commander(Province province, string team)
     {
         _province = province;
-        _sprite.Texture = Globals.Database.GetTexture("Player");
+        _sprite.Texture = Database.Instance.GetTexture("Player");
         _sprite.Scale = new Vector2(0.25f, 0.25f);
         Units = new CommanderInventory(this);
         Team = team;

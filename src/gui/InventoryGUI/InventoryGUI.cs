@@ -16,7 +16,7 @@ public partial class InventoryGUI : Control
 	{
 		var gui = GD.Load<PackedScene>("res://src/gui/InventoryGUI/inventory_gui.tscn").Instantiate<InventoryGUI>();
 		gui._inventory = inventory;
-		FactoryGUI.Instance.AddChild(gui);
+		Globals.FactoryScene.Gui.AddChild(gui);
 		return gui;
 	}
 
@@ -59,7 +59,7 @@ public partial class InventoryGUI : Control
 	private void UpdateRecipes()
 	{
 		RecipeButtonList.GetChildren().ToList().ForEach(child => child.QueueFree());
-		Globals.Database.UnlockedRecipes
+		Database.Instance.UnlockedRecipes
 			.OrderBy(recipe => recipe.Name)
 			.Where(recipe => recipe.Category is "None" or "hands")
 			.ToList().ForEach(AddRecipe);

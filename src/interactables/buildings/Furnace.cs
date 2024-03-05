@@ -31,7 +31,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
     	{
     		_time = 0;
-		    _recipe = Globals.Database.Recipes
+		    _recipe = Database.Instance.Recipes
 			    .Where(recipe => recipe.Category == GetCategory())
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
 		    tweenytwiney?.Kill();
@@ -88,7 +88,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-	    FactoryGUI.Instance.Display(playerInventory, this);
+	    Globals.FactoryScene.Gui.Display(playerInventory, this);
     }
     #endregion
     
@@ -110,7 +110,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public bool CanAcceptItems(string item, int count = 1)
     {
 	    var itemCount = _inputInventory.CountItem(item);
-	    return Globals.Database.Recipes
+	    return Database.Instance.Recipes
 		    .Where(recipe => recipe.Category == GetCategory())
 		    .Where(recipe => recipe.Ingredients.ContainsKey(item))
 		    .Select(recipe => recipe.Ingredients)
@@ -124,7 +124,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
     public int GetMaxTransferAmount(string itemType)
     {
-	    return Globals.Database.Recipes
+	    return Database.Instance.Recipes
 		    .Where(recipe => recipe.Category == GetCategory())
 		    .Where(recipe => recipe.Ingredients.ContainsKey(itemType))
 		    .Select(recipe => recipe.Ingredients)

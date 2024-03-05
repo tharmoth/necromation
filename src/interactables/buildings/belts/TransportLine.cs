@@ -47,7 +47,7 @@ public partial class TransportLine : ITransferTarget
      * Properties                                                             *
      **************************************************************************/
     public TransportLine OutputLine;
-    protected float Speed => BuildingTileMap.TileSize / _secondsPerItem;
+    protected float Speed => FactoryTileMap.TileSize / _secondsPerItem;
     
     /**************************************************************************
      * Public Methods                                                         *

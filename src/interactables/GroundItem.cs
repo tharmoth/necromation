@@ -2,7 +2,7 @@
 
 namespace Necromation;
 
-public partial class GroundItem : Node2D, BuildingTileMap.IEntity
+public partial class GroundItem : Node2D, FactoryTileMap.IEntity
 {
     private const int Size = 16;
     public string ItemType { get; set; }
@@ -34,7 +34,7 @@ public partial class GroundItem : Node2D, BuildingTileMap.IEntity
         
         // Add the texture to the rendering server directly for performance reasons.
         RenderingServer.CanvasItemSetParent(_renderingServerId, GetCanvasItem());
-        _texture = Globals.Database.GetTexture(ItemType);
+        _texture = Database.Instance.GetTexture(ItemType);
         RenderingServer.CanvasItemAddTextureRect(_renderingServerId, new Rect2(CachePosition - Vector2.One * Size / 2, Vector2.One * Size), _texture.GetRid());
         var transform = Transform2D.Identity.Translated(CachePosition);
         RenderingServer.CanvasItemSetTransform(_renderingServerId, transform);

@@ -1,4 +1,5 @@
 using Godot;
+using Necromation;
 using Necromation.gui;
 
 public partial class ChangeRecipeButton : Button
@@ -9,7 +10,7 @@ public partial class ChangeRecipeButton : Button
 	public override void _Pressed()
 	{
 		base._Pressed();
-		FactoryGUI.Instance.Display(Crafter);
+		Globals.FactoryScene.Gui.Display(Crafter);
 		_nodeToHide.Visible = false;
 	}
 }

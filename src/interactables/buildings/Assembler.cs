@@ -24,7 +24,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	{
 		ZIndex = 1,
 		Visible = false,
-		Texture = Globals.Database.GetTexture("Dark760")
+		Texture = Database.Instance.GetTexture("Dark760")
 	};
 
 	public Assembler(string itemType, string category)
@@ -111,11 +111,11 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     {
 	    if (Recipe == null)
 	    {
-		    FactoryGUI.Instance.Display(this);
+		    Globals.FactoryScene.Gui.Display(this);
 	    }
 	    else
 	    {
-		    FactoryGUI.Instance.Display(playerInventory, this);
+		    Globals.FactoryScene.Gui.Display(playerInventory, this);
 	    }
     }
     #endregion
@@ -130,7 +130,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	    _outlineSprite.Visible = true;
 	    _outlineSprite.Scale = new Vector2(48 / _outlineSprite.Texture.GetSize().X, 48 / _outlineSprite.Texture.GetSize().Y);
 	    _outlineSprite.Position = new Vector2(0, -10);
-	    _recipeSprite.Texture = Globals.Database.GetTexture(recipe.Products.First().Key);
+	    _recipeSprite.Texture = Database.Instance.GetTexture(recipe.Products.First().Key);
 	    _recipeSprite.Scale = new Vector2(32 / _recipeSprite.Texture.GetSize().X, 32 / _recipeSprite.Texture.GetSize().Y);
 	    _recipeSprite.Position = new Vector2(0, -10);
 	    Recipe = recipe;

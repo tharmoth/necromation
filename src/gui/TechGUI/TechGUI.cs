@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Linq;
 using Necromation;
-using Necromation.character;
 
 public partial class TechGUI : PanelContainer
 {
@@ -14,7 +13,7 @@ public partial class TechGUI : PanelContainer
 		Visible = true;
 
 		TechList.GetChildren().ToList().ForEach(node => node.Free());
-		Globals.Database.Technologies.ToList().ForEach(tech =>
+		Database.Instance.Technologies.ToList().ForEach(tech =>
 		{
 			var panel = _techPanelScene.Instantiate<TechPanel>();
 			panel.Tech = tech;

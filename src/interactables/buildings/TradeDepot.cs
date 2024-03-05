@@ -21,7 +21,7 @@ public partial class TradeDepot : Building, ITransferTarget, IInteractable
     public override void _Ready()
     {
         base._Ready();
-        var depots = Globals.TileMap.GetEntitiesOfType("TradeDepot").Where(entity => entity != this)
+        var depots = Globals.FactoryScene.TileMap.GetEntitiesOfType("TradeDepot").Where(entity => entity != this)
             .OfType<TradeDepot>().Where(depot => depot.ItemType != ItemType)
             .ToList();
                 
@@ -44,7 +44,7 @@ public partial class TradeDepot : Building, ITransferTarget, IInteractable
 
         if (ItemType == "Exporter") return;
         
-        var depots = Globals.TileMap.GetEntitiesOfType("TradeDepot").Where(entity => entity != this)
+        var depots = Globals.FactoryScene.TileMap.GetEntitiesOfType("TradeDepot").Where(entity => entity != this)
             .OfType<TradeDepot>().Where(depot => depot.ItemType != ItemType)
             .Where(depot => (MapPosition - depot.MapPosition).Length() > 142)
             .ToList();
@@ -69,6 +69,6 @@ public partial class TradeDepot : Building, ITransferTarget, IInteractable
 
     public void Interact(Inventory playerInventory)
     {
-        FactoryGUI.Instance.Display(playerInventory, _inventory, ItemType);
+        Globals.FactoryScene.Gui.Display(playerInventory, _inventory, ItemType);
     }
 }

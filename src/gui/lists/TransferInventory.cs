@@ -76,7 +76,7 @@ public partial class TransferInventory : VBoxContainer
 		
 		public ItemButton(string itemType, Inventory sourceInventory, Inventory targetInventory)
 		{
-			Icon = Globals.Database.GetTexture(itemType);
+			Icon = Database.Instance.GetTexture(itemType);
 			ExpandIcon = true;
 			this.ItemType = itemType;
 			this.SourceInventory = sourceInventory;

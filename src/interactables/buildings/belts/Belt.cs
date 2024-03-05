@@ -26,7 +26,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     }
     
     // Protected fields
-    protected Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
+    protected Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
     protected virtual Vector2I TargetDirectionGlobal => Orientation switch {
         IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
         IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
@@ -37,7 +37,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     
     // Private fields
     private float _secondsPerItem = .5333f;
-    private float Speed => BuildingTileMap.TileSize / _secondsPerItem;
+    private float Speed => FactoryTileMap.TileSize / _secondsPerItem;
     private Vector2I Output => MapPosition + TargetDirectionGlobal;
     private static Vector2I TargetDirectionLocal => new (0, -1);
     private AudioStreamPlayer2D _audio = new();
@@ -110,7 +110,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
                || GetOccupiedPositions(position)
                    .Any(pos =>
                    {
-                       return Globals.TileMap.GetEntity(pos, BuildingTileMap.Building) is Belt belt &&
+                       return Globals.FactoryScene.TileMap.GetEntity(pos, FactoryTileMap.Building) is Belt belt &&
                               belt.Orientation != Orientation;
                    });
     }
@@ -120,7 +120,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
      **************************************************************************/
     public void MovePlayer(Character player, double delta)
     {
-        if (Globals.TileMap.GlobalToMap(player.GlobalPosition) != MapPosition) return;
+        if (Globals.FactoryScene.TileMap.GlobalToMap(player.GlobalPosition) != MapPosition) return;
         player.GlobalPosition += -GetTargetLocation(0).DirectionTo(player.GlobalPosition) * Speed * (float)delta;
     }
     
@@ -162,9 +162,9 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     
     private Belt GetBeltInDirection(Vector2 direction)
     {
-        var global = ToGlobal(direction * BuildingTileMap.TileSize);
-        var map = Globals.TileMap.GlobalToMap(global);
-        var entity = Globals.TileMap.GetEntity(map, BuildingTileMap.Building);
+        var global = ToGlobal(direction * FactoryTileMap.TileSize);
+        var map = Globals.FactoryScene.TileMap.GlobalToMap(global);
+        var entity = Globals.FactoryScene.TileMap.GetEntity(map, FactoryTileMap.Building);
 
         return entity is Belt belt && (belt.GetOutputBelt() == this || belt == GetOutputBelt()) ? belt : null;
     }
@@ -215,7 +215,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
     protected virtual Belt GetOutputBelt()
     {
-        return Globals.TileMap.GetEntity(Output, BuildingTileMap.Building) as Belt;
+        return Globals.FactoryScene.TileMap.GetEntity(Output, FactoryTileMap.Building) as Belt;
     }
     
     protected virtual Belt GetBehindBelt()

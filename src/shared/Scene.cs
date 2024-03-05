@@ -12,8 +12,8 @@ public abstract partial class Scene : Node2D
 
     // The Scenes GUI node. This requres that the scene have a child node named %GUI. Used to access the GUI canvas layer
     // of the scene. Made not Visible by the SceneManager when the scene is not the current scene.
-    public CanvasLayer Gui => GetNode<CanvasLayer>("%GUI");
-    
+    public abstract CanvasLayer Gui { get; }
+
     // The Scenes Camera2D node. This requres that the scene have a child node named %Camera2D. Used to access the camera
     // of the scene. Disabled by the SceneManager when the scene is not the current scene.
     public Camera2D Camera => GetNode<Camera2D>("%Camera2D");

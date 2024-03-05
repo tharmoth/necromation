@@ -10,7 +10,7 @@ using Resource = Necromation.Resource;
 public partial class Character : Node2D
 {
 	public IRotatable.BuildingOrientation Orientation => IRotatable.GetOrientationFromDegrees(_rotationDegrees);
-	public Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
+	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 	
 	private const float Speed = 200;
 	private readonly Inventory _inventory = new();
@@ -29,8 +29,8 @@ public partial class Character : Node2D
 		{
 			_selected = value;
 			_sprite.Texture = _selected == null
-				?  Globals.Database.GetTexture("Selection")
-				: Globals.Database.GetTexture(_selected);
+				?  Database.Instance.GetTexture("Selection")
+				: Database.Instance.GetTexture(_selected);
 			
 			_sprite.Scale = !Building.IsBuilding(_selected) ? 
 				new Vector2(32 / (float)_sprite.Texture.GetWidth(), 32 / (float)_sprite.Texture.GetHeight()) 
@@ -51,7 +51,7 @@ public partial class Character : Node2D
 	{
 		AddToGroup("player");
 		
-		Globals.Database.Recipes
+		Database.Instance.Recipes
 			.Select(recipe => recipe.Products.First().Key)
 			.ToList()
 			.ForEach(item => _inventory.Insert(item, 100));
@@ -79,7 +79,7 @@ public partial class Character : Node2D
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 100;
 		_sprite.Visible = false;
-		_sprite.Texture =  Globals.Database.GetTexture("Selection");
+		_sprite.Texture =  Database.Instance.GetTexture("Selection");
 		Globals.FactoryScene.CallDeferred("add_child", _sprite);
 	}
 	
@@ -87,13 +87,13 @@ public partial class Character : Node2D
 	{
 		// Process mouseover
 		if (Selected != null) SelectedPreview();
-		else if (Globals.TileMap.GetBuildingAtMouse() != null || Globals.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
+		else if (Globals.FactoryScene.TileMap.GetBuildingAtMouse() != null || Globals.FactoryScene.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
 		else _sprite.Visible = false;
 
-		if (Globals.TileMap.GetEntity(MapPosition, BuildingTileMap.Building) is Belt belt) belt.MovePlayer(this, delta);
+		if (Globals.FactoryScene.TileMap.GetEntity(MapPosition, FactoryTileMap.Building) is Belt belt) belt.MovePlayer(this, delta);
 		
 		// Return if a gui is open
-		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
+		if (Globals.FactoryScene.Gui.IsAnyGuiOpen()) return;
 
 		// Process button presses
 		if (_buildingBeingRemoved == null)
@@ -103,12 +103,12 @@ public partial class Character : Node2D
 			if (Input.IsActionPressed("left")) newPosition += new Vector2(-Speed * (float)delta, 0);
 			if (Input.IsActionPressed("up")) newPosition += new Vector2(0, -Speed * (float)delta);
 			if (Input.IsActionPressed("down")) newPosition += new Vector2(0, Speed * (float)delta);
-			if (Globals.TileMap.IsOnMap(Globals.TileMap.GlobalToMap(newPosition))) Position = newPosition;
+			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) Position = newPosition;
 		}
 		
 		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
 		else CancelRemoval();
-		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.TileMap.GetBuildingAtMouse() == null) Mine();
+		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.FactoryScene.TileMap.GetBuildingAtMouse() == null) Mine();
 		else _resource?.Cancel();
 	}
 
@@ -119,21 +119,21 @@ public partial class Character : Node2D
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
 		if (Input.IsMouseButtonPressed(MouseButton.Left) && Building.IsBuilding(Selected)) Build();
 		
-		if (FactoryGUI.Instance.IsAnyGuiOpen()) return;
+		if (Globals.FactoryScene.Gui.IsAnyGuiOpen()) return;
 		if (!string.IsNullOrEmpty(Selected) && Input.IsMouseButtonPressed(MouseButton.Left) && Input.IsKeyPressed(Key.Ctrl) &&
-		    Globals.TileMap.GetBuildingAtMouse() is ITransferTarget transfer && transfer.GetMaxTransferAmount(Selected) > 0)
+		    Globals.FactoryScene.TileMap.GetBuildingAtMouse() is ITransferTarget transfer && transfer.GetMaxTransferAmount(Selected) > 0)
 		{
 			InsertToBuilding(transfer);
 		}
 		else if (string.IsNullOrEmpty(Selected) && Input.IsMouseButtonPressed(MouseButton.Left) && Input.IsKeyPressed(Key.Ctrl) &&
-		    Globals.TileMap.GetBuildingAtMouse() is ITransferTarget transfer2 && transfer2.GetOutputInventory().CountAllItems() > 0)
+		    Globals.FactoryScene.TileMap.GetBuildingAtMouse() is ITransferTarget transfer2 && transfer2.GetOutputInventory().CountAllItems() > 0)
 		{
 			RemoveFromBuilding(transfer2);
 		} 
 		else if (Input.IsActionJustPressed("left_click") 
 		         && !Building.IsBuilding(Selected)
 		         && !Input.IsKeyPressed(Key.Ctrl) 
-		         && Globals.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
+		         && Globals.FactoryScene.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
 		
 	}
 
@@ -154,7 +154,7 @@ public partial class Character : Node2D
 	{
 		_sprite.Visible = true;
 		_sprite.Modulate = Colors.White;
-		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
+		_sprite.Position = Globals.FactoryScene.TileMap.ToMap(GetGlobalMousePosition());
 
 		if (_tween != null) return;
 
@@ -170,7 +170,7 @@ public partial class Character : Node2D
 		_tween = null;
 		_sprite.Visible = true;
 		_sprite.RotationDegrees = _rotationDegrees;
-		_sprite.Position = Globals.TileMap.ToMap(GetGlobalMousePosition());
+		_sprite.Position = Globals.FactoryScene.TileMap.ToMap(GetGlobalMousePosition());
 		_sprite.Modulate = Colors.White;
 		
 		if (!Building.IsBuilding(Selected)) return;
@@ -206,7 +206,7 @@ public partial class Character : Node2D
 		if (!building.CanPlaceAt(position)) return;
 		// Remove any buildings that are in the way. This should probably only happen for IRotatable buildings.
 		building.GetOccupiedPositions(position)
-			.Select(pos => Globals.TileMap.GetEntity(pos, BuildingTileMap.Building))
+			.Select(pos => Globals.FactoryScene.TileMap.GetEntity(pos, FactoryTileMap.Building))
 			.Select(entity => entity as Building)
 			.Where(entity => entity != null)
 			.Distinct()
@@ -223,7 +223,7 @@ public partial class Character : Node2D
 
 	private void RemoveBuilding()
 	{
-		var entity = Globals.TileMap.GetBuildingAtMouse();
+		var entity = Globals.FactoryScene.TileMap.GetBuildingAtMouse();
 		if (entity != _buildingBeingRemoved) CancelRemoval();
 		if (entity == _buildingBeingRemoved) return;
 		if (entity is not Building building) return;
@@ -233,7 +233,7 @@ public partial class Character : Node2D
 
 	private void QPick()
 	{
-		Selected = Globals.TileMap.GetBuildingAtMouse() is Building building && building.ItemType != Selected && _inventory.Items.ContainsKey(building.ItemType)
+		Selected = Globals.FactoryScene.TileMap.GetBuildingAtMouse() is Building building && building.ItemType != Selected && _inventory.Items.ContainsKey(building.ItemType)
 			? building.ItemType
 			: null;
 	}
@@ -246,7 +246,7 @@ public partial class Character : Node2D
 
 	private void Mine()
 	{
-		if (Globals.TileMap.GetResourceAtMouse() is Resource resource)
+		if (Globals.FactoryScene.TileMap.GetResourceAtMouse() is Resource resource)
 		{
 			if (resource == _resource && !_resource.CanInteract()) return;
 			_resource?.Cancel();

@@ -6,7 +6,7 @@ using Necromation;
 using Necromation.map;
 using Necromation.map.character;
 
-public partial class Map : Scene
+public partial class MapScene : Scene
 {
 	public MapTileMap TileMap => GetNode<MapTileMap>("%TileMap");
 	
@@ -19,17 +19,19 @@ public partial class Map : Scene
 
 	public static Vector2I FactoryPosition => new(4, 2);
 
-	public Map()
+	public MapScene()
 	{
 		TurnListeners.Add(() => SelectedCommander = null);
 	}
 
+	public override CanvasLayer Gui => GetNode<MapGui>("%GUI");
+
 	public override void OnOpen()
 	{
-		if (Globals.TileMap == null) return;
+		if (Globals.FactoryScene.TileMap == null) return;
 		
-		var prov = TileMap.GetProvence(Map.FactoryPosition);
-		foreach (var barracks in Globals.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
+		var prov = TileMap.GetProvence(MapScene.FactoryPosition);
+		foreach (var barracks in Globals.FactoryScene.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
 		{
 			var inventory = barracks.GetInventories().First();
 			Inventory.TransferAllTo(inventory, prov.Units);
@@ -42,7 +44,7 @@ public partial class Map : Scene
 	{
 		Globals.MapScene.SelectedSprite = GetNode<Sprite2D>("%SelectedSprite");
 		
-		var provence = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition);
+		var provence = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition);
 		SelectProvince(provence);
 		
 		VisibilityChanged += () => SelectProvince(Globals.MapScene.SelectedProvince);

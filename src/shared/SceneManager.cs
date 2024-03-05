@@ -16,25 +16,25 @@ public class SceneManager
 	private static SceneTree _sceneTree;
 	public static SceneTree SceneTree => _sceneTree ??= Engine.GetMainLoop() as SceneTree;
 
-	private static Main _factoryScene;
+	private static FactoryScene _factoryScene;
 
-	public static Main FactoryScene
+	public static FactoryScene FactoryScene
 	{
-		get => _factoryScene ??= LoadScene("res://src/main.tscn") as Main;
+		get => _factoryScene ??= LoadScene("res://src/main.tscn") as FactoryScene;
 	}
 
-	private static Map _mapScene;
+	private static MapScene _mapSceneScene;
 
-	public static Map MapScene
+	public static MapScene MapScene
 	{
-		get => _mapScene ??= LoadScene("res://src/map.tscn") as Map;
+		get => _mapSceneScene ??= LoadScene("res://src/map.tscn") as MapScene;
 	}
 
-	private static Battle _battleScene;
+	private static BattleScene _battleSceneScene;
 
-	public static Battle BattleScene
+	public static BattleScene BattleScene
 	{
-		get => _battleScene ??= LoadScene("res://src/battle.tscn") as Battle;
+		get => _battleSceneScene ??= LoadScene("res://src/battle.tscn") as BattleScene;
 	}
 	
 	private static Scene _currentScene;
@@ -44,14 +44,14 @@ public class SceneManager
 	{
 		switch (scene)
 		{
-			case Main main:
+			case FactoryScene main:
 				_factoryScene = main;
 				break;
-			case Map map:
-				_mapScene = map;
+			case MapScene map:
+				_mapSceneScene = map;
 				break;
-			case Battle battle:
-				_battleScene = battle;
+			case BattleScene battle:
+				_battleSceneScene = battle;
 				break;
 			default:
 				throw new ArgumentException("Scene is not a valid type", nameof(scene));
@@ -68,16 +68,16 @@ public class SceneManager
 		switch (scene)
 		{
 			case SceneEnum.Factory:
-				if (!GodotObject.IsInstanceValid(_factoryScene)) _factoryScene = LoadScene("res://src/main.tscn") as Main;
+				if (!GodotObject.IsInstanceValid(_factoryScene)) _factoryScene = LoadScene("res://src/main.tscn") as FactoryScene;
 				ChangeScene(_factoryScene);
 				break;
 			case SceneEnum.Map:
-				if (!GodotObject.IsInstanceValid(_mapScene)) _mapScene = LoadScene("res://src/map.tscn") as Map;
-				ChangeScene(_mapScene);
+				if (!GodotObject.IsInstanceValid(_mapSceneScene)) _mapSceneScene = LoadScene("res://src/map.tscn") as MapScene;
+				ChangeScene(_mapSceneScene);
 				break;
 			case SceneEnum.Battle:
-				if (!GodotObject.IsInstanceValid(_battleScene)) _battleScene = LoadScene("res://src/battle.tscn") as Battle;
-				ChangeScene(_battleScene);
+				if (!GodotObject.IsInstanceValid(_battleSceneScene)) _battleSceneScene = LoadScene("res://src/battle.tscn") as BattleScene;
+				ChangeScene(_battleSceneScene);
 				break;
 			default:
 				throw new ArgumentOutOfRangeException(nameof(scene), scene, null);

@@ -22,8 +22,8 @@ public partial class Actionbar : Control
 	{
 		int index = 1;
 		// Use the original recipe list for dumb sorting reasons.
-		foreach (var recipe in Globals.Database.Recipes.Where(recipe => recipe.Category == _category)
-			         .Where(recipe => Globals.Database.UnlockedRecipes.Contains(recipe)).Where(recipe => Building.IsBuilding(recipe.Products.FirstOrDefault().Key)))
+		foreach (var recipe in Database.Instance.Recipes.Where(recipe => recipe.Category == _category)
+			         .Where(recipe => Database.Instance.UnlockedRecipes.Contains(recipe)).Where(recipe => Building.IsBuilding(recipe.Products.FirstOrDefault().Key)))
 		{
 			var button = new ActionBarButton(recipe, index);
 			AddChild(button);

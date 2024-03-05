@@ -27,7 +27,7 @@ public partial class MapTileMap : SKTileMap
 		base._Ready();
 		foreach (var (location, provence) in _provences)
 		{
-			InitProvence(provence, location == Map.FactoryPosition ? "Player" : "Enemy");
+			InitProvence(provence, location == MapScene.FactoryPosition ? "Player" : "Enemy");
 			Globals.MapScene.CallDeferred("add_child", provence);
 			foreach (var commander in provence.Commanders)
 			{
@@ -51,7 +51,7 @@ public partial class MapTileMap : SKTileMap
 		provence.Commanders.Add(rangedCommander);
 		
 		var provinceLocation = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
-		var dis = Mathf.Abs(provinceLocation.X - Map.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - Map.FactoryPosition.Y);
+		var dis = Mathf.Abs(provinceLocation.X - MapScene.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - MapScene.FactoryPosition.Y);
 		
 		switch (dis)
 		{

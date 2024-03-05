@@ -6,9 +6,9 @@ using Necromation;
 using Necromation.map;
 using Necromation.map.character;
 
-public partial class Main : Scene
+public partial class FactoryScene : Scene
 {
-	public BuildingTileMap TileMap => GetNode<BuildingTileMap>("%TileMap");
+	public FactoryTileMap TileMap => GetNode<FactoryTileMap>("%TileMap");
 	
 	private bool _initialized = false;
 	public Timer AttackTimer;
@@ -24,17 +24,19 @@ public partial class Main : Scene
 		Globals.Tree.Root.AddChild(new CheatCodes());
 	}
 
+	public override FactoryGUI Gui => GetNode<FactoryGUI>("%GUI");
+
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
 		if (_initialized) return;
 		_initialized = true;
-		var position = Map.FactoryPosition;
+		var position = MapScene.FactoryPosition;
 		Globals.Player.GlobalPosition =
-			position * BuildingTileMap.TileSize * BuildingTileMap.ProvinceSize
-			+ position * BuildingTileMap.TileSize * BuildingTileMap.ProvinceGap
-			+ Vector2I.One * BuildingTileMap.TileSize * BuildingTileMap.ProvinceSize / 2;
-		Globals.TileMap.AddProvence(position);
+			position * FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize
+			+ position * FactoryTileMap.TileSize * FactoryTileMap.ProvinceGap
+			+ Vector2I.One * FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize / 2;
+		Globals.FactoryScene.TileMap.AddProvence(position);
 	}
 
 	public override void OnOpen()

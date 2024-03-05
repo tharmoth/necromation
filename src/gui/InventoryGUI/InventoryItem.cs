@@ -15,7 +15,7 @@ public partial class InventoryItem : PanelContainer
 		set
 		{
 			_itemType = value;
-			Icon.Texture = Globals.Database.GetTexture(_itemType);
+			Icon.Texture = Database.Instance.GetTexture(_itemType);
 		}
 	}
 
@@ -47,6 +47,6 @@ public partial class InventoryItem : PanelContainer
 		base._Process(delta);
 
 		// Could be bad for performance, But seems to work.
-		Icon.Texture = Globals.Database.GetTexture(Globals.Player.Selected == ItemType ? "BoneHand" : ItemType);
+		Icon.Texture = Database.Instance.GetTexture(Globals.Player.Selected == ItemType ? "BoneHand" : ItemType);
 	}
 }

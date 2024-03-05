@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Necromation.character;
 
 namespace Necromation.gui;
 
@@ -25,11 +24,11 @@ public class Technology
             if (_progress < Count) return;
             Researched = true;
             GD.Print("Researched " + Name);
-            var unlockedRecipes = Globals.Database.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
-            Globals.Database.UnlockedRecipes.AddRange(unlockedRecipes);
+            var unlockedRecipes = Database.Instance.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
+            Database.Instance.UnlockedRecipes.AddRange(unlockedRecipes);
             Globals.ResearchListeners.ForEach(listener => listener());
             Globals.CurrentTechnology = null;
-            FactoryGUI.Instance.TechnologyComplete();
+            Globals.FactoryScene.Gui.TechnologyComplete();
         }
     }
 

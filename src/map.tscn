@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://yhp2pgk86ofe"]
 
-[ext_resource type="Script" path="res://src/map/Map.cs" id="1_muam7"]
+[ext_resource type="Script" path="res://src/map/MapScene.cs" id="1_q07oc"]
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="2_12t4y"]
 [ext_resource type="Script" path="res://src/map/MapTileMap.cs" id="2_xas5k"]
 [ext_resource type="Script" path="res://src/map/MapGui.cs" id="4_513oc"]
@@ -22,7 +22,7 @@ sources/0 = SubResource("TileSetAtlasSource_vg77j")
 
 [node name="Map" type="Node2D"]
 position = Vector2(8, -2)
-script = ExtResource("1_muam7")
+script = ExtResource("1_q07oc")
 
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true

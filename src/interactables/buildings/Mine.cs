@@ -55,8 +55,8 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         if (GetProgressPercent() < 1.0f) return;
         _time = 0;
 
-        var resource = Globals.TileMap.GetEntityPositions(this)
-            .Select(position => Globals.TileMap.GetEntity(position, BuildingTileMap.Resource))
+        var resource = Globals.FactoryScene.TileMap.GetEntityPositions(this)
+            .Select(position => Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Resource))
             .FirstOrDefault(resource => resource is Resource);
         
         if (resource is not Resource collectable) return;
@@ -71,7 +71,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     
     public override bool CanPlaceAt(Vector2 position)
     {
-        return base.CanPlaceAt(position) && GetOccupiedPositions(position).Any(Globals.TileMap.IsResource);
+        return base.CanPlaceAt(position) && GetOccupiedPositions(position).Any(Globals.FactoryScene.TileMap.IsResource);
     }
     
     /**************************************************************************
@@ -125,7 +125,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
      **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-        FactoryGUI.Instance.Display(playerInventory, _inventory, ItemType);
+        Globals.FactoryScene.Gui.Display(playerInventory, _inventory, ItemType);
     }
     #endregion
     

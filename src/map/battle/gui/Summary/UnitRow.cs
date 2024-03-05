@@ -12,7 +12,7 @@ public partial class UnitRow : HBoxContainer
 
 	public void Init(Summary.UnitStats stat)
 	{
-		Sprite.Texture = Globals.Database.GetTexture(stat.UnitType);
+		Sprite.Texture = Database.Instance.GetTexture(stat.UnitType);
 		NameLabel.Text = stat.UnitType;
 		CountLabel.Text = stat.Count.ToString();
 		KillsLabel.Text = stat.Kills.ToString();

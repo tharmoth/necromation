@@ -27,7 +27,7 @@ public abstract  class Weapon
     public void Attack(Unit wielder)
     {
         Attack(wielder, _target);
-        wielder.Cooldown = -1 * Cooldown * Battle.TimeStep;
+        wielder.Cooldown = -1 * Cooldown * BattleScene.TimeStep;
     }
     
     protected abstract void Attack(Unit wielder, Unit target);

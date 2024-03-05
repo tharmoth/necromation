@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://biyscljj05i1"]
 
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="1_2hsjy"]
-[ext_resource type="Script" path="res://src/map/battle/Battle.cs" id="1_nyo56"]
+[ext_resource type="Script" path="res://src/map/battle/BattleScene.cs" id="1_cid8i"]
 [ext_resource type="Script" path="res://src/sk/pan_camera.gd" id="2_rgifv"]
 [ext_resource type="Script" path="res://src/map/battle/BattleTileMap.cs" id="3_kgj4d"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="4_8x33n"]
@@ -86,7 +86,7 @@ sources/0 = SubResource("TileSetAtlasSource_7p67d")
 sources/1 = SubResource("TileSetAtlasSource_4oy1t")
 
 [node name="Battle" type="Node2D"]
-script = ExtResource("1_nyo56")
+script = ExtResource("1_cid8i")
 
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true

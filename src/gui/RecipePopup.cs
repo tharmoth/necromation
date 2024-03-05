@@ -35,7 +35,7 @@ public partial class RecipePopup : Control
 	
 	private void AddButtons()
 	{
-		foreach (var recipe in Globals.Database.UnlockedRecipes.Where(recipe => recipe.Category == _category))
+		foreach (var recipe in Database.Instance.UnlockedRecipes.Where(recipe => recipe.Category == _category))
 		{
 			var button = new Button();
 			button.CustomMinimumSize = new Vector2(100, 30);

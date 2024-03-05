@@ -5,11 +5,10 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using Godot.Collections;
 using Necromation;
-using Necromation.character;
 using Necromation.map;
 using Necromation.sk;
 
-public partial class BuildingTileMap : LayerTileMap
+public partial class FactoryTileMap : LayerTileMap
 {
 	public const string Building = "building";
 	public const string Resource = "resource";
@@ -56,7 +55,7 @@ public partial class BuildingTileMap : LayerTileMap
 		}
 		
 		Sprite2D sprite = new();
-		sprite.Texture = Globals.Database.GetTexture("soil2");
+		sprite.Texture = Database.Instance.GetTexture("soil2");
 		var scaler = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
 		sprite.Scale = new Vector2(scaler, scaler);
 		sprite.GlobalPosition = startpos;
@@ -64,8 +63,8 @@ public partial class BuildingTileMap : LayerTileMap
 		sprite.ZIndex = -99;
 		Globals.FactoryScene.CallDeferred("add_child", sprite);
 
-		var grassTexture = Globals.Database.GetTexture("Grass2");
-		var grassTexture2 = Globals.Database.GetTexture("Grass5");
+		var grassTexture = Database.Instance.GetTexture("Grass2");
+		var grassTexture2 = Database.Instance.GetTexture("Grass5");
 		PropSpawner spawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .5f);
 		spawner.GlobalPosition = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
@@ -76,12 +75,12 @@ public partial class BuildingTileMap : LayerTileMap
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 		
 		var resources = new List<string> {"Bone Fragments"};
-		if ((location - Map.FactoryPosition).Length() != 0) 
+		if ((location - MapScene.FactoryPosition).Length() != 0) 
 			resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
-		if ((location - Map.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
+		if ((location - MapScene.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
 		
 		var resource = resources[GD.RandRange(0, resources.Count - 1)];
-		if ((location - Map.FactoryPosition).Length() > 3) resource = "Tin Ore";
+		if ((location - MapScene.FactoryPosition).Length() > 3) resource = "Tin Ore";
 		switch (_provences.Count)
 		{
 			case 1:
@@ -118,22 +117,21 @@ public partial class BuildingTileMap : LayerTileMap
 
 	public override void _EnterTree()
 	{
-		Globals.TileMap = this;
 		// TODO: refactor this into a collision mask instead of discrete layers?
 		AddLayer(Building);
 		AddLayer(Resource);
 		
-		AddProvence(Map.FactoryPosition);
+		AddProvence(MapScene.FactoryPosition);
 	}
 
 	public bool IsBuildable(Vector2I mapPos)
 	{
-		return IsOnMap(mapPos) && Globals.TileMap.GetEntity(mapPos, Building) == null;
+		return IsOnMap(mapPos) && Globals.FactoryScene.TileMap.GetEntity(mapPos, Building) == null;
 	}
 	
 	public bool IsResource(Vector2I mapPos)
 	{
-		return Globals.TileMap.GetEntity(mapPos, Resource) != null;
+		return Globals.FactoryScene.TileMap.GetEntity(mapPos, Resource) != null;
 	}
 
 	public IEntity GetBuildingAtMouse()

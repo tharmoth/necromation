@@ -52,7 +52,7 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
      **************************************************************************/        
     public void Interact(Inventory playerInventory)
     {
-        FactoryGUI.Instance.Display(playerInventory, _inventory, ItemType);
+        Globals.FactoryScene.Gui.Display(playerInventory, _inventory, ItemType);
     }
     #endregion
     

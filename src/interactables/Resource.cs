@@ -27,7 +27,7 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     public Resource(string itemType)
     {
         Type = itemType;
-        _sprite.Texture = Globals.Database.GetTexture(Type);
+        _sprite.Texture = Database.Instance.GetTexture(Type);
         AddChild(_sprite);
         
         _progressBar.Scale = new Vector2(0.25f, 0.25f);
@@ -64,13 +64,13 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
         base._Ready();
         AddToGroup("resources");
         AddToGroup("Persist");
-        Globals.TileMap.AddEntity(GlobalPosition, this, BuildingTileMap.Resource);
+        Globals.FactoryScene.TileMap.AddEntity(GlobalPosition, this, FactoryTileMap.Resource);
     }
 
     public override void _ExitTree()
     {
         base._ExitTree();
-        Globals.TileMap.RemoveEntity(this);
+        Globals.FactoryScene.TileMap.RemoveEntity(this);
     }
     
     public override void _Process(double delta)

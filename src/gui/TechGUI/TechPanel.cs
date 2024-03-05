@@ -38,13 +38,13 @@ public partial class TechPanel : PanelContainer
 		
 		Tech.Unlocks.ToList().ForEach(unlock =>
 		{
-			if (!Globals.Database.Recipes.Select(recipe => recipe.Name).Contains(unlock))
+			if (!Database.Instance.Recipes.Select(recipe => recipe.Name).Contains(unlock))
 			{
 				GD.PrintErr("Missing recipe for " + unlock);
 				return;
 			}
 
-			var recipe = Globals.Database.Recipes.First(recipe => recipe.Name == unlock);
+			var recipe = Database.Instance.Recipes.First(recipe => recipe.Name == unlock);
 			var texture = new TextureRect();
 			texture.Texture = recipe.GetIcon();
 			texture.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
@@ -62,7 +62,7 @@ public partial class TechPanel : PanelContainer
 
 		foreach (var prerequisite in Tech.Prerequisites)
 		{
-			var researched = Globals.Database.Technologies
+			var researched = Database.Instance.Technologies
 				.Where(tech => tech.Researched)
 				.Select(tech => tech.Name)
 				.Any(name => name == prerequisite);

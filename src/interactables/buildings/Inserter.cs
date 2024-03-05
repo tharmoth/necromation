@@ -31,7 +31,7 @@ public partial class Inserter : Building, IRotatable
         }
     }
     
-    private Vector2I position => Globals.TileMap.GlobalToMap(GlobalPosition);
+    private Vector2I position => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
     private Vector2I _input => position + _range * Orientation switch {
         IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
         IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
@@ -64,13 +64,13 @@ public partial class Inserter : Building, IRotatable
         _audio.Attenuation = 25.0f;
         _audio.VolumeDb = -10.0f;
         
-        Globals.TileMap.listeners.Add(Update);
+        Globals.FactoryScene.TileMap.listeners.Add(Update);
     }
 
     public override void _ExitTree()
     {
         base._ExitTree();
-        Globals.TileMap.listeners.Remove(Update);
+        Globals.FactoryScene.TileMap.listeners.Remove(Update);
     }
 
     private ITransferTarget from;
@@ -79,8 +79,8 @@ public partial class Inserter : Building, IRotatable
     
     private void Update()
     {
-        from = Globals.TileMap.GetEntity(_input, BuildingTileMap.Building) as ITransferTarget;
-        to = Globals.TileMap.GetEntity(_output, BuildingTileMap.Building) as ITransferTarget;
+        from = Globals.FactoryScene.TileMap.GetEntity(_input, FactoryTileMap.Building) as ITransferTarget;
+        to = Globals.FactoryScene.TileMap.GetEntity(_output, FactoryTileMap.Building) as ITransferTarget;
         belt = to as Belt;
     }
 
@@ -100,8 +100,8 @@ public partial class Inserter : Building, IRotatable
     private void UpdateInputOutput()
     {
         SpriteInHand.Position = _range == 1 ? 
-            -BuildingTileMap.TileSize * _range * new Vector2I(0, 1) 
-            : -BuildingTileMap.TileSize * _range * new Vector2I(0, 1) + BuildingTileMap.TileSize * new Vector2I(0, 1) / 2;
+            -FactoryTileMap.TileSize * _range * new Vector2I(0, 1) 
+            : -FactoryTileMap.TileSize * _range * new Vector2I(0, 1) + FactoryTileMap.TileSize * new Vector2I(0, 1) / 2;
     }
 
     public override void _Process(double delta)
@@ -120,7 +120,7 @@ public partial class Inserter : Building, IRotatable
     private void Animate(string item)
     {
         if (IsOnScreen) return;
-        SpriteInHand.Texture =  Globals.Database.GetTexture(item);
+        SpriteInHand.Texture =  Database.Instance.GetTexture(item);
         SpriteInHand.Visible = true;
         SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
         _tween?.Kill();
@@ -189,7 +189,7 @@ public partial class Inserter : Building, IRotatable
 
     private string GetSourceItem()
     {
-        var sourceEntity = Globals.TileMap.GetEntity(_input, BuildingTileMap.Building);
+        var sourceEntity = Globals.FactoryScene.TileMap.GetEntity(_input, FactoryTileMap.Building);
         return sourceEntity switch
         {
             ITransferTarget building => building.GetFirstItem(),

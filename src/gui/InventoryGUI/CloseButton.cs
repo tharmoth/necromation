@@ -6,7 +6,7 @@ public partial class CloseButton : Button
 {
 	public override void _Pressed()
 	{
-		base._Pressed();
-		Globals.CurrentGUI.CloseGui();
+		base._Pressed(); 
+		Globals.FactoryScene.Gui.CloseGui();
 	}
 }

@@ -7,8 +7,6 @@ using Necromation.gui;
 using Necromation.map.battle.Weapons;
 using FileAccess = Godot.FileAccess;
 
-namespace Necromation.character;
-
 public class Database
 {
     public readonly IReadOnlyList<Recipe> Recipes = LoadRecipes();
@@ -20,9 +18,10 @@ public class Database
     public readonly List<Recipe> ResearchedTechnologies = new();
     
     private readonly Dictionary<string, Texture2D> _textureCache = new();
-
     
-    public Database()
+    public static Database Instance = new Database();
+    
+    private Database()
     {
         List<string> lockedRecipes = new();
         foreach (var technology in Technologies)

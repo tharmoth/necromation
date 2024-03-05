@@ -8,9 +8,9 @@ using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
 using Necromation.sk;
 
-public abstract partial class Building : Node2D, BuildingTileMap.IEntity, ProgressTracker.IProgress
+public abstract partial class Building : Node2D, FactoryTileMap.IEntity, ProgressTracker.IProgress
 {
-	public Vector2I MapPosition => Globals.TileMap.GlobalToMap(GlobalPosition);
+	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 	protected readonly Sprite2D Sprite = new();
 	private Tween _removeTween;
 
@@ -21,7 +21,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		set
 		{
 			_removePercent = value;
-			FactoryGUI.Instance.SetProgress(value);
+			Globals.FactoryScene.Gui.SetProgress(value);
 		}
 	}
 	
@@ -68,8 +68,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		
 		if (BuildingSize.X % 2 != 0)
 		{
-			_progress.Size = new Vector2(BuildingTileMap.TileSize * BuildingSize.X * 4 - 40, 28);
-			_progress.Position -= new Vector2(BuildingTileMap.TileSize * BuildingSize.X / 2.0f - 5, -BuildingTileMap.TileSize * BuildingSize.X / 2.0f + 28 / 4 + 10);
+			_progress.Size = new Vector2(FactoryTileMap.TileSize * BuildingSize.X * 4 - 40, 28);
+			_progress.Position -= new Vector2(FactoryTileMap.TileSize * BuildingSize.X / 2.0f - 5, -FactoryTileMap.TileSize * BuildingSize.X / 2.0f + 28 / 4 + 10);
 		}
 		else
 		{
@@ -78,12 +78,12 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			_particles.Position += new Vector2(16, 16);
 		}
 
-		Sprite.Texture = Globals.Database.GetTexture(ItemType);
-		GlobalPosition = Globals.TileMap.ToMap(GlobalPosition);
+		Sprite.Texture = Database.Instance.GetTexture(ItemType);
+		GlobalPosition = Globals.FactoryScene.TileMap.ToMap(GlobalPosition);
 		Sprite.GlobalPosition += GetSpriteOffset();
 
 		var positions = GetOccupiedPositions(GlobalPosition);
-		positions.ForEach(pos => Globals.TileMap.AddEntity(pos, this, BuildingTileMap.Building));
+		positions.ForEach(pos => Globals.FactoryScene.TileMap.AddEntity(pos, this, FactoryTileMap.Building));
 		
 		// Avoid death on load
 		if (Time.GetTicksMsec() > 1000) _audio.Play();
@@ -92,7 +92,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	public override void _ExitTree()
 	{
 		base._ExitTree();
-		Globals.TileMap.RemoveEntity(this);
+		Globals.FactoryScene.TileMap.RemoveEntity(this);
 	}
 
 	/******************************************************************
@@ -100,7 +100,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	 ******************************************************************/
 	public virtual bool CanPlaceAt(Vector2 position)
 	{
-		return GetOccupiedPositions(position).All(Globals.TileMap.IsBuildable);
+		return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable);
 	}
 
 	public void StartRemoval(Inventory to)
@@ -121,10 +121,10 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	
 	public List<Vector2I> GetOccupiedPositions(Vector2 position)
 	{
-		position = Globals.TileMap.ToMap(position);
+		position = Globals.FactoryScene.TileMap.ToMap(position);
 		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
 		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
-		var topLeft = Globals.TileMap.GlobalToMap(position) - BuildingSize / 2;
+		var topLeft = Globals.FactoryScene.TileMap.GlobalToMap(position) - BuildingSize / 2;
 
 		var positions = (from x in Enumerable.Range(0, BuildingSize.X)
 			from y in Enumerable.Range(0, BuildingSize.Y)
@@ -149,13 +149,13 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			}
 		}
 		to.Insert(ItemType);
-		Globals.TileMap.RemoveEntity(this);
+		Globals.FactoryScene.TileMap.RemoveEntity(this);
 		SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", GlobalPosition + new Vector2(0, index++ * 20));
 
 		RemovePercent = 100;
 		Sprite.Visible = false;
 		_progress.Visible = false;
-		FactoryGUI.Instance.BuildingRemoved();
+		Globals.FactoryScene.Gui.BuildingRemoved();
 		QueueFree();
 
 	}
@@ -261,7 +261,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 			var recipeName = nodeData["Recipe"].ToString();
 			if (recipeName != "") 
 			{
-				var recipe = Globals.Database.GetRecipe(recipeName);
+				var recipe = Database.Instance.GetRecipe(recipeName);
 				crafter.SetRecipe(recipe);
 			}
 		}

@@ -25,7 +25,7 @@ public partial class Spawner : Node2D
 
 	private void _spawn()
 	{
-		var mapPos = Globals.TileMap.GlobalToMap(GlobalPosition);
+		var mapPos = Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 		for (var x = -_radius; x <= _radius; x++)
 		{
 			for (var y = -_radius; y <= _radius; y++)
@@ -36,7 +36,7 @@ public partial class Spawner : Node2D
 				if (new Random().NextDouble() > 1.5 - Math.Sqrt(x * x + y * y) / _radius) continue;
 				
 				var spawn = new Resource(_resourceType);
-				spawn.GlobalPosition = Globals.TileMap.MapToGlobal(mapPos + new Vector2I(x, y));
+				spawn.GlobalPosition = Globals.FactoryScene.TileMap.MapToGlobal(mapPos + new Vector2I(x, y));
 				Globals.FactoryScene.AddChild(spawn);
 			}
 		}

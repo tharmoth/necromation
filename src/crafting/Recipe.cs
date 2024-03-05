@@ -65,6 +65,6 @@ public class Recipe
     
     public Texture2D GetIcon()
     {
-        return Globals.Database.GetTexture(Products.Keys.First());
+        return Database.Instance.GetTexture(Products.Keys.First());
     }
 }

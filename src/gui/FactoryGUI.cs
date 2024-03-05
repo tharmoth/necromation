@@ -33,7 +33,7 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		if (Globals.FactoryScene is Main { AttackTimer: not null } main)
+		if (Globals.FactoryScene is FactoryScene { AttackTimer: not null } main)
 		{
 			AttackLabel.Visible = true;
 			AttackLabel.Text = $"You are being attacked at {main.AttackProvince.Name}!\nNext attack in {main.AttackTimer.TimeLeft:0.0} seconds";

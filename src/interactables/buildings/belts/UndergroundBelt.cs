@@ -37,7 +37,7 @@ public partial class UndergroundBelt : Belt
         for (var i = 1; i <= Range; i++)
         {
             var position = MapPosition + TargetDirectionGlobal * i;
-            var entity = Globals.TileMap.GetEntity(position, BuildingTileMap.Building);
+            var entity = Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Building);
             if (entity is UndergroundBelt belt)
             {
                 _isEntrance = !belt._isEntrance;
@@ -49,7 +49,7 @@ public partial class UndergroundBelt : Belt
         base._Ready();
         
         // TODO: Resetting the texture to the correct one. Belt does animation things. This is bad and should be refactored.
-        Sprite.Texture = Globals.Database.GetTexture(ItemType);
+        Sprite.Texture = Database.Instance.GetTexture(ItemType);
         Sprite.Hframes = 1;
 
         Globals.Player.RotateSelection();
@@ -63,7 +63,7 @@ public partial class UndergroundBelt : Belt
     
     public override bool CanPlaceAt(Vector2 position)
     {
-        return GetOccupiedPositions(position).All(Globals.TileMap.IsBuildable);
+        return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable);
     }
 
     protected override Belt GetOutputBelt()
@@ -75,7 +75,7 @@ public partial class UndergroundBelt : Belt
         for (var i = 1; i <= Range; i++)
         {
             var position = MapPosition + TargetDirectionGlobal * i;
-            var entity = Globals.TileMap.GetEntity(position, BuildingTileMap.Building);
+            var entity = Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Building);
             if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance) return belt;
         }
         return null;
@@ -88,7 +88,7 @@ public partial class UndergroundBelt : Belt
         for (var i = 1; i <= Range; i++)
         {
             var position = MapPosition - TargetDirectionGlobal * i;
-            var entity = Globals.TileMap.GetEntity(position, BuildingTileMap.Building);
+            var entity = Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Building);
             if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance)
             {
                 LeftLine._secondsPerItem = 0.133325f;

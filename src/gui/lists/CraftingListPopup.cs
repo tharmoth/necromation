@@ -33,10 +33,10 @@ public partial class CraftingListPopup : PanelContainer
 	
 	public static CraftingListPopup DisplayPopup(Recipe recipe)
 	{
-		FactoryGUI.Instance.GetChildren().OfType<CraftingListPopup>().ToList().ForEach(popup => popup.QueueFree());
+		Globals.FactoryScene.Gui.GetChildren().OfType<CraftingListPopup>().ToList().ForEach(popup => popup.QueueFree());
 		var popup = (CraftingListPopup) GD.Load<PackedScene>("res://src/gui/lists/crafting_list_popup.tscn").Instantiate();
 		popup._recipe = recipe;
-		FactoryGUI.Instance.AddChild(popup);
+		Globals.FactoryScene.Gui.AddChild(popup);
 		return popup;
 	}
 
@@ -72,7 +72,7 @@ public partial class CraftingListPopup : PanelContainer
 		label.Text = amount + " x " + name;
 		
 		var texture = new TextureRect();
-		texture.Texture = Globals.Database.GetTexture(name);
+		texture.Texture = Database.Instance.GetTexture(name);
 		texture.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
 		texture.CustomMinimumSize = new Vector2(32, 32);
 		

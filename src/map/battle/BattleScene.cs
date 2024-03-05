@@ -6,9 +6,10 @@ using Necromation;
 using Necromation.map;
 using Necromation.map.character;
 
-public partial class Battle : Scene
+public partial class BattleScene : Scene
 {
 	public const double TimeStep = .5;
+	public override CanvasLayer Gui => GetNode<BattleGUI>("%GUI");
 	public BattleTileMap TileMap => GetNode<BattleTileMap>("%TileMap");
 	public Province Provence;
 
@@ -84,25 +85,25 @@ public partial class Battle : Scene
 
 		if (team == "Player" && Globals.MapScene.TileMap.GetProvinces().Count(province => province.Owner == "Player") == 2)
 		{
-			var provenceUp = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Up);
+			var provenceUp = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Up);
 			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Infantry", 2);
-			var provenceDown = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Down);
+			var provenceDown = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Down);
 			if (provenceDown.Owner != "Player") provenceDown.Commanders.First().Insert("Infantry", 2);
-			var provenceLeft = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Left);
+			var provenceLeft = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Left);
 			if (provenceLeft.Owner != "Player") provenceLeft.Commanders.First().Insert("Infantry", 2);
-			var provenceRight = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Right);
+			var provenceRight = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Right);
 			if (provenceRight.Owner != "Player") provenceRight.Commanders.First().Insert("Infantry", 2);
 		}
 
 		if (team == "Player" && Globals.MapScene.TileMap.GetProvinces().Count(province => province.Owner == "Player") == 3)
 		{
-			var provenceUp = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Up);
+			var provenceUp = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Up);
 			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Archer", 5);
-			var provenceDown = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Down);
+			var provenceDown = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Down);
 			if (provenceDown.Owner != "Player") provenceDown.Commanders.First().Insert("Archer", 5);
-			var provenceLeft = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Left);
+			var provenceLeft = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Left);
 			if (provenceLeft.Owner != "Player") provenceLeft.Commanders.First().Insert("Archer", 5);
-			var provenceRight = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Right);
+			var provenceRight = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Right);
 			if (provenceRight.Owner != "Player") provenceRight.Commanders.First().Insert("Archer", 5);
 			
 			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Infantry", 5);
@@ -113,13 +114,13 @@ public partial class Battle : Scene
 		
 		if (team == "Player" && Globals.MapScene.TileMap.GetProvinces().Count(province => province.Owner == "Player") == 4)
 		{
-			var provenceUp = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Up);
+			var provenceUp = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Up);
 			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Infantry", 5);
-			var provenceDown = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Down);
+			var provenceDown = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Down);
 			if (provenceDown.Owner != "Player") provenceDown.Commanders.First().Insert("Infantry", 5);
-			var provenceLeft = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Left);
+			var provenceLeft = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Left);
 			if (provenceLeft.Owner != "Player") provenceLeft.Commanders.First().Insert("Infantry", 5);
-			var provenceRight = Globals.MapScene.TileMap.GetProvence(Map.FactoryPosition + Vector2I.Right);
+			var provenceRight = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Right);
 			if (provenceRight.Owner != "Player") provenceRight.Commanders.First().Insert("Infantry", 5);
 		}
 		

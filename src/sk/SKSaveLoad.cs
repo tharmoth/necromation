@@ -52,7 +52,7 @@ public class SKSaveLoad
                     Character.Load(nodeData);
                     break;
                 case "BuildingTilemap":
-                    BuildingTileMap.Load(nodeData);
+                    FactoryTileMap.Load(nodeData);
                     break;
                 default:
                     Resource.Load(nodeData);
@@ -93,7 +93,7 @@ public class SKSaveLoad
         var playerJson = Json.Stringify(playerData);
         saveGame.StoreLine(playerJson);
 
-        var mapData = Globals.TileMap.Save();
+        var mapData = Globals.FactoryScene.TileMap.Save();
         var mapJson = Json.Stringify(mapData);
         saveGame.StoreLine(mapJson);
     }

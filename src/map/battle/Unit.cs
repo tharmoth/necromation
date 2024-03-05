@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
-using Necromation.character;
 using Necromation.map;
 using Necromation.map.battle.Weapons;
 using Necromation.map.character;
@@ -23,7 +22,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	
 	private int _hp = 10;
 
-	public double Cooldown = GD.RandRange(0, Battle.TimeStep);
+	public double Cooldown = GD.RandRange(0, BattleScene.TimeStep);
 	private Tween _jiggleTween;
 	private Tween _bobTween;
 	private Tween _moveTween;
@@ -44,19 +43,19 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		UnitType = unitType;
 		_commander = commander;
 
-		var def = Globals.Database.Units.First(unit => unit.Name == unitType);
+		var def = Database.Instance.Units.First(unit => unit.Name == unitType);
 		foreach (var weapon in def.Weapons)
 		{
-			Weapons.Add(Globals.Database.Equpment.OfType<Weapon>().First(weaponData => weaponData.Name == weapon));
+			Weapons.Add(Database.Instance.Equpment.OfType<Weapon>().First(weaponData => weaponData.Name == weapon));
 		}
 		Weapons.Add(new MeleeWeapon("Fist", 1, 1, 1, 1));
 		
 		foreach (var armor in def.Armor)
 		{
-			Armor.Add(Globals.Database.Equpment.OfType<Armor>().First(armorDef => armorDef.Name == armor));
+			Armor.Add(Database.Instance.Equpment.OfType<Armor>().First(armorDef => armorDef.Name == armor));
 		}
 
-		Sprite.Texture = Globals.Database.GetTexture(UnitType, "unit");
+		Sprite.Texture = Database.Instance.GetTexture(UnitType, "unit");
 		Sprite.Scale = new Vector2(.125f, .125f);
 		// Sprite.Scale = new Vector2(.5f, .5f);
 		AddChild(Sprite); 
@@ -91,7 +90,7 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		
 		// Every 0.5 seconds, move the unit one cell forward
 		Cooldown += delta;
-		if (Cooldown < Battle.TimeStep || _hp <= 0) return;
+		if (Cooldown < BattleScene.TimeStep || _hp <= 0) return;
 		Cooldown = 0;
 
 		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttackDeclump(this, enemies)))
@@ -131,8 +130,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 	{
 		_damageTween?.Kill();
 		_damageTween = CreateTween();
-		_damageTween.TweenProperty(this, "modulate", new Color(1, 0, 0), Battle.TimeStep / 5);
-		_damageTween.TweenProperty(this, "modulate", Colors.White, Battle.TimeStep /  5);
+		_damageTween.TweenProperty(this, "modulate", new Color(1, 0, 0), BattleScene.TimeStep / 5);
+		_damageTween.TweenProperty(this, "modulate", Colors.White, BattleScene.TimeStep /  5);
 
 		RichTextLabel text = new();
 		Globals.BattleScene.AddChild(text);
@@ -172,8 +171,8 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		_jiggleTween = CreateTween();
 		_jiggleTween.SetTrans(Tween.TransitionType.Quad);
 		_jiggleTween.SetEase(Tween.EaseType.Out);
-		_jiggleTween.TweenProperty(this, "rotation_degrees", 10, Battle.TimeStep /  5);
-		_jiggleTween.TweenProperty(this, "rotation_degrees", 0, Battle.TimeStep /  5);
+		_jiggleTween.TweenProperty(this, "rotation_degrees", 10, BattleScene.TimeStep /  5);
+		_jiggleTween.TweenProperty(this, "rotation_degrees", 0, BattleScene.TimeStep /  5);
 		_jiggleTween.TweenCallback(Callable.From(() => _jiggleTween = null));
 	}
 	/**************************************************************************
@@ -223,12 +222,12 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 
 		_moveTween?.Kill();
 		_moveTween = CreateTween();
-		_moveTween.TweenProperty(this, "global_position", Globals.BattleScene.TileMap.MapToGlobal(nextPosition), Battle.TimeStep);
+		_moveTween.TweenProperty(this, "global_position", Globals.BattleScene.TileMap.MapToGlobal(nextPosition), BattleScene.TimeStep);
 
 		_bobTween?.Kill();
 		_bobTween = CreateTween();
-		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, -5), Battle.TimeStep / 2);
-		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, 0), Battle.TimeStep / 2);
+		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, -5), BattleScene.TimeStep / 2);
+		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, 0), BattleScene.TimeStep / 2);
 		CachedPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
 	}
 
@@ -334,12 +333,12 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 
 		var deathTween = GetTree().CreateTween();
 		deathTween.SetTrans(Tween.TransitionType.Sine);
-		deathTween.TweenProperty(Sprite, "global_position", target, Battle.TimeStep);
+		deathTween.TweenProperty(Sprite, "global_position", target, BattleScene.TimeStep);
 		
 		var deathRotationTween = GetTree().CreateTween();
 		deathRotationTween.SetTrans(Tween.TransitionType.Quad);
 		deathRotationTween.SetEase(Tween.EaseType.In);
-		deathRotationTween.TweenProperty(Sprite, "rotation_degrees", targetDegrees, Battle.TimeStep);
+		deathRotationTween.TweenProperty(Sprite, "rotation_degrees", targetDegrees, BattleScene.TimeStep);
 	}
 
 	private void PlayDeathSound()
