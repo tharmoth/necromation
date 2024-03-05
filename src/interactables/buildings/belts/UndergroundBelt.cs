@@ -56,12 +56,9 @@ public partial class UndergroundBelt : Belt
         Globals.Player.RotateSelection();
 
         if (_isEntrance) return;
-        var leftpos = LeftLine.Position;
-        var rightpos = RightLine.Position;
-        LeftLine.Position = rightpos;
-        RightLine.Position = leftpos;
-        LeftLine.RotationDegrees = 180;
-        RightLine.RotationDegrees = 180;
+        // We want to flip the lanes for the exit.
+        LeftLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(GlobalRotation));
+        RightLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(GlobalRotation));
     }
     
     public override bool CanPlaceAt(Vector2 position)
@@ -92,7 +89,12 @@ public partial class UndergroundBelt : Belt
         {
             var position = MapPosition - TargetDirectionGlobal * i;
             var entity = Globals.TileMap.GetEntity(position, BuildingTileMap.Building);
-            if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance) return belt;
+            if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance)
+            {
+                LeftLine._secondsPerItem = 0.133325f;
+                RightLine._secondsPerItem = 0.133325f;
+                return belt;
+            }
         }
 
         return null;

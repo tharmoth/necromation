@@ -143,7 +143,7 @@ public partial class Character : Node2D
 	 ******************************************************************/
 	public void RotateSelection()
 	{
-		if (Building.GetBuilding(_selected, Orientation) is not IRotatable) return;
+		if (!Building.IsBuilding(_selected) || Building.GetBuilding(_selected, Orientation) is not IRotatable) return;
 		_rotationDegrees += 90;
 		if (_rotationDegrees == 360) _rotationDegrees = 0;
 	}

@@ -63,6 +63,25 @@ public partial class Inserter : Building, IRotatable
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/PM_MPRINTER_DPA4060_6_Printer_Printing_Individual_Cycle_Servo_Motor_Toner_Close_Perspectiv_328.mp3");
         _audio.Attenuation = 25.0f;
         _audio.VolumeDb = -10.0f;
+        
+        Globals.TileMap.listeners.Add(Update);
+    }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        Globals.TileMap.listeners.Remove(Update);
+    }
+
+    private ITransferTarget from;
+    private ITransferTarget to;
+    private Belt belt;
+    
+    private void Update()
+    {
+        from = Globals.TileMap.GetEntity(_input, BuildingTileMap.Building) as ITransferTarget;
+        to = Globals.TileMap.GetEntity(_output, BuildingTileMap.Building) as ITransferTarget;
+        belt = to as Belt;
     }
 
     public override void _Ready()
@@ -100,6 +119,7 @@ public partial class Inserter : Building, IRotatable
 
     private void Animate(string item)
     {
+        if (!Notifier.IsOnScreen()) return;
         SpriteInHand.Texture =  Globals.Database.GetTexture(item);
         SpriteInHand.Visible = true;
         SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
@@ -117,56 +137,53 @@ public partial class Inserter : Building, IRotatable
 
     private bool Transfer()
     {
-        var sourceEntity = Globals.TileMap.GetEntity(_input, BuildingTileMap.Building);
-        var targetEntity = Globals.TileMap.GetEntity(_output, BuildingTileMap.Building);
-        
-        switch (sourceEntity, targetEntity)
+        if (from == null) return false;
+        if (belt != null)
         {
-            case (ITransferTarget from, Belt to):
+            foreach (var item in from.GetItems().Where(item => !string.IsNullOrEmpty(item) && to.CanAcceptItems(item)))
             {
-                foreach (var item in from.GetItems().Where(item => !string.IsNullOrEmpty(item) && to.CanAcceptItems(item)))
+                // Grab these rotations to avoid GODOT system calls.
+                var beltRotation = belt.RotationDegrees;
+                var inserterRotation = RotationDegrees;
+                // Weird double checks due to degree weirdness. Should probably be done another way.
+                // BAD BAD BAD CODE - USE BRAIN TO MAKE BETTER
+                if ((TransportLine.IsEqualApprox(beltRotation + 90, inserterRotation)
+                     || TransportLine.IsEqualApprox(beltRotation, inserterRotation - 90)
+                     || TransportLine.IsEqualApprox(beltRotation, inserterRotation - 180)
+                     || TransportLine.IsEqualApprox(beltRotation - 270, inserterRotation)
+                     || TransportLine.IsEqualApprox(beltRotation - 180, inserterRotation)) &&
+                    belt.CanInsertLeft(item))
                 {
-                    // Weird double checks due to degree weirdness. Should probably be done another way.
-                    // BAD BAD BAD CODE - USE BRAIN TO MAKE BETTER
-                    if ((TransportLine.IsEqualApprox(to.RotationDegrees + 90, RotationDegrees) 
-                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 90) 
-                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 180) 
-                         || TransportLine.IsEqualApprox(to.RotationDegrees - 270, RotationDegrees) 
-                         || TransportLine.IsEqualApprox(to.RotationDegrees - 180, RotationDegrees)) && to.CanInsertLeft(item))
-                    {
-                        from.Remove(item);
-                        to.InsertLeft(item);
-                        Animate(item);
-                        return true;
-                    }
-                    if ((TransportLine.IsEqualApprox(to.RotationDegrees - 90, RotationDegrees) 
-                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees + 90)
-                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees - 270)
-                         || TransportLine.IsEqualApprox(to.RotationDegrees, RotationDegrees)) && to.CanInsertRight(item))
-                    {
-                        from.Remove(item);
-                        to.InsertRight(item);
-                        Animate(item);
-                        return true;
-                    }
-                    // GD.Print("Belt ROtation: " + to.RotationDegrees + " Inserter Rotation: " + RotationDegrees);
-                }
-                return false;
-            }
-            case (ITransferTarget from, ITransferTarget to):
-            {
-                foreach (var item in from.GetItems())
-                {
-                    if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) continue;
-                    
-                    var b = Inventory.TransferItem(from, to, item);
+                    from.Remove(item);
+                    belt.InsertLeft(item);
                     Animate(item);
-                    return b;
+                    return true;
                 }
 
-                return false;
+                if ((TransportLine.IsEqualApprox(beltRotation - 90, inserterRotation)
+                     || TransportLine.IsEqualApprox(beltRotation, inserterRotation + 90)
+                     || TransportLine.IsEqualApprox(beltRotation, inserterRotation - 270)
+                     || TransportLine.IsEqualApprox(beltRotation, inserterRotation)) && belt.CanInsertRight(item))
+                {
+                    from.Remove(item);
+                    belt.InsertRight(item);
+                    Animate(item);
+                    return true;
+                }
+            }
+        } 
+        else if (to != null)
+        {
+            foreach (var item in from.GetItems())
+            {
+                if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) continue;
+                
+                var b = Inventory.TransferItem(from, to, item);
+                Animate(item);
+                return b;
             }
         }
+
         return false;
     }
 

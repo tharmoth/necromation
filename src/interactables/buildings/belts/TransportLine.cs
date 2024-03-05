@@ -5,7 +5,7 @@ using Necromation.interactables.interfaces;
 
 namespace Necromation.interactables.belts;
 
-public partial class TransportLine : Node2D, ITransferTarget
+public partial class TransportLine : ITransferTarget
 {
     
     /*
@@ -14,14 +14,32 @@ public partial class TransportLine : Node2D, ITransferTarget
     private bool initalized = false;
     private Vector2 _cachePosition;
     private int _itemCount;
-    
-    
-    public Vector2I TargetDirectionGlobal { get; set; }
+
+
+    private Vector2I _targetDirectionGlobal;
+    public Vector2I TargetDirectionGlobal
+    {
+        get { return _targetDirectionGlobal; }
+        set
+        {
+            _targetDirectionGlobal = value;
+            _targetLocations.Clear();
+            _targetLocations.Add(TargetDirectionGlobal * 16);
+            _targetLocations.Add(TargetDirectionGlobal * 8);
+            _targetLocations.Add(TargetDirectionGlobal * 0);
+            _targetLocations.Add(TargetDirectionGlobal * -8);
+            _targetLocations.Add(TargetDirectionGlobal * -16);
+        }
+    }
+
+    private List<Vector2> _targetLocations = new();
+
+    public float _secondsPerItem = .5333f;
     
     /**************************************************************************
      * Data                                                                   *
      **************************************************************************/
-    protected float _secondsPerItem = .5333f;
+    
     private readonly List<GroundItem> _itemsOnBelt = new();
     private readonly Inventory _inventory = new();
 
@@ -37,42 +55,46 @@ public partial class TransportLine : Node2D, ITransferTarget
     public TransportLine()
     {
         _inventory.Listeners.Add(UpdateSprites);
+        TargetDirectionGlobal = TargetDirectionGlobal;
+
     }
 
-    public override void _Ready()
+    public void Init(Vector2 globalPosition)
     {
-        base._Ready();
-        int i = 0;
-        _cachePosition = GlobalPosition;
+        _cachePosition = globalPosition;
         _itemsOnBelt.ForEach(item =>
         {
-           item.CachePosition = _cachePosition + GetTargetLocation(4);
+            item.CachePosition = _cachePosition + GetTargetLocation(4);
         });
+        _itemCount = _inventory.CountAllItems();
     }
 
     private bool initialized = false;
     
-    public override void _Process(double delta)
+    public void _Process(double delta)
     {
-        base._Process(delta);
         if (!initialized)
         {
             initialized = true;
-            _cachePosition = GlobalPosition;
             _itemCount = _inventory.CountAllItems();
         }
         
-        for (var i = 0; i < _itemsOnBelt.Count; i++)
+        for (var i = 0; i < Mathf.Min(_itemsOnBelt.Count, 4); i++)
         {
             var groundItem = _itemsOnBelt[i];
             var targetLocation = _cachePosition + GetTargetLocation(i);
-            
+
             // Slide the item along the belt until it reaches the bottom of the belt.
-            if (!IsEqualApprox(groundItem.CachePosition, targetLocation, 1.0f))
+            if (groundItem.CachePosition.DistanceTo(targetLocation) > Speed * (float)delta)
             {
-                groundItem.CachePosition += -targetLocation.DirectionTo(groundItem.CachePosition) * Speed * (float)delta;
+                var distance = -targetLocation.DirectionTo(groundItem.CachePosition) * Speed * (float)delta;
+                groundItem.CachePosition += distance;
                 continue;
             }
+            // else if (groundItem.CachePosition.DistanceTo(targetLocation) < Speed * (float)delta)
+            // {
+            //     groundItem.CachePosition = targetLocation;
+            // }
             
             if (i != 0) continue;
             
@@ -96,15 +118,7 @@ public partial class TransportLine : Node2D, ITransferTarget
      **************************************************************************/
     protected Vector2 GetTargetLocation(int index)
     {
-        return index switch
-        {
-            0 => TargetDirectionGlobal * 16,
-            1 => TargetDirectionGlobal * 8,
-            2 => TargetDirectionGlobal * 0,
-            3 => TargetDirectionGlobal * -8,
-            4 => TargetDirectionGlobal * -16,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
-        };
+        return _targetLocations[index];
     }
     
     /**************************************************************************
@@ -169,7 +183,7 @@ public partial class TransportLine : Node2D, ITransferTarget
         }
         else
         {
-            item.CachePosition = pos;
+            // item.CachePosition = pos;
         }
     }
     
@@ -195,6 +209,7 @@ public partial class TransportLine : Node2D, ITransferTarget
     public bool CanAcceptItems(string item,  int count = 1) => _itemCount + count < 5;
     public void Insert(string item, int count = 1)
     {
+        if (!CanAcceptItems(item, count)) return;
         _itemCount += count;
         _inventory.Insert(item, count);
     }

@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=21 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/Main.cs" id="1_suggu"]
 [ext_resource type="Script" path="res://src/gui/FactoryGUI.cs" id="2_pkiw0"]
 [ext_resource type="Script" path="res://src/character/Character.cs" id="2_vcqpu"]
+[ext_resource type="Script" path="res://src/gui/FpsCounter.cs" id="3_fy5x1"]
 [ext_resource type="Script" path="res://src/gui/lists/Actionbar.cs" id="5_jpmfq"]
 [ext_resource type="Script" path="res://src/gui/ResearchLabel.cs" id="6_lnhcn"]
 [ext_resource type="PackedScene" uid="uid://cgfjtesm7s5bm" path="res://src/gui/popup.tscn" id="6_pwh8y"]
@@ -133,6 +134,11 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Attack Incoming"
+
+[node name="Label" type="Label" parent="GUI/Control/FactoryGUI/VBoxContainer"]
+layout_mode = 2
+text = "FPS: "
+script = ExtResource("3_fy5x1")
 
 [node name="Spacer" type="Control" parent="GUI/Control/FactoryGUI/VBoxContainer"]
 custom_minimum_size = Vector2(100, 0)

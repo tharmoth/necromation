@@ -25,6 +25,7 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		}
 	}
 	
+	protected VisibleOnScreenNotifier2D Notifier = new();
 	private AudioStreamPlayer2D _audio = new();
 	private ProgressTracker _progress;
 	private GpuParticles2D _particles;
@@ -33,6 +34,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	{
 		AddChild(Sprite);
 		AddChild(_audio);
+		AddChild(Notifier);
+
 		
 		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 
@@ -76,7 +79,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		var positions = GetOccupiedPositions(GlobalPosition);
 		positions.ForEach(pos => Globals.TileMap.AddEntity(pos, this, BuildingTileMap.Building));
 		
-		_audio.Play();
+		// Avoid death on load
+		if (Time.GetTicksMsec() > 1000) _audio.Play();
 	}
 
 	public override void _ExitTree()

@@ -44,11 +44,11 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         {
             if (_audio.Playing) _audio.Stop();
             _time = 0;
-            _particles.Emitting = false;
+            if (_particles.Emitting) _particles.Emitting = false;
             return;
         }
 
-        _particles.Emitting = true;
+        if (!_particles.Emitting) _particles.Emitting = true;
         _time += (float)delta;
         Animate();
 
@@ -86,7 +86,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     
     private void Animate()
     {
-        if (IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
+        if (IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning() || !Notifier.IsOnScreen()) return;
         
         // Get random position
         var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
@@ -99,6 +99,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
 
     private void ShowText(Resource collectable)
     {
+        if (!Notifier.IsOnScreen()) return;
         RichTextLabel text = new();
         text.AutowrapMode = TextServer.AutowrapMode.Off;
         text.CustomMinimumSize = new Vector2(1000, 100);

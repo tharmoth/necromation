@@ -41,6 +41,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     private Vector2I Output => MapPosition + TargetDirectionGlobal;
     private static Vector2I TargetDirectionLocal => new (0, -1);
     private AudioStreamPlayer2D _audio = new();
+
     
     public Belt(IRotatable.BuildingOrientation orientation)
     {
@@ -48,10 +49,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
         LeftLine = new TransportLine();
         RightLine = new TransportLine();
-
-        AddChild(LeftLine);
-        AddChild(RightLine);
-
 
         Sprite.Hframes = 8;
         
@@ -73,9 +70,9 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         
         LeftLine.TargetDirectionGlobal = TargetDirectionGlobal;
         RightLine.TargetDirectionGlobal = TargetDirectionGlobal;
-        
-        LeftLine.Position = new Vector2(-8, 0);
-        RightLine.Position = new Vector2(8, 0);
+            
+        LeftLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(GlobalRotation));
+        RightLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(GlobalRotation));
         
         // When this belt is placed, update the input and output of all adjacent belts
         GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));
@@ -86,11 +83,14 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     {
         base._Process(delta);
         
+        LeftLine._Process(delta);
+        RightLine._Process(delta);
+
+        if (!Notifier.IsOnScreen()) return;
         // Move the frame forward 8 times every .5333 seconds
         var seconds = Time.GetTicksMsec() / 1000.0;
         var frame = (int)(seconds / (_secondsPerItem / 32)) % Sprite.Hframes;
         if (Sprite.Frame != frame) Sprite.Frame = frame;
-        
     }
     
     public override void Remove(Inventory to)

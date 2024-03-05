@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -7,6 +8,10 @@ namespace Necromation.sk;
 public partial class LayerTileMap : SKTileMap
 {
 	private readonly Dictionary<string, Dictionary<Vector2I, IEntity>> _layers = new();
+	
+	
+	// TileMap listeners are fired whenever an entity is added or removed. We may need to make this more localized at some point.
+	public List<Action> listeners = new();
 
 	public void AddLayer(string layerName)
 	{
@@ -21,6 +26,7 @@ public partial class LayerTileMap : SKTileMap
 	public virtual bool AddEntity(Vector2I position, IEntity entity, string layerName){
 		if (!_layers.ContainsKey(layerName)) return false;
 		_layers[layerName].Add(position, entity);
+		listeners.ForEach(listener => listener());
 		return true;
 	}
 	
@@ -33,6 +39,7 @@ public partial class LayerTileMap : SKTileMap
 		if (!_layers[layerName].ContainsKey(position)) return false;
 		var entity = _layers[layerName][position];
 		_layers[layerName].Remove(position);
+		listeners.ForEach(listener => listener());
 		return true;
 	}
 

@@ -14,7 +14,7 @@ public class MusicManager
             {
                 _ambiancePlayer = new AudioStreamPlayer();
                 _ambiancePlayer.VolumeDb = -30;
-                // _ambiancePlayer.Finished += () => _ambiancePlayer.Play();
+                _ambiancePlayer.Finished += () => _ambiancePlayer.Play();
                 Globals.Tree.Root.CallDeferred("add_child", _ambiancePlayer);
             }
             return _ambiancePlayer;
