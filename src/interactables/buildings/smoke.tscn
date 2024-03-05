@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="2_e4k8q"]
 
 [sub_resource type="Gradient" id="Gradient_nywy8"]
-colors = PackedColorArray(0.305882, 0.305882, 0.305882, 0.105882, 0.605274, 0.605274, 0.605274, 0)
+colors = PackedColorArray(0.423529, 0.423529, 0.423529, 0.141176, 0.603922, 0.603922, 0.603922, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_g3g0n"]
 gradient = SubResource("Gradient_nywy8")
@@ -27,16 +27,16 @@ orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
 angle_min = -452.9
 angle_max = 278.7
-scale_min = 15.0
-scale_max = 20.0
+scale_min = 5.0
+scale_max = 10.0
 scale_curve = SubResource("CurveTexture_68jjl")
 color_ramp = SubResource("GradientTexture1D_g3g0n")
 
 [node name="GPUParticles2D" type="GPUParticles2D"]
 z_index = 101
-position = Vector2(16, -20)
+position = Vector2(16, -10)
 rotation = -0.00336232
-amount = 20
+amount = 100
 process_material = SubResource("ParticleProcessMaterial_g343j")
 texture = ExtResource("1_c0cjp")
 lifetime = 2.0
@@ -44,5 +44,5 @@ lifetime = 2.0
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
 z_index = -10
-position = Vector2(2.87222, 38.0099)
+position = Vector2(0.915936, 25.0032)
 texture = ExtResource("2_e4k8q")

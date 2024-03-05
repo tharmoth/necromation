@@ -41,4 +41,12 @@ public partial class InventoryItem : PanelContainer
 			Inventory.TransferItem(SourceInventory, TargetInventory, ItemType);
 		};
 	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+
+		// Could be bad for performance, But seems to work.
+		Icon.Texture = Globals.Database.GetTexture(Globals.Player.Selected == ItemType ? "BoneHand" : ItemType);
+	}
 }

@@ -37,7 +37,7 @@ public partial class Character : Node2D
 				new Vector2(32 / (float)_sprite.Texture.GetWidth(), 32 / (float)_sprite.Texture.GetHeight()) 
 				: new Vector2(1, 1);
 			
-			if (_selected == null || Building.GetBuilding(_selected, Orientation) is not IRotatable) _rotationDegrees = 0;
+			if (_selected == null || !Building.IsBuilding(_selected) || Building.GetBuilding(_selected, Orientation) is not IRotatable) _rotationDegrees = 0;
 		}
 	}
 	
@@ -57,8 +57,8 @@ public partial class Character : Node2D
 			.ToList()
 			.ForEach(item => _inventory.Insert(item, 100));
 		
-		// _inventory.Insert("Bone Fragments", 1000);
-		// _inventory.Insert("Coal Ore", 1000);
+		_inventory.Insert("Bone Fragments", 1000);
+		_inventory.Insert("Coal Ore", 1000);
 		//
 		
 		// _inventory.Insert("Bone Fragments", 5000);
