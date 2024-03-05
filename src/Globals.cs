@@ -29,20 +29,12 @@ public class Globals
     public static Technology CurrentTechnology;
     public static List<Action> ResearchListeners = new();
     
-    // I think these should go in some sort of scene manager maybe?
-    public static Camera2D FactoryCamera => Player.GetNode<Camera2D>("Camera2D");
-    public static Camera2D MapCamera;
-    public static Camera2D BattleCamera;
-
-    public static Node2D FactoryScene;
-    public static Node2D MapScene;
-    public static Battle BattleScene;
-
+    public static Main FactoryScene => SceneManager.FactoryScene;
+    public static Map MapScene => SceneManager.MapScene;
+    public static Battle BattleScene => SceneManager.BattleScene;
     
-    public static SceneTree Tree => FactoryScene?.GetTree() ?? MapScene?.GetTree() ?? BattleScene?.GetTree();
+    public static SceneTree Tree => SceneManager.SceneTree;
 
-    public static bool ChangingScene = false;
-    
     //TODO: make this actually the current gui. Maybe as a part of scene manager?
     public static SceneGUI CurrentGUI => FactoryGUI.Instance;
 }

@@ -7,7 +7,7 @@ namespace Necromation.map;
 
 public partial class Province : Node2D, ITransferTarget
 {
-    public Vector2I MapPosition => MapGlobals.TileMap.GetLocation(this);
+    public Vector2I MapPosition => Globals.MapScene.TileMap.GetLocation(this);
     public string Name { get; } = MapUtils.GetRandomProvinceName();
     public readonly Dictionary<string, int> RecruitQueue = new();
     public readonly Inventory Units = new();
@@ -35,7 +35,7 @@ public partial class Province : Node2D, ITransferTarget
     public override void _Ready()
     {
         base._Ready();
-        _flagSprite.GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(this));
+        _flagSprite.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(this));
         _flagSprite.GlobalPosition -= Vector2.One * MapTileMap.TileSize / 4.0f;
     }
 

@@ -4,26 +4,32 @@ using System.Linq;
 using Necromation;
 using Necromation.map;
 
-public partial class Map : Node2D
+public partial class Map : Scene
 {
-	public override void _EnterTree()
+	public MapTileMap TileMap => GetNode<MapTileMap>("%TileMap");
+
+	public override void OnOpen()
 	{
-		Globals.MapScene = this;
+		if (Globals.TileMap == null) return;
+		
+		var prov = TileMap.GetProvence(MapGlobals.FactoryPosition);
+		foreach (var barracks in Globals.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
+		{
+			var inventory = barracks.GetInventories().First();
+			Inventory.TransferAllTo(inventory, prov.Units);
+		}
 	}
-	
+
+	public override void OnClose() {}
+
 	public override void _Ready()
 	{
-		Globals.MapCamera = GetNode<Camera2D>("Camera2D");
 		MapGlobals.SelectedSprite = GetNode<Sprite2D>("%SelectedSprite");
 		
-		var provence = MapGlobals.TileMap.GetProvence(MapGlobals.FactoryPosition);
+		var provence = Globals.MapScene.TileMap.GetProvence(MapGlobals.FactoryPosition);
 		SelectProvince(provence);
 		
 		VisibilityChanged += () => SelectProvince(MapGlobals.SelectedProvince);
-		// VisibilityChanged += () =>
-		// {
-		// 	if (Visible) MusicManager.PlayExploration();
-		// };
 	}
 	
 	public override void _UnhandledInput(InputEvent @event)
@@ -35,9 +41,9 @@ public partial class Map : Node2D
 		
 		if (Input.IsActionJustPressed("left_click"))
 		{
-			var targetLocation = MapGlobals.TileMap.GlobalToMap(GetGlobalMousePosition());
+			var targetLocation = Globals.MapScene.TileMap.GlobalToMap(GetGlobalMousePosition());
 			
-			var provence = MapGlobals.TileMap.GetProvence(targetLocation);
+			var provence = Globals.MapScene.TileMap.GetProvence(targetLocation);
 			if (provence == null) return;
 
 			SelectProvince(provence);
@@ -47,7 +53,7 @@ public partial class Map : Node2D
 	private void SelectProvince(Province provence)
 	{
 		MapGlobals.SelectedProvince = provence;
-		MapGlobals.SelectedSprite.GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(provence));
+		MapGlobals.SelectedSprite.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(provence));
 		MapGlobals.UpdateListeners.ForEach(listener => listener());
 	}
 }

@@ -135,6 +135,14 @@ add_squad={
 "deadzone": 0.5,
 "events": []
 }
+return_to_map={
+"deadzone": 0.5,
+"events": []
+}
+return_to_factory={
+"deadzone": 0.5,
+"events": []
+}
 
 [rendering]
 

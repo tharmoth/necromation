@@ -27,7 +27,6 @@ public partial class Character : Node2D
 		get => _selected;
 		set
 		{
-			GD.Print(value);
 			_selected = value;
 			_sprite.Texture = _selected == null
 				?  Globals.Database.GetTexture("Selection")

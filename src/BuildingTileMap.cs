@@ -157,9 +157,9 @@ public partial class BuildingTileMap : LayerTileMap
 		{
 			if (!nodeData.ContainsKey("Provence" + i + "X")) continue;
 			var province = new Vector2I((int)nodeData["Provence" + i + "X"], (int)nodeData["Provence" + i + "Y"]);
-			MapGlobals.TileMap.GetProvence(province).Commanders.Clear();
-			MapGlobals.TileMap.GetProvence(province).Owner = "Player";
-			Globals.TileMap.AddProvence(province, false);
+			Globals.MapScene.TileMap.GetProvence(province).Commanders.Clear();
+			Globals.MapScene.TileMap.GetProvence(province).Owner = "Player";
+			Globals.FactoryScene.TileMap.AddProvence(province, false);
 		}
 	}
 }

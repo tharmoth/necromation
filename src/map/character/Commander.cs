@@ -6,7 +6,7 @@ namespace Necromation.map.character;
 
 public partial class Commander : Node2D, ITransferTarget
 {
-    public Vector2I MapPosition => MapGlobals.TileMap.GlobalToMap(GlobalPosition);
+    public Vector2I MapPosition => Globals.MapScene.TileMap.GlobalToMap(GlobalPosition);
     public string Name { get; } = MapUtils.GetRandomCommanderName();
     public string Team { get; set; }
 
@@ -46,8 +46,8 @@ public partial class Commander : Node2D, ITransferTarget
         base._Ready();
         Globals.MapScene.CallDeferred("add_child", _line);
         
-        GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
-        _targetLocation = MapGlobals.TileMap.GetLocation(_province);
+        GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(_province));
+        _targetLocation = Globals.MapScene.TileMap.GetLocation(_province);
         MapGlobals.TurnListeners.Add(MoveCommander);
         
         if (Team != "Player") _sprite.Visible = false;
@@ -68,27 +68,27 @@ public partial class Commander : Node2D, ITransferTarget
 
         if (!Input.IsActionJustPressed("right_click")) return;
 
-        var newTarget = MapGlobals.TileMap.GlobalToMap(GetGlobalMousePosition());
+        var newTarget = Globals.MapScene.TileMap.GlobalToMap(GetGlobalMousePosition());
         var diff = MapPosition - newTarget;
         if (diff.Length() > 1.5) return;
         
-        var provence = MapGlobals.TileMap.GetProvence(newTarget);
+        var provence = Globals.MapScene.TileMap.GetProvence(newTarget);
         if (provence == null) return;
 
         _targetLocation = newTarget;
-        _line.Points = new [] {GlobalPosition, MapGlobals.TileMap.MapToGlobal(_targetLocation)};
+        _line.Points = new [] {GlobalPosition, Globals.MapScene.TileMap.MapToGlobal(_targetLocation)};
     }
     
     private void MoveCommander()
     {
         _line.Points = new Vector2[] {};
-        if (_targetLocation == MapGlobals.TileMap.GetLocation(_province)) return;
-        GlobalPosition = MapGlobals.TileMap.MapToGlobal(_targetLocation);
+        if (_targetLocation == Globals.MapScene.TileMap.GetLocation(_province)) return;
+        GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(_targetLocation);
         _province?.Commanders.Remove(this);
-        _province = MapGlobals.TileMap.GetProvence(_targetLocation);
+        _province = Globals.MapScene.TileMap.GetProvence(_targetLocation);
         if (_province == null) return;
         _province.Commanders.Add(this);
-        GlobalPosition = MapGlobals.TileMap.MapToGlobal(MapGlobals.TileMap.GetLocation(_province));
+        GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(_province));
     }
     
     private partial class CommanderInventory : Inventory

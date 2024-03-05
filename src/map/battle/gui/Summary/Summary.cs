@@ -13,7 +13,7 @@ public partial class Summary : Control
 	{
 		var gui = GD.Load<PackedScene>("res://src/map/battle/gui/Summary/summary.tscn").Instantiate<Summary>();
 		gui.Init(title, playerStats, enemyStats);
-		Globals.BattleScene.GUI.AddChild(gui);
+		Globals.BattleScene.Gui.AddChild(gui);
 		return gui;
 	}
 

@@ -75,7 +75,7 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 				_openGui = InventoryGUI.Display(Globals.PlayerInventory);
 			}
 		}
-		if (Input.IsActionJustPressed("open_map")) FactoryToMapButton.ChangeScene();
+		if (Input.IsActionJustPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
 
 		if (Input.IsActionJustPressed("save")) SKSaveLoad.SaveGame(this);
 		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);

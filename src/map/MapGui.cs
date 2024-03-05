@@ -42,7 +42,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		{
 			var province = _battleQueue.Dequeue();
 			MapGlobals.SelectedProvince = province;
-			MapToBattleButton.ChangeScene();
+			SceneManager.ChangeToScene(SceneManager.SceneEnum.Battle);
 		}
 		
 		if (Input.IsActionJustPressed("close_gui")) CloseGui();
@@ -56,7 +56,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 			RecruitGui.Visible = true;
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_map") && MapGlobals.SelectedProvince.Owner == "Player") MapToFactoryButton.ChangeScene();
+		if (Input.IsActionJustPressed("open_map") && MapGlobals.SelectedProvince.Owner == "Player") SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
 		if (Input.IsActionJustPressed("end_turn")) EndTurn();
 		if (Input.IsActionJustPressed("add_squad"))
 		{
@@ -84,7 +84,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 
 	public void Battle()
 	{
-		MapGlobals.TileMap.GetProvinces().ForEach(province =>
+		Globals.MapScene.TileMap.GetProvinces().ForEach(province =>
 		{
 			var teams = province.Commanders.GroupBy(leader => leader.Team).ToList();
 			

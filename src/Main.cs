@@ -1,12 +1,15 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Necromation;
 using Necromation.map;
 using Necromation.map.character;
 
-public partial class Main : Node2D
+public partial class Main : Scene
 {
+	public BuildingTileMap TileMap => GetNode<BuildingTileMap>("%TileMap");
+	
 	private bool _initialized = false;
 	public Timer AttackTimer;
 	private bool attacked = false;
@@ -14,24 +17,23 @@ public partial class Main : Node2D
 	
 	public override void _EnterTree()
 	{
-		Globals.FactoryScene = this;
 		VisibilityChanged += () =>
 		{
 			if (!Visible) return;
 			MusicManager.PlayAmbiance();
-			MapGlobals.TileMap.GetProvinces()
+			Globals.MapScene.TileMap.GetProvinces()
 				.Where(province => province.Owner == "Player")
 				.Select(province => province.MapPosition)
 				.ToList()
 				.ForEach(Globals.TileMap.AddProvence);
 
-			if (AttackTimer == null && MapGlobals.TileMap
+			if (AttackTimer == null && Globals.MapScene.TileMap
 				    .GetProvinces().Count(province => province.Owner == "Player") >= 4)
 			{
 				attacked = true;
 				AttackTimer = new Timer();
 				AddChild(AttackTimer);
-				AttackProvince = MapGlobals.TileMap.GetProvinces().Where(province => province.Owner == "Player")
+				AttackProvince = Globals.MapScene.TileMap.GetProvinces().Where(province => province.Owner == "Player")
 					.MinBy(_ => GD.Randf());
 				
 				GD.Print("attack incoming!");
@@ -69,4 +71,8 @@ public partial class Main : Node2D
 			+ Vector2I.One * BuildingTileMap.TileSize * BuildingTileMap.ProvinceSize / 2;
 		Globals.TileMap.AddProvence(position);
 	}
+
+	public override void OnOpen() {}
+
+	public override void OnClose() {}
 }

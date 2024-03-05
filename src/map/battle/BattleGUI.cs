@@ -7,19 +7,14 @@ using Necromation.map;
 
 public partial class BattleGUI : CanvasLayer
 {
-    private Label BattleCompleteLabel => GetNode<Label>("%BattleCompleteLabel");
-    
-    public override void _EnterTree()
-    {
-        base._EnterTree();
-        Globals.BattleScene.GUI = this;
-    }
-    
     public override void _Process(double delta)
     {
         base._Process(delta);
 
         if (!_initialized) SetupKillCounts();
+        
+        if (Input.IsActionJustPressed("return_to_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
+        if (Input.IsActionJustPressed("return_to_factory")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
         
         var teams = Globals.BattleScene.TileMap.GetEntities(BattleTileMap.Unit)
             .Select(unit => unit as Unit)

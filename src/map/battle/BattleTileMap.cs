@@ -19,10 +19,7 @@ public partial class BattleTileMap : LayerTileMap
 	public override void _EnterTree()
 	{
 		base._EnterTree();
-		Globals.BattleScene.TileMap = this;
 		AddLayer(Unit);
-		
-		
 
 		var index = 0;
 		for (int x = 0; x < X; x++)

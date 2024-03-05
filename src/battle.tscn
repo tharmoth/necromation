@@ -89,6 +89,7 @@ sources/1 = SubResource("TileSetAtlasSource_4oy1t")
 script = ExtResource("1_nyo56")
 
 [node name="TileMap" type="TileMap" parent="."]
+unique_name_in_owner = true
 tile_set = SubResource("TileSet_lv767")
 format = 2
 layer_0/z_index = -100
@@ -96,6 +97,7 @@ layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 1, 0, 0, 2, 0, 0, 3, 
 script = ExtResource("3_kgj4d")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
 position = Vector2(1574, 1560)
 zoom = Vector2(0.25, 0.25)
 script = ExtResource("2_rgifv")
@@ -104,6 +106,7 @@ script = ExtResource("2_rgifv")
 current = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
 script = ExtResource("8_66t67")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GUI"]

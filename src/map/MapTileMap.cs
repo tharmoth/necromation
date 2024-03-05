@@ -9,23 +9,29 @@ public partial class MapTileMap : SKTileMap
 {
 	private readonly Dictionary<Vector2I, Province> _provences = new();
 	public const int TileSize = 32;
-	
-	public override void _EnterTree()
-	{
-		MapGlobals.TileMap = this;
-	}
 
-	public override void _Ready()
+	public MapTileMap()
 	{
-		base._Ready();
 		foreach (var location in GetUsedCells(0))
 		{
 			var provence = new Province();
 			
 			_provences.Add(location, provence);
-			Globals.MapScene.CallDeferred("add_child", provence);
 
 			InitProvence(provence, location == MapGlobals.FactoryPosition ? "Player" : "Enemy");
+		}
+	}
+	
+	public override void _Ready()
+	{
+		base._Ready();
+		foreach (var provence in _provences.Values)
+		{
+			Globals.MapScene.CallDeferred("add_child", provence);
+			foreach (var commander in provence.Commanders)
+			{
+				Globals.MapScene.CallDeferred("add_child", commander);
+			}
 		}
 	}
 
@@ -37,15 +43,13 @@ public partial class MapTileMap : SKTileMap
 		var meleeCommander = new Commander(provence, team);
 		meleeCommander.Team = team;
 		provence.Commanders.Add(meleeCommander);
-		Globals.MapScene.CallDeferred("add_child", meleeCommander);
 		
 		var rangedCommander = new Commander(new Province(), "Enemy");
 		rangedCommander.Team = team;
 		rangedCommander.SpawnLocation = new Vector2I(30, 25);
 		provence.Commanders.Add(rangedCommander);
-		Globals.MapScene.CallDeferred("add_child", rangedCommander);
-		var provinceLocation = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
 		
+		var provinceLocation = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
 		var dis = Mathf.Abs(provinceLocation.X - MapGlobals.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - MapGlobals.FactoryPosition.Y);
 		
 		switch (dis)
@@ -87,14 +91,7 @@ public partial class MapTileMap : SKTileMap
 
 	public void MoveUnitsToFromFactory()
 	{
-		if (Globals.TileMap == null) return;
-		
-		var prov = _provences[MapGlobals.FactoryPosition];
-		foreach (var barracks in Globals.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
-		{
-			var inventory = barracks.GetInventories().First();
-			Inventory.TransferAllTo(inventory, prov.Units);
-		}
+
 	}
 
 	public Province GetProvence(Vector2I position)
