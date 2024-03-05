@@ -18,46 +18,10 @@ public partial class Main : Scene
 	public override void _EnterTree()
 	{
 		base._EnterTree();
-		VisibilityChanged += () =>
-		{
-			if (!Visible) return;
-			MusicManager.PlayAmbiance();
-			Globals.MapScene.TileMap.GetProvinces()
-				.Where(province => province.Owner == "Player")
-				.Select(province => province.MapPosition)
-				.ToList()
-				.ForEach(Globals.TileMap.AddProvence);
 
-			if (AttackTimer == null && Globals.MapScene.TileMap
-				    .GetProvinces().Count(province => province.Owner == "Player") >= 4)
-			{
-				attacked = true;
-				AttackTimer = new Timer();
-				AddChild(AttackTimer);
-				AttackProvince = Globals.MapScene.TileMap.GetProvinces().Where(province => province.Owner == "Player")
-					.MinBy(_ => GD.Randf());
-				
-				GD.Print("attack incoming!");
-				
-				AttackTimer.WaitTime = 60*5;
-				AttackTimer.Timeout += () =>
-				{
-					GD.Print("Under attack!");
-					AttackTimer.QueueFree();
-
-					var attackingCommander = new Commander(AttackProvince, "Enemy");
-					attackingCommander.Units.Insert("Rabble", 10);
-					attackingCommander.GlobalPosition = AttackProvince.GlobalPosition;
-					AttackProvince.Commanders.Add(attackingCommander);
-					MapGui.Instance.Battle();
-					AttackTimer = null;
-                    
-				};
-				AttackTimer.Start();
-			}
-			
-		};
 		MusicManager.PlayAmbiance();
+		
+		Globals.Tree.Root.AddChild(new CheatCodes());
 	}
 
 	public override void _Process(double delta)
@@ -73,7 +37,39 @@ public partial class Main : Scene
 		Globals.TileMap.AddProvence(position);
 	}
 
-	public override void OnOpen() {}
+	public override void OnOpen()
+	{
+		MusicManager.PlayAmbiance();
+		TileMap.OnOpen();
+		
+		// if (AttackTimer == null && Globals.MapScene.TileMap
+		// 	    .GetProvinces().Count(province => province.Owner == "Player") >= 4)
+		// {
+		// 	attacked = true;
+		// 	AttackTimer = new Timer();
+		// 	AddChild(AttackTimer);
+		// 	AttackProvince = Globals.MapScene.TileMap.GetProvinces().Where(province => province.Owner == "Player")
+		// 		.MinBy(_ => GD.Randf());
+		// 	
+		// 	GD.Print("attack incoming!");
+		// 	
+		// 	AttackTimer.WaitTime = 60*5;
+		// 	AttackTimer.Timeout += () =>
+		// 	{
+		// 		GD.Print("Under attack!");
+		// 		AttackTimer.QueueFree();
+		//
+		// 		var attackingCommander = new Commander(AttackProvince, "Enemy");
+		// 		attackingCommander.Units.Insert("Rabble", 10);
+		// 		attackingCommander.GlobalPosition = AttackProvince.GlobalPosition;
+		// 		AttackProvince.Commanders.Add(attackingCommander);
+		// 		MapGui.Instance.Battle();
+		// 		AttackTimer = null;
+		//                  
+		// 	};
+		// 	AttackTimer.Start();
+		// }
+	}
 
 	public override void OnClose() {}
 }

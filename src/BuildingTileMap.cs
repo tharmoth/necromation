@@ -107,6 +107,15 @@ public partial class BuildingTileMap : LayerTileMap
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
 	}
 
+	public void OnOpen()
+	{
+		Globals.MapScene.TileMap.GetProvinces()
+			.Where(province => province.Owner == "Player")
+			.Select(province => province.MapPosition)
+			.ToList()
+			.ForEach(AddProvence);
+	}
+
 	public override void _EnterTree()
 	{
 		Globals.TileMap = this;

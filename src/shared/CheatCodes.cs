@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Necromation;
 
 public partial class CheatCodes : Node
 {
@@ -29,6 +30,8 @@ public partial class CheatCodes : Node
 		if (entered.EndsWith("``WORLD"))
 		{
 			GD.Print("All your base are belong to us");
+			Globals.MapScene.TileMap.GetProvinces().ForEach(province => province.Owner = "Player");
+			Globals.FactoryScene.TileMap.OnOpen();
 		}
 	}
 }
