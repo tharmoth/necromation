@@ -4,7 +4,7 @@ using System.Linq;
 using Necromation;
 using Necromation.map;
 
-public partial class SceneManager
+public class SceneManager
 {
 	public enum SceneEnum
 	{
@@ -40,6 +40,26 @@ public partial class SceneManager
 	private static Scene _currentScene;
 	private static bool _changingScene = false;
 
+	public static void Register(Scene scene)
+	{
+		switch (scene)
+		{
+			case Main main:
+				_factoryScene = main;
+				break;
+			case Map map:
+				_mapScene = map;
+				break;
+			case Battle battle:
+				_battleScene = battle;
+				break;
+			default:
+				throw new ArgumentException("Scene is not a valid type", nameof(scene));
+		}
+
+		_currentScene ??= scene;
+	}
+
 	public static void ChangeToScene(SceneEnum scene)
 	{
 		if (_changingScene) return;
@@ -69,12 +89,6 @@ public partial class SceneManager
 	
 	private static Scene LoadScene(string path)
 	{
-		var loadedScene = SceneTree.Root.GetChildren().OfType<Scene>().FirstOrDefault(child => child.SceneFilePath == path);
-		if (loadedScene != null)
-		{
-			return loadedScene;
-		}
-		
 		var scene = GD.Load<PackedScene>(path).Instantiate<Scene>();
 		
 		scene.Visible = false;

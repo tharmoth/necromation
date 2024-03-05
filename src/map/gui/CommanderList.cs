@@ -1,5 +1,6 @@
 using Godot;
 using System.Linq;
+using Necromation;
 using Necromation.map;
 
 public partial class CommanderList : VBoxContainer
@@ -7,12 +8,12 @@ public partial class CommanderList : VBoxContainer
 
 	public override void _Ready()
 	{
-		MapGlobals.UpdateListeners.Add(Update);
+		Globals.MapScene.UpdateListeners.Add(Update);
 	}
 
 	private void Update()
 	{
-		var provence = MapGlobals.SelectedProvince;
+		var provence = Globals.MapScene.SelectedProvince;
 		if (provence == null) return;
 		
 		GetChildren().OfType<Button>().ToList().ForEach(button =>
@@ -25,7 +26,7 @@ public partial class CommanderList : VBoxContainer
 		{
 			var button = new Button();
 			button.Text = commander.Name;
-			button.Pressed += () => MapGlobals.SelectedCommander = commander;
+			button.Pressed += () => Globals.MapScene.SelectedCommander = commander;
 			AddChild(button);
 		}
 	}

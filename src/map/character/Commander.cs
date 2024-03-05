@@ -48,7 +48,7 @@ public partial class Commander : Node2D, ITransferTarget
         
         GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(_province));
         _targetLocation = Globals.MapScene.TileMap.GetLocation(_province);
-        MapGlobals.TurnListeners.Add(MoveCommander);
+        Globals.MapScene.TurnListeners.Add(MoveCommander);
         
         if (Team != "Player") _sprite.Visible = false;
     }
@@ -56,15 +56,15 @@ public partial class Commander : Node2D, ITransferTarget
     public override void _Input(InputEvent @event)
     {
         base._Input(@event);
-        _line.Width = MapGlobals.SelectedCommander == this ? 4 : 8;
-        _line.Modulate = MapGlobals.SelectedCommander == this ? Colors.White : new Color(1, 1, 1, 0.5f);
+        _line.Width = Globals.MapScene.SelectedCommander == this ? 4 : 8;
+        _line.Modulate = Globals.MapScene.SelectedCommander == this ? Colors.White : new Color(1, 1, 1, 0.5f);
     }
 
     public override void _UnhandledInput(InputEvent @event)
     {
         base._UnhandledInput(@event);
         
-        if (MapGlobals.SelectedCommander != this) return;
+        if (Globals.MapScene.SelectedCommander != this) return;
 
         if (!Input.IsActionJustPressed("right_click")) return;
 

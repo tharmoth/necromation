@@ -76,12 +76,12 @@ public partial class BuildingTileMap : LayerTileMap
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 		
 		var resources = new List<string> {"Bone Fragments"};
-		if ((location - MapGlobals.FactoryPosition).Length() != 0) 
+		if ((location - Map.FactoryPosition).Length() != 0) 
 			resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
-		if ((location - MapGlobals.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
+		if ((location - Map.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
 		
 		var resource = resources[GD.RandRange(0, resources.Count - 1)];
-		if ((location - MapGlobals.FactoryPosition).Length() > 3) resource = "Tin Ore";
+		if ((location - Map.FactoryPosition).Length() > 3) resource = "Tin Ore";
 		switch (_provences.Count)
 		{
 			case 1:
@@ -114,7 +114,7 @@ public partial class BuildingTileMap : LayerTileMap
 		AddLayer(Building);
 		AddLayer(Resource);
 		
-		AddProvence(MapGlobals.FactoryPosition);
+		AddProvence(Map.FactoryPosition);
 	}
 
 	public bool IsBuildable(Vector2I mapPos)

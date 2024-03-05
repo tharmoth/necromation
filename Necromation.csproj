@@ -9,6 +9,8 @@
     <Content Include="res\data\recipes.json" />
     <Content Include="res\data\technology.json" />
     <Content Include="res\data\units.json" />
+    <Content Include="res\Stone Furnace.ico" />
+    <Content Include="res\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\gui\buttons\" />

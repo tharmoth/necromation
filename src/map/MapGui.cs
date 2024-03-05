@@ -31,7 +31,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 	public override void _Ready()
 	{
 		base._Ready();
-		MapGlobals.UpdateListeners.Add(Update);
+		Globals.MapScene.UpdateListeners.Add(Update);
 	}
 
 	public override void _Process(double delta)
@@ -41,45 +41,45 @@ public partial class MapGui : CanvasLayer, SceneGUI
 		if (_battleQueue.Count > 0)
 		{
 			var province = _battleQueue.Dequeue();
-			MapGlobals.SelectedProvince = province;
+			Globals.MapScene.SelectedProvince = province;
 			SceneManager.ChangeToScene(SceneManager.SceneEnum.Battle);
 		}
 		
 		if (Input.IsActionJustPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_army_setup") && GuiStack.Count == 0 && MapGlobals.SelectedProvince.Owner == "Player") 
+		if (Input.IsActionJustPressed("open_army_setup") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player") 
 		{
-			GuiStack.Push(ArmySetup.Display(MapGlobals.SelectedProvince));
+			GuiStack.Push(ArmySetup.Display(Globals.MapScene.SelectedProvince));
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_recruit") && GuiStack.Count == 0 && MapGlobals.SelectedProvince.Owner == "Player")
+		if (Input.IsActionJustPressed("open_recruit") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player")
 		{
 			RecruitGui.Visible = true;
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_map") && MapGlobals.SelectedProvince.Owner == "Player") SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
+		if (Input.IsActionJustPressed("open_map") && Globals.MapScene.SelectedProvince.Owner == "Player") SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
 		if (Input.IsActionJustPressed("end_turn")) EndTurn();
 		if (Input.IsActionJustPressed("add_squad"))
 		{
-			var commander = new Commander(MapGlobals.SelectedProvince, "Player");
-			commander.GlobalPosition = MapGlobals.SelectedProvince.GlobalPosition;
-			MapGlobals.SelectedProvince.Commanders.Add(commander);
+			var commander = new Commander(Globals.MapScene.SelectedProvince, "Player");
+			commander.GlobalPosition = Globals.MapScene.SelectedProvince.GlobalPosition;
+			Globals.MapScene.SelectedProvince.Commanders.Add(commander);
 			Globals.MapScene.AddChild(commander);
 			CloseGui();
 			MainGui.Visible = false;
-			GuiStack.Push(ArmySetup.Display(MapGlobals.SelectedProvince));
-			MapGlobals.UpdateListeners.ForEach(listener => listener());
+			GuiStack.Push(ArmySetup.Display(Globals.MapScene.SelectedProvince));
+			Globals.MapScene.UpdateListeners.ForEach(listener => listener());
 		};
 	}
 
 	private void EndTurn()
 	{
 		// Create a copy of the list as it may be modified during the loop
-		var listeners = MapGlobals.TurnListeners.ToList();
+		var listeners = Globals.MapScene.TurnListeners.ToList();
 		listeners.ForEach(listener => listener());
 
 		Battle();
 
-		MapGlobals.UpdateListeners.ForEach(listener => listener());
+		Globals.MapScene.UpdateListeners.ForEach(listener => listener());
 	}
 
 	public void Battle()
@@ -106,7 +106,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 
 	private void Update()
 	{
-		var provence = MapGlobals.SelectedProvince;
+		var provence = Globals.MapScene.SelectedProvince;
 
 		var units = new Dictionary<string, int>();
 

@@ -27,7 +27,6 @@ public abstract  class Weapon
     public void Attack(Unit wielder)
     {
         Attack(wielder, _target);
-        wielder.Jiggle();
         wielder.Cooldown = -1 * Cooldown * Battle.TimeStep;
     }
     

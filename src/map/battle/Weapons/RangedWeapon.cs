@@ -13,6 +13,7 @@ public class RangedWeapon : Weapon
     
     protected override void Attack(Unit wielder, Unit target)
     {
+        wielder.Jiggle();
         var targetLocs = Globals.BattleScene.TileMap.GetTilesInRadius(target.MapPosition, 2).ToList();
         var targetLoc = targetLocs[GD.RandRange(0, targetLocs.Count - 1)];
         Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, target.MapPosition, hit => ApplyDamage(wielder, hit)));

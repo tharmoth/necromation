@@ -14,6 +14,20 @@ public class MeleeWeapon : Weapon
     {
         if (!(GD.Randf() > 0.5)) return;
         
+        var timer = new Timer();
+        timer.WaitTime = Cooldown / 2;
+        timer.Timeout += () =>
+        {
+            timer.QueueFree();
+            wielder.Jiggle();
+            if (GodotObject.IsInstanceValid(wielder) && GodotObject.IsInstanceValid(target)) ApplyDamage(wielder, target);
+        };
+        wielder.AddChild(timer);
+        timer.Start();
+    }
+    
+    private void ApplyDamage(Unit wielder, Unit target)
+    {
         var armor = target.Armor.Sum(armor => armor.Protection);
         var armorRoll = Utils.RollDice("2d6");
         var damageRoll = Utils.RollDice("2d6");

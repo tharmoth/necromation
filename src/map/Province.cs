@@ -26,7 +26,6 @@ public partial class Province : Node2D, ITransferTarget
     
     public Province()
     {
-        MapGlobals.TurnListeners.Add(Recruit);
         _flagSprite.Texture = MapUtils.GetTexture("Unclaimed Flag");
         _flagSprite.Scale = new Vector2(0.25f, 0.25f);
         AddChild(_flagSprite);
@@ -35,6 +34,7 @@ public partial class Province : Node2D, ITransferTarget
     public override void _Ready()
     {
         base._Ready();
+        Globals.MapScene.TurnListeners.Add(Recruit);
         _flagSprite.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(this));
         _flagSprite.GlobalPosition -= Vector2.One * MapTileMap.TileSize / 4.0f;
     }

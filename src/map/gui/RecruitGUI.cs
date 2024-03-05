@@ -1,5 +1,6 @@
 using Godot;
 using System.Linq;
+using Necromation;
 using Necromation.map;
 
 public partial class RecruitGUI : Control
@@ -11,7 +12,7 @@ public partial class RecruitGUI : Control
 		GetNode<Button>("%ArcherButton").Pressed += RecruitArcher;
 		GetNode<Button>("%HorseButton").Pressed += RecruitHorse;
 		
-		MapGlobals.UpdateListeners.Add(Update);
+		Globals.MapScene.UpdateListeners.Add(Update);
 	}
 
 	private void RecruitCommander()
@@ -36,13 +37,13 @@ public partial class RecruitGUI : Control
 
 	private void Recruit(string type)
 	{
-		MapGlobals.SelectedProvince?.Recruit(type);
+		Globals.MapScene.SelectedProvince?.Recruit(type);
 		Update();
 	}
 
 	private void Update()
 	{
-		var provence = MapGlobals.SelectedProvince;
+		var provence = Globals.MapScene.SelectedProvince;
 		if (provence == null) return;
 		
 		var label = GetNode<Label>("%RecruitList");

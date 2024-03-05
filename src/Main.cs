@@ -17,6 +17,7 @@ public partial class Main : Scene
 	
 	public override void _EnterTree()
 	{
+		base._EnterTree();
 		VisibilityChanged += () =>
 		{
 			if (!Visible) return;
@@ -64,7 +65,7 @@ public partial class Main : Scene
 		base._Process(delta);
 		if (_initialized) return;
 		_initialized = true;
-		var position = MapGlobals.FactoryPosition;
+		var position = Map.FactoryPosition;
 		Globals.Player.GlobalPosition =
 			position * BuildingTileMap.TileSize * BuildingTileMap.ProvinceSize
 			+ position * BuildingTileMap.TileSize * BuildingTileMap.ProvinceGap
