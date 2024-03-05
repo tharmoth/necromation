@@ -119,7 +119,7 @@ public partial class Inserter : Building, IRotatable
 
     private void Animate(string item)
     {
-        if (!Notifier.IsOnScreen()) return;
+        if (IsOnScreen) return;
         SpriteInHand.Texture =  Globals.Database.GetTexture(item);
         SpriteInHand.Visible = true;
         SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);

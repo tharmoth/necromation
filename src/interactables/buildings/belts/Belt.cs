@@ -86,7 +86,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         LeftLine._Process(delta);
         RightLine._Process(delta);
 
-        if (!Notifier.IsOnScreen()) return;
+        if (IsOnScreen) return;
         // Move the frame forward 8 times every .5333 seconds
         var seconds = Time.GetTicksMsec() / 1000.0;
         var frame = (int)(seconds / (_secondsPerItem / 32)) % Sprite.Hframes;

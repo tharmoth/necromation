@@ -13,4 +13,8 @@
   <ItemGroup>
     <Folder Include="src\gui\buttons\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="NodeTest.cs" />
+    <Compile Remove="ChildNodeTest.cs" />
+  </ItemGroup>
 </Project>

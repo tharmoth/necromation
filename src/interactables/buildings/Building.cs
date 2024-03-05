@@ -25,10 +25,12 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		}
 	}
 	
-	protected VisibleOnScreenNotifier2D Notifier = new();
+	private VisibleOnScreenNotifier2D Notifier = new();
 	private AudioStreamPlayer2D _audio = new();
 	private ProgressTracker _progress;
 	private GpuParticles2D _particles;
+
+	protected bool IsOnScreen = true;
 
 	protected Building()
 	{
@@ -36,6 +38,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 		AddChild(_audio);
 		AddChild(Notifier);
 
+		Notifier.ScreenEntered += () => IsOnScreen = true;
+		Notifier.ScreenExited += () => IsOnScreen = false;
 		
 		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 
@@ -57,6 +61,8 @@ public abstract partial class Building : Node2D, BuildingTileMap.IEntity, Progre
 	public override void _Ready()
 	{
 		base._Ready();
+		IsOnScreen = Notifier.IsOnScreen();
+		
 		var particleMaterial = (ParticleProcessMaterial)_particles.ProcessMaterial;
 		particleMaterial.EmissionBoxExtents = new Vector3(16 * BuildingSize.X, 16 * BuildingSize.Y, 0);
 		
