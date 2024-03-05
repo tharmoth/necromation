@@ -11,7 +11,7 @@ public partial class Summary : Control
 	
 	public static Summary Display(string title, Dictionary<string, UnitStats> playerStats, Dictionary<string, UnitStats> enemyStats)
 	{
-		var gui = GD.Load<PackedScene>("res://src/map/battle/gui/Summary/summary.tscn").Instantiate<Summary>();
+		var gui = GD.Load<PackedScene>("res://src/battle/gui/Summary/summary.tscn").Instantiate<Summary>();
 		gui.Init(title, playerStats, enemyStats);
 		Globals.BattleScene.Gui.AddChild(gui);
 		return gui;
@@ -30,7 +30,7 @@ public partial class Summary : Control
 		
 		foreach (var stat in playerStats)
 		{
-			var row = GD.Load<PackedScene>("res://src/map/battle/gui/Summary/unitrow.tscn").Instantiate<UnitRow>();
+			var row = GD.Load<PackedScene>("res://src/battle/gui/Summary/unitrow.tscn").Instantiate<UnitRow>();
 			row.Init(stat.Value);
 			UnitList.AddChild(row);
 		}
@@ -43,29 +43,9 @@ public partial class Summary : Control
 
 		foreach (var stat in enemyStats)
 		{
-			var row = GD.Load<PackedScene>("res://src/map/battle/gui/Summary/unitrow.tscn").Instantiate<UnitRow>();
+			var row = GD.Load<PackedScene>("res://src/battle/gui/Summary/unitrow.tscn").Instantiate<UnitRow>();
 			row.Init(stat.Value);
 			UnitList.AddChild(row);
 		}
-	}
-	
-	public class UnitStats
-	{
-		public string UnitType { get; set; }
-		public int Count { get; set; }
-		public int Kills { get; set; }
-		public int Deaths { get; set; }
-
-		public UnitStats(string unitType)
-		{
-			UnitType = unitType;
-			Count = 0;
-			Kills = 0;
-			Deaths = 0;
-		}
-
-		public void IncrementCount() => Count++;
-		public void IncrementKills() => Kills++;
-		public void IncrementDeaths() => Deaths++;
 	}
 }

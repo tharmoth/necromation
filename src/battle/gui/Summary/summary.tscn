@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://8m3ibmllkwwu"]
 
-[ext_resource type="Script" path="res://src/map/battle/gui/Summary/Summary.cs" id="1_2dc4n"]
-[ext_resource type="PackedScene" uid="uid://d04gyqxbtve6" path="res://src/map/battle/gui/Summary/unitrow.tscn" id="2_gece4"]
+[ext_resource type="Script" path="res://src/battle/gui/Summary/Summary.cs" id="1_2dc4n"]
+[ext_resource type="PackedScene" uid="uid://d04gyqxbtve6" path="res://src/battle/gui/Summary/unitrow.tscn" id="2_gece4"]
 [ext_resource type="Script" path="res://src/gui/buttons/ActionButton.cs" id="3_bsbyi"]
 
 [node name="Summary" type="Control"]

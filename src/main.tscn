@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=22 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/FactoryScene.cs" id="1_48nsg"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://d2sv6kue0g7hw" path="res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3" id="12_ep3l7"]
 [ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
 [ext_resource type="Script" path="res://src/FactoryTileMap.cs" id="16_ny2qt"]
+[ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
 texture = ExtResource("11_q1hir")
@@ -285,3 +286,6 @@ unique_name_in_owner = true
 
 [node name="AudioListener2D" type="AudioListener2D" parent="Character"]
 current = true
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("18_nrhn7")

@@ -21,14 +21,7 @@ public class Technology
         set
         {
             _progress = value;
-            if (_progress < Count) return;
-            Researched = true;
-            GD.Print("Researched " + Name);
-            var unlockedRecipes = Database.Instance.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
-            Database.Instance.UnlockedRecipes.AddRange(unlockedRecipes);
-            Globals.ResearchListeners.ForEach(listener => listener());
-            Globals.CurrentTechnology = null;
-            Globals.FactoryScene.Gui.TechnologyComplete();
+            if (_progress >= Count) Unlock();
         }
     }
 
@@ -47,5 +40,29 @@ public class Technology
         Unlocks = unlocks;
         Prerequisites = prerequisites;
         Description = description;
+    }
+
+    public void Unlock()
+    {
+        Researched = true;
+        GD.Print("Researched " + Name);
+        var unlockedRecipes = Database.Instance.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
+        Database.Instance.UnlockedRecipes.AddRange(unlockedRecipes);
+        Globals.ResearchListeners.ForEach(listener => listener());
+        Globals.CurrentTechnology = null;
+        Globals.FactoryScene.Gui.TechnologyComplete();
+    }
+    
+    public void Lock()
+    {
+        Researched = false;
+        var lockedRecipes = Database.Instance.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
+        foreach (var recipe in lockedRecipes)
+        {
+            Database.Instance.UnlockedRecipes.Remove(recipe);
+        }
+        Globals.ResearchListeners.ForEach(listener => listener());
+        Globals.CurrentTechnology = null;
+        Globals.FactoryScene.Gui.TechnologyComplete();
     }
 }

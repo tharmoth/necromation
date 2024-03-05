@@ -30,8 +30,8 @@ public partial class BattleGUI : CanvasLayer
         playerStats, enemyStats);
     }
 
-    private Dictionary<string, Summary.UnitStats> playerStats = new();
-    private Dictionary<string, Summary.UnitStats> enemyStats = new();
+    private Dictionary<string, UnitStats> playerStats = new();
+    private Dictionary<string, UnitStats> enemyStats = new();
 	
     private bool _initialized = false;
     private bool _complete = false;
@@ -48,7 +48,7 @@ public partial class BattleGUI : CanvasLayer
         {
             if (!enemyStats.ContainsKey(unit.UnitType))
             {
-                enemyStats[unit.UnitType] = new Summary.UnitStats(unit.UnitType);
+                enemyStats[unit.UnitType] = new UnitStats(unit.UnitType);
             }
             enemyStats[unit.UnitType].IncrementCount();
 
@@ -69,7 +69,7 @@ public partial class BattleGUI : CanvasLayer
         {
             if (!playerStats.ContainsKey(unit.UnitType))
             {
-                playerStats[unit.UnitType] = new Summary.UnitStats(unit.UnitType);
+                playerStats[unit.UnitType] = new UnitStats(unit.UnitType);
             }
             playerStats[unit.UnitType].IncrementCount();
 

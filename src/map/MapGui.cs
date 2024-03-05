@@ -122,7 +122,7 @@ public partial class MapGui : CanvasLayer, SceneGUI
 			unitString += unit + " x" + count + "\n";
 		}
 		if (unitString == "") unitString = "no units\n";
-		MapGui.Instance.SelectedLabel.Text = provence.Name + "\n" + unitString;
+		SelectedLabel.Text = provence.Name + "\n" + unitString;
 		
 		_factoryButton.Disabled = provence.Owner != "Player";
 		_armyButton.Disabled = provence.Owner != "Player";

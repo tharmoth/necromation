@@ -20,8 +20,6 @@ public partial class FactoryScene : Scene
 		base._EnterTree();
 
 		MusicManager.PlayAmbiance();
-		
-		Globals.Tree.Root.AddChild(new CheatCodes());
 	}
 
 	public override FactoryGUI Gui => GetNode<FactoryGUI>("%GUI");
@@ -65,7 +63,7 @@ public partial class FactoryScene : Scene
 		// 		attackingCommander.Units.Insert("Rabble", 10);
 		// 		attackingCommander.GlobalPosition = AttackProvince.GlobalPosition;
 		// 		AttackProvince.Commanders.Add(attackingCommander);
-		// 		MapGui.Instance.Battle();
+		// 		Globals.MapScene.Gui.Battle();
 		// 		AttackTimer = null;
 		//                  
 		// 	};

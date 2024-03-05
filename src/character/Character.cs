@@ -50,16 +50,7 @@ public partial class Character : Node2D
 	public override void _Ready()
 	{
 		AddToGroup("player");
-		
-		Database.Instance.Recipes
-			.Select(recipe => recipe.Products.First().Key)
-			.ToList()
-			.ForEach(item => _inventory.Insert(item, 100));
-		
-		_inventory.Insert("Bone Fragments", 1000);
-		_inventory.Insert("Coal Ore", 1000);
-		//
-		
+
 		// _inventory.Insert("Bone Fragments", 5000);
 		// _inventory.Insert("Underground Belt", 100);
 		// _inventory.Insert("Inserter", 500);

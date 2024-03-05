@@ -9,6 +9,7 @@ using Necromation.map.character;
 public partial class MapScene : Scene
 {
 	public MapTileMap TileMap => GetNode<MapTileMap>("%TileMap");
+	public override MapGui Gui => GetNode<MapGui>("%GUI");
 	
 	public readonly List<Action> TurnListeners = new();
 	public readonly List<Action> UpdateListeners = new();
@@ -24,7 +25,7 @@ public partial class MapScene : Scene
 		TurnListeners.Add(() => SelectedCommander = null);
 	}
 
-	public override CanvasLayer Gui => GetNode<MapGui>("%GUI");
+	
 
 	public override void OnOpen()
 	{
@@ -55,7 +56,7 @@ public partial class MapScene : Scene
 		base._UnhandledInput(@event);
 		
 		// Strange bug where the gui doesn't catch things?
-		if (MapGui.Instance.GuiOpen) return;
+		if (Globals.MapScene.Gui.GuiOpen) return;
 		
 		if (Input.IsActionJustPressed("left_click"))
 		{

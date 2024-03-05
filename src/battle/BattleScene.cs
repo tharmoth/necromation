@@ -23,11 +23,11 @@ public partial class BattleScene : Scene
 		if (Provence.Commanders.Count == 0)
 		{
 			var PlayerCommanderInfantry = new Commander(new Province(), "Player");
-			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 1000);
+			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 100);
 			Provence.Commanders.Add(PlayerCommanderInfantry);
 			
 			var EnemyCommanderInfantry = new Commander(new Province(), "Enemy");
-			EnemyCommanderInfantry.Units.Insert("Heavy Infantry", 100);
+			EnemyCommanderInfantry.Units.Insert("Heavy Infantry", 10);
 			Provence.Commanders.Add(EnemyCommanderInfantry);
 			
 			// var PlayerCommanderArcher = new Commander(new Province(), "Player");

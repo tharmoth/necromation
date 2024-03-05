@@ -14,8 +14,8 @@ public partial class BoxDraw : Control
 	{
 		var gui = GD.Load<PackedScene>("res://src/map/gui/ArmyLayout/box_draw.tscn").Instantiate<BoxDraw>();
 		gui.Init(commander);
-		MapGui.Instance.GuiStack.Push(gui);
-		MapGui.Instance.AddChild(gui);
+		Globals.MapScene.Gui.GuiStack.Push(gui);
+		Globals.MapScene.Gui.AddChild(gui);
 	}
 	
 	public void Init(Commander commander)

@@ -10,7 +10,7 @@ public partial class UnitRow : HBoxContainer
 	private Label KillsLabel => GetNode<Label>("%Kills");
 	private Label DeathsLabel => GetNode<Label>("%Deaths");
 
-	public void Init(Summary.UnitStats stat)
+	public void Init(UnitStats stat)
 	{
 		Sprite.Texture = Database.Instance.GetTexture(stat.UnitType);
 		NameLabel.Text = stat.UnitType;

@@ -21,7 +21,7 @@ public partial class ArmySetup : PanelContainer
 	{
 		var gui = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup.tscn").Instantiate<ArmySetup>();
 		gui._province = province;
-		MapGui.Instance.AddChild(gui);
+		Globals.MapScene.Gui.AddChild(gui);
 		return gui;
 	}
 	

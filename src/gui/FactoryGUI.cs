@@ -8,8 +8,6 @@ using Necromation.sk;
 
 public partial class FactoryGUI : CanvasLayer, SceneGUI
 {
-	private static FactoryGUI _instance;
-	public static FactoryGUI Instance => _instance;
 	private RecipePopup Popup => GetNode<RecipePopup>("%Popup");
 	private CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
@@ -19,14 +17,6 @@ public partial class FactoryGUI : CanvasLayer, SceneGUI
 	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
 	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
 	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
-	
-	// Use _EnterTree to make sure the Singleton instance is avaiable in _Ready()
-	public override void _EnterTree(){
-		if(_instance != null){
-			this.QueueFree(); // The Singleton is already loaded, kill this instance
-		}
-		_instance = this;
-	}
 
 	private Control _openGui;
 

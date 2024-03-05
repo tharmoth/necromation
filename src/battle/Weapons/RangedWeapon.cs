@@ -16,7 +16,7 @@ public class RangedWeapon : Weapon
         wielder.Jiggle();
         var targetLocs = Globals.BattleScene.TileMap.GetTilesInRadius(target.MapPosition, 2).ToList();
         var targetLoc = targetLocs[GD.RandRange(0, targetLocs.Count - 1)];
-        Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, target.MapPosition, hit => ApplyDamage(wielder, hit)));
+        Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, targetLoc, hit => ApplyDamage(wielder, hit)));
         wielder.Ammo--;
         PlayFiredSound(wielder);
     }
