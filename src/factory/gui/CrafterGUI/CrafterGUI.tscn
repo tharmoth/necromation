@@ -36,7 +36,7 @@ script = ExtResource("2_kcrb5")
 _nodeToHide = NodePath("../../..")
 
 [node name="CloseButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(25, 25)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "X"

@@ -1,25 +1,40 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0pcouetqfxom"]
+[gd_scene load_steps=5 format=3 uid="uid://b0pcouetqfxom"]
 
 [ext_resource type="Script" path="res://src/factory/gui/InventoryGUI/InventoryItem.cs" id="1_uf47y"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="2_7vv8f"]
 [ext_resource type="Texture2D" uid="uid://c7d8pkta2c0jw" path="res://res/sprites/items/Bow.png" id="2_ihul7"]
+[ext_resource type="PackedScene" uid="uid://q7t1uywyifjt" path="res://src/factory/gui/InventoryGUI/mouseover_audio.tscn" id="4_6gqrj"]
 
 [node name="InventoryItem" type="PanelContainer"]
+custom_minimum_size = Vector2(38, 38)
 script = ExtResource("1_uf47y")
 
-[node name="Button" type="Button" parent="."]
+[node name="Outline" parent="." instance=ExtResource("2_7vv8f")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Button" type="Button" parent="MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="AudioStreamPlayer" parent="MarginContainer/Button" instance=ExtResource("4_6gqrj")]
+
+[node name="Icon" type="TextureRect" parent="MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("2_ihul7")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CountLabel" type="Label" parent="."]
+[node name="CountLabel" type="Label" parent="MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8

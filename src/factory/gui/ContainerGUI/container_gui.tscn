@@ -32,6 +32,7 @@ layout_mode = 2
 text = "Container"
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 text = "X"
 script = ExtResource("2_c8qg6")

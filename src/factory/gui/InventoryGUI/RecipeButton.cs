@@ -25,12 +25,13 @@ public partial class RecipeButton : PanelContainer
 	public override void _ExitTree()
 	{
 		base._ExitTree();
-		TargetInventory.Listeners.Remove(Update);
+		TargetInventory?.Listeners.Remove(Update);
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
+		if (TargetInventory == null) return;
 		Button.Pressed += () => _recipe.Craft(TargetInventory);
 		Update();
 		TargetInventory.Listeners.Add(Update);
@@ -40,6 +41,6 @@ public partial class RecipeButton : PanelContainer
 	private void Update()
 	{
 		Button.Disabled = !_recipe.CanCraft(TargetInventory);
-		Icon.Modulate = _recipe.CanCraft(TargetInventory) ? Colors.White : new Color(.3f, .3f, .3f);
+		Icon.Modulate = _recipe.CanCraft(TargetInventory) ? Colors.White : new Color(.5f, .5f, .5f);
 	}
 }

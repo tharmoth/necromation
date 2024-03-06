@@ -1,0 +1,93 @@
+[gd_scene load_steps=10 format=3 uid="uid://tojwiuw0q0ip"]
+
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_cp7xx"]
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_jiopq"]
+[ext_resource type="Script" path="res://src/factory/gui/FilterGUI/FilterMenu.cs" id="2_kufoy"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="3_yl0nk"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="4_5etj7"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="5_ycrom"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="6_5erip"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uc7a8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_07hgf"]
+
+[node name="FilterMenu" type="PanelContainer"]
+custom_minimum_size = Vector2(900, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -250.0
+offset_right = 450.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_cp7xx")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_uc7a8")
+script = ExtResource("2_kufoy")
+
+[node name="DropShadowBorder" parent="." instance=ExtResource("2_jiopq")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="DropShadowDividerLeft" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_yl0nk")]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Select Filter"
+
+[node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_5etj7")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
+script = ExtResource("6_5erip")
+_action = "close_gui"
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_07hgf")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 22
+
+[node name="FilterList" type="HFlowContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/PanelContainer" instance=ExtResource("5_ycrom")]
+layout_mode = 2

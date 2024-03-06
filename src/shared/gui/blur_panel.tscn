@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://hxgfr1c0a80i"]
+
+[ext_resource type="Material" uid="uid://osnmn52o652k" path="res://src/factory/gui/InventoryGUI/blurshader.tres" id="1_yuvii"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_udf21"]
+bg_color = Color(1, 1, 1, 1)
+
+[node name="BlurPanel" type="Panel"]
+material = ExtResource("1_yuvii")
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_udf21")

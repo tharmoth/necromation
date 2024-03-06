@@ -40,6 +40,7 @@ public partial class InventoryItem : PanelContainer
 			}
 			Inventory.TransferItem(SourceInventory, TargetInventory, ItemType);
 		};
+
 	}
 
 	public override void _Process(double delta)

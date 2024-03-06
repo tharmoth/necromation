@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://sr7vg0mmakj7"]
+
+[ext_resource type="Script" path="res://src/factory/gui/Shared/ItemBox.cs" id="1_q0nbf"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="2_3cet6"]
+[ext_resource type="PackedScene" uid="uid://q7t1uywyifjt" path="res://src/factory/gui/InventoryGUI/mouseover_audio.tscn" id="3_vs02t"]
+[ext_resource type="Texture2D" uid="uid://c7d8pkta2c0jw" path="res://res/sprites/items/Bow.png" id="4_lunqf"]
+
+[node name="ItemBox" type="PanelContainer"]
+custom_minimum_size = Vector2(38, 38)
+script = ExtResource("1_q0nbf")
+
+[node name="Outline" parent="." instance=ExtResource("2_3cet6")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Button" type="Button" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_mask = 5
+
+[node name="AudioStreamPlayer" parent="MarginContainer/Button" instance=ExtResource("3_vs02t")]
+
+[node name="Icon" type="TextureRect" parent="MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_lunqf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CountLabel" type="Label" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 11
+text = "200"
+vertical_alignment = 2

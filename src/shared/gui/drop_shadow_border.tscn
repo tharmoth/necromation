@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1jocdq57jmar"]
+
+[ext_resource type="PackedScene" uid="uid://hxgfr1c0a80i" path="res://src/shared/gui/blur_panel.tscn" id="1_is1hd"]
+[ext_resource type="Texture2D" uid="uid://cyd0ww7m6mlfw" path="res://res/gui/Inventory/panel-transparent-center-031.png" id="2_teb81"]
+[ext_resource type="Texture2D" uid="uid://beplnqvpdb7ml" path="res://res/gui/Inventory/panel-border-031.png" id="3_b6ijn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0r8tc"]
+
+[node name="DropShadowBorder" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0r8tc")
+
+[node name="BlurPanel" parent="." instance=ExtResource("1_is1hd")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="."]
+modulate = Color(0, 0, 0, 0.866667)
+layout_mode = 2
+texture = ExtResource("2_teb81")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Borders" type="NinePatchRect" parent="MarginContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+texture = ExtResource("3_b6ijn")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="Borders" type="NinePatchRect" parent="."]
+modulate = Color(0.6, 0.6, 0.6, 1)
+layout_mode = 2
+texture = ExtResource("3_b6ijn")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28

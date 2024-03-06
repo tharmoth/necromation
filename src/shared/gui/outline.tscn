@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsabce6vfa6cs"]
+
+[ext_resource type="Texture2D" uid="uid://cn4apjxe2pguh" path="res://res/gui/Item/panel-border-015.png" id="1_3t6af"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kgkvc"]
+
+[node name="Outline" type="PanelContainer"]
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_kgkvc")
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer2"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+texture = ExtResource("1_3t6af")
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 7
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="."]
+modulate = Color(0.6, 0.6, 0.6, 1)
+layout_mode = 2
+texture = ExtResource("1_3t6af")
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 7

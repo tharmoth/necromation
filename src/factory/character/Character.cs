@@ -11,6 +11,7 @@ public partial class Character : Node2D
 {
 	public IRotatable.BuildingOrientation Orientation => IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
+	private AudioStreamPlayer _clickAudio => GetNode<AudioStreamPlayer>("%ClickAudio");
 	
 	private const float Speed = 200;
 	private readonly Inventory _inventory = new();
@@ -97,8 +98,7 @@ public partial class Character : Node2D
 			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) Position = newPosition;
 		}
 		
-		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
-		else CancelRemoval();
+
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.FactoryScene.TileMap.GetBuildingAtMouse() == null) Mine();
 		else _resource?.Cancel();
 	}
@@ -126,6 +126,9 @@ public partial class Character : Node2D
 		         && !Building.IsBuilding(Selected)
 		         && !Input.IsKeyPressed(Key.Ctrl) 
 		         && Globals.FactoryScene.TileMap.GetBuildingAtMouse() is IInteractable interactable) interactable.Interact(_inventory);
+		
+		if (Input.IsMouseButtonPressed(MouseButton.Right)) RemoveBuilding();
+		else CancelRemoval();
 		
 	}
 
@@ -225,9 +228,11 @@ public partial class Character : Node2D
 
 	private void QPick()
 	{
+		var cache = Selected;
 		Selected = Globals.FactoryScene.TileMap.GetBuildingAtMouse() is Building building && building.ItemType != Selected && _inventory.Items.ContainsKey(building.ItemType)
 			? building.ItemType
 			: null;
+		if (cache != Selected) _clickAudio.Play();
 	}
 	
 	private void CancelRemoval()

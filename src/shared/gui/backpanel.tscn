@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bab01tg0lbklp"]
+
+[ext_resource type="Texture2D" uid="uid://dl5ffdoa2v2wr" path="res://res/gui/panel-transparent-center-031.png" id="1_t8w0a"]
+
+[node name="Backpanel" type="NinePatchRect"]
+modulate = Color(0, 0, 0, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_t8w0a")
+patch_margin_left = 40
+patch_margin_top = 30
+patch_margin_right = 40
+patch_margin_bottom = 40

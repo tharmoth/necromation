@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://q7t1uywyifjt"]
+
+[ext_resource type="AudioStream" uid="uid://1j5g242tw4wp" path="res://res/sfx/gui/rollover5.ogg" id="1_20wox"]
+[ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="1_ogdrs"]
+[ext_resource type="AudioStream" uid="uid://b2ke0geqjgl4k" path="res://res/sfx/gui/rollover4.ogg" id="1_xswle"]
+[ext_resource type="Script" path="res://src/shared/gui/MouseoverAudio.cs" id="3_wb4c4"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_qw2el"]
+streams_count = 2
+playback_mode = 1
+stream_0/stream = ExtResource("1_20wox")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("1_xswle")
+stream_1/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_mp6q5"]
+streams_count = 1
+playback_mode = 1
+random_pitch = 1.05
+stream_0/stream = ExtResource("1_ogdrs")
+stream_0/weight = 1.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer"]
+stream = SubResource("AudioStreamRandomizer_qw2el")
+volume_db = -5.0
+script = ExtResource("3_wb4c4")
+
+[node name="ClickAudio" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_mp6q5")
+pitch_scale = 1.2

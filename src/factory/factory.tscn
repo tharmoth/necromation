@@ -1,23 +1,51 @@
-[gd_scene load_steps=22 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=35 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
 [ext_resource type="Script" path="res://src/factory/gui/FactoryGUI.cs" id="2_pkiw0"]
 [ext_resource type="Script" path="res://src/factory/character/Character.cs" id="2_vcqpu"]
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="3_5rf83"]
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="3_fy5x1"]
-[ext_resource type="Script" path="res://src/factory/gui/ActionBarGUI/Actionbar.cs" id="5_jpmfq"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="5_06d3l"]
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="6_kka5s"]
+[ext_resource type="PackedScene" uid="uid://c2qjj45xkcere" path="res://src/factory/gui/ActionBarGUI/action_bar_item.tscn" id="6_lhutd"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
 [ext_resource type="PackedScene" uid="uid://cgfjtesm7s5bm" path="res://src/factory/gui/RecipeChooserGUI/popup.tscn" id="6_pwh8y"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
 [ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/factory/gui/ContainerGUI/container_gui.tscn" id="7_cu3ym"]
 [ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/factory/gui/CrafterGUI/CrafterGUI.tscn" id="7_ky81d"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchProgressBar.cs" id="7_ohqwt"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="8_jqtrb"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="9_oba7v"]
 [ext_resource type="AudioStream" uid="uid://bchkfk8pny2se" path="res://res/sfx/jingles-pizzicato_14.ogg" id="11_p2cxa"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
 [ext_resource type="AudioStream" uid="uid://d2sv6kue0g7hw" path="res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3" id="12_ep3l7"]
 [ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/factory/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
+[ext_resource type="AudioStream" uid="uid://bfgsqm06fyo57" path="res://res/sfx/kenny-audio/cloth3.ogg" id="19_1q2vv"]
+[ext_resource type="AudioStream" uid="uid://c3jlxq11k8o0t" path="res://res/sfx/kenny-audio/cloth4.ogg" id="20_7aquo"]
+[ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_w3p5j"]
+streams_count = 1
+stream_0/stream = ExtResource("19_1q2vv")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_5lbr3"]
+streams_count = 1
+stream_0/stream = SubResource("AudioStreamRandomizer_w3p5j")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fby65"]
+streams_count = 1
+stream_0/stream = ExtResource("20_7aquo")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_krf7e"]
+streams_count = 1
+stream_0/stream = SubResource("AudioStreamRandomizer_fby65")
+stream_0/weight = 1.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
 texture = ExtResource("11_q1hir")
@@ -101,6 +129,12 @@ tile_size = Vector2i(32, 32)
 sources/1 = SubResource("TileSetAtlasSource_8qpuw")
 sources/0 = SubResource("TileSetAtlasSource_adiq0")
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_h7m82"]
+streams_count = 1
+random_pitch = 1.05
+stream_0/stream = ExtResource("23_1sfga")
+stream_0/weight = 1.0
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_4xbbd")
 
@@ -108,152 +142,261 @@ script = ExtResource("1_4xbbd")
 unique_name_in_owner = true
 script = ExtResource("2_pkiw0")
 
-[node name="Control" type="Control" parent="GUI"]
-layout_mode = 3
+[node name="Control" type="MarginContainer" parent="GUI"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
+theme = ExtResource("3_5rf83")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_edit_lock_ = true
 
-[node name="FactoryGUI" type="HBoxContainer" parent="GUI/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Control"]
+layout_mode = 2
+mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/FactoryGUI"]
+[node name="Left" type="VBoxContainer" parent="GUI/Control/PanelContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control/FactoryGUI/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control/PanelContainer/Left"]
 layout_mode = 2
 
-[node name="AttackLabel" type="Label" parent="GUI/Control/FactoryGUI/VBoxContainer/HBoxContainer"]
+[node name="AttackLabel" type="Label" parent="GUI/Control/PanelContainer/Left/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Attack Incoming"
 
-[node name="FpsLabel" type="Label" parent="GUI/Control/FactoryGUI/VBoxContainer"]
+[node name="FpsLabel" type="Label" parent="GUI/Control/PanelContainer/Left"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "FPS: "
 script = ExtResource("3_fy5x1")
 
-[node name="Spacer" type="Control" parent="GUI/Control/FactoryGUI/VBoxContainer"]
+[node name="Spacer" type="Control" parent="GUI/Control/PanelContainer/Left"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/Control/FactoryGUI"]
+[node name="Center" type="VBoxContainer" parent="GUI/Control/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/FactoryGUI/VBoxContainer2"]
+[node name="GridContainer" type="GridContainer" parent="GUI/Control/PanelContainer/Center"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 50
+columns = 3
+
+[node name="Control2" type="Control" parent="GUI/Control/PanelContainer/Center/GridContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/PanelContainer/Center/GridContainer"]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/PanelContainer/Center/GridContainer/PanelContainer"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 show_percentage = false
 
-[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 8
-vertical_scroll_mode = 0
-
-[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2/ScrollContainer"]
+[node name="Control" type="Control" parent="GUI/Control/PanelContainer/Center/GridContainer"]
 layout_mode = 2
 
-[node name="Actionbar" type="HBoxContainer" parent="GUI/Control/FactoryGUI/VBoxContainer2/ScrollContainer/PanelContainer"]
-layout_mode = 2
-alignment = 1
-script = ExtResource("5_jpmfq")
-
-[node name="Buttons" type="VBoxContainer" parent="GUI/Control/FactoryGUI"]
+[node name="DropShadowDividerLeft" parent="GUI/Control/PanelContainer/Center/GridContainer" instance=ExtResource("5_06d3l")]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/FactoryGUI/Buttons"]
+[node name="DropShadowBorder" parent="GUI/Control/PanelContainer/Center/GridContainer" instance=ExtResource("6_kka5s")]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 20
+
+[node name="GridContainer" type="GridContainer" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+columns = 10
+
+[node name="ActionBarItem" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem2" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem3" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem4" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem5" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem6" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem7" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem8" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem9" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem10" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem11" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem12" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem13" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem14" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem15" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem16" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem17" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem18" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem19" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="ActionBarItem20" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+layout_mode = 2
+
+[node name="DropShadowDividerRight" parent="GUI/Control/PanelContainer/Center/GridContainer" instance=ExtResource("8_jqtrb")]
+layout_mode = 2
+
+[node name="Right" type="VBoxContainer" parent="GUI/Control/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="DropShadowBorder" parent="GUI/Control/PanelContainer/Right" instance=ExtResource("6_kka5s")]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="GUI/Control/PanelContainer/Right/DropShadowBorder"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Control/PanelContainer/Right/DropShadowBorder/MarginContainer2"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/FactoryGUI/Buttons/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control/PanelContainer/Right/DropShadowBorder/MarginContainer2/PanelContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="GUI/Control/FactoryGUI/Buttons/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="GUI/Control/PanelContainer/Right/DropShadowBorder/MarginContainer2/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Researching: Nothing"
 horizontal_alignment = 1
 script = ExtResource("6_lnhcn")
 
-[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/FactoryGUI/Buttons/PanelContainer/VBoxContainer"]
+[node name="Outline" parent="GUI/Control/PanelContainer/Right/DropShadowBorder/MarginContainer2/PanelContainer/VBoxContainer" instance=ExtResource("9_oba7v")]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/Control/PanelContainer/Right/DropShadowBorder/MarginContainer2/PanelContainer/VBoxContainer/Outline"]
 layout_mode = 2
 script = ExtResource("7_ohqwt")
 
-[node name="FactoryToMapButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+[node name="Outline4" parent="GUI/Control/PanelContainer/Right" instance=ExtResource("9_oba7v")]
+layout_mode = 2
+
+[node name="FactoryToMapButton" type="Button" parent="GUI/Control/PanelContainer/Right/Outline4"]
 unique_name_in_owner = true
+z_index = -1
 layout_mode = 2
 text = "Map (M)"
 script = ExtResource("7_04mnd")
 _action = "open_map"
 
-[node name="TechnologyButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+[node name="Outline3" parent="GUI/Control/PanelContainer/Right" instance=ExtResource("9_oba7v")]
+layout_mode = 2
+
+[node name="TechnologyButton" type="Button" parent="GUI/Control/PanelContainer/Right/Outline3"]
+z_index = -1
 layout_mode = 2
 text = "Technology (T)"
 script = ExtResource("7_04mnd")
 
-[node name="InventoryButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+[node name="Outline5" parent="GUI/Control/PanelContainer/Right" instance=ExtResource("9_oba7v")]
+layout_mode = 2
+
+[node name="InventoryButton" type="Button" parent="GUI/Control/PanelContainer/Right/Outline5"]
+z_index = -1
 layout_mode = 2
 text = "Inventory (E)"
 script = ExtResource("7_04mnd")
 _action = "open_inventory"
 
-[node name="SaveButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+[node name="Outline2" parent="GUI/Control/PanelContainer/Right" instance=ExtResource("9_oba7v")]
 layout_mode = 2
-text = "Save Factory"
+
+[node name="SaveButton" type="Button" parent="GUI/Control/PanelContainer/Right/Outline2"]
+z_index = -1
+layout_mode = 2
+text = "Save
+"
 script = ExtResource("7_04mnd")
 _action = "save"
 
-[node name="LoadButton" type="Button" parent="GUI/Control/FactoryGUI/Buttons"]
+[node name="Outline" parent="GUI/Control/PanelContainer/Right" instance=ExtResource("9_oba7v")]
 layout_mode = 2
-text = "Load Button"
+
+[node name="LoadButton" type="Button" parent="GUI/Control/PanelContainer/Right/Outline"]
+z_index = -1
+layout_mode = 2
+text = "Load"
 script = ExtResource("7_04mnd")
 _action = "load"
 
 [node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]
 unique_name_in_owner = true
-layout_mode = 0
-offset_bottom = 200.0
+layout_mode = 2
 
 [node name="CrafterGUI" parent="GUI/Control" instance=ExtResource("7_ky81d")]
 unique_name_in_owner = true
 visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -200.0
-offset_right = 250.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="ContainerGUI" parent="GUI/Control" instance=ExtResource("7_cu3ym")]
 unique_name_in_owner = true
 visible = false
-layout_mode = 1
+layout_mode = 2
 
 [node name="TechGUI" parent="GUI/Control" instance=ExtResource("13_jc62p")]
 unique_name_in_owner = true
 visible = false
-layout_mode = 1
+layout_mode = 2
 
 [node name="TechnologyCompleteAudio" type="AudioStreamPlayer" parent="GUI"]
 unique_name_in_owner = true
@@ -263,6 +406,16 @@ stream = ExtResource("11_p2cxa")
 unique_name_in_owner = true
 stream = ExtResource("12_ep3l7")
 volume_db = -15.0
+
+[node name="GuiCloseAudio" type="AudioStreamPlayer" parent="GUI"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_5lbr3")
+volume_db = -15.0
+
+[node name="GuiOpenAudio" type="AudioStreamPlayer" parent="GUI"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_krf7e")
+volume_db = -10.0
 
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true
@@ -288,6 +441,11 @@ unique_name_in_owner = true
 
 [node name="AudioListener2D" type="AudioListener2D" parent="Character"]
 current = true
+
+[node name="ClickAudio" type="AudioStreamPlayer" parent="Character"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_h7m82")
+pitch_scale = 0.8
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource("18_nrhn7")

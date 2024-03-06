@@ -58,9 +58,10 @@ public partial class FactoryTileMap : LayerTileMap
 		sprite.Texture = Database.Instance.GetTexture("soil2");
 		var scaler = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
 		sprite.Scale = new Vector2(scaler, scaler);
-		sprite.GlobalPosition = startpos;
-		sprite.Centered = false;
+		sprite.GlobalPosition = startpos + sprite.Texture.GetSize() / 2 + Vector2.One * 64;
+		sprite.Centered = true;
 		sprite.ZIndex = -99;
+		sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
 		Globals.FactoryScene.CallDeferred("add_child", sprite);
 
 		var grassTexture = Database.Instance.GetTexture("Grass2");

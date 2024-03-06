@@ -17,7 +17,14 @@ public partial class IngrediantsPopup : PanelContainer
 		control.MouseExited += () =>
 		{
 			if (!IsInstanceValid(popup)) return;
-			popup.QueueFree();
+			var tween = Globals.Tree.CreateTween();
+			popup.DropShadowBorder.DisableBlur();
+			tween.TweenProperty(popup, "modulate:a", 0, .15f);
+			tween.TweenCallback(Callable.From(() =>
+			{
+				if (!IsInstanceValid(popup)) return;
+				popup.QueueFree();
+			}));
 		};
 		control.VisibilityChanged += () =>
 		{
@@ -41,13 +48,13 @@ public partial class IngrediantsPopup : PanelContainer
 	}
 
 	private Recipe _recipe;
+	private DropShadowBorder DropShadowBorder => GetNode<DropShadowBorder>("%DropShadowBorder");
 
 	public override void _Ready()
 	{
 		if (_recipe == null) throw new ArgumentException("Recipe popup recipe cannot be null when added to tree");
 
 		Size = Vector2.Zero;
-
 		
 		_recipe.Products.First().Deconstruct(out var product, out var amount);
 		GetNode<Label>("%RecipeNameLabel").Text = product + (amount == 1 ? "" : " x" + amount);
@@ -56,7 +63,11 @@ public partial class IngrediantsPopup : PanelContainer
 		
 		GetNode<VBoxContainer>("%Rows").GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
-
+		
+		var tween = CreateTween();
+		DropShadowBorder.DisableBlur();
+		Modulate = Colors.Transparent;
+		tween.TweenProperty(this, "modulate:a", 1, .15f);
 		FactoryGUI.SnapToScreen(this);
 	}
 

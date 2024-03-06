@@ -71,6 +71,13 @@ public partial class FactoryGUI : CanvasLayer
 		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);
 	}
 	
+	public void OpenGui(Control gui)
+	{
+		CloseGui();
+		_openGui = gui;
+		AddChild(gui);
+	}
+	
 	public void CloseGui()
 	{
 		CrafterGui.Visible = false;

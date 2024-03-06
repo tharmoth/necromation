@@ -25,7 +25,8 @@ public partial class Actionbar : Control
 		foreach (var recipe in Database.Instance.Recipes.Where(recipe => recipe.Category == _category)
 			         .Where(recipe => Database.Instance.UnlockedRecipes.Contains(recipe)).Where(recipe => Building.IsBuilding(recipe.Products.FirstOrDefault().Key)))
 		{
-			var button = new ActionBarButton(recipe, index);
+			var button = GD.Load<PackedScene>("res://src/factory/gui/ActionBarGUI/action_bar_item.tscn").Instantiate<ActionBarItem>();
+			// button.Init(recipe.Products.FirstOrDefault().Key, recipe, index);
 			AddChild(button);
 			index++;
 		}

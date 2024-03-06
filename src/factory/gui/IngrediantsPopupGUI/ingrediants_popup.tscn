@@ -1,24 +1,36 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvji4s2e7iexm"]
+[gd_scene load_steps=9 format=3 uid="uid://dvji4s2e7iexm"]
 
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_kdn1d"]
 [ext_resource type="Script" path="res://src/factory/gui/IngrediantsPopupGUI/IngrediantsPopup.cs" id="1_va5g5"]
 [ext_resource type="Texture2D" uid="uid://otk10dlw6m1x" path="res://res/sprites/old/Circuit.png" id="2_20lq4"]
 [ext_resource type="Texture2D" uid="uid://bm3v4xaf4n7dg" path="res://res/sprites/items/Gear.png" id="3_lk15i"]
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="3_wt6rv"]
+[ext_resource type="Script" path="res://src/shared/gui/DropShadowBorder.cs" id="4_dhsui"]
 [ext_resource type="Texture2D" uid="uid://bkp0ssod7ugep" path="res://res/sprites/items/Iron Bar.png" id="4_msm2r"]
 
-[node name="CraftingListPopup" type="PanelContainer"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7ntfq"]
+
+[node name="IngrediantsPopup" type="PanelContainer"]
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 142.0
 offset_bottom = 5.0
 size_flags_vertical = 0
+theme = ExtResource("1_kdn1d")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_7ntfq")
 script = ExtResource("1_va5g5")
+
+[node name="DropShadowBorder" parent="." instance=ExtResource("3_wt6rv")]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("4_dhsui")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
