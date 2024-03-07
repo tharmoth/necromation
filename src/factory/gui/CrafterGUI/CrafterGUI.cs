@@ -42,6 +42,8 @@ public partial class CrafterGUI : Control
 	private Container InventoryItemList => GetNode<Container>("%InventoryItemList");
 	private Container SourceInventoryItemList => GetNode<Container>("%SourceInventoryItemList");
 	private Container OutputInventoryItemList => GetNode<Container>("%OutputInventoryItemList");
+	private Button RecipeChangeButton => GetNode<Button>("%ChangeRecipeButton");
+	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
 	
 
 	private void Init(Inventory to, ICrafter crafter)
@@ -57,6 +59,16 @@ public partial class CrafterGUI : Control
 		
 		_crafter.GetOutputInventory().Listeners.Add(UpdateOutputInventory);
 		UpdateOutputInventory();
+
+		RecipeChangeButton.Pressed += () =>
+		{
+			RecipePopup.Display(_crafter);
+		};
+		
+		if (_crafter is ProgressTracker.IProgress progress)
+		{
+			ProgressBar.Init(progress);
+		}
 	}
 
 	private void UpdatePlayerInventory()

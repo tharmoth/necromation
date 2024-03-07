@@ -111,7 +111,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     {
 	    if (Recipe == null)
 	    {
-		    Globals.FactoryScene.Gui.Display(this);
+		    RecipePopup.Display(this);
 	    }
 	    else
 	    {

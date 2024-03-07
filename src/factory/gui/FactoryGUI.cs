@@ -8,7 +8,6 @@ using Necromation.sk;
 public partial class FactoryGUI : CanvasLayer
 {
 	private Label FpsLabel => GetNode<Label>("%FpsLabel");
-	private RecipePopup Popup => GetNode<RecipePopup>("%Popup");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
@@ -80,7 +79,6 @@ public partial class FactoryGUI : CanvasLayer
 	public void CloseGui()
 	{
 		ContainerGui.Visible = false;
-		Popup.Visible = false;
 		TechGui.Visible = false;
 		if (IsInstanceValid(_openGui)) _openGui?.QueueFree();
 		_openGui = null;
@@ -88,13 +86,7 @@ public partial class FactoryGUI : CanvasLayer
 	
 	public bool IsAnyGuiOpen()
 	{
-		return Popup.Visible  || ContainerGui.Visible || TechGui.Visible || _openGui != null;
-	}
-
-	public void Display(ICrafter crafter)
-	{
-		CloseGui();
-		Popup.DisplayPopup(crafter);
+		return ContainerGui.Visible || TechGui.Visible || _openGui != null;
 	}
 	
 	public void Display(Inventory to, Inventory from, string title)

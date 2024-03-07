@@ -10,27 +10,26 @@ public partial class RecipePopup : Control
 	
 	private ICrafter _crafter;
 	
-	public void DisplayPopup(ICrafter crafter)
+	public static void Display(ICrafter crafter)
 	{
-		_category = crafter.GetCategory();
-		GlobalPosition = GetViewport().GetMousePosition() + new Vector2(40, 0);
-		Visible = true;
-		_crafter = crafter;
-
-		RecipeList.GetChildren().OfType<Button>().ToList().ForEach(button =>
-		{
-			button.GetParent().RemoveChild(button);
-			button.QueueFree();
-		});
-		AddButtons();
-		
-		FactoryGUI.SnapToScreen(this);
+		var gui = GD.Load<PackedScene>("res://src/factory/gui/RecipeChooserGUI/recipe_popup.tscn").Instantiate<RecipePopup>();
+		gui.Init(crafter);
+		Globals.FactoryScene.Gui.OpenGui(gui);
 	}
 
-	private void SetRecipe(Recipe recipe)
+	private void Init(ICrafter crafter)
+	{ 
+		_crafter = crafter;
+		_category = _crafter.GetCategory();
+		RecipeList.GetChildren().OfType<Button>().ToList().ForEach(button => button.QueueFree());
+		AddButtons();
+	}
+
+	public override void _Ready()
 	{
-		Visible = false;
-		_crafter.SetRecipe(recipe);
+		base._Ready();
+		GlobalPosition = GetViewport().GetMousePosition() + new Vector2(40, 0);
+		FactoryGUI.SnapToScreen(this);
 	}
 	
 	private void AddButtons()
@@ -41,11 +40,13 @@ public partial class RecipePopup : Control
 			button.CustomMinimumSize = new Vector2(100, 30);
 			button.Pressed += () =>
 			{
-				Visible = false;
-				SetRecipe(recipe);
+				_crafter.SetRecipe(recipe);
+				QueueFree();
 			};
 			button.Text = recipe.Name;
+			button.AddChild(GD.Load<PackedScene>("res://src/shared/gui/outline.tscn").Instantiate<Control>());
 			RecipeList.AddChild(button);
+			IngrediantsPopup.Register(recipe, button);
 		}
 	}
 }

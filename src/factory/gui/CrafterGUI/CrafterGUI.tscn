@@ -2,20 +2,27 @@
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_8six3"]
 [ext_resource type="Script" path="res://src/factory/gui/CrafterGUI/CrafterGUI.cs" id="1_tdwk2"]
-[ext_resource type="Script" path="res://src/factory/gui/CrafterGUI/ChangeRecipeButton.cs" id="2_kcrb5"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="3_ox0ho"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_p8o4u"]
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="4_n6jta"]
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="5_y5mff"]
 [ext_resource type="Texture2D" uid="uid://dkrc6yyui6nlx" path="res://res/sprites/Arrow-down.png" id="6_sqb8d"]
+[ext_resource type="Script" path="res://src/factory/gui/ProgressTracker.cs" id="8_hppbb"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="8_orngy"]
 
 [node name="CrafterGUI" type="PanelContainer"]
 custom_minimum_size = Vector2(900, 500)
-offset_left = 326.0
-offset_top = 124.0
-offset_right = 826.0
-offset_bottom = 524.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -250.0
+offset_right = 450.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_8six3")
@@ -50,14 +57,12 @@ text = "Assembler"
 [node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("5_y5mff")]
 layout_mode = 2
 
-[node name="ChangeRecipeButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow" node_paths=PackedStringArray("_nodeToHide")]
+[node name="ChangeRecipeButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 4
 text = "Change Recipe"
-script = ExtResource("2_kcrb5")
-_nodeToHide = NodePath("../../../..")
 
 [node name="Outline" parent="MarginContainer/VBoxContainer/TitleRow/ChangeRecipeButton" instance=ExtResource("8_orngy")]
 layout_mode = 1
@@ -77,6 +82,7 @@ layout_mode = 1
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 30
 
 [node name="PlayerInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
@@ -109,6 +115,7 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 5
 
 [node name="SourceInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
@@ -138,16 +145,19 @@ size_flags_vertical = 3
 [node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory" instance=ExtResource("8_orngy")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="HBoxContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 
 [node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 show_percentage = false
+script = ExtResource("8_hppbb")
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+modulate = Color(0.6, 0.6, 0.6, 1)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("6_sqb8d")

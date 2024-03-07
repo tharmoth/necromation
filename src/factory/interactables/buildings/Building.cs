@@ -27,7 +27,6 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 	
 	private VisibleOnScreenNotifier2D Notifier = new();
 	private AudioStreamPlayer2D _audio = new();
-	private ProgressTracker _progress;
 	private GpuParticles2D _particles;
 
 	protected bool IsOnScreen = true;
@@ -42,11 +41,6 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 		AddChild(Notifier);
 		
 		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
-
-		_progress = new ProgressTracker(this);
-		_progress.NodeToTrack = this;
-		_progress.Scale = new Vector2(0.25f, 0.25f);
-		// AddChild(_progress);
 		
 		AddToGroup("Persist");
 
@@ -66,15 +60,8 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 		var particleMaterial = (ParticleProcessMaterial)_particles.ProcessMaterial;
 		particleMaterial.EmissionBoxExtents = new Vector3(16 * BuildingSize.X, 16 * BuildingSize.Y, 0);
 		
-		if (BuildingSize.X % 2 != 0)
+		if (BuildingSize.X % 2 == 0)
 		{
-			_progress.Size = new Vector2(FactoryTileMap.TileSize * BuildingSize.X * 4 - 40, 28);
-			_progress.Position -= new Vector2(FactoryTileMap.TileSize * BuildingSize.X / 2.0f - 5, -FactoryTileMap.TileSize * BuildingSize.X / 2.0f + 28 / 4 + 10);
-		}
-		else
-		{
-			_progress.Size = new Vector2(256-8*8, 28);
-			_progress.Position -= new Vector2(16-8, -32);
 			_particles.Position += new Vector2(16, 16);
 		}
 
@@ -166,7 +153,6 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 
 		RemovePercent = 100;
 		Sprite.Visible = false;
-		_progress.Visible = false;
 		Globals.FactoryScene.Gui.BuildingRemoved();
 		QueueFree();
 

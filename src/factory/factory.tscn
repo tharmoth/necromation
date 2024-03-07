@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=28 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="6_kka5s"]
 [ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/ActionBarGUI/action_bar_item.tscn" id="6_lhutd"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
-[ext_resource type="PackedScene" uid="uid://cgfjtesm7s5bm" path="res://src/factory/gui/RecipeChooserGUI/popup.tscn" id="6_pwh8y"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
 [ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/factory/gui/ContainerGUI/container_gui.tscn" id="7_cu3ym"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchProgressBar.cs" id="7_ohqwt"]
@@ -385,10 +384,6 @@ layout_mode = 2
 text = "Load"
 script = ExtResource("7_04mnd")
 _action = "load"
-
-[node name="Popup" parent="GUI/Control" instance=ExtResource("6_pwh8y")]
-unique_name_in_owner = true
-layout_mode = 2
 
 [node name="ContainerGUI" parent="GUI/Control" instance=ExtResource("7_cu3ym")]
 unique_name_in_owner = true

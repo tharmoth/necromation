@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgfjtesm7s5bm"]
+
+[ext_resource type="Script" path="res://src/factory/gui/RecipeChooserGUI/RecipePopup.cs" id="1_4f1tj"]
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_avwgb"]
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_b760j"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="3_b7t4r"]
+
+[node name="Popup" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 300)
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_avwgb")
+script = ExtResource("1_4f1tj")
+_category = "smelting"
+
+[node name="DropShadowBorder" parent="." instance=ExtResource("2_b760j")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select Recipe"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RecipeList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/RecipeList"]
+layout_mode = 2
+text = "Brains"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/ScrollContainer/RecipeList/Button" instance=ExtResource("3_b7t4r")]
+layout_mode = 0
+anchors_preset = 0

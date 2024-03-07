@@ -2,46 +2,28 @@ using Godot;
 
 public partial class ProgressTracker : ProgressBar
 {
-	public IProgress NodeToTrack;
+	private IProgress _nodeToTrack;
 
-	private ProgressTracker()
+	public void Init(IProgress nodeToTrack)
 	{
-		
-	}
-
-	public ProgressTracker(IProgress progress)
-	{
+		_nodeToTrack = nodeToTrack;
 		ShowPercentage = false;
 	}
 
-	public override void _Ready()
+	public override void _Process(double delta)
 	{
-		base._Ready();
-		if (GetParent() is IProgress progress)
+		if (_nodeToTrack == null) return;
+		if (_nodeToTrack.GetProgressPercent() > 0.0f)
 		{
-			NodeToTrack = progress;
+			Visible = true;
+			Value = _nodeToTrack.GetProgressPercent() * 100;
 		}
 		else
 		{
-			GD.PrintErr("ProgressTracker: Parent does not implement IProgress" + GetParent().GetPath());
+			Visible = false;
+			Value = 0;
 		}
 	}
-
-	// public override void _Process(double delta)
-	// {
-	// 	if (NodeToTrack == null) return;
-	// 	var node = (Node2D)NodeToTrack;
-	// 	if (NodeToTrack.GetProgressPercent() > 0.0f)
-	// 	{
-	// 		if (!node.Visible) node.Visible = true;
-	// 		Value = NodeToTrack.GetProgressPercent() * 100;
-	// 	}
-	// 	else
-	// 	{
-	// 		if (node.Visible) node.Visible = false;
-	// 		Value = 0;
-	// 	}
-	// }
 	
 	public interface IProgress
 	{

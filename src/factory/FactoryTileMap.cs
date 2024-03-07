@@ -82,7 +82,8 @@ public partial class FactoryTileMap : LayerTileMap
 		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;
 		sprite.Centered = true;
 		sprite.ZIndex = -99;
-		sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
+		// We need to fix the edges to enable rotation.
+		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
 		Globals.FactoryScene.CallDeferred("add_child", sprite);
 
 		var grassTexture = Database.Instance.GetTexture("Grass2");
