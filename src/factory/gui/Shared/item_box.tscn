@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c7d8pkta2c0jw" path="res://res/sprites/items/Bow.png" id="4_lunqf"]
 
 [node name="ItemBox" type="PanelContainer"]
-custom_minimum_size = Vector2(38, 38)
+custom_minimum_size = Vector2(50, 50)
 script = ExtResource("1_q0nbf")
 
 [node name="Outline" parent="." instance=ExtResource("2_3cet6")]
@@ -28,7 +28,6 @@ button_mask = 5
 
 [node name="Icon" type="TextureRect" parent="MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("4_lunqf")

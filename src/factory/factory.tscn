@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=33 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -8,12 +8,11 @@
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="3_fy5x1"]
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="5_06d3l"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="6_kka5s"]
-[ext_resource type="PackedScene" uid="uid://c2qjj45xkcere" path="res://src/factory/gui/ActionBarGUI/action_bar_item.tscn" id="6_lhutd"]
+[ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/ActionBarGUI/action_bar_item.tscn" id="6_lhutd"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
 [ext_resource type="PackedScene" uid="uid://cgfjtesm7s5bm" path="res://src/factory/gui/RecipeChooserGUI/popup.tscn" id="6_pwh8y"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
 [ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/factory/gui/ContainerGUI/container_gui.tscn" id="7_cu3ym"]
-[ext_resource type="PackedScene" uid="uid://lbatg01khpfb" path="res://src/factory/gui/CrafterGUI/CrafterGUI.tscn" id="7_ky81d"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchProgressBar.cs" id="7_ohqwt"]
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="8_jqtrb"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="9_oba7v"]
@@ -23,29 +22,11 @@
 [ext_resource type="PackedScene" uid="uid://cgevopavei0g0" path="res://src/factory/gui/TechGUI/tech_gui.tscn" id="13_jc62p"]
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
-[ext_resource type="AudioStream" uid="uid://bfgsqm06fyo57" path="res://res/sfx/kenny-audio/cloth3.ogg" id="19_1q2vv"]
-[ext_resource type="AudioStream" uid="uid://c3jlxq11k8o0t" path="res://res/sfx/kenny-audio/cloth4.ogg" id="20_7aquo"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_w3p5j"]
-streams_count = 1
-stream_0/stream = ExtResource("19_1q2vv")
-stream_0/weight = 1.0
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_5lbr3"]
-streams_count = 1
-stream_0/stream = SubResource("AudioStreamRandomizer_w3p5j")
-stream_0/weight = 1.0
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fby65"]
-streams_count = 1
-stream_0/stream = ExtResource("20_7aquo")
-stream_0/weight = 1.0
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_krf7e"]
-streams_count = 1
-stream_0/stream = SubResource("AudioStreamRandomizer_fby65")
-stream_0/weight = 1.0
+[ext_resource type="Texture2D" uid="uid://b1n6xxfgdbpss" path="res://res/sprites/Light760.png" id="23_go2ix"]
+[ext_resource type="Texture2D" uid="uid://cymftb4rgfyq4" path="res://res/fow.png" id="25_bcdk7"]
+[ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="26_f72o1"]
+[ext_resource type="Texture2D" uid="uid://dalt7rcg1kqh7" path="res://res/sprites/buildings/Stone Furnace-normal.png" id="27_ye582"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
 texture = ExtResource("11_q1hir")
@@ -134,6 +115,10 @@ streams_count = 1
 random_pitch = 1.05
 stream_0/stream = ExtResource("23_1sfga")
 stream_0/weight = 1.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_jhwvb"]
+diffuse_texture = ExtResource("26_f72o1")
+normal_texture = ExtResource("27_ye582")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_4xbbd")
@@ -231,64 +216,84 @@ size_flags_vertical = 4
 mouse_filter = 2
 columns = 10
 
-[node name="ActionBarItem" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem2" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox2" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem3" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox3" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem4" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox4" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem5" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox5" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem6" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox6" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem7" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox7" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem8" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox8" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem9" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox9" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem10" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox10" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem11" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox11" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem12" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox12" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem13" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox13" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem14" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox14" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem15" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox15" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem16" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox16" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem17" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox17" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem18" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox18" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem19" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox19" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
-[node name="ActionBarItem20" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+[node name="ItemBox20" parent="GUI/Control/PanelContainer/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 
 [node name="DropShadowDividerRight" parent="GUI/Control/PanelContainer/Center/GridContainer" instance=ExtResource("8_jqtrb")]
@@ -383,20 +388,19 @@ _action = "load"
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CrafterGUI" parent="GUI/Control" instance=ExtResource("7_ky81d")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
 [node name="ContainerGUI" parent="GUI/Control" instance=ExtResource("7_cu3ym")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="TechGUI" parent="GUI/Control" instance=ExtResource("13_jc62p")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="TechnologyCompleteAudio" type="AudioStreamPlayer" parent="GUI"]
 unique_name_in_owner = true
@@ -406,16 +410,6 @@ stream = ExtResource("11_p2cxa")
 unique_name_in_owner = true
 stream = ExtResource("12_ep3l7")
 volume_db = -15.0
-
-[node name="GuiCloseAudio" type="AudioStreamPlayer" parent="GUI"]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_5lbr3")
-volume_db = -15.0
-
-[node name="GuiOpenAudio" type="AudioStreamPlayer" parent="GUI"]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_krf7e")
-volume_db = -10.0
 
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true
@@ -447,5 +441,26 @@ unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_h7m82")
 pitch_scale = 0.8
 
+[node name="PointLight2D" type="PointLight2D" parent="Character"]
+texture = ExtResource("23_go2ix")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Character"]
+visible = false
+color = Color(1, 1, 0, 1)
+texture_scale = 0.25
+
 [node name="Node" type="Node" parent="."]
 script = ExtResource("18_nrhn7")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.658824, 0.658824, 0.658824, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Fow" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(15856, 9378)
+texture = ExtResource("25_bcdk7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(2733, 1715)
+texture = SubResource("CanvasTexture_jhwvb")

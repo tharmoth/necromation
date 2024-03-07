@@ -50,9 +50,8 @@ public partial class InventoryGUI : Control
 
 	private void AddInventoryItem(KeyValuePair<string, int> item)
 	{
-		var inventoryItem = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_item.tscn").Instantiate<InventoryItem>();
-		inventoryItem.ItemType = item.Key;
-		inventoryItem.Count = item.Value;
+		var inventoryItem = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_item_box.tscn").Instantiate<InventoryItem>();
+		inventoryItem.Init(_inventory, null, item.Key, item.Value);
 		InventoryItemList.AddChild(inventoryItem);
 	}
 	
@@ -67,10 +66,8 @@ public partial class InventoryGUI : Control
 	
 	private void AddRecipe(Recipe recipe)
 	{
-		var craftingItem = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/recipe_button.tscn").Instantiate<RecipeButton>();
-		craftingItem.Recipe = recipe;
-		craftingItem.TargetInventory = _inventory;
-		craftingItem.Button.Pressed += MusicManager.PlayCraft;
+		var craftingItem = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_recipe_box.tscn").Instantiate<InventoryRecipeBox>();
+		craftingItem.Init(_inventory, recipe);
 		RecipeButtonList.AddChild(craftingItem);
 	}
 }

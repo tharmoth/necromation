@@ -115,7 +115,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	    }
 	    else
 	    {
-		    Globals.FactoryScene.Gui.Display(playerInventory, this);
+		    CrafterGUI.Display(playerInventory, this);
 	    }
     }
     #endregion

@@ -3,64 +3,68 @@ using System;
 using Necromation;
 using Necromation.gui;
 
-public partial class ActionBarItem : PanelContainer
+public partial class ActionBarItem : ItemBox
 {
-	
-	private string _itemType = null;
-	private Recipe _recipe;
 	private int _index;
-	string _cachedSelected = "";
+	private string _cachedSelected = "";
 	
-	private Label CountLabel => GetNode<Label>("%CountLabel");
-	private TextureRect Icon => GetNode<TextureRect>("%Icon");
-	private Button _button => GetNode<Button>("%Button");
-	private AudioStreamPlayer _audio => GetNode<AudioStreamPlayer>("%AudioStreamPlayer");
+	private AudioStreamPlayer Audio => GetNode<AudioStreamPlayer>("%AudioStreamPlayer");
 	
 	public void SetFilter(string itemType)
 	{
-		_itemType = itemType;
+		// Update data
+		ItemType = itemType;
+
+		// Update Visuals
+		UpdateCount();
 		
-		_audio.Play();
+		// Play sound
+		Audio.Play();
 		
-		Icon.Visible = true;
-		Icon.Texture = Database.Instance.GetTexture(Globals.Player.Selected == _itemType ? "BoneHand" : _itemType);
-		
-		Globals.PlayerInventory.Listeners.Add(Update);
-		Update();
+		ItemPopup.Register(itemType, Button);
 	}
-
-
 
 	public override void _Ready()
 	{
 		base._Ready();
 		_index = GetParent().GetChildren().IndexOf(this);
-		_button.GuiInput += ButtonPressed;
+		Button.GuiInput += ButtonPressed;
+		
+		if (!Globals.PlayerInventory.Listeners.Contains(UpdateCount)) Globals.PlayerInventory.Listeners.Add(UpdateCount);
 
 		ClearFilter();
 	}
 	
 	private void ClearFilter()
 	{
-		_itemType = null;
-		Icon.Visible = false;
+		ItemType = null;
 		CountLabel.Text = "";
 	}
 
-	private void Update()
+	private void UpdateCount()
 	{
-		if (_itemType == null) return;
-		CountLabel.Text = Globals.PlayerInventory.CountItem(_itemType).ToString();
+		if (ItemType != null) CountLabel.Text = Globals.PlayerInventory.CountItem(ItemType).ToString();
 	}
 	
+	protected override void UpdateIcon()
+	{
+		if (Globals.Player.Selected == ItemType && !string.IsNullOrEmpty(ItemType))
+		{
+			Icon.Visible = true;
+			Icon.Texture = Database.Instance.GetTexture("BoneHand");
+			return;
+		}
+		base.UpdateIcon();
+	}
+	
+	// Switch the icon to the BoneHand when the item is selected.
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
 
-		if (_cachedSelected == Globals.Player.Selected || string.IsNullOrEmpty(_itemType)) return;
+		if (_cachedSelected == Globals.Player.Selected || string.IsNullOrEmpty(ItemType)) return;
 		_cachedSelected = Globals.Player.Selected;
-		Icon.Visible = true;
-		Icon.Texture = Database.Instance.GetTexture(Globals.Player.Selected == _itemType ? "BoneHand" : _itemType);
+		UpdateIcon();
 	}
 
 	// Either select the item, show the filter menu, or clear the slot
@@ -71,13 +75,14 @@ public partial class ActionBarItem : PanelContainer
 		if (eventMouseButton.ButtonIndex == MouseButton.Middle)
 		{
 			ClearFilter();
-		} else if (eventMouseButton.ButtonIndex == MouseButton.Right || string.IsNullOrEmpty(_itemType))
+		} else if (eventMouseButton.ButtonIndex == MouseButton.Right || string.IsNullOrEmpty(ItemType))
 		{
+			ClearFilter();
 			FilterMenu.Display(this);
 		} 
-		else if (eventMouseButton.ButtonIndex == MouseButton.Left && Globals.PlayerInventory.CountItem(_itemType) > 0 )
+		else if (eventMouseButton.ButtonIndex == MouseButton.Left && Globals.PlayerInventory.CountItem(ItemType) > 0 )
 		{
-			Globals.Player.Selected = _itemType;
+			Globals.Player.Selected = ItemType;
 		} 
 	}
 	
@@ -85,16 +90,17 @@ public partial class ActionBarItem : PanelContainer
 	public override void _UnhandledKeyInput(InputEvent @event)
 	{
 		base._UnhandledKeyInput(@event);
+		if (_index >= 9) return;
 		if (@event is InputEventKey { Pressed: true } eventKey && eventKey.Keycode == Key.Key0 + _index + 1)
 		{
-			Globals.Player.Selected = _itemType;
+			Globals.Player.Selected = ItemType;
 		}
 	}
 	
-	
+	// Clean up the event listeners when the node is freed
 	public override void _ExitTree()
 	{
 		base._ExitTree();
-		Globals.PlayerInventory.Listeners.Remove(Update);
+		Globals.PlayerInventory.Listeners.Remove(UpdateCount);
 	}
 }

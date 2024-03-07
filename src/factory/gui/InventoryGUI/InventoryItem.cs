@@ -2,52 +2,52 @@ using Godot;
 using System;
 using Necromation;
 
-public partial class InventoryItem : PanelContainer
+public partial class InventoryItem : ItemBox
 {
-	private TextureRect Icon => GetNode<TextureRect>("%Icon");
-	private Label CountLabel => GetNode<Label>("%CountLabel");
-	private Button Button => GetNode<Button>("%Button");
-	
-	private string _itemType;
-	public string ItemType
-	{
-		get => _itemType;
-		set
-		{
-			_itemType = value;
-			Icon.Texture = Database.Instance.GetTexture(_itemType);
-		}
-	}
+	private Inventory _targetInventory;
+	private Inventory _sourceInventory;
+	private string _cachedSelected = "";
 
-	public int Count
+	public void Init(Inventory source, Inventory target, string item, int count)
 	{
-		get => int.Parse(CountLabel.Text);
-		set => CountLabel.Text = value.ToString();
-	}
-	
-	public Inventory TargetInventory { get; set; }
-	public Inventory SourceInventory { get; set; }
-	
-	public override void _Ready()
-	{
-		base._Ready();
+		ItemType = item;
+		CountLabel.Text = count.ToString();
+		_targetInventory = target;
+		_sourceInventory = source;
+		
 		Button.Pressed += () =>
 		{
-			if (TargetInventory == null || SourceInventory == null || !SourceInventory.CanAcceptItems(ItemType))
+			if (_targetInventory == null || _sourceInventory == null || !_sourceInventory.CanAcceptItems(ItemType))
 			{
 				Globals.Player.Selected = ItemType;
 				return;
 			}
-			Inventory.TransferItem(SourceInventory, TargetInventory, ItemType);
+			var count = Input.IsActionPressed("shift") ? _sourceInventory.Items[ItemType] : 1;
+			// _targetInventory.GetMaxTransferAmount();
+			
+			// TODO: Figure this out!
+			Inventory.TransferItem(_sourceInventory, _targetInventory, ItemType);
 		};
-
 	}
 
+	protected override void UpdateIcon()
+	{
+		if (Globals.Player.Selected == ItemType && !string.IsNullOrEmpty(ItemType))
+		{
+			Icon.Visible = true;
+			Icon.Texture = Database.Instance.GetTexture("BoneHand");
+			return;
+		}
+		base.UpdateIcon();
+	}
+	
+	// Switch the icon to the BoneHand when the item is selected.
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
 
-		// Could be bad for performance, But seems to work.
-		Icon.Texture = Database.Instance.GetTexture(Globals.Player.Selected == ItemType ? "BoneHand" : ItemType);
+		if (_cachedSelected == Globals.Player.Selected || string.IsNullOrEmpty(ItemType)) return;
+		_cachedSelected = Globals.Player.Selected;
+		UpdateIcon();
 	}
 }

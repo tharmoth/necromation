@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://c1jocdq57jmar"]
+[gd_scene load_steps=6 format=3 uid="uid://c1jocdq57jmar"]
 
+[ext_resource type="Script" path="res://src/shared/gui/DropShadowBorder.cs" id="1_44ssq"]
 [ext_resource type="PackedScene" uid="uid://hxgfr1c0a80i" path="res://src/shared/gui/blur_panel.tscn" id="1_is1hd"]
 [ext_resource type="Texture2D" uid="uid://cyd0ww7m6mlfw" path="res://res/gui/Inventory/panel-transparent-center-031.png" id="2_teb81"]
 [ext_resource type="Texture2D" uid="uid://beplnqvpdb7ml" path="res://res/gui/Inventory/panel-border-031.png" id="3_b6ijn"]
@@ -8,6 +9,7 @@
 
 [node name="DropShadowBorder" type="PanelContainer"]
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0r8tc")
+script = ExtResource("1_44ssq")
 
 [node name="BlurPanel" parent="." instance=ExtResource("1_is1hd")]
 unique_name_in_owner = true

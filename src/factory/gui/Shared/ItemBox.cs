@@ -14,13 +14,20 @@ public partial class ItemBox : PanelContainer
 		set
 		{
 			_itemType = value;
-			Icon.Texture = Database.Instance.GetTexture(_itemType);
+			UpdateIcon();
 		}
 	}
 
-	public int Count
+	protected virtual void UpdateIcon()
 	{
-		get => int.Parse(CountLabel.Text);
-		set => CountLabel.Text = value.ToString();
+		if (_itemType == null)
+		{
+			Icon.Visible = false;
+		}
+		else
+		{
+			Icon.Visible = true;
+			Icon.Texture = Database.Instance.GetTexture(_itemType);
+		}
 	}
 }

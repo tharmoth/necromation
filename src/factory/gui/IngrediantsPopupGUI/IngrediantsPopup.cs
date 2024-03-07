@@ -60,7 +60,6 @@ public partial class IngrediantsPopup : PanelContainer
 		GetNode<Label>("%RecipeNameLabel").Text = product + (amount == 1 ? "" : " x" + amount);
 		GetNode<Label>("%CraftingTimeLabel").Text = _recipe.Time + "s Crafting Time";
 		
-		
 		GetNode<VBoxContainer>("%Rows").GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
 		

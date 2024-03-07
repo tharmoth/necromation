@@ -9,7 +9,6 @@ public partial class FactoryGUI : CanvasLayer
 {
 	private Label FpsLabel => GetNode<Label>("%FpsLabel");
 	private RecipePopup Popup => GetNode<RecipePopup>("%Popup");
-	private CrafterGUI CrafterGui => GetNode<CrafterGUI>("%CrafterGUI");
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
@@ -80,29 +79,22 @@ public partial class FactoryGUI : CanvasLayer
 	
 	public void CloseGui()
 	{
-		CrafterGui.Visible = false;
 		ContainerGui.Visible = false;
 		Popup.Visible = false;
 		TechGui.Visible = false;
-		_openGui?.QueueFree();
+		if (IsInstanceValid(_openGui)) _openGui?.QueueFree();
 		_openGui = null;
 	}
 	
 	public bool IsAnyGuiOpen()
 	{
-		return Popup.Visible || CrafterGui.Visible || ContainerGui.Visible || TechGui.Visible || _openGui != null;
+		return Popup.Visible  || ContainerGui.Visible || TechGui.Visible || _openGui != null;
 	}
 
 	public void Display(ICrafter crafter)
 	{
 		CloseGui();
 		Popup.DisplayPopup(crafter);
-	}
-	
-	public void Display(Inventory to, ICrafter crafter)
-	{
-		CloseGui();
-		CrafterGui.Display(to, crafter);
 	}
 	
 	public void Display(Inventory to, Inventory from, string title)

@@ -1,47 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2qjj45xkcere"]
+[gd_scene load_steps=3 format=3 uid="uid://bi1nksdh0hjtf"]
 
-[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="1_8rlve"]
-[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_iygtf"]
+[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="1_eg0iv"]
 [ext_resource type="Script" path="res://src/factory/gui/ActionBarGUI/ActionBarItem.cs" id="1_vsjt2"]
-[ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="2_gy16w"]
-[ext_resource type="PackedScene" uid="uid://q7t1uywyifjt" path="res://src/factory/gui/InventoryGUI/mouseover_audio.tscn" id="5_w3mjf"]
 
-[node name="ActionBarItem" type="PanelContainer"]
-custom_minimum_size = Vector2(46, 46)
-mouse_filter = 2
-theme = ExtResource("1_iygtf")
+[node name="ItemBox" instance=ExtResource("1_eg0iv")]
 script = ExtResource("1_vsjt2")
 
-[node name="Outline" parent="." instance=ExtResource("1_8rlve")]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="."]
+[node name="AudioStreamPlayer" parent="MarginContainer/Button" index="0"]
 unique_name_in_owner = true
-layout_mode = 2
-
-[node name="AudioStreamPlayer" parent="Button" instance=ExtResource("5_w3mjf")]
-unique_name_in_owner = true
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="Icon" type="TextureRect" parent="MarginContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("2_gy16w")
-expand_mode = 1
-stretch_mode = 4
-
-[node name="CountLabel" type="Label" parent="MarginContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme_override_constants/line_spacing = 0
-text = "7"

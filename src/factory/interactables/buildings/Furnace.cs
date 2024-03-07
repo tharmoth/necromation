@@ -15,13 +15,23 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     private Inventory _outputInventory = new();
     private float _time;
 
-    private GpuParticles2D _particles = GD.Load<PackedScene>("res://src/factory/interactables/buildings/smoke.tscn")
-	    .Instantiate<GpuParticles2D>();
-
+    private GpuParticles2D _particles;
+    private PointLight2D _light = new();
+    
     public override void _Ready()
     {
 	    base._Ready();
+	    _particles = GD.Load<PackedScene>("res://src/factory/interactables/buildings/smoke.tscn")
+		    .Instantiate<GpuParticles2D>();
 	    CallDeferred("add_child", _particles);
+	    
+	    
+	    _light.Texture = Database.Instance.GetTexture("Light760");
+	    _light.Color = Colors.Yellow;
+	    _light.TextureScale = .25f;
+	    _light.Position = new Vector2(16, 16);
+	    _light.Energy = .25f;
+	    CallDeferred("add_child", _light);
     }
 
     public override void _Process(double delta)
@@ -36,10 +46,10 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
 		    tweenytwiney?.Kill();
 		    _particles.Emitting = false;
+		    _light.Visible = false;
     		return;
     	}
-    	
-	    _particles.Emitting = true;
+
     	_time += (float)delta;
 	    Animate();
 
@@ -69,6 +79,9 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, 1f);
 	    // tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, .5f);
 	    tweenytwiney.TweenCallback(Callable.From(() => tweenytwiney.Kill()));
+	    
+	    _particles.Emitting = true;
+	    _light.Visible = true;
     }
     
 
@@ -88,7 +101,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-	    Globals.FactoryScene.Gui.Display(playerInventory, this);
+	    CrafterGUI.Display(playerInventory, this);
     }
     #endregion
     

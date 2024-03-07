@@ -1,13 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://cgevopavei0g0"]
+[gd_scene load_steps=8 format=3 uid="uid://cgevopavei0g0"]
 
 [ext_resource type="Script" path="res://src/factory/gui/TechGUI/TechGUI.cs" id="1_1wudm"]
 [ext_resource type="PackedScene" uid="uid://dym3bw8at8qt1" path="res://src/factory/gui/TechGUI/tech_panel.tscn" id="1_3eie5"]
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_tfhd4"]
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="3_55u88"]
 [ext_resource type="Texture2D" uid="uid://d3tkyt42kfr3" path="res://res/sprites/Check Mark.png" id="3_hw6jm"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_mytom"]
 [ext_resource type="Texture2D" uid="uid://egikjt8vcqsa" path="res://res/sprites/items/Experiment.png" id="5_b6c1u"]
 
 [node name="TechGUI" type="PanelContainer"]
-custom_minimum_size = Vector2(500, 400)
+custom_minimum_size = Vector2(900, 500)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -19,15 +21,18 @@ offset_right = 250.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_tfhd4")
 script = ExtResource("1_1wudm")
-_techPanelScene = ExtResource("1_3eie5")
+
+[node name="DropShadowBorder" parent="." instance=ExtResource("3_55u88")]
+layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2

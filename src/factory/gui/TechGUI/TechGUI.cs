@@ -5,7 +5,6 @@ using Necromation;
 
 public partial class TechGUI : PanelContainer
 {
-	[Export] private PackedScene _techPanelScene;
 	private VBoxContainer TechList => GetNode<VBoxContainer>("%TechList");
 	
 	public void Display()
@@ -15,7 +14,7 @@ public partial class TechGUI : PanelContainer
 		TechList.GetChildren().ToList().ForEach(node => node.Free());
 		Database.Instance.Technologies.ToList().ForEach(tech =>
 		{
-			var panel = _techPanelScene.Instantiate<TechPanel>();
+			var panel = GD.Load<PackedScene>("res://src/factory/gui/TechGUI/tech_panel.tscn").Instantiate<TechPanel>();
 			panel.Tech = tech;
 			TechList.AddChild(panel);
 		});

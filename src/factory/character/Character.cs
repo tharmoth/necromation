@@ -37,7 +37,6 @@ public partial class Character : Node2D
 				new Vector2(32 / (float)_sprite.Texture.GetWidth(), 32 / (float)_sprite.Texture.GetHeight()) 
 				: new Vector2(1, 1);
 			
-			if (_selected == null || !Building.IsBuilding(_selected) || Building.GetBuilding(_selected, Orientation) is not IRotatable) _rotationDegrees = 0;
 		}
 	}
 	
@@ -97,7 +96,6 @@ public partial class Character : Node2D
 			if (Input.IsActionPressed("down")) newPosition += new Vector2(0, Speed * (float)delta);
 			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) Position = newPosition;
 		}
-		
 
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && Globals.FactoryScene.TileMap.GetBuildingAtMouse() == null) Mine();
 		else _resource?.Cancel();
@@ -108,9 +106,7 @@ public partial class Character : Node2D
 		base._UnhandledInput(@event);
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
-		
-		
-		
+
 		if (!string.IsNullOrEmpty(Selected) && Input.IsMouseButtonPressed(MouseButton.Left) && Input.IsKeyPressed(Key.Ctrl) &&
 		    Globals.FactoryScene.TileMap.GetBuildingAtMouse() is ITransferTarget transfer && transfer.GetMaxTransferAmount(Selected) > 0)
 		{
