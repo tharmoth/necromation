@@ -9,6 +9,7 @@ using Necromation.map.character;
 public partial class FactoryScene : Scene
 {
 	public FactoryTileMap TileMap => GetNode<FactoryTileMap>("%TileMap");
+	public Node2D GroundItemHolder => GetNode<Node2D>("GroundItemHolder");
 	
 	private bool _initialized = false;
 	public Timer AttackTimer;

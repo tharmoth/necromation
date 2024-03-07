@@ -10,12 +10,20 @@ public partial class Inventory : Node, ITransferTarget
 	public readonly List<Action> Listeners = new();
 	private readonly Dictionary<string, int> _items = new();
 	public ImmutableDictionary<string, int> Items => _items.ToImmutableDictionary();
+	
+	int itemCount = 0;
 
 	public int CountItem(string item) => _items.TryGetValue(item, out var count) ? count : 0;
-	public int CountAllItems() => _items.Values.Sum();
+	public int CountAllItems() => itemCount;
 	
-	public void Clear() => _items.Clear();
-	
+	public void Clear()
+	{
+		foreach (var item in _items.Keys.ToList())
+		{
+			Remove(item, _items[item]);
+		}
+	}
+
 	/**************************************************************************
 	 * Utility Methods                                                        *
 	 **************************************************************************/
@@ -43,13 +51,22 @@ public partial class Inventory : Node, ITransferTarget
 	{
 		_items.TryGetValue(item, out var currentCount);
 		_items[item] = currentCount + count;
+		itemCount += count;
 		Listeners.ForEach(listener => listener());
 	}
 	public bool Remove(string item, int count = 1)
 	{
 		if (!_items.TryGetValue(item, out var currentCount) || currentCount < count) return false;
-		_items[item] -= count;
-		if (_items[item] == 0) _items.Remove(item);
+		currentCount -= count;
+		itemCount -= count;
+		if (currentCount == 0)
+		{
+			_items.Remove(item);
+		}
+		else
+		{
+			_items[item] = currentCount;
+		}
 		Listeners.ForEach(listener => listener());
 		return true;
 	}
@@ -68,6 +85,7 @@ public partial class Inventory : Node, ITransferTarget
 		foreach (var entry in dictionary)
 		{
 			_items.Add(entry.Key.ToString(), (int)entry.Value);
+			itemCount += (int)entry.Value;
 		}
 		Listeners.ForEach(listener => listener());
 	}

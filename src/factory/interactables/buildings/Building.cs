@@ -36,10 +36,10 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 	{
 		AddChild(Sprite);
 		AddChild(_audio);
+		
+		Notifier.ScreenEntered += () => IsOnScreen = true;
+		Notifier.ScreenExited += () => IsOnScreen = false;
 		AddChild(Notifier);
-
-		// Notifier.ScreenEntered += () => IsOnScreen = true;
-		// Notifier.ScreenExited += () => IsOnScreen = false;
 		
 		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 
@@ -287,6 +287,7 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 		}
 		
 		building.GlobalPosition = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);
+		building._audio.Stream = null;
 		Globals.FactoryScene.AddChild(building);
 	}
 	#endregion

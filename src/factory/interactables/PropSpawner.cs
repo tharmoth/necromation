@@ -120,6 +120,13 @@ public partial class PropSpawner : Node2D
 		spawn.ZIndex = -98;
 		spawn.RotationDegrees = new Random().Next(-10, 10);
 		spawn.Scale = new Vector2(scale, scale);
+		ShaderMaterial matty = new();
+		matty.Shader = GD.Load<Shader>("res://src/factory/shaders/wind_sway.gdshader");
+		matty.SetShaderParameter("offset", GlobalPosition.X + position.X + GlobalPosition.Y + position.Y);
+		matty.SetShaderParameter("minStrength", 0.025f);
+		matty.SetShaderParameter("maxStrength", 0.1f);
+		matty.SetShaderParameter("detail", 5.0f);
+		spawn.Material = matty;
 		AddChild(spawn);
 	}
 }

@@ -79,18 +79,25 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         UpdateInputOutput(this, GetAdjacent());
     }
 
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+        LeftLine._Process(delta);
+        RightLine._Process(delta);
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);
-        
-        LeftLine._Process(delta);
-        RightLine._Process(delta);
+        //
+        // LeftLine._Process(delta);
+        // RightLine._Process(delta);
 
-        if (IsOnScreen) return;
-        // Move the frame forward 8 times every .5333 seconds
-        var seconds = Time.GetTicksMsec() / 1000.0;
-        var frame = (int)(seconds / (_secondsPerItem / 32)) % Sprite.Hframes;
-        if (Sprite.Frame != frame) Sprite.Frame = frame;
+        // if (!IsOnScreen) return;
+        // // Move the frame forward 8 times every .5333 seconds
+        // var seconds = Time.GetTicksMsec() / 1000.0;
+        // var frame = (int)(seconds / (_secondsPerItem / 32)) % Sprite.Hframes;
+        // if (Sprite.Frame != frame) Sprite.Frame = frame;
     }
     
     public override void Remove(Inventory to)

@@ -109,7 +109,6 @@ script = ExtResource("2_g5pfu")
 _action = "close_gui"
 
 [node name="Outline" parent="MarginContainer/GridContainer/CraftingTitle/PanelContainer" instance=ExtResource("9_wvleb")]
-z_index = 0
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/GridContainer"]

@@ -64,7 +64,7 @@ public partial class TransportLine : ITransferTarget
         _cachePosition = globalPosition;
         _itemsOnBelt.ForEach(item =>
         {
-            item.CachePosition = _cachePosition + GetTargetLocation(4);
+            item.GlobalPosition = _cachePosition + GetTargetLocation(4);
         });
         _itemCount = _inventory.CountAllItems();
     }
@@ -82,20 +82,22 @@ public partial class TransportLine : ITransferTarget
         for (var i = 0; i < Mathf.Min(_itemsOnBelt.Count, 4); i++)
         {
             var groundItem = _itemsOnBelt[i];
-            var targetLocation = _cachePosition + GetTargetLocation(i);
-
-            // Slide the item along the belt until it reaches the bottom of the belt.
-            if (groundItem.CachePosition.DistanceTo(targetLocation) > Speed * (float)delta)
+            if (groundItem.CacheIndex != i)
             {
-                var distance = -targetLocation.DirectionTo(groundItem.CachePosition) * Speed * (float)delta;
-                groundItem.CachePosition += distance;
-                continue;
+                var targetLocation = _cachePosition + GetTargetLocation(i);
+                // Slide the item along the belt until it reaches the bottom of the belt.
+                if (groundItem.GlobalPosition.DistanceTo(targetLocation) > Speed * (float)delta)
+                {
+                    var distance = -targetLocation.DirectionTo(groundItem.GlobalPosition) * Speed * (float)delta;
+                    groundItem.GlobalPosition += distance;
+                    continue;
+                }
+                else
+                {
+                    groundItem.CacheIndex = i;
+                }
             }
-            // else if (groundItem.CachePosition.DistanceTo(targetLocation) < Speed * (float)delta)
-            // {
-            //     groundItem.CachePosition = targetLocation;
-            // }
-            
+
             if (i != 0) continue;
             
             if (OutputLine == null) continue;
@@ -134,6 +136,7 @@ public partial class TransportLine : ITransferTarget
         var item = _itemsOnBelt[0];
         _itemsOnBelt.RemoveAt(0);
         to.AddItem(item);
+        item.CacheIndex = -1;
         Inventory.TransferItem(this, to, item.ItemType);
     }
 
@@ -147,7 +150,8 @@ public partial class TransportLine : ITransferTarget
             }
             else
             {
-                AddItem(new GroundItem(GetMissingItem()));
+                var newItem = new GroundItem(GetMissingItem());
+                AddItem(newItem);
             }
         }
     }
@@ -175,15 +179,9 @@ public partial class TransportLine : ITransferTarget
     private void AddItem(GroundItem item)
     {
         _itemsOnBelt.Add(item);
-        var pos = item.CachePosition;
-        if (item.GetParent() == null) Globals.FactoryScene.AddChild(item);
-        if (IsEqualApprox(item.Position, Vector2.Zero, 1))
+        if (IsEqualApprox(item.GlobalPosition, Vector2.Zero, 1))
         {
-            item.CachePosition = _cachePosition + GetTargetLocation(4);
-        }
-        else
-        {
-            // item.CachePosition = pos;
+            item.GlobalPosition = _cachePosition + GetTargetLocation(4);
         }
     }
     
@@ -193,7 +191,7 @@ public partial class TransportLine : ITransferTarget
         if (_itemsOnBelt.Count == 0) return null;
         var item = _itemsOnBelt[0];
         _itemsOnBelt.RemoveAt(0);
-        Globals.FactoryScene.RemoveChild(item);
+        item.Free();
         return item;
     }
 
@@ -216,7 +214,6 @@ public partial class TransportLine : ITransferTarget
 
     public bool Remove(string item, int count = 1)
     {
-        
         _itemCount -= count;
         return _inventory.Remove(item, count);
     }

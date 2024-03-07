@@ -73,15 +73,15 @@ public partial class Inserter : Building, IRotatable
         Globals.FactoryScene.TileMap.listeners.Remove(Update);
     }
 
-    private ITransferTarget from;
-    private ITransferTarget to;
-    private Belt belt;
+    private ITransferTarget _from;
+    private ITransferTarget _to;
+    private Belt _belt;
     
     private void Update()
     {
-        from = Globals.FactoryScene.TileMap.GetEntity(_input, FactoryTileMap.Building) as ITransferTarget;
-        to = Globals.FactoryScene.TileMap.GetEntity(_output, FactoryTileMap.Building) as ITransferTarget;
-        belt = to as Belt;
+        _from = Globals.FactoryScene.TileMap.GetEntity(_input, FactoryTileMap.Building) as ITransferTarget;
+        _to = Globals.FactoryScene.TileMap.GetEntity(_output, FactoryTileMap.Building) as ITransferTarget;
+        _belt = _to as Belt;
     }
 
     public override void _Ready()
@@ -119,15 +119,24 @@ public partial class Inserter : Building, IRotatable
 
     private void Animate(string item)
     {
-        if (IsOnScreen) return;
-        SpriteInHand.Texture =  Database.Instance.GetTexture(item);
-        SpriteInHand.Visible = true;
-        SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
-        _tween?.Kill();
-        _tween = GetTree().CreateTween();
-        _tween.TweenProperty(Sprite, "rotation", Math.PI, _interval/2);
-        _tween.TweenCallback(new Callable(this, "DropItem"));
-        _tween.TweenProperty(Sprite, "rotation", 0, _interval/2);
+        if (IsOnScreen)
+        {
+            SpriteInHand.Texture =  Database.Instance.GetTexture(item);
+            SpriteInHand.Visible = true;
+            SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
+            _tween?.Kill();
+            _tween = GetTree().CreateTween();
+            _tween.TweenProperty(Sprite, "rotation", Math.PI, _interval/2);
+            _tween.TweenCallback(new Callable(this, "DropItem"));
+            _tween.TweenProperty(Sprite, "rotation", 0, _interval/2);
+        }
+        else
+        {
+            _tween?.Kill();
+            _tween = GetTree().CreateTween();
+            _tween.TweenInterval(_interval / 2);
+            _tween.TweenCallback(new Callable(this, "DropItem"));
+        }
     }
 
     private void DropItem()
@@ -137,13 +146,13 @@ public partial class Inserter : Building, IRotatable
 
     private bool Transfer()
     {
-        if (from == null) return false;
-        if (belt != null)
+        if (_from == null) return false;
+        if (_belt != null)
         {
-            foreach (var item in from.GetItems().Where(item => !string.IsNullOrEmpty(item) && to.CanAcceptItems(item)))
+            foreach (var item in _from.GetItems().Where(item => !string.IsNullOrEmpty(item) && _to.CanAcceptItems(item)))
             {
                 // Grab these rotations to avoid GODOT system calls.
-                var beltRotation = belt.RotationDegrees;
+                var beltRotation = _belt.RotationDegrees;
                 var inserterRotation = RotationDegrees;
                 // Weird double checks due to degree weirdness. Should probably be done another way.
                 // BAD BAD BAD CODE - USE BRAIN TO MAKE BETTER
@@ -152,10 +161,10 @@ public partial class Inserter : Building, IRotatable
                      || TransportLine.IsEqualApprox(beltRotation, inserterRotation - 180)
                      || TransportLine.IsEqualApprox(beltRotation - 270, inserterRotation)
                      || TransportLine.IsEqualApprox(beltRotation - 180, inserterRotation)) &&
-                    belt.CanInsertLeft(item))
+                    _belt.CanInsertLeft(item))
                 {
-                    from.Remove(item);
-                    belt.InsertLeft(item);
+                    _from.Remove(item);
+                    _belt.InsertLeft(item);
                     Animate(item);
                     return true;
                 }
@@ -163,22 +172,22 @@ public partial class Inserter : Building, IRotatable
                 if ((TransportLine.IsEqualApprox(beltRotation - 90, inserterRotation)
                      || TransportLine.IsEqualApprox(beltRotation, inserterRotation + 90)
                      || TransportLine.IsEqualApprox(beltRotation, inserterRotation - 270)
-                     || TransportLine.IsEqualApprox(beltRotation, inserterRotation)) && belt.CanInsertRight(item))
+                     || TransportLine.IsEqualApprox(beltRotation, inserterRotation)) && _belt.CanInsertRight(item))
                 {
-                    from.Remove(item);
-                    belt.InsertRight(item);
+                    _from.Remove(item);
+                    _belt.InsertRight(item);
                     Animate(item);
                     return true;
                 }
             }
         } 
-        else if (to != null)
+        else if (_to != null)
         {
-            foreach (var item in from.GetItems())
+            foreach (var item in _from.GetItems())
             {
-                if (string.IsNullOrEmpty(item) || !to.CanAcceptItems(item)) continue;
+                if (string.IsNullOrEmpty(item) || !_to.CanAcceptItems(item)) continue;
                 
-                var b = Inventory.TransferItem(from, to, item);
+                var b = Inventory.TransferItem(_from, _to, item);
                 Animate(item);
                 return b;
             }
@@ -189,12 +198,6 @@ public partial class Inserter : Building, IRotatable
 
     private string GetSourceItem()
     {
-        var sourceEntity = Globals.FactoryScene.TileMap.GetEntity(_input, FactoryTileMap.Building);
-        return sourceEntity switch
-        {
-            ITransferTarget building => building.GetFirstItem(),
-            _ => null
-        };
+        return _from?.GetFirstItem();
     }
-
 }

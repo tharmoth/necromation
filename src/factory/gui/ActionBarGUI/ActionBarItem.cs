@@ -75,15 +75,24 @@ public partial class ActionBarItem : ItemBox
 		if (eventMouseButton.ButtonIndex == MouseButton.Middle)
 		{
 			ClearFilter();
-		} else if (eventMouseButton.ButtonIndex == MouseButton.Right || string.IsNullOrEmpty(ItemType))
+		} 
+		else if (eventMouseButton.ButtonIndex == MouseButton.Right || string.IsNullOrEmpty(ItemType))
 		{
-			ClearFilter();
-			FilterMenu.Display(this);
+			if (Globals.Player.Selected != null)
+			{
+				SetFilter(Globals.Player.Selected);
+				Globals.Player.Selected = null;
+			}
+			else
+			{
+				ClearFilter();
+				FilterMenu.Display(this);
+			}
 		} 
 		else if (eventMouseButton.ButtonIndex == MouseButton.Left && Globals.PlayerInventory.CountItem(ItemType) > 0 )
 		{
 			Globals.Player.Selected = ItemType;
-		} 
+		}
 	}
 	
 	// Allow the player to select the item by pressing the number key

@@ -17,6 +17,8 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 
     private GpuParticles2D _particles;
     private PointLight2D _light = new();
+
+    private readonly Dictionary<string, int> _maxItems = new();
     
     public override void _Ready()
     {
@@ -32,6 +34,27 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    _light.Position = new Vector2(16, 16);
 	    _light.Energy = .25f;
 	    CallDeferred("add_child", _light);
+
+	    Update();
+	    Globals.ResearchListeners.Add(Update);
+    }
+
+    private void Update()
+    {
+	    var validIngrediants = Database.Instance.Recipes
+		    .Where(recipe => recipe.Category == GetCategory())
+		    .SelectMany(recipe => recipe.Ingredients)
+		    .ToList();
+	    
+	    _maxItems.Clear();
+	    foreach (var (item, count) in validIngrediants)
+	    {
+		    _maxItems.TryGetValue(item, out var currentCount);
+		    if (currentCount < count * 2 )
+		    {
+			    _maxItems[item] = count * 2;
+		    }
+	    }
     }
 
     public override void _Process(double delta)
@@ -83,8 +106,6 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    _particles.Emitting = true;
 	    _light.Visible = true;
     }
-    
-
 
 	/**************************************************************************
 	 * Protected Methods                                                      *
@@ -123,11 +144,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public bool CanAcceptItems(string item, int count = 1)
     {
 	    var itemCount = _inputInventory.CountItem(item);
-	    return Database.Instance.Recipes
-		    .Where(recipe => recipe.Category == GetCategory())
-		    .Where(recipe => recipe.Ingredients.ContainsKey(item))
-		    .Select(recipe => recipe.Ingredients)
-		    .Any(ingredients => itemCount < ingredients[item] * 2);
+	    return _maxItems.ContainsKey(item) && itemCount < _maxItems[item];
     }
     
     public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
@@ -148,4 +165,10 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     }
 
     #endregion
+
+    public override void _ExitTree()
+    {
+	    base._ExitTree();
+	    Globals.ResearchListeners.Remove(Update);
+    }
 }

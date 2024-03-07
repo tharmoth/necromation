@@ -16,7 +16,28 @@ public partial class FactoryTileMap : LayerTileMap
 	public const int ProvinceSize = 20;
 	public const int ProvinceGap = 0;
 	private readonly List<Vector2I> _provences = new();
+	private readonly System.Collections.Generic.Dictionary<Vector2I, Sprite2D> _fogs = new();
 
+	private void AddFog(Vector2I location)
+	{
+		// We're missing a fog of war texture for now.
+		if (true) return;
+		
+		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
+		
+		Sprite2D sprite = new();
+		sprite.Texture = Database.Instance.GetTexture("fow");
+		var scaler = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
+		sprite.Scale = new Vector2(scaler, scaler);
+		
+		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;;
+		sprite.Centered = true;
+		sprite.ZIndex = 1000;
+		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
+		Globals.FactoryScene.CallDeferred("add_child", sprite);
+		_fogs.Add(location, sprite);
+	}
+	
 	public void AddProvence(Vector2I location)
 	{
 		AddProvence(location, true);
@@ -58,7 +79,7 @@ public partial class FactoryTileMap : LayerTileMap
 		sprite.Texture = Database.Instance.GetTexture("soil2");
 		var scaler = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
 		sprite.Scale = new Vector2(scaler, scaler);
-		sprite.GlobalPosition = startpos + sprite.Texture.GetSize() / 2 + Vector2.One * 64;
+		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;
 		sprite.Centered = true;
 		sprite.ZIndex = -99;
 		sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
@@ -69,6 +90,8 @@ public partial class FactoryTileMap : LayerTileMap
 		PropSpawner spawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .5f);
 		spawner.GlobalPosition = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
+		
+		if (_fogs.TryGetValue(location, out var fog)) fog?.QueueFree();
 	}
 	
 	private void SpawnResource(Vector2I location)
@@ -121,6 +144,11 @@ public partial class FactoryTileMap : LayerTileMap
 		// TODO: refactor this into a collision mask instead of discrete layers?
 		AddLayer(Building);
 		AddLayer(Resource);
+		
+		foreach (var province in Globals.MapScene.TileMap.GetProvinces())
+		{
+			AddFog(province.MapPosition);
+		}
 		
 		AddProvence(MapScene.FactoryPosition);
 	}

@@ -47,7 +47,7 @@ public partial class CheatCodes : Node
 			Globals.FactoryScene.TileMap.OnOpen();
 		}
 		
-		if(entered.EndsWith("``ROBIN HOOD"))
+		if(entered.EndsWith("``ROBIN"))
 		{
 			GD.Print("SHERIFF OF NOTTINGHAM");
 			Database.Instance.Recipes

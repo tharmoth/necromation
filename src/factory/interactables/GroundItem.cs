@@ -2,49 +2,54 @@
 
 namespace Necromation;
 
-public partial class GroundItem : Node2D, FactoryTileMap.IEntity
+public class GroundItem
 {
-    private const int Size = 16;
+    // String representation of the item type. Used to look up the texture in the database.
     public string ItemType { get; set; }
-    private Sprite2D _sprite;
-    private Vector2 _cachePosition;
-    public Vector2 CachePosition
+    
+    // Index of the item on it's parent transport belt. Allows the item to bypass processing if it has already reached.
+    // It's target location.
+    public int CacheIndex = -1;
+    
+    // Hand backed version of Node2D.GlobalPosition. Used to update the rendering server.
+    private Vector2 _globalPosition;
+    public Vector2 GlobalPosition
     {
-        get => _cachePosition;
+        get => _globalPosition;
         set
         {
-            _cachePosition = value;
-            var transform = Transform2D.Identity.Translated(_cachePosition);
+            _globalPosition = value;
+
+            var transform = Transform2D.Identity.Translated(new Vector2((int)value.X, ((int)value.Y)));
             RenderingServer.CanvasItemSetTransform(_renderingServerId, transform);
         }
     }
     
-    private Texture2D _texture;
+    // The size in pixels that the texture is to be drawn at.
+    private const int Size = 16;
+    
+    // A referance to the texture that is to be drawn in the rendering server.
+    // Effectively our sprite.
     private Rid _renderingServerId = RenderingServer.CanvasItemCreate();
 
     public GroundItem(string itemType)
     {
         ItemType = itemType;
-    }
-    
-    public override void _Ready()
-    {
-        base._Ready();
-        CachePosition = GlobalPosition;
+        
+        GlobalPosition = Vector2.Zero;
         
         // Add the texture to the rendering server directly for performance reasons.
-        RenderingServer.CanvasItemSetParent(_renderingServerId, GetCanvasItem());
-        _texture = Database.Instance.GetTexture(ItemType);
-        RenderingServer.CanvasItemAddTextureRect(_renderingServerId, new Rect2(CachePosition - Vector2.One * Size / 2, Vector2.One * Size), _texture.GetRid());
-        var transform = Transform2D.Identity.Translated(CachePosition);
+        RenderingServer.CanvasItemSetParent(_renderingServerId, Globals.FactoryScene.GroundItemHolder.GetCanvasItem());
+        var texture = Database.Instance.GetTexture(ItemType);
+        RenderingServer.CanvasItemAddTextureRect(_renderingServerId, new Rect2(GlobalPosition - Vector2.One * Size / 2, Vector2.One * Size), texture.GetRid());
+        var transform = Transform2D.Identity.Translated(GlobalPosition);
         RenderingServer.CanvasItemSetTransform(_renderingServerId, transform);
         RenderingServer.CanvasItemSetZIndex(_renderingServerId, 1);
     }
-    
-    public bool AddToInventory(Inventory inventory)
+
+    // Removes the texture from the rendering server.
+    public void Free()
     {
-        inventory.Insert(ItemType);
-        QueueFree();
-        return true;
+        RenderingServer.CanvasItemClear(_renderingServerId);
     }
 }

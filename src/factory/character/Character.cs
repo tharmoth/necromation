@@ -37,6 +37,9 @@ public partial class Character : Node2D
 				new Vector2(32 / (float)_sprite.Texture.GetWidth(), 32 / (float)_sprite.Texture.GetHeight()) 
 				: new Vector2(1, 1);
 			
+			if (Building.IsBuilding(_selected) 
+			    && Building.GetBuilding(_selected, IRotatable.BuildingOrientation.NorthSouth) is not IRotatable) 
+				_rotationDegrees = 0;
 		}
 	}
 	
