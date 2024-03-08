@@ -1,7 +1,8 @@
-[gd_scene load_steps=28 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=29 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
+[ext_resource type="PackedScene" uid="uid://csccrf1y0jkwi" path="res://src/factory/shaders/grass_particles.tscn" id="2_ad58l"]
 [ext_resource type="Script" path="res://src/factory/gui/FactoryGUI.cs" id="2_pkiw0"]
 [ext_resource type="Script" path="res://src/factory/character/Character.cs" id="2_vcqpu"]
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="3_5rf83"]
@@ -114,6 +115,11 @@ stream_0/weight = 1.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_4xbbd")
+
+[node name="Party" parent="." instance=ExtResource("2_ad58l")]
+unique_name_in_owner = true
+visible = false
+position = Vector2(2648, 1789)
 
 [node name="GUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Godot.Collections;
+using Necromation;
 using Array = Godot.Collections.Array;
 
 public partial class PropSpawner : Node2D
@@ -10,6 +11,7 @@ public partial class PropSpawner : Node2D
 		Random,
 		Simplex,
 		Cuboid,
+		Particles,
 	}
 
 	[Export] private RandomType _type = RandomType.Simplex;
@@ -54,6 +56,9 @@ public partial class PropSpawner : Node2D
 				break;
 			case RandomType.Cuboid:
 				PlacePropsCuboid();
+				break;
+			case RandomType.Particles:
+				PlacePropsParticles();
 				break;
 			default:
 				throw new ArgumentOutOfRangeException();
@@ -133,6 +138,16 @@ public partial class PropSpawner : Node2D
 		// matty.SetShaderParameter("maxStrength", 0.1f);
 		// matty.SetShaderParameter("detail", 5.0f);
 		// spawn.Material = matty;
-		AddChild(spawn);
+		// AddChild(spawn);
+	}
+
+	public void PlacePropsParticles()
+	{
+		var part = GD.Load<PackedScene>("res://src/factory/shaders/grass_particles.tscn").Instantiate<GpuParticles2D>();
+		AddChild(part);
+		part.ZIndex = -98;
+		var tweeny = Globals.Tree.CreateTween();
+		tweeny.TweenInterval(1);
+		tweeny.TweenCallback(Callable.From(() => part.SpeedScale = 0));
 	}
 }

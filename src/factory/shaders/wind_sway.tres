@@ -6,10 +6,9 @@
 shader = ExtResource("1_357ob")
 shader_parameter/speed = 1.0
 shader_parameter/minStrength = 0.05
-shader_parameter/maxStrength = 0.01
+shader_parameter/maxStrength = 0.2
 shader_parameter/strengthScale = 100.0
 shader_parameter/interval = 3.5
 shader_parameter/detail = 5.0
 shader_parameter/distortion = 0.0
 shader_parameter/heightOffset = 0.0
-shader_parameter/offset = 0.0

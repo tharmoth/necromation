@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://csccrf1y0jkwi"]
+
+[ext_resource type="Material" uid="uid://b4f6au4nnkrbj" path="res://src/factory/shaders/wind_sway.tres" id="1_tpnpr"]
+[ext_resource type="Texture2D" uid="uid://c7iplbovhc3by" path="res://res/sprites/Grass2.png" id="1_ychv1"]
+[ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/sprites/soil2.png" id="2_1tw4h"]
+
+[sub_resource type="CurveTexture" id="CurveTexture_jduvm"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4dkab"]
+emission_shape = 3
+emission_box_extents = Vector3(320, 320, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_min = -10.0
+angle_max = 10.0
+angle_curve = SubResource("CurveTexture_jduvm")
+scale_min = 0.25
+scale_max = 0.5
+
+[node name="Node2D" type="GPUParticles2D"]
+material = ExtResource("1_tpnpr")
+position = Vector2(1, 0)
+amount = 1400
+process_material = SubResource("ParticleProcessMaterial_4dkab")
+texture = ExtResource("1_ychv1")
+preprocess = 1.0
+visibility_rect = Rect2(-319.992, -319.977, 639.992, 639.977)
+draw_order = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+z_index = -1
+texture = ExtResource("2_1tw4h")

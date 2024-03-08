@@ -28,6 +28,7 @@ public partial class FactoryScene : Scene
 		base._Ready();
 		// Cache this here for performance reasons so we don't have to access the tree.
 		GroundItemHolder = GetNode<Node2D>("GroundItemHolder");
+		// GetNode<GpuParticles2D>("%Party").SpeedScale = 0;
 	}
 
 	public override FactoryGUI Gui => GetNode<FactoryGUI>("%GUI");

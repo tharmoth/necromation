@@ -88,7 +88,7 @@ public partial class FactoryTileMap : LayerTileMap
 
 		var grassTexture = Database.Instance.GetTexture("Grass2");
 		var grassTexture2 = Database.Instance.GetTexture("Grass5");
-		PropSpawner spawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .75f);
+		PropSpawner spawner = new(PropSpawner.RandomType.Particles, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .75f);
 		spawner.GlobalPosition = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
 		

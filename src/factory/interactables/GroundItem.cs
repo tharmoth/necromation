@@ -20,7 +20,7 @@ public class GroundItem
         {
             _globalPosition = value;
 
-            var transform = Transform2D.Identity.Translated(new Vector2((int)value.X, ((int)value.Y)));
+            var transform = Transform2D.Identity.Translated(_globalPosition);
             RenderingServer.CanvasItemSetTransform(_renderingServerId, transform);
         }
     }

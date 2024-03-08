@@ -1,48 +1,61 @@
-[gd_scene load_steps=8 format=3 uid="uid://b0foctmtsvywg"]
+[gd_scene load_steps=9 format=3 uid="uid://b0foctmtsvywg"]
 
 [ext_resource type="Texture2D" uid="uid://c2lvsbtr85b8u" path="res://res/sprites/Dot.png" id="1_c0cjp"]
+[ext_resource type="Texture2D" uid="uid://dxj7frmg8hdn6" path="res://res/sprites/particles/smoke_08.png" id="1_pgdus"]
 [ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="2_e4k8q"]
 
 [sub_resource type="Gradient" id="Gradient_nywy8"]
-colors = PackedColorArray(0.423529, 0.423529, 0.423529, 0.141176, 0.603922, 0.603922, 0.603922, 0)
+offsets = PackedFloat32Array(0, 0.0310881, 0.196891, 1)
+colors = PackedColorArray(0.423529, 0.423529, 0.423529, 0, 0.454902, 0.454902, 0.454902, 1, 0.596078, 0.596078, 0.596078, 0.12549, 0.603922, 0.603922, 0.603922, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_g3g0n"]
 gradient = SubResource("Gradient_nywy8")
 
 [sub_resource type="Curve" id="Curve_tagjt"]
 max_value = 3.0
-_data = [Vector2(0, 1), 0.0, 0.209591, 0, 0, Vector2(1, 3), 1.91775, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 0.347368), 0.0, 0.209591, 0, 0, Vector2(0.647321, 1.61053), -0.456368, -0.456368, 0, 0, Vector2(1, 3), 1.91775, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_68jjl"]
 curve = SubResource("Curve_tagjt")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g343j"]
 particle_flag_disable_z = true
-direction = Vector3(5, -10, 0)
+direction = Vector3(0, -1, 0)
 spread = 5.0
-gravity = Vector3(0, -5, 0)
-initial_velocity_max = 20.0
+gravity = Vector3(0, -4, 0)
+initial_velocity_min = 9.0
+initial_velocity_max = 11.0
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
-angle_min = -452.9
-angle_max = 278.7
-scale_min = 5.0
-scale_max = 10.0
+tangential_accel_min = 3.0
+tangential_accel_max = 3.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 0.09
+scale_max = 0.11
 scale_curve = SubResource("CurveTexture_68jjl")
 color_ramp = SubResource("GradientTexture1D_g3g0n")
 
 [node name="GPUParticles2D" type="GPUParticles2D"]
 z_index = 101
-position = Vector2(16, -10)
+position = Vector2(0, -25)
 rotation = -0.00336232
 amount = 100
 process_material = SubResource("ParticleProcessMaterial_g343j")
-texture = ExtResource("1_c0cjp")
-lifetime = 2.0
+texture = ExtResource("1_pgdus")
+lifetime = 10.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
 z_index = -10
 position = Vector2(0.915936, 25.0032)
 texture = ExtResource("2_e4k8q")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
+z_index = -1
+position = Vector2(-98.643, -106.332)
+scale = Vector2(1000, 1000)
+texture = ExtResource("1_c0cjp")
+centered = false
