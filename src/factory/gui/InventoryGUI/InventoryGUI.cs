@@ -12,12 +12,11 @@ public partial class InventoryGUI : Control
 	private Container RecipeButtonList => GetNode<Container>("%RecipeButtonList");
 	private Inventory _inventory;
 
-	public static InventoryGUI Display(Inventory inventory)
+	public static void Display(Inventory inventory)
 	{
 		var gui = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_gui.tscn").Instantiate<InventoryGUI>();
 		gui._inventory = inventory;
-		Globals.FactoryScene.Gui.AddChild(gui);
-		return gui;
+		Globals.FactoryScene.Gui.OpenGui(gui);
 	}
 
 	public override void _ExitTree()

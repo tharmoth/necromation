@@ -94,10 +94,10 @@ public partial class Inserter : Building, IRotatable
         Sprite.AddChild(SpriteInHand);
         Sprite.ZIndex = 2;
         
-        AddChild(_audio);
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/PM_MPRINTER_DPA4060_6_Printer_Printing_Individual_Cycle_Servo_Motor_Toner_Close_Perspectiv_328.mp3");
         _audio.Attenuation = 25.0f;
         _audio.VolumeDb = -10.0f;
+        AddChild(_audio);
         
         Globals.FactoryScene.TileMap.listeners.Add(Update);
     }

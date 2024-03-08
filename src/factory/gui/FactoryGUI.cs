@@ -48,30 +48,23 @@ public partial class FactoryGUI : CanvasLayer
 			else
 			{
 				CloseGui();
-				TechGui.Display();
 			}
 		}
-		if (Input.IsActionJustPressed("open_inventory"))
-		{
-			if (_openGui != null)
-			{
-				CloseGui();
-			}
-			else
-			{
-				CloseGui();
-				_openGui = InventoryGUI.Display(Globals.PlayerInventory);
-			}
-		}
+
+		if (Input.IsActionJustPressed("open_inventory")) InventoryGUI.Display(Globals.PlayerInventory);
 		if (Input.IsActionJustPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
+		if (Input.IsActionPressed("open_config")) ConfigurationGui.Display();
 
 		if (Input.IsActionJustPressed("save")) SKSaveLoad.SaveGame(this);
 		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);
+		
 	}
 	
 	public void OpenGui(Control gui)
 	{
+		var open = _openGui;
 		CloseGui();
+		if (IsInstanceValid(open) && open.GetType() == gui.GetType()) return;
 		_openGui = gui;
 		AddChild(gui);
 	}
