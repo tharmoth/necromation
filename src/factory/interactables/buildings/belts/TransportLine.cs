@@ -227,4 +227,13 @@ public partial class TransportLine : ITransferTarget
     public List<string> GetItems() => _inventory.GetItems();
     public List<Inventory> GetInventories() => _inventory.GetInventories();
     #endregion
+
+    // This is needed for saveload where items are not placed in an inventory so the groundItems to get removed.
+    public void _ExitTree()
+    {
+        foreach (var groundItem in _itemsOnBelt)
+        {
+            groundItem.Free();
+        }
+    }
 }

@@ -10,13 +10,25 @@ namespace Necromation;
 
 public partial class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IRotatable
 {
-	public override Vector2I BuildingSize => Vector2I.One * 3;
+	/**************************************************************************
+	 * Building Implementation                                                *
+	 **************************************************************************/
 	public override string ItemType { get; }
-	public Recipe Recipe;
+	public override Vector2I BuildingSize => Vector2I.One * 3;
+	
+	/**************************************************************************
+	 * Logic Variables                                                        *
+	 **************************************************************************/
+	private float _time;
+	private Recipe _recipe;
+	private readonly string _category;
     private Inventory _inputInventory;
     private Inventory _outputInventory = new();
-    private float _time;
-	private readonly string _category;
+    
+    /**************************************************************************
+     * Visuals Variables 													  *
+     **************************************************************************/
+	private Tween _animationTween;
 	private Sprite2D _recipeSprite = new()
 	{
 		ZIndex = 2
@@ -37,15 +49,10 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	    _inputInventory = new AssemblerInventory(this);
 	}
 
-	public override void _Ready()
-	{
-		base._Ready();
-	}
-
 	public override void _Process(double delta)
     {
 	    base._Process(delta);
-    	if (Recipe == null || !Recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
+    	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
     	{
     		_time = 0;
     		return;
@@ -56,56 +63,32 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 
     	if (GetProgressPercent() < 1.0f) return;
     	_time = 0;
-    	Recipe.Craft(_inputInventory, _outputInventory);
+    	_recipe.Craft(_inputInventory, _outputInventory);
     }
         
     public override float GetProgressPercent()
     {
-	    if (Recipe == null) return 0;
-	    return _time / Recipe.Time;
+	    if (_recipe == null) return 0;
+	    return _time / _recipe.Time;
     }
 
 	/**************************************************************************
 	 * Protected Methods                                                      *
 	 **************************************************************************/
-    
     protected virtual bool MaxOutputItemsReached()
     {
-	    return _outputInventory.CountItem(Recipe.Products.First().Key) > Recipe.Products.First().Value * 2;
+	    return _outputInventory.CountItem(_recipe.Products.First().Key) > _recipe.Products.First().Value * 2;
     }
-
-    private Tween tweenytwiney;
     
     private void Animate()
     {
-	    if (GodotObject.IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
-        
-	    // Get random position
-	    var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
-	    tweenytwiney?.Kill();
-	    tweenytwiney = Globals.Tree.CreateTween();
-	    tweenytwiney.TweenProperty(Sprite, "scale", new Vector2(.85f, .85f), 1f);
-	    tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, 1f);
-	    // tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, .5f);
-	    tweenytwiney.TweenCallback(Callable.From(() => tweenytwiney.Kill()));
-    }
-    
-    private partial class AssemblerInventory : Inventory
-    {
-	    private Assembler _assembler;
+	    if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
 
-	    public AssemblerInventory(Assembler assembler)
-	    {
-		    _assembler = assembler;
-	    }
-	    
-	    public override bool CanAcceptItems(string item, int count = 1)
-	    {
-		    if (_assembler.GetRecipe() == null) return false;
-		    var ingredients = _assembler.GetRecipe().Ingredients;
-		    var itemCount = CountItem(item);
-		    return ingredients.ContainsKey(item) && itemCount < 50;
-	    }
+	    _animationTween?.Kill();
+	    _animationTween = Globals.Tree.CreateTween();
+	    _animationTween.TweenProperty(Sprite, "scale", new Vector2(.85f, .85f), 1f);
+	    _animationTween.TweenProperty(Sprite, "scale", Vector2.One, 1f);
+	    _animationTween.TweenCallback(Callable.From(() => _animationTween.Kill()));
     }
     
     #region IInteractable Implementation
@@ -114,7 +97,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	 **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-	    if (Recipe == null)
+	    if (_recipe == null)
 	    {
 		    RecipePopup.Display(this);
 	    }
@@ -129,7 +112,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	/**************************************************************************
 	 * ICrafter Methods                                                       *
 	 **************************************************************************/
-    public Recipe GetRecipe() => Recipe;
+    public Recipe GetRecipe() => _recipe;
     public void SetRecipe(Recipe recipe)
     {
 	    _outlineSprite.Visible = true;
@@ -138,7 +121,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	    _recipeSprite.Texture = Database.Instance.GetTexture(recipe.Products.First().Key);
 	    _recipeSprite.Scale = new Vector2(32 / _recipeSprite.Texture.GetSize().X, 32 / _recipeSprite.Texture.GetSize().Y);
 	    _recipeSprite.Position = new Vector2(0, -10);
-	    Recipe = recipe;
+	    _recipe = recipe;
     }
 
     public Inventory GetInputInventory() => _inputInventory;
@@ -150,14 +133,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item, int count = 1)
-    {
-	    if (GetRecipe() == null) return false;
-	    var ingredients = GetRecipe().Ingredients;
-	    var itemCount = _inputInventory.CountItem(item);
-	    return ingredients.ContainsKey(item) && itemCount < ingredients[item] * 2;
-    }
-    
+    public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
     public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _outputInventory.Remove(item, count);
     public List<string> GetItems() => _outputInventory.GetItems();
@@ -165,4 +141,23 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
 
     #endregion
+    
+	// Class Used for limiting the inputs to the assembler.
+    private class AssemblerInventory : Inventory
+    {
+	    private readonly Assembler _assembler;
+
+	    public AssemblerInventory(Assembler assembler)
+	    {
+		    _assembler = assembler;
+	    }
+	    
+	    public override bool CanAcceptItems(string item, int count = 1)
+	    {
+		    if (_assembler.GetRecipe() == null) return false;
+		    var ingredients = _assembler.GetRecipe().Ingredients;
+		    var itemCount = CountItem(item);
+		    return ingredients.ContainsKey(item) && itemCount < 50;
+	    }
+    }
 }

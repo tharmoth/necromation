@@ -8,34 +8,38 @@ namespace Necromation;
 
 public partial class Inserter : Building, IRotatable
 {
-    public override Vector2I BuildingSize => Vector2I.One;
+    /**************************************************************************
+     * Building Implementation                                                *
+     **************************************************************************/
     public override string ItemType => _range == 1 ? "Inserter" : "Long Inserter";
-    
+    public override Vector2I BuildingSize => Vector2I.One;
+
+    /**************************************************************************
+     * Logic Variables                                                        *
+     **************************************************************************/
     // Stores how far the inserter can take and place from in tiles.
-    private int _range;
-    
+    private int _range; 
     // timer that is updated every frame to determine if the inserter should try to transfer.
     private double _time = 0;
-    
     // The interval in seconds that the inserter should wait before trying to transfer items again.
-    private double _interval = .83;
+    private double _interval = .83;  
     
-    /**************************************************************************
-     * Child Nodes                                                            *
+     /*************************************************************************
+     * Visuals Variables 													  *
      **************************************************************************/
-    // Node that plays the inserter sound when it transfers items.
+     // Node that plays the inserter sound when it transfers items.
     private AudioStreamPlayer2D _audio = new();
-    
-    // Sprite of the item in teh inserters hand. Is Invisible when an inserter isn't moving the hand towards the destination.
+    // Sprite that is used to display the item that the inserter is currently transferring.
     private Sprite2D SpriteInHand = new()
     {
         Visible = false,
         ZIndex = 1
     };
-    
     // Tween that rotates the inserter when it transfers items.
-    private Tween _rotationTween;
+    private Tween _animationTween;
     
+    // The rotation of the inserter. This isn't a node for performance so we'll have to store it manually.
+    private float RotationDegrees;
     // The orientation of the inserter. This is used to determine the input and output positions of the inserter.
     // Can be one of the four cardinal directions.
     private IRotatable.BuildingOrientation _orientation;
@@ -49,8 +53,6 @@ public partial class Inserter : Building, IRotatable
             RotationDegrees = Sprite.RotationDegrees;
         }
     }
-
-    private float RotationDegrees;
     
     // The input and output tiles for the inserter. These are determined by the orientation of the inserter and the range.
     private Vector2I Input => MapPosition + _range * Orientation switch {
@@ -161,10 +163,10 @@ public partial class Inserter : Building, IRotatable
         SpriteInHand.Texture =  Database.Instance.GetTexture(item);
         SpriteInHand.Visible = true;
         SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
-        _rotationTween?.Kill();
-        _rotationTween = Globals.Tree.CreateTween();
-        _rotationTween.TweenProperty(Sprite, "rotation", Mathf.DegToRad(RotationDegrees)  + Math.PI, _interval/2);
-        _rotationTween.TweenProperty(Sprite, "rotation", Mathf.DegToRad(RotationDegrees), _interval/2);
+        _animationTween?.Kill();
+        _animationTween = Globals.Tree.CreateTween();
+        _animationTween.TweenProperty(Sprite, "rotation", Mathf.DegToRad(RotationDegrees)  + Math.PI, _interval/2);
+        _animationTween.TweenProperty(Sprite, "rotation", Mathf.DegToRad(RotationDegrees), _interval/2);
     }
     
     // Attempts to transfer items from the from inventory to the to inventory.

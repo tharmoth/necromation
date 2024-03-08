@@ -153,12 +153,12 @@ public partial class PropSpawner : Node2D
 		tweeny.TweenCallback(Callable.From(() => party.SpeedScale = 0));
 	}
 
-	public override void _Process(double delta)
-	{
-		base._Process(delta);
-		if (party == null) return;
-
-		var matty = party.Material as ShaderMaterial;
-		matty.SetShaderParameter("character_position", Globals.Player.GlobalPosition);
-	}
+	// public override void _Process(double delta)
+	// {
+	// 	base._Process(delta);
+	// 	if (party == null) return;
+	//
+	// 	var matty = party.Material as ShaderMaterial;
+	// 	matty.SetShaderParameter("character_position", Globals.Player.GlobalPosition);
+	// }
 }

@@ -19,9 +19,14 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	}
 	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 	public readonly Sprite2D Sprite = new();
-
 	
 	private VisibleOnScreenNotifier2D Notifier = new();
+	
+	/**************************************************************************
+	 * Visuals Variables 													  *
+	 **************************************************************************/
+	private static readonly PackedScene ParticleScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/place_particles.tscn");
+	private static readonly AudioStream PlaceSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 	private AudioStreamPlayer2D _audio = new();
 	private GpuParticles2D _particles;
 
@@ -35,9 +40,9 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		Notifier.ScreenExited += () => IsOnScreen = false;
 		Sprite.AddChild(Notifier);
 		
-		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
+		_audio.Stream = PlaceSound;
 		
-		_particles = GD.Load<PackedScene>("res://src/factory/interactables/buildings/place_particles.tscn").Instantiate<GpuParticles2D>();
+		_particles = ParticleScene.Instantiate<GpuParticles2D>();
 		_particles.OneShot = true;
 		_particles.Emitting = true;
 		_particles.ZAsRelative = true;
@@ -118,8 +123,6 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	{
 		return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable);
 	}
-
-
 	
 	public List<Vector2I> GetOccupiedPositions(Vector2 position)
 	{
@@ -152,15 +155,16 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 				}
 			}
 			to.Insert(ItemType);
-			Globals.FactoryScene.TileMap.RemoveEntity(this);
+			
 			SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, index++ * 20));
+			Globals.FactoryScene.Gui.BuildingRemoved();
 		}
-		Sprite.Visible = false;
-		Globals.FactoryScene.Gui.BuildingRemoved();
-		Sprite.QueueFree();
-
+		
+		Globals.FactoryScene.TileMap.RemoveEntity(this);
 		Globals.BuildingManager.RemoveBuilding(this);
-
+		
+		Sprite.Visible = false;
+		Sprite.QueueFree();
 	}
 
 	protected Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
@@ -236,8 +240,8 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		var dict =  new Godot.Collections.Dictionary<string, Variant>()
 		{
 			{ "ItemType", ItemType },
-			{ "PosX", Sprite.Position.X }, // Vector2 is not supported by JSON
-			{ "PosY", Sprite.Position.Y },
+			{ "PosX", _globalPosition.X }, // Vector2 is not supported by JSON
+			{ "PosY", _globalPosition.Y },
 			{ "Orientation", Orientation.ToString() }
 		};
 		if (this is ICrafter crafter)

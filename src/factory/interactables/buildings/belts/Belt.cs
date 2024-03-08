@@ -311,4 +311,12 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         { LeftLine.GetInventories().First(), RightLine.GetInventories().First() };
 
     #endregion
+
+    // This is needed for saveload where items are not placed in an inventory so the groundItems to get removed.
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        LeftLine._ExitTree();
+        RightLine._ExitTree();
+    }
 }

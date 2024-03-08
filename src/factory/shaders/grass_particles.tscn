@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://csccrf1y0jkwi"]
+[gd_scene load_steps=6 format=3 uid="uid://csccrf1y0jkwi"]
 
 [ext_resource type="Material" uid="uid://b4f6au4nnkrbj" path="res://src/factory/shaders/wind_sway.tres" id="1_tpnpr"]
 [ext_resource type="Texture2D" uid="uid://c7iplbovhc3by" path="res://res/sprites/Grass2.png" id="1_ychv1"]
-[ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/sprites/soil2.png" id="2_1tw4h"]
 
 [sub_resource type="Curve" id="Curve_ib31q"]
 min_value = -360.0
@@ -35,8 +34,3 @@ texture = ExtResource("1_ychv1")
 preprocess = 1.0
 visibility_rect = Rect2(-319.992, -319.977, 639.992, 639.977)
 draw_order = 0
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-z_index = -1
-texture = ExtResource("2_1tw4h")

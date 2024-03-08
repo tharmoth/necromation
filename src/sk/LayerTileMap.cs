@@ -24,6 +24,11 @@ public partial class LayerTileMap : SKTileMap
 
 	public virtual bool AddEntity(Vector2I position, IEntity entity, string layerName){
 		if (!_layers.ContainsKey(layerName)) return false;
+		if (_layers[layerName].ContainsKey(position))
+		{
+			GD.PrintErr($"Tried to add {entity} to occupied position {position} on layer {layerName} already contains {_layers[layerName][position]}!");
+			return false;
+		}
 		_layers[layerName].Add(position, entity);
 		listeners.ForEach(listener => listener());
 		return true;

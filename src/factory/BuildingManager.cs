@@ -82,8 +82,9 @@ public partial class BuildingManager : Node
 
     public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
     {
-
-        foreach (var building in Globals.BuildingManager._buildings)
+        // Copy the list to avoid concurrent modification.
+        var existingBuildings = new List<Building>(Globals.BuildingManager._buildings);
+        foreach (var building in existingBuildings)
         {
             building.Remove(null);
         }

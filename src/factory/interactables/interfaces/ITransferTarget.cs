@@ -13,7 +13,7 @@ public interface ITransferTarget
     public string GetFirstItem();
     public List<Inventory> GetInventories();
 
-    public virtual int GetMaxTransferAmount(string itemType)
+    public int GetMaxTransferAmount(string itemType)
     {
         return int.MaxValue;
     }
