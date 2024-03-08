@@ -98,8 +98,6 @@ public partial class Inserter : Building, IRotatable
         _audio.Attenuation = 25.0f;
         _audio.VolumeDb = -10.0f;
         AddChild(_audio);
-        
-        Globals.FactoryScene.TileMap.listeners.Add(Update);
     }
 
     private void Update()
@@ -123,6 +121,7 @@ public partial class Inserter : Building, IRotatable
     {
         base._Ready();
         Orientation = _orientation;
+        Update();
     }
 
     public override void _Notification(int what)
@@ -237,7 +236,7 @@ public partial class Inserter : Building, IRotatable
     private void ResetListeners()
     {
         ClearListeners();
-        Globals.FactoryScene.TileMap.listeners.Remove(Update);
+        Globals.FactoryScene.TileMap.listeners.Add(Update);
         _from?.GetOutputInventory().Listeners.Add(InventoryChanged);
         if (_belt != null)
         {

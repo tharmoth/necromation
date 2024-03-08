@@ -1,14 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://uwavrwbbaciu"]
+[gd_scene load_steps=6 format=3 uid="uid://uwavrwbbaciu"]
 
 [ext_resource type="Script" path="res://src/factory/gui/ConfigurationGUI/ConfigurationGui.cs" id="1_plsc2"]
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_sdsi5"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_vjw1v"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_ma621"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="4_ohcaa"]
 
 [node name="ConfigurationGUI" type="PanelContainer"]
 custom_minimum_size = Vector2(300, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -250.0
+offset_right = 150.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme = ExtResource("1_sdsi5")
 script = ExtResource("1_plsc2")
 
 [node name="DropShadowBorder" parent="." instance=ExtResource("2_vjw1v")]
@@ -28,7 +41,12 @@ theme_override_constants/separation = 20
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/PanelContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -36,9 +54,8 @@ text = "X"
 script = ExtResource("3_ma621")
 _action = "close_gui"
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/PanelContainer/Button" instance=ExtResource("4_ohcaa")]
-layout_mode = 0
-anchors_preset = 0
+[node name="Outline" parent="MarginContainer/VBoxContainer/PanelContainer/PanelContainer" instance=ExtResource("4_ohcaa")]
+layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
