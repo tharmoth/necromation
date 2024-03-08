@@ -79,19 +79,19 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         UpdateInputOutput(this, GetAdjacent());
     }
 
-    public override void _PhysicsProcess(double delta)
-    {
-        base._PhysicsProcess(delta);
-        LeftLine._Process(delta);
-        RightLine._Process(delta);
-    }
+    // public override void _PhysicsProcess(double delta)
+    // {
+    //     base._PhysicsProcess(delta);
+    //     LeftLine.Process(delta);
+    //     RightLine.Process(delta);
+    // }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        //
-        // LeftLine._Process(delta);
-        // RightLine._Process(delta);
+        
+        LeftLine.Process(delta);
+        RightLine.Process(delta);
 
         // if (!IsOnScreen) return;
         // // Move the frame forward 8 times every .5333 seconds

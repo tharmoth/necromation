@@ -16,6 +16,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         .Instantiate<GpuParticles2D>();
 
     public override string ItemType => "Mine";
+    private Resource _resource;
     
     public Mine() 
     {
@@ -34,6 +35,10 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         base._Ready();
         _audio.Playing = true;
         _audio.Play(fromPosition:(float)GD.RandRange(0.0f, 34.0f));
+        _resource = Globals.FactoryScene.TileMap.GetEntityPositions(this)
+            .Select(position => Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Resource))
+            .OfType<Resource>()
+            .FirstOrDefault();
     }
 
     public override void _Process(double delta)
@@ -55,13 +60,8 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         if (GetProgressPercent() < 1.0f) return;
         _time = 0;
 
-        var resource = Globals.FactoryScene.TileMap.GetEntityPositions(this)
-            .Select(position => Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Resource))
-            .FirstOrDefault(resource => resource is Resource);
-        
-        if (resource is not Resource collectable) return;
-        _inventory.Insert(collectable.ItemType);
-        ShowText(collectable);
+        _inventory.Insert(_resource.ItemType);
+        ShowText(_resource);
     }
     
     public override float GetProgressPercent()
@@ -86,7 +86,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     
     private void Animate()
     {
-        if (IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning() || !IsOnScreen) return;
+        if (!IsOnScreen || tweenytwiney != null && tweenytwiney.IsRunning()) return;
         
         // Get random position
         var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
@@ -100,14 +100,14 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     private void ShowText(Resource collectable)
     {
         if (!IsOnScreen) return;
-        RichTextLabel text = new();
+        Label text = new();
         text.AutowrapMode = TextServer.AutowrapMode.Off;
         text.CustomMinimumSize = new Vector2(1000, 100);
         
-        text.Text = "[font_size=7]" + collectable.ItemType + " +1" + "[/font_size]";
+        text.Text = collectable.ItemType + " +1";
         text.GlobalPosition = GlobalPosition - GetSpriteOffset();
-        text.BbcodeEnabled = true;
         text.ZIndex = 100;
+        text.Set("theme_override_font_sizes/font_size", 7);
         
         Globals.FactoryScene.AddChild(text);
 

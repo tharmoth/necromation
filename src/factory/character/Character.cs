@@ -53,23 +53,6 @@ public partial class Character : Node2D
 	public override void _Ready()
 	{
 		AddToGroup("player");
-
-		// _inventory.Insert("Bone Fragments", 5000);
-		// _inventory.Insert("Underground Belt", 100);
-		// _inventory.Insert("Inserter", 500);
-		// _inventory.Insert("Long Inserter", 500);
-		
-		// _inventory.Insert("Research Lab", 5);
-		//
-		// _inventory.Insert("Mine", 100);	
-		// _inventory.Insert("Assembler", 10);
-		// _inventory.Insert("Inserter", 100);
-		// _inventory.Insert("Belt", 500);
-		// _inventory.Insert("Skeleton", 200);
-		
-		// No other way to get wood right now.
-		_inventory.Insert("Barracks", 1);
-		
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 100;
 		_sprite.Visible = false;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=27 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -22,7 +22,6 @@
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
-[ext_resource type="Texture2D" uid="uid://b1n6xxfgdbpss" path="res://res/sprites/Light760.png" id="23_go2ix"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
 texture = ExtResource("11_q1hir")
@@ -418,7 +417,9 @@ layer_0/tile_data = PackedInt32Array(0, 1, 0, 65536, 1, 0, 131072, 1, 0, 196608,
 script = ExtResource("16_o18cr")
 
 [node name="Character" type="Node2D" parent="."]
+light_mask = 4
 z_index = 99
+position = Vector2(2650, 1800)
 script = ExtResource("2_vcqpu")
 
 [node name="Sprite2D" type="Sprite2D" parent="Character"]
@@ -438,19 +439,8 @@ unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_h7m82")
 pitch_scale = 0.8
 
-[node name="PointLight2D" type="PointLight2D" parent="Character"]
-texture = ExtResource("23_go2ix")
-
-[node name="PointLight2D2" type="PointLight2D" parent="Character"]
-visible = false
-color = Color(1, 1, 0, 1)
-texture_scale = 0.25
-
-[node name="Node" type="Node" parent="."]
+[node name="Cheatcodes" type="Node" parent="."]
 script = ExtResource("18_nrhn7")
-
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.658824, 0.658824, 0.658824, 1)
 
 [node name="GroundItemHolder" type="Node2D" parent="."]
 unique_name_in_owner = true

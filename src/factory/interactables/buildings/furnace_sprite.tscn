@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dstbj0cct8ahp"]
+
+[ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="1_ew36l"]
+[ext_resource type="Texture2D" uid="uid://dalt7rcg1kqh7" path="res://res/sprites/buildings/Stone Furnace-normal.png" id="2_y6nwn"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_oapg6"]
+diffuse_texture = ExtResource("1_ew36l")
+normal_texture = ExtResource("2_y6nwn")
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_8d1jj"]
+polygon = PackedVector2Array(3, -9, 15, 3, 16, 33, -23, 33, -22, 3, -12, -9)
+
+[node name="FurnaceSprite" type="Sprite2D"]
+light_mask = 2
+position = Vector2(75, 74)
+texture = SubResource("CanvasTexture_oapg6")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+show_behind_parent = true
+position = Vector2(3, -3)
+occluder = SubResource("OccluderPolygon2D_8d1jj")
+sdf_collision = false
+occluder_light_mask = 0

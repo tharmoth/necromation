@@ -71,7 +71,7 @@ public partial class TransportLine : ITransferTarget
 
     private bool initialized = false;
     
-    public void _Process(double delta)
+    public void Process(double delta)
     {
         if (!initialized)
         {

@@ -65,18 +65,21 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 			_particles.Position += new Vector2(16, 16);
 		}
 
-		var normal = Database.Instance.GetTexture(ItemType+"-normal");
-		if (normal != null)
-		{
-			var canvasTexture = new CanvasTexture();
-			canvasTexture.NormalTexture = normal;
-			canvasTexture.DiffuseTexture = Database.Instance.GetTexture(ItemType);
-			Sprite.Texture = canvasTexture;
-		}
-		else
-		{
+		/*
+		 * Light code we're not going to be using for a while.
+		 */
+		// var normal = Database.Instance.GetTexture(ItemType+"-normal");
+		// if (normal != null)
+		// {
+		// 	var canvasTexture = new CanvasTexture();
+		// 	canvasTexture.NormalTexture = normal;
+		// 	canvasTexture.DiffuseTexture = Database.Instance.GetTexture(ItemType);
+		// 	Sprite.Texture = canvasTexture;
+		// }
+		// else
+		// {
 			Sprite.Texture = Database.Instance.GetTexture(ItemType);
-		}
+		// }
 
 		GlobalPosition = Globals.FactoryScene.TileMap.ToMap(GlobalPosition);
 		Sprite.GlobalPosition += GetSpriteOffset();

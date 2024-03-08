@@ -47,3 +47,7 @@ text = "Brains"
 [node name="Outline" parent="MarginContainer/VBoxContainer/ScrollContainer/RecipeList/Button" instance=ExtResource("3_b7t4r")]
 layout_mode = 0
 anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1

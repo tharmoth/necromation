@@ -28,12 +28,12 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    CallDeferred("add_child", _particles);
 	    
 	    
-	    _light.Texture = Database.Instance.GetTexture("Light760");
-	    _light.Color = Colors.Yellow;
-	    _light.TextureScale = .25f;
-	    _light.Position = new Vector2(16, 16);
-	    _light.Energy = .25f;
-	    CallDeferred("add_child", _light);
+	    // _light.Texture = Database.Instance.GetTexture("Light760");
+	    // _light.Color = Colors.Yellow;
+	    // _light.TextureScale = .25f;
+	    // _light.Position = new Vector2(16, 16);
+	    // _light.Energy = .25f;
+	    // CallDeferred("add_child", _light);
 
 	    Update();
 	    Globals.ResearchListeners.Add(Update);
@@ -69,7 +69,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
 		    tweenytwiney?.Kill();
 		    _particles.Emitting = false;
-		    _light.Visible = false;
+		    // _light.Visible = false;
     		return;
     	}
 
@@ -104,7 +104,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    tweenytwiney.TweenCallback(Callable.From(() => tweenytwiney.Kill()));
 	    
 	    _particles.Emitting = true;
-	    _light.Visible = true;
+	    // _light.Visible = true;
     }
 
 	/**************************************************************************

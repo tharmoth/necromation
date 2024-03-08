@@ -9,7 +9,7 @@ using Necromation.map.character;
 public partial class FactoryScene : Scene
 {
 	public FactoryTileMap TileMap => GetNode<FactoryTileMap>("%TileMap");
-	public Node2D GroundItemHolder => GetNode<Node2D>("GroundItemHolder");
+	public Node2D GroundItemHolder;
 	
 	private bool _initialized = false;
 	public Timer AttackTimer;
@@ -21,6 +21,13 @@ public partial class FactoryScene : Scene
 		base._EnterTree();
 
 		MusicManager.PlayAmbiance();
+	}
+
+	public override void _Ready()
+	{
+		base._Ready();
+		// Cache this here for performance reasons so we don't have to access the tree.
+		GroundItemHolder = GetNode<Node2D>("GroundItemHolder");
 	}
 
 	public override FactoryGUI Gui => GetNode<FactoryGUI>("%GUI");
