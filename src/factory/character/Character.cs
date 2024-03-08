@@ -12,6 +12,7 @@ public partial class Character : Node2D
 {
 	public IRotatable.BuildingOrientation Orientation => IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
+	public PointLight2D Light => GetNode<PointLight2D>("%Light");
 	private AudioStreamPlayer _clickAudio => GetNode<AudioStreamPlayer>("%ClickAudio");
 	
 	private const float Speed = 200;
@@ -66,6 +67,16 @@ public partial class Character : Node2D
 
 	public override void _Ready()
 	{
+		// Extra insurance against breaking builds.
+		if (OS.IsDebugBuild())
+		{
+			Database.Instance.Recipes
+				.Select(recipe => recipe.Products.First().Key)
+				.ToList()
+				.ForEach(item => Globals.PlayerInventory.Insert(item, 100));
+		}
+		
+		
 		AddToGroup("player");
 		_sprite = new Sprite2D();
 		_sprite.ZIndex = 100;

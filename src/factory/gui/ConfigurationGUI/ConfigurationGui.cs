@@ -43,5 +43,15 @@ public partial class ConfigurationGui : PanelContainer
 		checkBox4.SetPressedNoSignal(Config.ProcessBeltsInPhysics);
 		checkBox4.Toggled += (toggled) => Config.ProcessBeltsInPhysics = toggled;
 		Options.AddChild(checkBox4);
+		
+		var checkBox5 = new CheckBox();
+		checkBox5.Text = "Cinematic Mode";
+		checkBox5.SetPressedNoSignal(Config.CinematicMode);
+		checkBox5.Toggled += (toggled) =>
+		{
+			Config.CinematicMode = toggled;
+			Globals.FactoryScene.Gui.ToggleCinematicMode();
+		};
+		Options.AddChild(checkBox5);
 	}
 }

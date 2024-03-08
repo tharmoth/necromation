@@ -23,9 +23,17 @@ uniform float detail = 1.0;
 uniform float distortion : hint_range(0.0, 1.0);
 uniform float heightOffset : hint_range(0.0, 1.0);
 
+uniform vec2 character_position;
+
 // With the offset value, you can if you want different moves for each asset. Just put a random value (1, 2, 3) in the editor. Don't forget to mark the material as unique if you use this
 // uniform float offset = 0; 
 
+varying vec2 world_pos;
+uniform float falloff_distace = 300.0;
+
+float easeOutCubic(float x) {
+	return pow(x, 3);
+}
 
 float getWind(vec2 vertex, vec2 uv, float time){
     float diff = pow(maxStrength - minStrength, 2.0);
@@ -35,9 +43,26 @@ float getWind(vec2 vertex, vec2 uv, float time){
     return wind; 
 }
 
+void fragment() {
+	
+	float minimum = 0.0;
+	float arr[] = { 0.0, 1.0, 0.5, -1.0 };
+	for (int i = 0; i < arr.length(); i++) {
+	    // ...
+	}
+	
+	float dist = sqrt(pow(world_pos.x - character_position.x, 2) + pow(world_pos.y - character_position.y, 2));
+	if (dist < falloff_distace) {
+		COLOR = vec4(texture(TEXTURE, UV).rgb, texture(TEXTURE, UV).a * easeOutCubic(dist / falloff_distace));
+	}
+	
+}
+
 void vertex() {
     vec4 pos = MODEL_MATRIX * vec4(0.0, 0.0, 0.0, 1.0);
+	world_pos = pos.xy;
 	float offset = pos.x + pos.y;
+
 	
     float time = TIME * speed + offset;
     //float time = TIME * speed + pos.x * pos.y  ; not working when moving...

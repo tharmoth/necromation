@@ -28,15 +28,14 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    _particles = _particleScene.Instantiate<GpuParticles2D>();
 	    Sprite.CallDeferred("add_child", _particles);
 	    
-	    // _light.Texture = Database.Instance.GetTexture("Light760");
-	    // _light.Color = Colors.Yellow;
-	    // _light.TextureScale = .25f;
-	    // _light.Position = new Vector2(16, 16);
-	    // _light.Energy = .25f;
-	    // CallDeferred("add_child", _light);
-
 	    Update();
 	    Globals.ResearchListeners.Add(Update);
+	    
+	    _light.Texture = Database.Instance.GetTexture("SoftLight");
+	    _light.Color = Colors.Yellow;
+	    _light.TextureScale = .3f;
+	    _light.Position = new Vector2(0, 24);
+	    Sprite.CallDeferred("add_child", _light);
     }
 
     private void Update()
@@ -68,7 +67,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
 		    tweenytwiney?.Kill();
 		    _particles.Emitting = false;
-		    // _light.Visible = false;
+		    _light.Visible = false;
     		return;
     	}
 
@@ -103,7 +102,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    tweenytwiney.TweenCallback(Callable.From(() => tweenytwiney.Kill()));
 	    
 	    _particles.Emitting = true;
-	    // _light.Visible = true;
+	    _light.Visible = true;
     }
 
 	/**************************************************************************
@@ -153,14 +152,13 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
     public int GetMaxTransferAmount(string itemType)
     {
-	    return Database.Instance.Recipes
-		    .Where(recipe => recipe.Category == GetCategory())
-		    .Where(recipe => recipe.Ingredients.ContainsKey(itemType))
-		    .Select(recipe => recipe.Ingredients)
-		    .Where(ingredient => ingredient.ContainsKey(itemType))
-		    .Select(_ => GetInputInventory().CountItem(itemType))
-		    .Select(count => 50 - count)
-		    .Max();
+	    var currentCount = _inputInventory.CountItem(itemType);
+	    if (_maxItems.TryGetValue(itemType, out var maxCount) && currentCount < maxCount * 50)
+	    {
+		    return maxCount * 50 - currentCount;
+	    }
+
+	    return 0;
     }
 
     #endregion

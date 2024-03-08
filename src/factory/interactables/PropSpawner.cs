@@ -141,13 +141,24 @@ public partial class PropSpawner : Node2D
 		// AddChild(spawn);
 	}
 
+	private GpuParticles2D party;
+	
 	public void PlacePropsParticles()
 	{
-		var part = GD.Load<PackedScene>("res://src/factory/shaders/grass_particles.tscn").Instantiate<GpuParticles2D>();
-		AddChild(part);
-		part.ZIndex = -98;
+		party = GD.Load<PackedScene>("res://src/factory/shaders/grass_particles.tscn").Instantiate<GpuParticles2D>();
+		AddChild(party);
+		party.ZIndex = -98;
 		var tweeny = Globals.Tree.CreateTween();
 		tweeny.TweenInterval(1);
-		tweeny.TweenCallback(Callable.From(() => part.SpeedScale = 0));
+		tweeny.TweenCallback(Callable.From(() => party.SpeedScale = 0));
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		if (party == null) return;
+
+		var matty = party.Material as ShaderMaterial;
+		matty.SetShaderParameter("character_position", Globals.Player.GlobalPosition);
 	}
 }

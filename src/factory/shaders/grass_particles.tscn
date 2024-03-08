@@ -1,10 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://csccrf1y0jkwi"]
+[gd_scene load_steps=7 format=3 uid="uid://csccrf1y0jkwi"]
 
 [ext_resource type="Material" uid="uid://b4f6au4nnkrbj" path="res://src/factory/shaders/wind_sway.tres" id="1_tpnpr"]
 [ext_resource type="Texture2D" uid="uid://c7iplbovhc3by" path="res://res/sprites/Grass2.png" id="1_ychv1"]
 [ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/sprites/soil2.png" id="2_1tw4h"]
 
+[sub_resource type="Curve" id="Curve_ib31q"]
+min_value = -360.0
+max_value = 360.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="CurveTexture" id="CurveTexture_jduvm"]
+curve = SubResource("Curve_ib31q")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4dkab"]
 emission_shape = 3
@@ -16,13 +23,13 @@ orbit_velocity_max = 0.0
 angle_min = -10.0
 angle_max = 10.0
 angle_curve = SubResource("CurveTexture_jduvm")
-scale_min = 0.25
-scale_max = 0.5
+scale_min = 0.5
+scale_max = 0.75
 
 [node name="Node2D" type="GPUParticles2D"]
 material = ExtResource("1_tpnpr")
 position = Vector2(1, 0)
-amount = 1400
+amount = 5200
 process_material = SubResource("ParticleProcessMaterial_4dkab")
 texture = ExtResource("1_ychv1")
 preprocess = 1.0

@@ -11,7 +11,8 @@ public partial class FactoryGUI : CanvasLayer
 	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
-	
+	private ColorRect TopBar => GetNode<ColorRect>("%TopBar");
+	private ColorRect BottomBar => GetNode<ColorRect>("%BottomBar");
 	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
 	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
 	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
@@ -132,6 +133,21 @@ public partial class FactoryGUI : CanvasLayer
 		if (node.GlobalPosition.Y + node.Size.Y > screenSize.Y)
 		{
 			node.GlobalPosition = new Vector2(node.GlobalPosition.X, screenSize.Y - node.Size.Y);
+		}
+	}
+
+	
+	public void ToggleCinematicMode()
+	{
+		if (Config.CinematicMode)
+		{
+			TopBar.Visible = true;
+			BottomBar.Visible = true;
+		}
+		else
+		{
+			TopBar.Visible = false;
+			BottomBar.Visible = false;
 		}
 	}
 }
