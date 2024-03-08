@@ -17,6 +17,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
 
     public override string ItemType => "Mine";
     private Resource _resource;
+    private Tween tweenytwiney;
     
     public Mine() 
     {
@@ -53,7 +54,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
             return;
         }
 
-        if (!_particles.Emitting) _particles.Emitting = true;
+
         _time += (float)delta;
         Animate();
 
@@ -81,12 +82,12 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     {
         return _inventory.CountAllItems() >= 200;
     }
-
-    private Tween tweenytwiney;
     
     private void Animate()
     {
-        if (!IsOnScreen || tweenytwiney != null && tweenytwiney.IsRunning()) return;
+        if (!Config.AnimateMines && _particles.Emitting) _particles.Emitting = false; 
+        if (!_particles.Emitting && Config.AnimateMines) _particles.Emitting = true;
+        if (!IsOnScreen || tweenytwiney != null && tweenytwiney.IsRunning() || !Config.AnimateMines) return;
         
         // Get random position
         var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));

@@ -102,6 +102,7 @@ public partial class Inserter : Building, IRotatable
 
     private void Update()
     {
+        _hasInventoryChanged = true;
         _from = Globals.FactoryScene.TileMap.GetEntity(Input, FactoryTileMap.Building) as ITransferTarget;
         _to = Globals.FactoryScene.TileMap.GetEntity(Output, FactoryTileMap.Building) as ITransferTarget;
         _belt = _to as Belt;
