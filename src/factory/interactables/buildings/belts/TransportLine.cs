@@ -41,7 +41,12 @@ public partial class TransportLine : ITransferTarget
      **************************************************************************/
     
     private readonly List<GroundItem> _itemsOnBelt = new();
-    private readonly Inventory _inventory = new();
+    private readonly TransportInventory _inventory = new();
+    
+    private class TransportInventory : Inventory
+    {
+        public override bool CanAcceptItems(string item, int count = 1) => CountAllItems() + count <= 5;
+    }
 
     /**************************************************************************
      * Properties                                                             *
@@ -181,7 +186,7 @@ public partial class TransportLine : ITransferTarget
         _itemsOnBelt.Add(item);
         if (IsEqualApprox(item.GlobalPosition, Vector2.Zero, 1))
         {
-            item.GlobalPosition = _cachePosition + GetTargetLocation(4);
+            item.GlobalPosition = _cachePosition + GetTargetLocation(_itemsOnBelt.Count - 1);
         }
     }
     

@@ -41,7 +41,6 @@ public partial class TradeDepot : Building, ITransferTarget, IInteractable
     public override void _Process(double delta)
     {
         base._Process(delta);
-
         if (ItemType == "Exporter") return;
         
         var depots = Globals.FactoryScene.TileMap.GetEntitiesOfType("TradeDepot").Where(entity => entity != this)

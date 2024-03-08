@@ -71,7 +71,7 @@ public partial class FactoryTileMap : LayerTileMap
 					randomvec = new Vector2I(GD.RandRange(4, 7), GD.RandRange(0, 3));
 				}
 
-				SetCell(0, coords, 0, randomvec);
+				// SetCell(0, coords, 0, randomvec);
 			}
 		}
 		
@@ -88,7 +88,7 @@ public partial class FactoryTileMap : LayerTileMap
 
 		var grassTexture = Database.Instance.GetTexture("Grass2");
 		var grassTexture2 = Database.Instance.GetTexture("Grass5");
-		PropSpawner spawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .5f);
+		PropSpawner spawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .75f);
 		spawner.GlobalPosition = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
 		
@@ -152,6 +152,11 @@ public partial class FactoryTileMap : LayerTileMap
 		}
 		
 		AddProvence(MapScene.FactoryPosition);
+	}
+	
+	public override bool IsOnMap(Vector2I mapPos)
+	{
+		return true;
 	}
 
 	public bool IsBuildable(Vector2I mapPos)

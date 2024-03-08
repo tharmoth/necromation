@@ -15,18 +15,18 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     private Inventory _outputInventory = new();
     private float _time;
 
+    private static readonly PackedScene _particleScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/smoke.tscn");
     private GpuParticles2D _particles;
     private PointLight2D _light = new();
 
     private readonly Dictionary<string, int> _maxItems = new();
     
+    
     public override void _Ready()
     {
 	    base._Ready();
-	    _particles = GD.Load<PackedScene>("res://src/factory/interactables/buildings/smoke.tscn")
-		    .Instantiate<GpuParticles2D>();
-	    CallDeferred("add_child", _particles);
-	    
+	    _particles = _particleScene.Instantiate<GpuParticles2D>();
+	    Sprite.CallDeferred("add_child", _particles);
 	    
 	    // _light.Texture = Database.Instance.GetTexture("Light760");
 	    // _light.Color = Colors.Yellow;
@@ -59,8 +59,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 
     public override void _Process(double delta)
     {
-    	base._Process(delta);
-	    
+	    base._Process(delta);
     	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
     	{
     		_time = 0;
@@ -92,12 +91,12 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     
     private void Animate()
     {
-	    if (IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
+	    if (GodotObject.IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
         
 	    // Get random position
 	    var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
 	    tweenytwiney?.Kill();
-	    tweenytwiney = GetTree().CreateTween();
+	    tweenytwiney = Globals.Tree.CreateTween();
 	    tweenytwiney.TweenProperty(Sprite, "scale", new Vector2(1.0f, .85f), 1f);
 	    tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, 1f);
 	    // tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, .5f);

@@ -21,7 +21,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         set
         {
             _orientation = value;
-            RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
+            Sprite.RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
         }
     }
     
@@ -35,10 +35,19 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         _ => throw new ArgumentOutOfRangeException()
     };
     
+    protected virtual Vector2I LeftDirectionGlobal => Orientation switch {
+        IRotatable.BuildingOrientation.NorthSouth => new Vector2I(0, -1),
+        IRotatable.BuildingOrientation.EastWest => new Vector2I(1, 0),
+        IRotatable.BuildingOrientation.SouthNorth => new Vector2I(0, 1),
+        IRotatable.BuildingOrientation.WestEast => new Vector2I(-1, 0),
+        _ => throw new ArgumentOutOfRangeException()
+    };
+    
     // Private fields
     private float _secondsPerItem = .5333f;
     private float Speed => FactoryTileMap.TileSize / _secondsPerItem;
     private Vector2I Output => MapPosition + TargetDirectionGlobal;
+    private Vector2I Input => MapPosition - TargetDirectionGlobal;
     private static Vector2I TargetDirectionLocal => new (0, -1);
     private AudioStreamPlayer2D _audio = new();
 
@@ -53,7 +62,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         Sprite.Hframes = 8;
         
         // AddChild(_audio);
-        _audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_sport_treadmill_run_fast_no_one_on_22684.mp3");
+        // _audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_sport_treadmill_run_fast_no_one_on_22684.mp3");
         _audio.Attenuation = 50.0f;
         _audio.Autoplay = true;
         _audio.VolumeDb = -30.0f;
@@ -64,15 +73,15 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     {
         base._Ready();
         Orientation = _orientation;
-        RotationDegrees = IRotatable.GetDegreesFromOrientation(_orientation);
+        Sprite.RotationDegrees = IRotatable.GetDegreesFromOrientation(_orientation);
         Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/buildings/BeltAnimated.png");
         // _audio.Play();
         
         LeftLine.TargetDirectionGlobal = TargetDirectionGlobal;
         RightLine.TargetDirectionGlobal = TargetDirectionGlobal;
             
-        LeftLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(GlobalRotation));
-        RightLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(GlobalRotation));
+        LeftLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(Sprite.GlobalRotation));
+        RightLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(Sprite.GlobalRotation));
         
         // When this belt is placed, update the input and output of all adjacent belts
         GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));
@@ -81,7 +90,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
     public override void _PhysicsProcess(double delta)
     {
-        base._PhysicsProcess(delta);
         if (Config.ProcessBeltsInPhysics)
         {
             LeftLine.Process(delta);
@@ -91,8 +99,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
     public override void _Process(double delta)
     {
-        base._Process(delta);
-
         if (!Config.ProcessBeltsInPhysics)
         {
             LeftLine.Process(delta);
@@ -176,7 +182,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     
     private Belt GetBeltInDirection(Vector2 direction)
     {
-        var global = ToGlobal(direction * FactoryTileMap.TileSize);
+        var global = Sprite.ToGlobal(direction * FactoryTileMap.TileSize);
         var map = Globals.FactoryScene.TileMap.GlobalToMap(global);
         var entity = Globals.FactoryScene.TileMap.GetEntity(map, FactoryTileMap.Building);
 
@@ -194,6 +200,12 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         var beltBehind = belts["Behind"];
         var beltRight = belts["Right"];
         var beltLeft = belts["Left"];
+
+        // If the belt behind this one is not oriented the same as thie one we don't care about it.
+        if (beltBehind != null && beltBehind._orientation != Orientation)
+        {
+            beltBehind = null;
+        }
         
         var leftLine = belt?.LeftLine;
         var rightLine = belt?.RightLine;
@@ -234,7 +246,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     
     protected virtual Belt GetBehindBelt()
     {
-        return GetBeltInDirection(-TargetDirectionLocal);
+        return Globals.FactoryScene.TileMap.GetEntity(Input, FactoryTileMap.Building) as Belt;
     }
 
     public void InsertLeft(string item, int count = 1)
@@ -284,7 +296,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public string GetFirstItem()
     {
         var item = LeftLine.GetInventories().First().GetFirstItem();
-        item ??= RightLine.GetInventories().First().GetFirstItem();;
+        item ??= RightLine.GetInventories().First().GetFirstItem();
         return item;
     }
     

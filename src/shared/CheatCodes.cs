@@ -7,13 +7,7 @@ using Necromation;
 public partial class CheatCodes : Node
 {
 	
-	private Queue<String> _keys = new();
-
-	public override void _Ready()
-	{
-		base._Ready();
-		GD.Print("Cheater!");
-	}
+	private readonly Queue<string> _keys = new();
 
 	public override void _UnhandledKeyInput(InputEvent @event)
 	{

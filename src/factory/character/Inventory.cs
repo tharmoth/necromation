@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Necromation;
 
-public partial class Inventory : Node, ITransferTarget
+public partial class Inventory : ITransferTarget
 {
 	public readonly List<Action> Listeners = new();
 	private readonly Dictionary<string, int> _items = new();
@@ -84,6 +84,8 @@ public partial class Inventory : Node, ITransferTarget
 		_items.Clear();
 		foreach (var entry in dictionary)
 		{
+			// This shouldn't happen unless the file is an old version or manually edited.
+			if (!CanAcceptItems(entry.Key.ToString(), (int)entry.Value)) continue;
 			_items.Add(entry.Key.ToString(), (int)entry.Value);
 			itemCount += (int)entry.Value;
 		}

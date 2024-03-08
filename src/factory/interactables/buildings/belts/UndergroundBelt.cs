@@ -38,7 +38,7 @@ public partial class UndergroundBelt : Belt
         {
             var position = MapPosition + TargetDirectionGlobal * i;
             var entity = Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Building);
-            if (entity is UndergroundBelt belt)
+            if (entity is UndergroundBelt belt && belt.Orientation  == IRotatable.GetOppositeOrientation(Orientation))
             {
                 _isEntrance = !belt._isEntrance;
                 
@@ -57,8 +57,8 @@ public partial class UndergroundBelt : Belt
 
         if (_isEntrance) return;
         // We want to flip the lanes for the exit.
-        LeftLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(GlobalRotation));
-        RightLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(GlobalRotation));
+        LeftLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(Sprite.GlobalRotation));
+        RightLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(Sprite.GlobalRotation));
     }
     
     public override bool CanPlaceAt(Vector2 position)
@@ -89,7 +89,7 @@ public partial class UndergroundBelt : Belt
         {
             var position = MapPosition - TargetDirectionGlobal * i;
             var entity = Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Building);
-            if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance)
+            if (entity is UndergroundBelt belt && belt._isEntrance != _isEntrance && belt.Orientation  == IRotatable.GetOppositeOrientation(Orientation))
             {
                 LeftLine._secondsPerItem = 0.133325f;
                 RightLine._secondsPerItem = 0.133325f;

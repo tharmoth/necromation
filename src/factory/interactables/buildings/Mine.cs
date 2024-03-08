@@ -27,15 +27,14 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         _audio.VolumeDb = -20.0f;
         _audio.PitchScale = .5f;
         _audio.Finished += () => _audio.Play();
-        AddChild(_audio);
+        Sprite.AddChild(_audio);
         Sprite.AddChild(_particles);
     }
 
     public override void _Ready()
     {
         base._Ready();
-        _audio.Playing = true;
-        _audio.Play(fromPosition:(float)GD.RandRange(0.0f, 34.0f));
+        _audio.CallDeferred("play", (float)GD.RandRange(0.0f, 34.0f));
         _resource = Globals.FactoryScene.TileMap.GetEntityPositions(this)
             .Select(position => Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Resource))
             .OfType<Resource>()
@@ -45,7 +44,6 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     public override void _Process(double delta)
     {
         base._Process(delta);
-
         if (MaxOutputItemsReached())
         {
             if (_audio.Playing) _audio.Stop();
@@ -92,9 +90,9 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         // Get random position
         var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
         tweenytwiney?.Kill();
-        tweenytwiney = GetTree().CreateTween();
-        tweenytwiney.TweenProperty(Sprite, "position", GetSpriteOffset() + randomPosition, .1f);
-        tweenytwiney.TweenProperty(Sprite, "position", GetSpriteOffset(), .1f);
+        tweenytwiney = Globals.Tree.CreateTween();
+        tweenytwiney.TweenProperty(Sprite, "global_position", GlobalPosition + GetSpriteOffset() + randomPosition, .1f);
+        tweenytwiney.TweenProperty(Sprite, "global_position", GlobalPosition + GetSpriteOffset(), .1f);
         tweenytwiney.TweenCallback(Callable.From(() => tweenytwiney.Kill()));
     }
 
@@ -112,11 +110,11 @@ public partial class Mine : Building, IInteractable, ITransferTarget
         
         Globals.FactoryScene.AddChild(text);
 
-        var textPositionTween = GetTree().CreateTween();
+        var textPositionTween = Globals.Tree.CreateTween();
         textPositionTween.TweenProperty(text, "global_position", text.GlobalPosition + new Vector2(0, -50), 1.0f);
         textPositionTween.TweenCallback(Callable.From(() => text.QueueFree()));
         
-        var textColorTween = GetTree().CreateTween();
+        var textColorTween = Globals.Tree.CreateTween();
         textColorTween.TweenProperty(text, "modulate", new Color(1, 1, 1, 0), 1.0f);
     }
 

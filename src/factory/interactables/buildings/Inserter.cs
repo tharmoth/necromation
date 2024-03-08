@@ -45,9 +45,12 @@ public partial class Inserter : Building, IRotatable
         set
         {
             _orientation = value;
-            RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
+            Sprite.RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
+            RotationDegrees = Sprite.RotationDegrees;
         }
     }
+
+    private float RotationDegrees;
     
     // The input and output tiles for the inserter. These are determined by the orientation of the inserter and the range.
     private Vector2I Input => MapPosition + _range * Orientation switch {
@@ -90,14 +93,14 @@ public partial class Inserter : Building, IRotatable
         
         //TODO: too many hacks to add long inserter. Think about it
         _range = range;
-        SetNotifyTransform(true);
         Sprite.AddChild(SpriteInHand);
         Sprite.ZIndex = 2;
         
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/PM_MPRINTER_DPA4060_6_Printer_Printing_Individual_Cycle_Servo_Motor_Toner_Close_Perspectiv_328.mp3");
         _audio.Attenuation = 25.0f;
         _audio.VolumeDb = -10.0f;
-        AddChild(_audio);
+        Sprite.AddChild(_audio);
+        UpdateInputOutput();
     }
 
     private void Update()
@@ -108,30 +111,23 @@ public partial class Inserter : Building, IRotatable
         _belt = _to as Belt;
         if (_belt != null)
         {
-            _insertLeft = TransportLine.IsEqualApprox(_belt.RotationDegrees + 90, RotationDegrees)
-                          || TransportLine.IsEqualApprox(_belt.RotationDegrees, RotationDegrees - 90)
-                          || TransportLine.IsEqualApprox(_belt.RotationDegrees, RotationDegrees - 180)
-                          || TransportLine.IsEqualApprox(_belt.RotationDegrees - 270, RotationDegrees)
-                          || TransportLine.IsEqualApprox(_belt.RotationDegrees - 180, RotationDegrees);
+            _insertLeft = TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees + 90, RotationDegrees)
+                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees, RotationDegrees - 90)
+                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees, RotationDegrees - 180)
+                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees - 270, RotationDegrees)
+                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees - 180, RotationDegrees);
         }
-
-        CallDeferred("ResetListeners");
+        
+        ResetListeners();
     }
     
     public override void _Ready()
     {
         base._Ready();
         Orientation = _orientation;
+        Globals.FactoryScene.TileMap.listeners.Add(Update);
         Update();
     }
-
-    public override void _Notification(int what)
-    {
-        base._Notification(what);
-        if (what != NotificationTransformChanged) return;
-        UpdateInputOutput();
-    }
-    
     private void UpdateInputOutput()
     {
         SpriteInHand.Position = _range == 1 ? 
@@ -141,8 +137,6 @@ public partial class Inserter : Building, IRotatable
 
     public override void _Process(double delta)
     {
-        base._Process(delta);
-        
         _time += delta;
         if (_time > _interval / 2 && _isTransferring)
         {
@@ -168,9 +162,9 @@ public partial class Inserter : Building, IRotatable
         SpriteInHand.Visible = true;
         SpriteInHand.Scale = new Vector2(16 / SpriteInHand.Texture.GetSize().X, 16 / SpriteInHand.Texture.GetSize().Y);
         _rotationTween?.Kill();
-        _rotationTween = GetTree().CreateTween();
-        _rotationTween.TweenProperty(Sprite, "rotation", Math.PI, _interval/2);
-        _rotationTween.TweenProperty(Sprite, "rotation", 0, _interval/2);
+        _rotationTween = Globals.Tree.CreateTween();
+        _rotationTween.TweenProperty(Sprite, "rotation", Mathf.DegToRad(RotationDegrees)  + Math.PI, _interval/2);
+        _rotationTween.TweenProperty(Sprite, "rotation", Mathf.DegToRad(RotationDegrees), _interval/2);
     }
     
     // Attempts to transfer items from the from inventory to the to inventory.
@@ -229,15 +223,16 @@ public partial class Inserter : Building, IRotatable
     {
         base._ExitTree();
         
+        Globals.FactoryScene.TileMap.listeners.Remove(Update);
         ClearListeners();
     }
     
-    // Clears then adds all of the inserters associated listeners.
-    // This includes the tilemap, the from inventory, and the to inventory.
+    // Clears then adds most of the inserters associated listeners.
+    // This includes the from inventory, and the to inventory.
+    // this excludes the tilemap.
     private void ResetListeners()
     {
         ClearListeners();
-        Globals.FactoryScene.TileMap.listeners.Add(Update);
         _from?.GetOutputInventory().Listeners.Add(InventoryChanged);
         if (_belt != null)
         {
@@ -250,11 +245,9 @@ public partial class Inserter : Building, IRotatable
         }
     }
 
-    // Clears all of the inserters associated listeners. Needs to be called before this node is freed or we'll get
-    // instanceremoved errors... probably.
+    // Clears the building from and to listeners
     private void ClearListeners()
     {
-        Globals.FactoryScene.TileMap.listeners.Remove(Update);
         _from?.GetOutputInventory().Listeners.Remove(InventoryChanged);
         if (_belt != null)
         {

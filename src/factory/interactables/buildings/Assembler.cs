@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Necromation.gui;
+using Necromation.interactables.interfaces;
 using Necromation.interfaces;
 
 namespace Necromation;
 
-public partial class Assembler : Building, ICrafter, IInteractable, ITransferTarget
+public partial class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IRotatable
 {
 	public override Vector2I BuildingSize => Vector2I.One * 3;
 	public override string ItemType { get; }
@@ -31,15 +32,19 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	{
 		ItemType = itemType;
 	    _category = category;
-	    AddChild(_recipeSprite);
-	    AddChild(_outlineSprite);
+	    Sprite.AddChild(_recipeSprite);
+	    Sprite.AddChild(_outlineSprite);
 	    _inputInventory = new AssemblerInventory(this);
 	}
 
-    public override void _Process(double delta)
+	public override void _Ready()
+	{
+		base._Ready();
+	}
+
+	public override void _Process(double delta)
     {
-    	base._Process(delta);
-    	
+	    base._Process(delta);
     	if (Recipe == null || !Recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
     	{
     		_time = 0;
@@ -73,12 +78,12 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     
     private void Animate()
     {
-	    if (IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
+	    if (GodotObject.IsInstanceValid(tweenytwiney) && tweenytwiney.IsRunning()) return;
         
 	    // Get random position
 	    var randomPosition = new Vector2((float)GD.RandRange(-2.0f, 2.0f), (float)GD.RandRange(-3.0f, 0f));
 	    tweenytwiney?.Kill();
-	    tweenytwiney = GetTree().CreateTween();
+	    tweenytwiney = Globals.Tree.CreateTween();
 	    tweenytwiney.TweenProperty(Sprite, "scale", new Vector2(.85f, .85f), 1f);
 	    tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, 1f);
 	    // tweenytwiney.TweenProperty(Sprite, "scale", Vector2.One, .5f);

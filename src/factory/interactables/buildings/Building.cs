@@ -3,27 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.factory;
 using Necromation.gui;
 using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
 using Necromation.sk;
 
-public abstract partial class Building : Node2D, FactoryTileMap.IEntity, ProgressTracker.IProgress
+public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker.IProgress
 {
-	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
-	protected readonly Sprite2D Sprite = new();
-	private Tween _removeTween;
-
-	private float _removePercent;
-	public float RemovePercent
+	private Vector2 _globalPosition;
+	public Vector2 GlobalPosition
 	{
-		get => _removePercent;
-		set
-		{
-			_removePercent = value;
-			Globals.FactoryScene.Gui.SetProgress(value);
-		}
+		get => _globalPosition;
+		set => _globalPosition = value;
 	}
+	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
+	public readonly Sprite2D Sprite = new();
+
 	
 	private VisibleOnScreenNotifier2D Notifier = new();
 	private AudioStreamPlayer2D _audio = new();
@@ -33,28 +29,46 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 
 	protected Building()
 	{
-		AddChild(Sprite);
-		AddChild(_audio);
+		Sprite.AddChild(_audio);
 		
 		Notifier.ScreenEntered += () => IsOnScreen = true;
 		Notifier.ScreenExited += () => IsOnScreen = false;
-		AddChild(Notifier);
+		Sprite.AddChild(Notifier);
 		
 		_audio.Stream = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 		
-		AddToGroup("Persist");
-
 		_particles = GD.Load<PackedScene>("res://src/factory/interactables/buildings/place_particles.tscn").Instantiate<GpuParticles2D>();
 		_particles.OneShot = true;
 		_particles.Emitting = true;
 		_particles.ZAsRelative = true;
 		_particles.ZIndex = -1;
-		CallDeferred("add_child", _particles);
+		Sprite.CallDeferred("add_child", _particles);
 	}
 
-	public override void _Ready()
+	public virtual void _Process(double delta)
 	{
-		base._Ready();
+		// if (Sprite.Visible)
+		// {
+		// 	if (!IsOnScreen)
+		// 	{
+		// 		Sprite.Visible = false;
+		// 	}
+		// } else if (!Sprite.Visible)
+		// {
+		// 	if (Notifier.IsOnScreen())
+		// 	{
+		// 		Sprite.Visible = true;
+		// 	}
+		// }
+	}
+
+	public virtual void _PhysicsProcess(double delta)
+	{
+		
+	}
+
+	public virtual void _Ready()
+	{
 		IsOnScreen = Notifier.IsOnScreen();
 		
 		var particleMaterial = (ParticleProcessMaterial)_particles.ProcessMaterial;
@@ -82,18 +96,18 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 		// }
 
 		GlobalPosition = Globals.FactoryScene.TileMap.ToMap(GlobalPosition);
+		Sprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(GlobalPosition);
 		Sprite.GlobalPosition += GetSpriteOffset();
 
 		var positions = GetOccupiedPositions(GlobalPosition);
 		positions.ForEach(pos => Globals.FactoryScene.TileMap.AddEntity(pos, this, FactoryTileMap.Building));
 		
 		// Avoid death on load
-		if (Time.GetTicksMsec() > 1000) _audio.Play();
+		_audio.CallDeferred("play");
 	}
 
-	public override void _ExitTree()
+	public virtual void _ExitTree()
 	{
-		base._ExitTree();
 		Globals.FactoryScene.TileMap.RemoveEntity(this);
 	}
 
@@ -105,21 +119,7 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 		return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable);
 	}
 
-	public void StartRemoval(Inventory to)
-	{
-		_removeTween?.Kill();
-		_removeTween = GetTree().CreateTween();
-		_removeTween.TweenProperty(this, "RemovePercent", 1.0f, .333f);
-		_removeTween.TweenCallback(Callable.From(() => Remove(to)));
-	}
-	
-		
-	public void CancelRemoval()
-	{
-		RemovePercent = 0;
-		_removeTween?.Kill();
-		_removeTween = null;
-	}
+
 	
 	public List<Vector2I> GetOccupiedPositions(Vector2 position)
 	{
@@ -136,28 +136,30 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 
 	public virtual void Remove(Inventory to)
 	{
-		int index = 0;
-		if (this is ITransferTarget inputTarget)
-		{
-			foreach (var from in inputTarget.GetInventories())
+		if (to != null) {
+			int index = 0;
+			if (this is ITransferTarget inputTarget)
 			{
-				foreach (var item in from.GetItems())
+				foreach (var from in inputTarget.GetInventories())
 				{
-					var count = from.CountItem(item);
-					Inventory.TransferItem(from, to, item, count);
-					var remaining = to.CountItem(item);
-					SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", GlobalPosition + new Vector2(0, index++ * 20));
+					foreach (var item in from.GetItems())
+					{
+						var count = from.CountItem(item);
+						Inventory.TransferItem(from, to, item, count);
+						var remaining = to.CountItem(item);
+						SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", Sprite.GlobalPosition + new Vector2(0, index++ * 20));
+					}
 				}
 			}
+			to.Insert(ItemType);
+			Globals.FactoryScene.TileMap.RemoveEntity(this);
+			SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, index++ * 20));
 		}
-		to.Insert(ItemType);
-		Globals.FactoryScene.TileMap.RemoveEntity(this);
-		SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", GlobalPosition + new Vector2(0, index++ * 20));
-
-		RemovePercent = 100;
 		Sprite.Visible = false;
 		Globals.FactoryScene.Gui.BuildingRemoved();
-		QueueFree();
+		Sprite.QueueFree();
+
+		Globals.BuildingManager.RemoveBuilding(this);
 
 	}
 
@@ -234,8 +236,8 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 		var dict =  new Godot.Collections.Dictionary<string, Variant>()
 		{
 			{ "ItemType", ItemType },
-			{ "PosX", Position.X }, // Vector2 is not supported by JSON
-			{ "PosY", Position.Y },
+			{ "PosX", Sprite.Position.X }, // Vector2 is not supported by JSON
+			{ "PosY", Sprite.Position.Y },
 			{ "Orientation", Orientation.ToString() }
 		};
 		if (this is ICrafter crafter)
@@ -255,7 +257,7 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
 	{
 		Enum.TryParse(nodeData["Orientation"].ToString(), true, out IRotatable.BuildingOrientation orientation);
-            
+		          
 		var building = Building.GetBuilding(nodeData["ItemType"].ToString(), orientation);
 		if (building is ICrafter crafter)
 		{
@@ -277,7 +279,7 @@ public abstract partial class Building : Node2D, FactoryTileMap.IEntity, Progres
 		
 		building.GlobalPosition = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);
 		building._audio.Stream = null;
-		Globals.FactoryScene.AddChild(building);
+		Globals.BuildingManager.AddBuilding(building, building.GlobalPosition);
 	}
 	#endregion
 }

@@ -1,6 +1,7 @@
 using System.Linq;
 using Godot;
 using Necromation;
+using Necromation.factory;
 using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
 using Necromation.sk;
@@ -40,6 +41,19 @@ public partial class Character : Node2D
 			if (Building.IsBuilding(_selected) 
 			    && Building.GetBuilding(_selected, IRotatable.BuildingOrientation.NorthSouth) is not IRotatable) 
 				_rotationDegrees = 0;
+		}
+	}
+	
+	private Tween _removeTween;
+
+	private float _removePercent;
+	public float RemovePercent
+	{
+		get => _removePercent;
+		set
+		{
+			_removePercent = value;
+			Globals.FactoryScene.Gui.SetProgress(value);
 		}
 	}
 	
@@ -192,9 +206,8 @@ public partial class Character : Node2D
 		
 		_inventory.Remove(building.ItemType);
 
-		building.GlobalPosition = position;
-		Globals.FactoryScene.AddChild(building);
-		
+		Globals.BuildingManager.AddBuilding(building, position);
+
 		if(!_inventory.Items.ContainsKey(building.ItemType)) Selected = null;
 	}
 
@@ -205,9 +218,24 @@ public partial class Character : Node2D
 		if (entity == _buildingBeingRemoved) return;
 		if (entity is not Building building) return;
 		_buildingBeingRemoved = building;
-		building.StartRemoval(_inventory);
+		_removeTween?.Kill();
+		_removeTween = Globals.Tree.CreateTween();
+		_removeTween.TweenProperty(this, "RemovePercent", 1.0f, .333f);
+		_removeTween.TweenCallback(Callable.From(() =>
+		{
+			RemovePercent = 100;
+			_buildingBeingRemoved.Remove(_inventory);
+		}));
 	}
 
+	private void CancelRemoval()
+	{
+		RemovePercent = 0;
+		_removeTween?.Kill();
+		_removeTween = null;
+		_buildingBeingRemoved = null;
+	}
+	
 	private void QPick()
 	{
 		var cache = Selected;
@@ -215,12 +243,6 @@ public partial class Character : Node2D
 			? building.ItemType
 			: null;
 		if (cache != Selected) _clickAudio.Play();
-	}
-	
-	private void CancelRemoval()
-	{
-		_buildingBeingRemoved?.CancelRemoval();
-		_buildingBeingRemoved = null;
 	}
 
 	private void Mine()
@@ -248,7 +270,7 @@ public partial class Character : Node2D
 
 		var remaining = _inventory.CountItem(Selected);
 
-		SKFloatingLabel.Show("-" + count + " " + Selected + " (" + remaining + ")" , ((Node2D)transfer).GlobalPosition);
+		SKFloatingLabel.Show("-" + count + " " + Selected + " (" + remaining + ")" , ((Building)transfer).GlobalPosition);
 			
 		if (remaining == 0) Selected = "";
 		
@@ -266,7 +288,7 @@ public partial class Character : Node2D
 			var count = from.CountItem(item);
 			Inventory.TransferItem(from, _inventory, item, count);
 			var remaining = _inventory.CountItem(item);
-			SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", ((Node2D)transfer).GlobalPosition + new Vector2(0, index++ * 20));
+			SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", ((Building)transfer).GlobalPosition + new Vector2(0, index++ * 20));
 		}
 
 		MusicManager.PlayCraft();

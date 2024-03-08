@@ -9,7 +9,6 @@ public partial class LayerTileMap : SKTileMap
 {
 	private readonly Dictionary<string, Dictionary<Vector2I, IEntity>> _layers = new();
 	
-	
 	// TileMap listeners are fired whenever an entity is added or removed. We may need to make this more localized at some point.
 	public List<Action> listeners = new();
 
@@ -127,7 +126,7 @@ public partial class LayerTileMap : SKTileMap
 		return GetEntities(position).Count == 0;
 	}
 	
-	public bool IsOnMap(Vector2I mapPos)
+	public virtual bool IsOnMap(Vector2I mapPos)
 	{
 		return GetCellSourceId(0, mapPos) != -1;
 	}

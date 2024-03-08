@@ -13,7 +13,7 @@ public partial class Barracks : Building, IInteractable, ITransferTarget
     public override void _Ready()
     {
         base._Ready();
-        CallDeferred("add_child",
+        Sprite.CallDeferred("add_child",
             GD.Load<PackedScene>("res://src/factory/interactables/buildings/soul_storm.tscn").Instantiate<GpuParticles2D>());
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Godot;
+using Necromation.factory;
 using Necromation.interactables.interfaces;
 
 namespace Necromation.sk;
@@ -54,6 +55,9 @@ public class SKSaveLoad
                 case "BuildingTilemap":
                     FactoryTileMap.Load(nodeData);
                     break;
+                case "BuildingManager":
+                    BuildingManager.Load(nodeData);
+                    break;
                 default:
                     Resource.Load(nodeData);
                     break;
@@ -96,5 +100,9 @@ public class SKSaveLoad
         var mapData = Globals.FactoryScene.TileMap.Save();
         var mapJson = Json.Stringify(mapData);
         saveGame.StoreLine(mapJson);
+        
+        var buildingData = Globals.BuildingManager.Save();
+        var buildingJson = Json.Stringify(buildingData);
+        saveGame.StoreLine(buildingJson);
     }
 }
