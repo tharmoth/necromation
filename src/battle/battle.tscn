@@ -1,13 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://biyscljj05i1"]
+[gd_scene load_steps=15 format=3 uid="uid://biyscljj05i1"]
 
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="1_2hsjy"]
 [ext_resource type="Script" path="res://src/battle/BattleScene.cs" id="1_jh312"]
+[ext_resource type="Script" path="res://src/battle/CloudRegionSpawner.cs" id="2_4opva"]
 [ext_resource type="Script" path="res://src/sk/pan_camera.gd" id="2_rgifv"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="4_8x33n"]
 [ext_resource type="Script" path="res://src/battle/BattleTileMap.cs" id="4_ht4g8"]
 [ext_resource type="Script" path="res://src/battle/gui/BattleGUI.cs" id="6_ldfr3"]
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="7_0goob"]
 [ext_resource type="Script" path="res://src/battle/UnitManager.cs" id="7_lcofj"]
+[ext_resource type="Texture2D" uid="uid://c6j5bqbm5mwtp" path="res://res/sprites/CloudTest.png" id="9_yg8ia"]
+[ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="11_81kll"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7p67d"]
 texture = ExtResource("1_2hsjy")
@@ -90,8 +93,19 @@ sources/1 = SubResource("TileSetAtlasSource_4oy1t")
 [node name="Battle" type="Node2D"]
 script = ExtResource("1_jh312")
 
+[node name="CloudRegion" type="Control" parent="."]
+clip_children = 1
+clip_contents = true
+custom_minimum_size = Vector2(3200, 3200)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_4opva")
+
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true
+clip_children = 2
 tile_set = SubResource("TileSet_lv767")
 format = 2
 layer_0/z_index = -100
@@ -134,3 +148,9 @@ script = ExtResource("7_lcofj")
 
 [node name="GrassHolder" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="CloudTest" type="Sprite2D" parent="."]
+position = Vector2(3207, 3194)
+texture = ExtResource("9_yg8ia")
+
+[node name="DayNight" parent="." instance=ExtResource("11_81kll")]

@@ -24,22 +24,22 @@ public partial class BattleScene : Scene
 		if (Provence.Commanders.Count == 0)
 		{
 			var PlayerCommanderInfantry = new Commander(new Province(), "Player");
-			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 10);
+			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 500);
 			Provence.Commanders.Add(PlayerCommanderInfantry);
 			
 			var EnemyCommanderInfantry = new Commander(new Province(), "Enemy");
-			EnemyCommanderInfantry.Units.Insert("Barbarian", 10);
+			EnemyCommanderInfantry.Units.Insert("Barbarian", 500);
 			Provence.Commanders.Add(EnemyCommanderInfantry);
 			
-			// var PlayerCommanderArcher = new Commander(new Province(), "Player");
-			// PlayerCommanderArcher.SpawnLocation = new Vector2I(0, 25);
-			// PlayerCommanderArcher.Units.Insert("Skeleton Archer", 100);
-			// Provence.Commanders.Add(PlayerCommanderArcher);
-			//
-			// var EnemyCommanderArcher = new Commander(new Province(), "Enemy");
-			// EnemyCommanderArcher.SpawnLocation = new Vector2I(30, 25);
-			// EnemyCommanderArcher.Units.Insert("Archer", 100);
-			// Provence.Commanders.Add(EnemyCommanderArcher);
+			var PlayerCommanderArcher = new Commander(new Province(), "Player");
+			PlayerCommanderArcher.SpawnLocation = new Vector2I(0, 25);
+			PlayerCommanderArcher.Units.Insert("Skeleton Archer", 100);
+			Provence.Commanders.Add(PlayerCommanderArcher);
+			
+			var EnemyCommanderArcher = new Commander(new Province(), "Enemy");
+			EnemyCommanderArcher.SpawnLocation = new Vector2I(30, 25);
+			EnemyCommanderArcher.Units.Insert("Archer", 100);
+			Provence.Commanders.Add(EnemyCommanderArcher);
 		}
 		
 		foreach(var commander in Provence.Commanders)

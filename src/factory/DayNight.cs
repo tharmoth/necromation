@@ -27,13 +27,9 @@ public partial class DayNight : CanvasModulate
 		_time += delta * INGAME_TO_REAL_MINUTE * MINUTES_PER_SECOND;
 		var value = (Mathf.Sin(_time) + 1) / 2;
 
-		if (value < .25)
+		if (Globals.Player != null)
 		{
-			Globals.Player.Light.Enabled = true;
-		}
-		else
-		{
-			Globals.Player.Light.Enabled = false;
+			Globals.Player.Light.Enabled = value < .25;
 		}
 		
 		Color = _gradient.Gradient.Sample((float)value);
