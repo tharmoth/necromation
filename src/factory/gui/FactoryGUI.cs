@@ -17,6 +17,8 @@ public partial class FactoryGUI : CanvasLayer
 	private ColorRect BottomBar => GetNode<ColorRect>("%BottomBar");
 	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
 	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
+	private AudioStreamPlayer GuiOpenedAudio => GetNode<AudioStreamPlayer>("%GuiOpenedAudio");
+	private AudioStreamPlayer GuiClosedAudio => GetNode<AudioStreamPlayer>("%GuiClosedAudio");
 
 	/**************************************************************************
 	 * State Data          													  *
@@ -50,12 +52,17 @@ public partial class FactoryGUI : CanvasLayer
 		CloseGui();
 		if (IsInstanceValid(open) && open.GetType() == gui.GetType()) return;
 		_openGui = gui;
+		GuiOpenedAudio.Play();
 		AddChild(gui);
 	}
 	
 	public void CloseGui()
 	{
-		if (IsInstanceValid(_openGui)) _openGui?.QueueFree();
+		if (IsInstanceValid(_openGui))
+		{
+			_openGui?.QueueFree();
+			GuiClosedAudio.Play();
+		}
 		_openGui = null;
 	}
 		

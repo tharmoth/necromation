@@ -39,6 +39,7 @@ zoom = Vector2(4, 4)
 
 [node name="GUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+layer = 2
 script = ExtResource("4_513oc")
 
 [node name="MainGui" type="HBoxContainer" parent="GUI"]

@@ -22,6 +22,7 @@ public partial class Character : Node2D
 	
 	private Resource _resource;
 	private Building _buildingBeingRemoved;
+	private Building _buildingInHand;
 
 	private int _rotationDegrees;
 	private string _selected;
@@ -38,10 +39,16 @@ public partial class Character : Node2D
 			_sprite.Scale = !Building.IsBuilding(_selected) ? 
 				new Vector2(32 / (float)_sprite.Texture.GetWidth(), 32 / (float)_sprite.Texture.GetHeight()) 
 				: new Vector2(1, 1);
-			
-			if (Building.IsBuilding(_selected) 
-			    && Building.GetBuilding(_selected, IRotatable.BuildingOrientation.NorthSouth) is not IRotatable) 
-				_rotationDegrees = 0;
+
+			if (Building.IsBuilding(Selected))
+			{
+				_buildingInHand = Building.GetBuilding(Selected, Orientation);
+				if (_buildingInHand is not IRotatable) _rotationDegrees = 0;
+			}
+			else
+			{
+				_buildingInHand = null;
+			}
 		}
 	}
 	
@@ -179,17 +186,14 @@ public partial class Character : Node2D
 		_sprite.Modulate = Colors.White;
 		
 		if (!Building.IsBuilding(Selected)) return;
-		
-		//TODO: making buildings every tick seems like a bad idea.
-		var buildingInHand = Building.GetBuilding(Selected, Orientation);
-		
-		if (buildingInHand is IRotatable rotatable)
+
+		if (_buildingInHand is IRotatable rotatable)
 			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
 		
-		if (buildingInHand.BuildingSize.X % 2 == 0) _sprite.Position += new Vector2(16, 0);
-		if (buildingInHand.BuildingSize.Y % 2 == 0) _sprite.Position += new Vector2(0, 16);
+		if (_buildingInHand.BuildingSize.X % 2 == 0) _sprite.Position += new Vector2(16, 0);
+		if (_buildingInHand.BuildingSize.Y % 2 == 0) _sprite.Position += new Vector2(0, 16);
 		
-		_sprite.Modulate = buildingInHand.CanPlaceAt(GetGlobalMousePosition())
+		_sprite.Modulate = _buildingInHand.CanPlaceAt(GetGlobalMousePosition())
 			? new Color(0, 1, 0, 0.5f)
 			: new Color(1, 0, 0, 0.5f);
 	}
@@ -200,7 +204,7 @@ public partial class Character : Node2D
 	 ******************************************************************/
 	private void Build()
 	{
-		var building = Building.GetBuilding(Selected, Orientation);
+		var building = _buildingInHand;
 		if (!_inventory.Items.ContainsKey(building.ItemType))
 		{
 			Selected = null;
@@ -223,6 +227,7 @@ public partial class Character : Node2D
 		Globals.BuildingManager.AddBuilding(building, position);
 
 		if(!_inventory.Items.ContainsKey(building.ItemType)) Selected = null;
+		else _buildingInHand = Building.GetBuilding(Selected, Orientation);
 	}
 
 	private void RemoveBuilding()
