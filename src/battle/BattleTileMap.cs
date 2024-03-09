@@ -2,16 +2,17 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using Necromation;
 using Necromation.sk;
 
 public partial class BattleTileMap : LayerTileMap
 {
 	public const string Unit = "unit";
-	public static Vector2I TileSize = new(32, 32);
+	public static int TileSize = 32;
 	
 	private readonly AStar2D _grid = new();
-	private Dictionary<Vector2I, int> cells = new();
+	private System.Collections.Generic.Dictionary<Vector2I, int> cells = new();
 	
 	private const int X = 100;
 	private const int Y = 100;
@@ -69,17 +70,26 @@ public partial class BattleTileMap : LayerTileMap
 			}
 		}
 		
-		
-		Sprite2D sprite = new();
-		sprite.Texture = Database.Instance.GetTexture("soil2");
-		var scaler2 = (FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize) / sprite.Texture.GetSize().X;
-		sprite.Scale = new Vector2(scaler2, scaler2);
-		sprite.GlobalPosition = Vector2.Zero + scaler2 * sprite.Texture.GetSize() / 2;
-		sprite.Centered = true;
-		sprite.ZIndex = -50;
-		// We need to fix the edges to enable rotation.
-		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
-		Globals.BattleScene.CallDeferred("add_child", sprite);
+		for (int x = 0; x < X * TileSize; x += FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize)
+		{
+			for (int y = 0; y < Y * TileSize; y  += FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize)
+			{
+				var startpos = new Vector2(x, y);
+				
+				Sprite2D sprite = new();
+				sprite.Texture = Database.Instance.GetTexture("soil2");
+				var scaler2 = (FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize) / sprite.Texture.GetSize().X;
+				sprite.Scale = new Vector2(scaler2, scaler2);
+				sprite.GlobalPosition = startpos + scaler2 * sprite.Texture.GetSize() / 2;
+				sprite.Centered = true;
+				sprite.ZIndex = -99;
+				Globals.BattleScene.CallDeferred("add_child", sprite);
+				
+				PropSpawner spawner = new(PropSpawner.RandomType.Particles, new Array<Texture2D>(){  }, FactoryTileMap.ProvinceSize * TileSize / 2, .75f);
+				spawner.GlobalPosition = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
+				Globals.BattleScene.GetNode<Node2D>("GrassHolder").CallDeferred("add_child", spawner);
+			}
+		}
 	}
 
 	private void Connect(Vector2I a, Vector2I b)
@@ -115,7 +125,7 @@ public partial class BattleTileMap : LayerTileMap
 
 	public Vector2I GetNearestEmpty(Vector2I to)
 	{
-		if (!_grid.IsPointDisabled(cells[to])) return to;
+		if (cells.ContainsKey(to) && !_grid.IsPointDisabled(cells[to])) return to;
 		// Do this by scanning in a spiral pattern over the grid
 		var radius = 1;
 		while (radius < 50)
