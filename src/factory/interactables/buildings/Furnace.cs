@@ -143,7 +143,12 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 * ICrafter Methods                                                       *
 	 **************************************************************************/
     public Recipe GetRecipe() => _recipe;
-    public void SetRecipe(Recipe recipe) => _recipe = recipe;
+    // Assemblers add their contents to the players inventory when the recipe is changed. Furnaces auto choose recipes
+    // so they don't need to.
+    public void SetRecipe(Inventory dumpInventory, Recipe recipe)
+    {
+	    _recipe = recipe;
+    }
     public Inventory GetInputInventory() => _inputInventory;
     public Inventory GetOutputInventory() => _outputInventory;
     public virtual string GetCategory() => "smelting";
@@ -167,6 +172,17 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 		    var itemCount = CountItem(item);
 		    return _furnace._maxItems.ContainsKey(item) && itemCount < _furnace._maxItems[item];
 	    }
+	    
+	    public override int GetMaxTransferAmount(string itemType)
+	    {
+		    var currentCount = CountItem(itemType);
+		    if (_furnace._maxItems.TryGetValue(itemType, out var maxCount) && currentCount < maxCount * 50)
+		    {
+			    return maxCount * 50 - currentCount;
+		    }
+
+		    return 0;
+	    }
     }
     
     public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
@@ -175,17 +191,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public List<string> GetItems() => _outputInventory.GetItems();
     public string GetFirstItem() => _outputInventory.GetFirstItem();
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
-    public int GetMaxTransferAmount(string itemType)
-    {
-	    var currentCount = _inputInventory.CountItem(itemType);
-	    if (_maxItems.TryGetValue(itemType, out var maxCount) && currentCount < maxCount * 50)
-	    {
-		    return maxCount * 50 - currentCount;
-	    }
-
-	    return 0;
-    }
-
+    public int GetMaxTransferAmount(string itemType) => _inputInventory.GetMaxTransferAmount(itemType);
     #endregion
 
     public override void _ExitTree()

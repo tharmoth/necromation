@@ -9,16 +9,19 @@ public partial class RecipePopup : Control
 	private Container RecipeList => GetNode<Container>("%RecipeList");
 	
 	private ICrafter _crafter;
+	// The inventory items will be dumped to if a recipe is selected
+	private Inventory _targetInventory;
 	
-	public static void Display(ICrafter crafter)
+	public static void Display(Inventory targetInventory, ICrafter crafter)
 	{
 		var gui = GD.Load<PackedScene>("res://src/factory/gui/RecipeChooserGUI/recipe_popup.tscn").Instantiate<RecipePopup>();
-		gui.Init(crafter);
+		gui.Init(targetInventory, crafter);
 		Globals.FactoryScene.Gui.OpenGui(gui);
 	}
 
-	private void Init(ICrafter crafter)
-	{ 
+	private void Init(Inventory targetInventory, ICrafter crafter)
+	{
+		_targetInventory = targetInventory;
 		_crafter = crafter;
 		_category = _crafter.GetCategory();
 		RecipeList.GetChildren().OfType<Button>().ToList().ForEach(button => button.QueueFree());
@@ -40,7 +43,7 @@ public partial class RecipePopup : Control
 			button.CustomMinimumSize = new Vector2(100, 30);
 			button.Pressed += () =>
 			{
-				_crafter.SetRecipe(recipe);
+				_crafter.SetRecipe(_targetInventory, recipe);
 				QueueFree();
 			};
 			button.Text = recipe.Name;

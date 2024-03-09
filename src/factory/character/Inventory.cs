@@ -29,7 +29,7 @@ public partial class Inventory : ITransferTarget
 	 **************************************************************************/
 	public static bool TransferItem(ITransferTarget from, ITransferTarget to, string item, int count = 1)
 	{
-		if (!to.CanAcceptItems(item, count)) return false;
+		if (!to.CanAcceptItems(item, count) || count <= 0) return false;
 		from.Remove(item, count);
 		to.Insert(item, count);
 		return true;
@@ -70,10 +70,11 @@ public partial class Inventory : ITransferTarget
 		Listeners.ForEach(listener => listener());
 		return true;
 	}
-	public virtual bool CanAcceptItems(string item, int count = 1) => true;
+	public virtual bool CanAcceptItems(string item, int count = 1) => GetMaxTransferAmount(item) >= count;
 	public string GetFirstItem() => _items.Keys.FirstOrDefault();
 	public List<string> GetItems() => _items.Keys.ToList();
 	public List<Inventory> GetInventories() => new() { this };
+	public virtual int GetMaxTransferAmount(string itemType) => int.MaxValue;
 	#endregion
 
 	/**************************************************************************

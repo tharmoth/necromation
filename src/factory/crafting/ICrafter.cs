@@ -10,7 +10,7 @@ public interface ICrafter
     /*
      * Set the recipe that the crafter should use
      */
-    public void SetRecipe(Recipe recipe);
+    public void SetRecipe(Inventory dumpInventory, Recipe recipe);
     
     /*
      * Returns the inventory that the crafter uses to get the ingredients

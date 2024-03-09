@@ -17,16 +17,17 @@ public partial class InventoryItem : ItemBox
 		
 		Button.Pressed += () =>
 		{
-			if (_targetInventory == null || _sourceInventory == null || !_sourceInventory.CanAcceptItems(ItemType))
+			if (_targetInventory == null || _sourceInventory == null || !_targetInventory.CanAcceptItems(ItemType))
 			{
 				Globals.Player.Selected = ItemType;
 				return;
 			}
-			var count = Input.IsActionPressed("shift") ? _sourceInventory.Items[ItemType] : 1;
-			// _targetInventory.GetMaxTransferAmount();
+			var sourceCount = Input.IsActionPressed("shift") ? _sourceInventory.Items[ItemType] : 1;
+			var targetCapacity = _targetInventory.GetMaxTransferAmount(ItemType);
+			var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
 			
 			// TODO: Figure this out!
-			Inventory.TransferItem(_sourceInventory, _targetInventory, ItemType);
+			Inventory.TransferItem(_sourceInventory, _targetInventory, ItemType, amountToTransfer);
 		};
 	}
 

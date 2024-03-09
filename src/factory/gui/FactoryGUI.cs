@@ -101,7 +101,7 @@ public partial class FactoryGUI : CanvasLayer
 		TechnologyCompleteAudio.Play();
 	}
 	
-	public void BuildingRemoved()
+	public void PlayBuildingRemovedAudio()
 	{
 		BuildingRemovedAudio.Play();
 	}

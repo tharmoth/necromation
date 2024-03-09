@@ -39,7 +39,12 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 		Visible = false,
 		Texture = Database.Instance.GetTexture("Dark760")
 	};
-
+	
+	/**************************************************************************
+	 * Data Constants                                                         *
+	 **************************************************************************/
+	private const int MaxInputItems = 50;
+	
 	public Assembler(string itemType, string category)
 	{
 		ItemType = itemType;
@@ -99,7 +104,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     {
 	    if (_recipe == null)
 	    {
-		    RecipePopup.Display(this);
+		    RecipePopup.Display(playerInventory, this);
 	    }
 	    else
 	    {
@@ -113,8 +118,11 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	 * ICrafter Methods                                                       *
 	 **************************************************************************/
     public Recipe GetRecipe() => _recipe;
-    public void SetRecipe(Recipe recipe)
+    // Assemblers add their contents to the players inventory when the recipe is changed.
+    public void SetRecipe(Inventory dumpInventory, Recipe recipe)
     {
+	    if (dumpInventory != null) TransferInventories(dumpInventory);
+
 	    _outlineSprite.Visible = true;
 	    _outlineSprite.Scale = new Vector2(48 / _outlineSprite.Texture.GetSize().X, 48 / _outlineSprite.Texture.GetSize().Y);
 	    _outlineSprite.Position = new Vector2(0, -10);
@@ -133,16 +141,6 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
-    public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
-    public bool Remove(string item, int count = 1) => _outputInventory.Remove(item, count);
-    public List<string> GetItems() => _outputInventory.GetItems();
-    public string GetFirstItem() => _outputInventory.GetFirstItem();
-    public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
-
-    #endregion
-    
-	// Class Used for limiting the inputs to the assembler.
     private class AssemblerInventory : Inventory
     {
 	    private readonly Assembler _assembler;
@@ -152,12 +150,24 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 		    _assembler = assembler;
 	    }
 	    
-	    public override bool CanAcceptItems(string item, int count = 1)
+	    public override int GetMaxTransferAmount(string itemType)
 	    {
-		    if (_assembler.GetRecipe() == null) return false;
+		    if (_assembler.GetRecipe() == null) return 0;
+		    
 		    var ingredients = _assembler.GetRecipe().Ingredients;
-		    var itemCount = CountItem(item);
-		    return ingredients.ContainsKey(item) && itemCount < 50;
+		    if (!ingredients.ContainsKey(itemType)) return 0;
+		    
+		    var currentCount = CountItem(itemType);
+		    return Mathf.Max(0,  MaxInputItems - currentCount);
 	    }
     }
+    
+    public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
+    public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
+    public bool Remove(string item, int count = 1) => _outputInventory.Remove(item, count);
+    public List<string> GetItems() => _outputInventory.GetItems();
+    public string GetFirstItem() => _outputInventory.GetFirstItem();
+    public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
+
+    #endregion
 }

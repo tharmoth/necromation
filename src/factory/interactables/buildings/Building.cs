@@ -139,33 +139,37 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 
 	public virtual void Remove(Inventory to)
 	{
-		if (to != null) {
-			int index = 0;
-			if (this is ITransferTarget inputTarget)
-			{
-				foreach (var from in inputTarget.GetInventories())
-				{
-					foreach (var item in from.GetItems())
-					{
-						var count = from.CountItem(item);
-						Inventory.TransferItem(from, to, item, count);
-						var remaining = to.CountItem(item);
-						SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", Sprite.GlobalPosition + new Vector2(0, index++ * 20));
-					}
-				}
-			}
-			to.Insert(ItemType);
-			
-			SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, index++ * 20));
-			Globals.FactoryScene.Gui.BuildingRemoved();
-		}
-		
 		Globals.FactoryScene.TileMap.RemoveEntity(this);
 		Globals.BuildingManager.RemoveBuilding(this);
+		Globals.FactoryScene.Gui.PlayBuildingRemovedAudio();
+		
+		if (to != null)
+		{
+			TransferInventories(to);
+			to.Insert(ItemType);
+			SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, 0));
+		}
 		
 		Sprite.Visible = false;
 		Sprite.QueueFree();
 	}
+
+	protected void TransferInventories(Inventory to)
+	{
+		int labelOffset = 1;
+		if (this is not ITransferTarget inputTarget) return;
+		foreach (var from in inputTarget.GetInventories())
+		{
+			foreach (var item in from.GetItems())
+			{
+				var count = from.CountItem(item);
+				Inventory.TransferItem(from, to, item, count);
+				var remaining = to.CountItem(item);
+				SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", Sprite.GlobalPosition + new Vector2(0, labelOffset++ * 20));
+			}
+		}
+	}
+	
 
 	protected Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
 
@@ -269,7 +273,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			if (recipeName != "") 
 			{
 				var recipe = Database.Instance.GetRecipe(recipeName);
-				crafter.SetRecipe(recipe);
+				crafter.SetRecipe(null, recipe);
 			}
 		}
 		

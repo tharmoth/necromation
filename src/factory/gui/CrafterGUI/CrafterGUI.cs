@@ -29,12 +29,11 @@ public partial class CrafterGUI : Control
 	// 	// }
 	// }
 	
-	public static CrafterGUI Display(Inventory to, ICrafter crafter)
+	public static void Display(Inventory to, ICrafter crafter)
 	{
 		var gui = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/CrafterGUI.tscn").Instantiate<CrafterGUI>();
 		gui.Init(to, crafter);
 		Globals.FactoryScene.Gui.OpenGui(gui);
-		return gui;
 	}
 	
 	private Inventory _to;
@@ -45,7 +44,6 @@ public partial class CrafterGUI : Control
 	private Button RecipeChangeButton => GetNode<Button>("%ChangeRecipeButton");
 	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
 	
-
 	private void Init(Inventory to, ICrafter crafter)
 	{
 		_to = to;
@@ -62,7 +60,7 @@ public partial class CrafterGUI : Control
 
 		RecipeChangeButton.Pressed += () =>
 		{
-			RecipePopup.Display(_crafter);
+			RecipePopup.Display(to, _crafter);
 		};
 		
 		if (_crafter is ProgressTracker.IProgress progress)
