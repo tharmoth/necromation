@@ -6,15 +6,14 @@ using Necromation.gui;
 
 public partial class CrafterGUI : Control
 {
-	public static void Display(Inventory to, ICrafter crafter)
-	{
-		var gui = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/CrafterGUI.tscn").Instantiate<CrafterGUI>();
-		gui.Init(to, crafter);
-		Globals.FactoryScene.Gui.OpenGui(gui);
-	}
-	
-	private Inventory _to;
-	private ICrafter _crafter;
+	/**************************************************************************
+	 * Hardcoded Scene Imports 											      *
+	 **************************************************************************/
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/CrafterGUI.tscn");
+
+	/* ***********************************************************************
+	 * Child Accessors 													     *
+	 * ***********************************************************************/
 	private Container InventoryItemList => GetNode<Container>("%InventoryItemList");
 	private Container SourceInventoryItemList => GetNode<Container>("%SourceInventoryItemList");
 	private Container OutputInventoryItemList => GetNode<Container>("%OutputInventoryItemList");
@@ -22,6 +21,21 @@ public partial class CrafterGUI : Control
 	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
 	private Label Title => GetNode<Label>("%Title");
 	
+	/**************************************************************************
+	 * State Data          													  *
+	 **************************************************************************/
+	private Inventory _to;
+	private ICrafter _crafter;
+	
+	// Static Accessor
+	public static void Display(Inventory to, ICrafter crafter)
+	{
+		var gui = Scene.Instantiate<CrafterGUI>();
+		gui.Init(to, crafter);
+		Globals.FactoryScene.Gui.OpenGui(gui);
+	}
+
+	// Constructor workaround.
 	private void Init(Inventory to, ICrafter crafter)
 	{
 		_to = to;
@@ -51,32 +65,17 @@ public partial class CrafterGUI : Control
 
 	private void UpdatePlayerInventory()
 	{
-		UpdateInventory(_to, _crafter.GetInputInventory(), InventoryItemList);
+		InventoryItem.UpdateInventory(_to, _crafter.GetInputInventory(), InventoryItemList);
 	}
 	
 	private void UpdateSourceInventory()
 	{
-		UpdateInventory(_crafter.GetInputInventory(), _to, SourceInventoryItemList);
+		InventoryItem.UpdateInventory(_crafter.GetInputInventory(), _to, SourceInventoryItemList);
 	}
 	
 	private void UpdateOutputInventory()
 	{
-		UpdateInventory(_crafter.GetOutputInventory(), _to, OutputInventoryItemList);
-	}
-	
-	private void UpdateInventory(Inventory from, Inventory to, Container list)
-	{
-		list.GetChildren().ToList().ForEach(child => child.QueueFree());
-		from.Items
-			.OrderBy(item => item.Key)
-			.ToList().ForEach(item => AddInventoryItem(item, from, to, list));
-	}
-	
-	private void AddInventoryItem(KeyValuePair<string, int> item, Inventory from, Inventory to, Container list)
-	{
-		var inventoryItem = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_item_box.tscn").Instantiate<InventoryItem>();
-		inventoryItem.Init(from, to, item.Key, item.Value);
-		list.AddChild(inventoryItem);
+		InventoryItem.UpdateInventory(_crafter.GetOutputInventory(), _to, OutputInventoryItemList);
 	}
 
 	public override void _ExitTree()

@@ -7,10 +7,9 @@ using Necromation.sk;
 
 public partial class FactoryGUI : CanvasLayer
 {
-	/* ***********************************************************************
-	 * The following are the nodes that are used in the FactoryGUI scene.    *
-	 * They are used to display the GUI elements on the screen.   	         *
-	 * ***********************************************************************/
+	/************************************************************************
+	 * Child Accessors 													    *
+	 ************************************************************************/
 	private Label FpsLabel => GetNode<Label>("%FpsLabel");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
@@ -19,30 +18,15 @@ public partial class FactoryGUI : CanvasLayer
 	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
 	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
 
-	/***************************************************************************
-	 * This node is the currently open gui.  								   *
-	 * We may want to move it to a stack based system at some point.           *
-	 ***************************************************************************/
+	/**************************************************************************
+	 * State Data          													  *
+	 **************************************************************************/
 	private Control _openGui;
 	
 	/***************************************************************************
 	 * Properties  														       *
 	 ***************************************************************************/
 	public bool IsAnyGuiOpen() => _openGui != null;
-
-	public override void _Process(double delta)
-	{
-		base._Process(delta);
-		if (Globals.FactoryScene is FactoryScene { AttackTimer: not null } main)
-		{
-			AttackLabel.Visible = true;
-			AttackLabel.Text = $"You are being attacked at {main.AttackProvince.Name}!\nNext attack in {main.AttackTimer.TimeLeft:0.0} seconds";
-		}
-		else
-		{
-			AttackLabel.Visible = false;
-		}
-	}
 
 	public override void _UnhandledInput(InputEvent inputEvent)
 	{
@@ -55,9 +39,11 @@ public partial class FactoryGUI : CanvasLayer
 		if (Input.IsActionPressed("open_config")) ConfigurationGui.Display();
 		if (Input.IsActionJustPressed("save")) SKSaveLoad.SaveGame(this);
 		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);
-		
 	}
 	
+	/***************************************************************************
+	 * Public API Methods  													   *
+	 ***************************************************************************/
 	public void OpenGui(Control gui)
 	{
 		var open = _openGui;
@@ -72,6 +58,20 @@ public partial class FactoryGUI : CanvasLayer
 		if (IsInstanceValid(_openGui)) _openGui?.QueueFree();
 		_openGui = null;
 	}
+		
+	public void ToggleCinematicMode()
+	{
+		if (Config.CinematicMode)
+		{
+			TopBar.Visible = true;
+			BottomBar.Visible = true;
+		}
+		else
+		{
+			TopBar.Visible = false;
+			BottomBar.Visible = false;
+		}
+	}
 
 	public void SetProgress(double value)
 	{
@@ -80,9 +80,9 @@ public partial class FactoryGUI : CanvasLayer
 		ProgressBar.Visible = value is < 1 and > 0;
 	}
 	
-	// Audio Should be moved to MusicManager
 	public void TechnologyComplete()
 	{
+		// Audio Should be moved to MusicManager
 		TechnologyCompleteAudio.Play();
 	}
 	public void PlayBuildingRemovedAudio()
@@ -94,10 +94,11 @@ public partial class FactoryGUI : CanvasLayer
 	{
 		FpsLabel.Visible = !FpsLabel.Visible;
 	}
-		
-	/*
-	 * Adjusts the position of the popup so that it is always visible on the screen
-	 */
+	
+	/***************************************************************************
+	 * Static Utility Methods  												   *
+	 ***************************************************************************/
+	// Adjusts the position of the popup so that it is always visible on the screen
 	public static void SnapToScreen(Control node)
 	{
 		node.ResetSize();
@@ -117,21 +118,6 @@ public partial class FactoryGUI : CanvasLayer
 		if (node.GlobalPosition.Y + node.Size.Y > screenSize.Y)
 		{
 			node.GlobalPosition = new Vector2(node.GlobalPosition.X, screenSize.Y - node.Size.Y);
-		}
-	}
-
-	
-	public void ToggleCinematicMode()
-	{
-		if (Config.CinematicMode)
-		{
-			TopBar.Visible = true;
-			BottomBar.Visible = true;
-		}
-		else
-		{
-			TopBar.Visible = false;
-			BottomBar.Visible = false;
 		}
 	}
 }

@@ -117,12 +117,23 @@ layout_mode = 2
 layout_mode = 2
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows"]
-modulate = Color(0.6, 0.6, 0.6, 1)
+[node name="Control" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows"]
 layout_mode = 2
 size_flags_vertical = 3
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows/Control"]
+modulate = Color(0.6, 0.6, 0.6, 1)
+layout_mode = 2
 texture = ExtResource("8_6m0iw")
 stretch_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows/Control"]
+modulate = Color(0.6, 0.6, 0.6, 1)
+layout_mode = 2
+texture = ExtResource("8_6m0iw")
+stretch_mode = 3
+flip_h = true
 
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows"]
 modulate = Color(0.6, 0.6, 0.6, 1)

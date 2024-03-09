@@ -15,10 +15,6 @@ run/main_scene="res://src/factory/factory.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://res/sprites/buildings/Stone Furnace.png"
 
-[autoload]
-
-GlobalInventory="*res://src/factory/character/Inventory.cs"
-
 [display]
 
 window/size/viewport_width=1920
