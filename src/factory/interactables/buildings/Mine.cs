@@ -7,7 +7,12 @@ namespace Necromation;
 
 public partial class Mine : Building, IInteractable, ITransferTarget
 {
+    /**************************************************************************
+     * Building Implementation                                                *
+     **************************************************************************/
+    public override string ItemType => "Mine";
     public override Vector2I BuildingSize => Vector2I.One * 2;
+    
     private Inventory _inventory = new();
     private float _time;
     private float _miningSpeed = 2.0f;
@@ -15,7 +20,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
     private GpuParticles2D _particles = GD.Load<PackedScene>("res://src/factory/interactables/buildings/drilling.tscn")
         .Instantiate<GpuParticles2D>();
 
-    public override string ItemType => "Mine";
+
     private Resource _resource;
     private Tween tweenytwiney;
     
@@ -124,7 +129,7 @@ public partial class Mine : Building, IInteractable, ITransferTarget
      **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-        Globals.FactoryScene.Gui.Display(playerInventory, _inventory, ItemType);
+        ContainerGui.Display(playerInventory, _inventory, ItemType);;
     }
     #endregion
     

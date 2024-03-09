@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=34 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/ActionBarGUI/action_bar_item.tscn" id="6_lhutd"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
-[ext_resource type="PackedScene" uid="uid://cdjkbupy1qapf" path="res://src/factory/gui/ContainerGUI/container_gui.tscn" id="7_cu3ym"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchProgressBar.cs" id="7_ohqwt"]
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="8_jqtrb"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="9_oba7v"]
@@ -428,13 +427,6 @@ layout_mode = 2
 text = "Load"
 script = ExtResource("7_04mnd")
 _action = "load"
-
-[node name="ContainerGUI" parent="GUI/PanelContainer/VBoxContainer/Control" instance=ExtResource("7_cu3ym")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
 [node name="TechGUI" parent="GUI/PanelContainer/VBoxContainer/Control" instance=ExtResource("13_jc62p")]
 unique_name_in_owner = true

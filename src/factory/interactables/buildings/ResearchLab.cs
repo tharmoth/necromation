@@ -50,7 +50,7 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
      **************************************************************************/        
     public void Interact(Inventory playerInventory)
     {
-        Globals.FactoryScene.Gui.Display(playerInventory, _inventory, ItemType);
+        ContainerGui.Display(playerInventory, _inventory, ItemType);;
     }
     #endregion
     

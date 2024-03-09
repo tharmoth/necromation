@@ -8,7 +8,6 @@ using Necromation.sk;
 public partial class FactoryGUI : CanvasLayer
 {
 	private Label FpsLabel => GetNode<Label>("%FpsLabel");
-	private ContainerGUI ContainerGui => GetNode<ContainerGUI>("%ContainerGUI");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
 	private ColorRect TopBar => GetNode<ColorRect>("%TopBar");
@@ -72,7 +71,6 @@ public partial class FactoryGUI : CanvasLayer
 	
 	public void CloseGui()
 	{
-		ContainerGui.Visible = false;
 		TechGui.Visible = false;
 		if (IsInstanceValid(_openGui)) _openGui?.QueueFree();
 		_openGui = null;
@@ -80,13 +78,7 @@ public partial class FactoryGUI : CanvasLayer
 	
 	public bool IsAnyGuiOpen()
 	{
-		return ContainerGui.Visible || TechGui.Visible || _openGui != null;
-	}
-	
-	public void Display(Inventory to, Inventory from, string title)
-	{
-		CloseGui();
-		ContainerGui.Display(to, from, title);
+		return TechGui.Visible || _openGui != null;
 	}
 
 	public void SetProgress(double value)

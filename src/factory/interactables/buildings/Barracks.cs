@@ -16,6 +16,11 @@ public class Barracks : Building, IInteractable, ITransferTarget
      * Logic Variables
      */
     private BarracksInventory _inventory = new();
+    
+    /**************************************************************************
+     * Data Constants                                                         *
+     **************************************************************************/
+    private const int MaxInputItems = 50;
 
     public Barracks()
     {
@@ -35,7 +40,7 @@ public class Barracks : Building, IInteractable, ITransferTarget
      **************************************************************************/        
     public void Interact(Inventory playerInventory)
     {
-        Globals.FactoryScene.Gui.Display(playerInventory, _inventory, ItemType);
+        ContainerGui.Display(playerInventory, _inventory, ItemType);
     }
     #endregion
     
@@ -53,9 +58,9 @@ public class Barracks : Building, IInteractable, ITransferTarget
     
     private class BarracksInventory : Inventory
     {
-        public override bool CanAcceptItems(string item, int count = 1)
-        {
-            return item.Contains("Skeleton") && GetInventories().TrueForAll(inventory => inventory.CountItem(item) < 100);
+        public override int GetMaxTransferAmount(string itemType)
+        { 
+            return itemType.Contains("Skeleton") ? MaxInputItems - CountAllItems() : 0;
         }
     }
 }
