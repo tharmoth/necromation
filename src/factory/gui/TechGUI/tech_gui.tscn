@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cgevopavei0g0"]
+[gd_scene load_steps=11 format=3 uid="uid://cgevopavei0g0"]
 
 [ext_resource type="Script" path="res://src/factory/gui/TechGUI/TechGUI.cs" id="1_1wudm"]
 [ext_resource type="PackedScene" uid="uid://dym3bw8at8qt1" path="res://src/factory/gui/TechGUI/tech_panel.tscn" id="1_3eie5"]
@@ -6,7 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="3_55u88"]
 [ext_resource type="Texture2D" uid="uid://d3tkyt42kfr3" path="res://res/sprites/Check Mark.png" id="3_hw6jm"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_mytom"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="4_281uf"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="5_86yqx"]
 [ext_resource type="Texture2D" uid="uid://egikjt8vcqsa" path="res://res/sprites/items/Experiment.png" id="5_b6c1u"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="7_u14t4"]
 
 [node name="TechGUI" type="PanelContainer"]
 custom_minimum_size = Vector2(900, 500)
@@ -37,24 +40,40 @@ theme_override_constants/margin_bottom = 30
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="TitleRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
-text = "TechGUI
-"
+theme_override_constants/separation = 50
+alignment = 2
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow"]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="DropShadowDividerLeft" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow" instance=ExtResource("4_281uf")]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Technology"
+
+[node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow" instance=ExtResource("5_86yqx")]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
 text = "X"
 script = ExtResource("3_mytom")
 _action = "close_gui"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow/CloseButton" instance=ExtResource("7_u14t4")]
+layout_mode = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

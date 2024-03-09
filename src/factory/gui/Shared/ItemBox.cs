@@ -3,6 +3,9 @@ using System;
 
 public partial class ItemBox : PanelContainer
 {
+	/* ***********************************************************************
+	 * Child Accessors 													     *
+	 * ***********************************************************************/
 	protected TextureRect Icon => GetNode<TextureRect>("%Icon");
 	protected Label CountLabel => GetNode<Label>("%CountLabel");
 	protected Button Button => GetNode<Button>("%Button");

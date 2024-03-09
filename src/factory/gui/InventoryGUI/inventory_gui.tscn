@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://cavx5whagemc5"]
+[gd_scene load_steps=12 format=3 uid="uid://cavx5whagemc5"]
 
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_1kgmi"]
 [ext_resource type="Script" path="res://src/factory/gui/InventoryGUI/InventoryGUI.cs" id="1_uyue2"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="2_g5pfu"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_hb15s"]
@@ -28,6 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme = ExtResource("1_1kgmi")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_vdmax")
 script = ExtResource("1_uyue2")
 
@@ -49,6 +51,7 @@ columns = 2
 
 [node name="CharacterTitle" type="HBoxContainer" parent="MarginContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="DropShadowDividerLeft2" parent="MarginContainer/GridContainer/CharacterTitle" instance=ExtResource("3_5xf7p")]
 layout_mode = 2
@@ -62,14 +65,17 @@ theme_override_constants/margin_right = 5
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_gtwpl")
-theme_override_font_sizes/font_size = 25
 text = "Inventory"
 
 [node name="DropShadowDividerRight" parent="MarginContainer/GridContainer/CharacterTitle" instance=ExtResource("5_r0ml1")]
 layout_mode = 2
 
 [node name="CraftingTitle" type="HBoxContainer" parent="MarginContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Control" type="Control" parent="MarginContainer/GridContainer/CraftingTitle"]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 
 [node name="DropShadowDividerLeft" parent="MarginContainer/GridContainer/CraftingTitle" instance=ExtResource("3_5xf7p")]
@@ -84,8 +90,6 @@ theme_override_constants/margin_right = 5
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_gtwpl")
-theme_override_font_sizes/font_size = 25
 text = "Crafting
 "
 

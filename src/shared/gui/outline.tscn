@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsabce6vfa6cs"]
+[gd_scene load_steps=4 format=3 uid="uid://dsabce6vfa6cs"]
 
 [ext_resource type="Texture2D" uid="uid://cn4apjxe2pguh" path="res://res/gui/Item/panel-border-015.png" id="1_3t6af"]
+[ext_resource type="Texture2D" uid="uid://cb0js2gwv4flk" path="res://res/sprites/particles/vignette.png" id="2_5ddmy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kgkvc"]
 
@@ -38,3 +39,10 @@ patch_margin_left = 7
 patch_margin_top = 7
 patch_margin_right = 7
 patch_margin_bottom = 7
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.12549)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_5ddmy")
+expand_mode = 1

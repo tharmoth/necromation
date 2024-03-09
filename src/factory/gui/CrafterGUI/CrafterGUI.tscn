@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://lbatg01khpfb"]
+[gd_scene load_steps=12 format=3 uid="uid://lbatg01khpfb"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_8six3"]
 [ext_resource type="Script" path="res://src/factory/gui/CrafterGUI/CrafterGUI.cs" id="1_tdwk2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_p8o4u"]
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="4_n6jta"]
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="5_y5mff"]
+[ext_resource type="PackedScene" uid="uid://cvn2ithtvvp85" path="res://src/factory/gui/CrafterGUI/ItemSelectionItemBox.tscn" id="6_okvu0"]
 [ext_resource type="Texture2D" uid="uid://dkrc6yyui6nlx" path="res://res/sprites/Arrow-down.png" id="6_sqb8d"]
 [ext_resource type="Texture2D" uid="uid://df0vkwm5lx4c5" path="res://res/sprites/Arrow-right.png" id="8_6m0iw"]
 [ext_resource type="Script" path="res://src/factory/gui/ProgressTracker.cs" id="8_hppbb"]
@@ -58,15 +59,14 @@ text = "Assembler"
 [node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("5_y5mff")]
 layout_mode = 2
 
-[node name="ChangeRecipeButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 0)
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/TitleRow"]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
-text = "Change Recipe"
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/TitleRow/ChangeRecipeButton" instance=ExtResource("8_orngy")]
-layout_mode = 1
+[node name="ItemSelectionItemBox" parent="MarginContainer/VBoxContainer/TitleRow/PanelContainer" instance=ExtResource("6_okvu0")]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow"]
 custom_minimum_size = Vector2(30, 30)

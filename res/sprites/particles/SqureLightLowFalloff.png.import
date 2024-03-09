@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkau0eti50wiv"
-path="res://.godot/imported/Light.png-9286f28b3e49147a59d4146b0084e578.ctex"
+uid="uid://f7w0yelurwry"
+path="res://.godot/imported/SqureLightLowFalloff.png-deb4e03f4c4a4acf9f9545128cba16ca.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/Light.png"
-dest_files=["res://.godot/imported/Light.png-9286f28b3e49147a59d4146b0084e578.ctex"]
+source_file="res://res/sprites/particles/SqureLightLowFalloff.png"
+dest_files=["res://.godot/imported/SqureLightLowFalloff.png-deb4e03f4c4a4acf9f9545128cba16ca.ctex"]
 
 [params]
 

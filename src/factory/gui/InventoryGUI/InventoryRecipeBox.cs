@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Necromation;
 using Necromation.gui;
@@ -22,6 +23,7 @@ public partial class InventoryRecipeBox : ItemBox
 	public static void UpdateRecipes(Inventory from, Container list)
 	{
 		list.GetChildren().ToList().ForEach(child => child.QueueFree());
+
 		Database.Instance.UnlockedRecipes
 			.OrderBy(recipe => recipe.Name)
 			.Where(recipe => recipe.Category is "None" or "hands")

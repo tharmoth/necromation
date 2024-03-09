@@ -1,0 +1,148 @@
+[gd_scene load_steps=9 format=3 uid="uid://cgfjtesm7s5bm"]
+
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_clhjk"]
+[ext_resource type="Script" path="res://src/factory/gui/RecipeSelectionGui/RecipeSelectionGui.cs" id="2_55sks"]
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="3_b31bd"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="4_l1hc3"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="5_uhbkl"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="6_es4is"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="7_v7n17"]
+[ext_resource type="PackedScene" uid="uid://dll12fkpwiya" path="res://src/factory/gui/RecipeSelectionGui/RecipeSelectionItemBox.tscn" id="8_16n7a"]
+
+[node name="Popup" type="PanelContainer"]
+custom_minimum_size = Vector2(500, 400)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.5
+offset_top = -150.0
+offset_right = 81.5
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_clhjk")
+script = ExtResource("2_55sks")
+
+[node name="DropShadowBorder" parent="." instance=ExtResource("3_b31bd")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TitleRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/TitleRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+
+[node name="DropShadowDividerLeft" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("4_l1hc3")]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Select Recipe"
+
+[node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("5_uhbkl")]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+text = "X"
+script = ExtResource("6_es4is")
+_action = "close_gui"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/TitleRow/CloseButton" instance=ExtResource("7_v7n17")]
+layout_mode = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RecipeList" type="GridContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 7
+
+[node name="ItemBox" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox2" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox3" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox4" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox5" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox6" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox7" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox8" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox9" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox10" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox11" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox12" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox13" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox14" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox15" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="ItemBox16" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/RecipeList" instance=ExtResource("8_16n7a")]
+layout_mode = 2
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/PanelContainer" instance=ExtResource("7_v7n17")]
+layout_mode = 2

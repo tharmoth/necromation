@@ -104,7 +104,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     {
 	    if (_recipe == null)
 	    {
-		    RecipePopup.Display(playerInventory, this);
+		    RecipeSelectionGui.Display(playerInventory, this);
 	    }
 	    else
 	    {

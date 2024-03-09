@@ -21,7 +21,7 @@ public partial class FactoryTileMap : LayerTileMap
 	private void AddFog(Vector2I location)
 	{
 		// We're missing a fog of war texture for now.
-		if (true) return;
+		// if (true) return;
 		
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 		
