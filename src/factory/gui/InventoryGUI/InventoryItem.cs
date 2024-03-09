@@ -25,8 +25,7 @@ public partial class InventoryItem : ItemBox
 			var sourceCount = Input.IsActionPressed("shift") ? _sourceInventory.Items[ItemType] : 1;
 			var targetCapacity = _targetInventory.GetMaxTransferAmount(ItemType);
 			var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
-			
-			// TODO: Figure this out!
+
 			Inventory.TransferItem(_sourceInventory, _targetInventory, ItemType, amountToTransfer);
 		};
 	}
