@@ -49,7 +49,7 @@ alignment = 2
 [node name="DropShadowDividerLeft" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("4_n6jta")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TitleRow"]
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/TitleRow"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Assembler"

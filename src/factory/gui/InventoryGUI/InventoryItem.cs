@@ -17,7 +17,7 @@ public partial class InventoryItem : ItemBox
 		
 		Button.Pressed += () =>
 		{
-			if (_targetInventory == null || _sourceInventory == null || !_targetInventory.CanAcceptItems(ItemType))
+			if (_targetInventory == null || _sourceInventory == null)
 			{
 				Globals.Player.Selected = ItemType;
 				return;

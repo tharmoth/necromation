@@ -26,4 +26,6 @@ public interface ICrafter
      * Returns the item category that the crafter can craft.
      */
     public string GetCategory();
+
+    public string ItemType { get; }
 }

@@ -6,29 +6,6 @@ using Necromation.gui;
 
 public partial class CrafterGUI : Control
 {
-	// public void Display(Inventory to, ICrafter crafter)
-	// {
-	// 	Visible = true;
-	// 	
-	// 	GetNode<TransferInventory>("%Player").InventoryToDisplay = to;
-	// 	GetNode<TransferInventory>("%Player").InventoryToTransferTo = crafter.GetInputInventory();
-	// 	
-	// 	GetNode<TransferInventory>("%Input").InventoryToDisplay = crafter.GetInputInventory();
-	// 	GetNode<TransferInventory>("%Input").InventoryToTransferTo = to;
-	// 	
-	// 	GetNode<TransferInventory>("%Output").InventoryToDisplay = crafter.GetOutputInventory();
-	// 	GetNode<TransferInventory>("%Output").InventoryToTransferTo = to;
-	// 	
-	// 	GetNode<ChangeRecipeButton>("%ChangeRecipeButton").Crafter = crafter;
-	// 	
-	// 	GetNode<Label>("%Label").Text = crafter.GetRecipe()?.Name ?? "No Recipe";
-	//
-	// 	// if (crafter is ProgressTracker.IProgress progress)
-	// 	// {
-	// 	// 	GetNode<ProgressTracker>("%ProgressBar").NodeToTrack = progress;
-	// 	// }
-	// }
-	
 	public static void Display(Inventory to, ICrafter crafter)
 	{
 		var gui = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/CrafterGUI.tscn").Instantiate<CrafterGUI>();
@@ -43,6 +20,7 @@ public partial class CrafterGUI : Control
 	private Container OutputInventoryItemList => GetNode<Container>("%OutputInventoryItemList");
 	private Button RecipeChangeButton => GetNode<Button>("%ChangeRecipeButton");
 	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
+	private Label Title => GetNode<Label>("%Title");
 	
 	private void Init(Inventory to, ICrafter crafter)
 	{
@@ -67,6 +45,8 @@ public partial class CrafterGUI : Control
 		{
 			ProgressBar.Init(progress);
 		}
+		
+		Title.Text = _crafter.ItemType;
 	}
 
 	private void UpdatePlayerInventory()

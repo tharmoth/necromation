@@ -74,6 +74,9 @@ public partial class Character : Node2D
 				.Select(recipe => recipe.Products.First().Key)
 				.ToList()
 				.ForEach(item => Globals.PlayerInventory.Insert(item, 100));
+			
+			_inventory.Insert("Coal Ore", 1000);
+			_inventory.Insert("Bone Fragments", 1000);
 		}
 		
 		

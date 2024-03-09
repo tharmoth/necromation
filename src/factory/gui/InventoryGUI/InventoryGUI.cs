@@ -31,12 +31,12 @@ public partial class InventoryGUI : Control
 	public override void _Ready()
 	{
 		base._Ready();
+
+		_inventory.Listeners.Add(UpdateInventory);
+		UpdateInventory();
 		
 		Globals.ResearchListeners.Add(UpdateRecipes);
 		UpdateRecipes();
-		
-		_inventory.Listeners.Add(UpdateInventory);
-		UpdateInventory();
 	}
 	
 	private void UpdateInventory()
