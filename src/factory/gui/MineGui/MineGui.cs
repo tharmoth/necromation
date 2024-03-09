@@ -6,12 +6,12 @@ using Necromation;
 
 public partial class MineGui : PanelContainer
 {
-	private static readonly PackedScene _scene = GD.Load<PackedScene>("res://src/factory/gui/MineGui/MineGui.tscn");
-	private static readonly PackedScene _inventoryItemScene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_item_box.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/MineGui/MineGui.tscn");
+	private static readonly PackedScene InventoryItemScene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_item_box.tscn");
 	
 	public static void Display(Inventory to, Inventory from, ProgressTracker.IProgress progress, string title)
 	{
-		var gui = _scene.Instantiate<MineGui>();
+		var gui = Scene.Instantiate<MineGui>();
 		gui.Init(to, from, progress, title);
 		Globals.FactoryScene.Gui.OpenGui(gui);
 	}
@@ -58,7 +58,7 @@ public partial class MineGui : PanelContainer
 	
 	private void AddInventoryItem(KeyValuePair<string, int> item, Inventory from, Inventory to, Container list)
 	{
-		var inventoryItem = _inventoryItemScene.Instantiate<InventoryItem>();
+		var inventoryItem = InventoryItemScene.Instantiate<InventoryItem>();
 		inventoryItem.Init(from, to, item.Key, item.Value);
 		list.AddChild(inventoryItem);
 	}

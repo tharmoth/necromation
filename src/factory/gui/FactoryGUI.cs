@@ -7,16 +7,28 @@ using Necromation.sk;
 
 public partial class FactoryGUI : CanvasLayer
 {
+	/* ***********************************************************************
+	 * The following are the nodes that are used in the FactoryGUI scene.    *
+	 * They are used to display the GUI elements on the screen.   	         *
+	 * ***********************************************************************/
 	private Label FpsLabel => GetNode<Label>("%FpsLabel");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
 	private ColorRect TopBar => GetNode<ColorRect>("%TopBar");
 	private ColorRect BottomBar => GetNode<ColorRect>("%BottomBar");
-	private TechGUI TechGui => GetNode<TechGUI>("%TechGUI");
 	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
 	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
 
+	/***************************************************************************
+	 * This node is the currently open gui.  								   *
+	 * We may want to move it to a stack based system at some point.           *
+	 ***************************************************************************/
 	private Control _openGui;
+	
+	/***************************************************************************
+	 * Properties  														       *
+	 ***************************************************************************/
+	public bool IsAnyGuiOpen() => _openGui != null;
 
 	public override void _Process(double delta)
 	{
@@ -34,27 +46,13 @@ public partial class FactoryGUI : CanvasLayer
 
 	public override void _UnhandledInput(InputEvent inputEvent)
 	{
-		
 		base._UnhandledInput(inputEvent);
 		if (!inputEvent.IsPressed()) return;
-		
 		if (Input.IsActionJustPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_technology"))
-		{
-			if (TechGui.Visible)
-			{
-				TechGui.Visible = false;
-			}
-			else
-			{
-				CloseGui();
-			}
-		}
-
+		if (Input.IsActionJustPressed("open_technology")) TechGUI.Display();
 		if (Input.IsActionJustPressed("open_inventory")) InventoryGUI.Display(Globals.PlayerInventory);
 		if (Input.IsActionJustPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
 		if (Input.IsActionPressed("open_config")) ConfigurationGui.Display();
-
 		if (Input.IsActionJustPressed("save")) SKSaveLoad.SaveGame(this);
 		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);
 		
@@ -71,14 +69,8 @@ public partial class FactoryGUI : CanvasLayer
 	
 	public void CloseGui()
 	{
-		TechGui.Visible = false;
 		if (IsInstanceValid(_openGui)) _openGui?.QueueFree();
 		_openGui = null;
-	}
-	
-	public bool IsAnyGuiOpen()
-	{
-		return TechGui.Visible || _openGui != null;
 	}
 
 	public void SetProgress(double value)
@@ -88,11 +80,11 @@ public partial class FactoryGUI : CanvasLayer
 		ProgressBar.Visible = value is < 1 and > 0;
 	}
 	
+	// Audio Should be moved to MusicManager
 	public void TechnologyComplete()
 	{
 		TechnologyCompleteAudio.Play();
 	}
-	
 	public void PlayBuildingRemovedAudio()
 	{
 		BuildingRemovedAudio.Play();
