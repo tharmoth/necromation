@@ -6,11 +6,6 @@ using Necromation.gui;
 
 public partial class ItemSelectionItemBox : ItemBox
 {
-	/**************************************************************************
-	 * Hardcoded Scene Imports 											      *
-	 **************************************************************************/
-	public static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/ItemSelectionItemBox.tscn");
-	
 	public void Init(Inventory dumpInventory, ICrafter crafter)
 	{
 		ItemType = crafter.GetRecipe().Products.First().Key;

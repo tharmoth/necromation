@@ -68,6 +68,18 @@ public partial class BattleTileMap : LayerTileMap
 				Connect(new Vector2I(x, y), right);
 			}
 		}
+		
+		
+		Sprite2D sprite = new();
+		sprite.Texture = Database.Instance.GetTexture("soil2");
+		var scaler2 = (FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize) / sprite.Texture.GetSize().X;
+		sprite.Scale = new Vector2(scaler2, scaler2);
+		sprite.GlobalPosition = Vector2.Zero + scaler2 * sprite.Texture.GetSize() / 2;
+		sprite.Centered = true;
+		sprite.ZIndex = -50;
+		// We need to fix the edges to enable rotation.
+		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
+		Globals.BattleScene.CallDeferred("add_child", sprite);
 	}
 
 	private void Connect(Vector2I a, Vector2I b)

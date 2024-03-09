@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Godot;
+using Necromation.battle;
 using Necromation.sk;
 
 namespace Necromation.map.battle.Weapons;
@@ -19,10 +20,10 @@ public class MeleeWeapon : Weapon
         timer.Timeout += () =>
         {
             timer.QueueFree();
-            wielder.Jiggle();
-            if (GodotObject.IsInstanceValid(wielder) && GodotObject.IsInstanceValid(target)) ApplyDamage(wielder, target);
+            wielder.PlayAttackAnimation();
+            if (Globals.UnitManager.IsUnitAlive(wielder) && Globals.UnitManager.IsUnitAlive(target)) ApplyDamage(wielder, target);
         };
-        wielder.AddChild(timer);
+        wielder.SpriteHolder.AddChild(timer);
         timer.Start();
     }
     

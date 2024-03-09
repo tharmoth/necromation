@@ -22,7 +22,7 @@ public class Mine : Building, IInteractable, ITransferTarget
     private Resource _resource;
 
     /**************************************************************************
-     * Visuals Variables                                                     *
+     * FX Variables                                                           *
      **************************************************************************/
     private static readonly PackedScene ParticlesScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/drilling.tscn");
     private readonly GpuParticles2D _particles = ParticlesScene.Instantiate<GpuParticles2D>();

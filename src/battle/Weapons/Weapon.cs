@@ -45,7 +45,7 @@ public abstract  class Weapon
     protected virtual bool CanAttack(Unit wielder, List<Unit> targets, int range)
     {
         var targetCount = targets
-            .Count(unit => unit.CachedPosition.DistanceTo(wielder.CachedPosition) <= range * 32);
+            .Count(unit => unit.GlobalPosition.DistanceTo(wielder.GlobalPosition) <= range * 32);
         if (targetCount == 0)
         {
             _target = null;
@@ -53,7 +53,7 @@ public abstract  class Weapon
         else
         {
             _target = targets
-                .Where(unit => unit.CachedPosition.DistanceTo(wielder.CachedPosition) <= range * 32)
+                .Where(unit => unit.GlobalPosition.DistanceTo(wielder.GlobalPosition) <= range * 32)
                 .ElementAt(GD.RandRange(0, targetCount - 1));
         }
         

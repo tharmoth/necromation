@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.battle;
 using Necromation.map;
 using Necromation.map.character;
 
@@ -23,11 +24,11 @@ public partial class BattleScene : Scene
 		if (Provence.Commanders.Count == 0)
 		{
 			var PlayerCommanderInfantry = new Commander(new Province(), "Player");
-			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 1000);
+			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 100);
 			Provence.Commanders.Add(PlayerCommanderInfantry);
 			
 			var EnemyCommanderInfantry = new Commander(new Province(), "Enemy");
-			EnemyCommanderInfantry.Units.Insert("Heavy Infantry", 100);
+			EnemyCommanderInfantry.Units.Insert("Barbarian", 100);
 			Provence.Commanders.Add(EnemyCommanderInfantry);
 			
 			// var PlayerCommanderArcher = new Commander(new Province(), "Player");

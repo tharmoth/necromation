@@ -8,10 +8,6 @@ using Necromation.map.character;
 
 public partial class UnitSpawner : Node2D
 {
-	[Export] private int _spawnCount = 10;
-	[Export] private string _defaultUnit = "Infantry";
-	private Queue<Unit> _units = new();
-	
 	private readonly Commander _commander;
 	private readonly string _team = "Player";
 
@@ -37,13 +33,31 @@ public partial class UnitSpawner : Node2D
 	}
 
 	private void _spawn() {
-		LoadFromCommanders();
 		PlaceUnitsInRectangle();
 	}
 
 	private void PlaceUnitsInRectangle()
 	{
-		var count = _units.Count;
+		var positions = GetPositions(_commander.Units.CountAllItems());
+		
+		foreach (var entry in _commander.Units.Items)
+		{
+			for (int i = 0; i < entry.Value; i++)
+			{
+				var position = positions.Dequeue();
+				var empty = Globals.BattleScene.TileMap.GetNearestEmpty(position);
+				var global = Globals.BattleScene.TileMap.MapToGlobal(empty);
+				
+				var unit = new Unit(entry.Key, global,  _commander);
+
+				Globals.UnitManager.AddUnit(unit);
+			}	
+		}
+	}
+
+	private Queue<Vector2I> GetPositions(int count)
+	{
+		Queue<Vector2I> positions = new();
 		var width = (int)Math.Ceiling(Math.Sqrt(count / 2.0f));
 		var height = width * 2;
 		width *= 2;
@@ -52,43 +66,15 @@ public partial class UnitSpawner : Node2D
 		{
 			for (var y = 0; y < height; y += 2)
 			{
-				_units.TryDequeue(out var unit);
-				if (unit == null) return;;
-				
 				var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
 				position.X -= width / 2;
 				position.Y -= height / 2;
 				position.X += x;
 				position.Y += y;
-				unit.Position = Globals.BattleScene.TileMap.MapToGlobal(Globals.BattleScene.TileMap.GetNearestEmpty(position));
-				unit.Team = _team;
-				Globals.BattleScene.TileMap.AddEntity(unit.Position, unit, BattleTileMap.Unit);
-				Globals.BattleScene.CallDeferred("add_child", unit);
+				positions.Enqueue(position);
 			}
-		}
-	}
-	
 
-	private void LoadFromCommanders()
-	{
-		foreach (var entry in _commander.Units.Items)
-		{
-			for (int i = 0; i < entry.Value; i++)
-			{
-				_units.Enqueue(new Unit(entry.Key, _commander));
-			}	
 		}
+		return positions;
 	}
-
-	private void AddUnit(string unitType, Commander commander = null)
-	{
-		Unit newUnit = new Unit(unitType, commander);
-		
-		var position = Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
-		newUnit.Position = Globals.BattleScene.TileMap.MapToGlobal(Globals.BattleScene.TileMap.GetNearestEmpty(position));
-		newUnit.Team = _team;
-		Globals.BattleScene.TileMap.AddEntity(newUnit.Position, newUnit, BattleTileMap.Unit);
-		Globals.BattleScene.CallDeferred("add_child", newUnit);
-	}
-	
 }

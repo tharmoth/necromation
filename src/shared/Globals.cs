@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using Necromation.battle;
 using Necromation.factory;
 using Necromation.gui;
 
@@ -18,6 +19,9 @@ public class Globals
     
     // Avoids having all of the C# buildings in the tree. This lets classes access the manager without the scene tree.
     public static BuildingManager BuildingManager;
+    
+    // Avoids having all of the C# Units in the tree. This lets classes access the manager without the scene tree.
+    public static UnitManager UnitManager;
 
     // I think this should probably go somewhere else. Maybe associated with the player?
     public static Technology CurrentTechnology;

@@ -3,45 +3,66 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.battle;
 using Necromation.map;
 using Necromation.map.battle.Weapons;
 using Necromation.map.character;
 using Necromation.sk;
 
-public partial class Unit : Sprite2D, LayerTileMap.IEntity
+public class Unit : CsharpNode, LayerTileMap.IEntity
 {
+	/**************************************************************************
+	 * Position Variables 			     									  *
+	 **************************************************************************/
 	public Vector2I MapPosition => Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
-	public Vector2I TargetPosition = Vector2I.Zero;
-	public Vector2 CachedPosition;
+	public Vector2 GlobalPosition;
+	private Vector2I _targetPosition = Vector2I.Zero;
+	private List<Unit> Enemies => Globals.UnitManager.GetGroup(Team == "Player" ? "Enemy" : "Player");
 	
-	private readonly Commander _commander;
-	public string Team = "Player";
-	public string UnitType;
+	/**************************************************************************
+	 * Logic Variables 			     										  *
+	 **************************************************************************/
+	public double Cooldown = GD.RandRange(0, BattleScene.TimeStep);
 	public readonly  List<Weapon> Weapons = new();
 	public readonly List<Armor> Armor = new();
+	private readonly Commander _commander;
+	public readonly string Team;
+	public readonly string UnitType;
+	public readonly List<Action<Unit>> DeathCallbacks = new();
 	
-	private int _hp = 10;
-
-	public double Cooldown = GD.RandRange(0, BattleScene.TimeStep);
+	private Unit _target;
+	
+	/**************************************************************************
+	 * Visuals Variables 													  *
+	 **************************************************************************/
+	private readonly Sprite2D BodySprite = new();
+	public readonly AudioStreamPlayer2D Audio = new();
+	
+	public readonly Node2D SpriteHolder = new();
 	private Tween _jiggleTween;
 	private Tween _bobTween;
 	private Tween _moveTween;
 	private Tween _damageTween;
-
-	protected Sprite2D Sprite = new();
-	private List<Unit> enemies = null;
-	public AudioStreamPlayer2D Audio = new AudioStreamPlayer2D();
-	private Unit _target;
+	
+	/**************************************************************************
+	 * RPG Data Variables 													  *
+	 **************************************************************************/
+	private int _hp = 10;
 	public int Ammo = 12;
-	public int Strength = 10;
+	public readonly int Strength = 10;
 	
-	public readonly List<Action<Unit>> DeathCallbacks = new();
-	
-
-	public Unit(string unitType, Commander commander = null)
+	/// <summary>
+	/// Constructor loads in the units data and sets up the appropriate RPG data and Visuals.
+	/// </summary>
+	/// <param name="unitType">String used to load in unit data and update commander on death</param>
+	/// <param name="position">Global position that the unit is located at on start</param>
+	/// <param name="commander">This units commander, used to update unit counts on death</param>
+	public Unit(string unitType, Vector2 position, Commander commander)
 	{
 		UnitType = unitType;
 		_commander = commander;
+		GlobalPosition = position;
+		Team = commander.Team;
 
 		var def = Database.Instance.Units.First(unit => unit.Name == unitType);
 		foreach (var weapon in def.Weapons)
@@ -55,187 +76,188 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 			Armor.Add(Database.Instance.Equpment.OfType<Armor>().First(armorDef => armorDef.Name == armor));
 		}
 
-		Sprite.Texture = Database.Instance.GetTexture(UnitType, "unit");
-		Sprite.Scale = new Vector2(.125f, .125f);
-		// Sprite.Scale = new Vector2(.5f, .5f);
-		AddChild(Sprite); 
-		AddChild(Audio);
+		BodySprite.Texture = Database.Instance.GetTexture(UnitType, "unit");
+		BodySprite.Scale = new Vector2(.125f, .125f);
+		BodySprite.FlipH = Team != "Player";
+		
+		SpriteHolder.AddChild(BodySprite); 
+		SpriteHolder.AddChild(Audio);
+		Globals.UnitManager.AddToGroup(this, Team);
+		
+		Globals.BattleScene.TileMap.AddEntity(GlobalPosition, this, BattleTileMap.Unit);
 	}
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Sprite.FlipH = Team != "Player";
-		// Sprite.Modulate = Team == "Player" ? new Color(.8f, .8f, 1) : new Color(1, .8f, .8f);
-		AddToGroup(Team+"Units");
-		CachedPosition = GlobalPosition;
+		base._Ready();
+		SpriteHolder.GlobalPosition = GlobalPosition;
 	}
 
-	private void initEnemies()
-	{
-		enemies ??= GetTree()
-			.GetNodesInGroup(Team == "Player" ? "EnemyUnits" : "PlayerUnits")
-			.OfType<Unit>()
-			.ToList();
-		enemies.ForEach(unit =>
-		{
-			unit.DeathCallbacks.Add((_) => enemies.Remove(unit));
-		});
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (enemies == null) initEnemies();
 		
-		// Every 0.5 seconds, move the unit one cell forward
 		Cooldown += delta;
 		if (Cooldown < BattleScene.TimeStep || _hp <= 0) return;
 		Cooldown = 0;
 
-		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttackDeclump(this, enemies)))
-		{
-			weapon.Attack(this);
-			return;
-		}
-
-		if (!IsInstanceValid(_target))
-		{
-			var rand = GD.Randf();
-			if (rand < 0.25)
-			{
-				_target = TargetRandomEnemy();
-			}
-			else if (rand < 0.5)
-			{
-				_target = TargetClosestEnemy();
-			}
-		}
-
+		// Walk through the units state machine every time the cooldown is over and attack if possible.
 		UpdateTargetPosition();
-
-		MoveToTarget();
+		if (AttackDeclump()) return;
+		ChooseOrKeepTarget();
 		
-		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, enemies)))
-		{
-			weapon.Attack(this);
-			return;
-		}
+		if (MoveToTarget()) return;
+		if (Attack()) return;
 	}
 	
 	/**************************************************************************
-	 * Public Methods                                                         *
+	 *                          State Machine Methods  					      *
+	 *	                                                                      *
+	 * We should think about moveing these somewhere else when unit AI is more*
+	 * formalized.														      *
+	 **************************************************************************/
+	/// <summary>
+	/// Updates the the position this unit is trying to move to in order to account for target movement.
+	/// </summary>
+	private void UpdateTargetPosition()
+	{
+		_targetPosition = !Globals.UnitManager.IsUnitAlive(_target) ? MapPosition : _target.MapPosition;
+	}
+	
+	/// <summary>
+	/// Attempts to make an attack with any weapon with reduced range to try and declump the units.
+	/// </summary>
+	/// <returns>
+	/// True if an action was taken.
+	/// False if no action was taken.
+	/// </returns>
+	private bool AttackDeclump()
+	{
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttackDeclump(this, Enemies)))
+		{
+			weapon.Attack(this);
+			return true;
+		}
+
+		return false;
+	}
+	
+	/// <summary>
+	/// Randomly choose a new target or keep the current one. Used to help with unit pathing getting stuck.
+	/// </summary>
+	private void ChooseOrKeepTarget()
+	{
+		if (Globals.UnitManager.IsUnitAlive(_target)) return;
+		var rand = GD.Randf();
+		if (rand < 0.25)
+		{
+			_target = TargetRandomEnemy();
+			UpdateTargetPosition();
+		}
+		else if (rand < 0.5)
+		{
+			_target = TargetClosestEnemy();
+			UpdateTargetPosition();
+		}
+	}
+	
+	/// <summary>
+	/// Attempts to move the unit towards the target position and returns true if it was able to move. Otherwise the 
+	/// path is blocked and it returns false.
+	/// </summary>
+	/// <returns>
+	/// True if an action was taken.
+	/// False if no action was taken.
+	/// </returns>
+	private bool MoveToTarget()
+	{
+		if (MapPosition == _targetPosition) return false;
+		if (Globals.BattleScene.TileMap.IsSurrounded(MapPosition)) return false;
+
+		var nextPosition = GetNextPosition();
+		if (nextPosition == MapPosition) return false;
+		if (!Globals.BattleScene.TileMap.IsEmpty(nextPosition)) return false;
+		
+		Globals.BattleScene.TileMap.RemoveEntity(this);
+		Globals.BattleScene.TileMap.AddEntity(nextPosition, this, BattleTileMap.Unit);
+		var nextPositionGlobal = Globals.BattleScene.TileMap.MapToGlobal(nextPosition) + new Vector2((float)GD.RandRange(-5.0, 5.0), (float)GD.RandRange(-5.0, 5.0));
+		
+		PlayMovementAnimation(nextPositionGlobal);
+		GlobalPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
+
+		return true;
+	}
+	
+	/// <summary>
+	/// Attempts to make an attack with any weapon.
+	/// </summary>
+	/// <returns>
+	/// True if an action was taken.
+	/// False if no action was taken.
+	/// </returns>
+	private bool Attack()
+	{
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, Enemies)))
+		{
+			weapon.Attack(this);
+			return true;
+		}
+
+		return false;
+	}
+	
+	/**************************************************************************
+	 * Health Methods                                                         *
 	 **************************************************************************/
 	public void Damage(Unit source, int damage)
 	{
-		_damageTween?.Kill();
-		_damageTween = CreateTween();
-		_damageTween.TweenProperty(this, "modulate", new Color(1, 0, 0), BattleScene.TimeStep / 5);
-		_damageTween.TweenProperty(this, "modulate", Colors.White, BattleScene.TimeStep /  5);
-
-		RichTextLabel text = new();
-		Globals.BattleScene.AddChild(text);
-		text.Text = "[color=red]" + damage.ToString() + "[/color]";
-		text.GlobalPosition = GlobalPosition;
-		text.CustomMinimumSize = new Vector2(100, 100);
-		text.BbcodeEnabled = true;
-
-		var labelTween = GetTree().CreateTween();
-		labelTween.TweenProperty(text, "global_position", text.GlobalPosition + new Vector2(0, -50), 1.0f);
-		labelTween.TweenCallback(Callable.From(() =>
-		{
-			if (!IsInstanceValid(text)) return;
-			text.QueueFree();
-		}));
+		PlayDamageAnimation();
+		ShowText(damage);
 		
-		var textColorTween = GetTree().CreateTween();
-		textColorTween.TweenProperty(text, "modulate", new Color(1, 1, 1, 0), 1.0f);
-        
 		_hp -= damage;
-		if (_hp > 0) return;
+		if (_hp < 0) OnDeath();
+	}
 
+	private void OnDeath()
+	{
+		DeathCallbacks.ForEach(callback => callback(this));
 		PlayDeathAnimation();
 		PlayDeathSound();
 		
-		DeathCallbacks.ForEach(callback => callback(source));
-
 		Globals.BattleScene.TileMap.RemoveEntity(this);
+		Globals.UnitManager.RemoveUnit(this);
 		_commander?.Remove(UnitType);
-		QueueFree();
 	}
 	
-	public void Jiggle()
-	{
-		// jiggle the unit
-		if (_jiggleTween != null) return;
-		_jiggleTween = CreateTween();
-		_jiggleTween.SetTrans(Tween.TransitionType.Quad);
-		_jiggleTween.SetEase(Tween.EaseType.Out);
-		_jiggleTween.TweenProperty(this, "rotation_degrees", 10, BattleScene.TimeStep /  5);
-		_jiggleTween.TweenProperty(this, "rotation_degrees", 0, BattleScene.TimeStep /  5);
-		_jiggleTween.TweenCallback(Callable.From(() => _jiggleTween = null));
-	}
 	/**************************************************************************
-	 * Private Methods                                                        *
+	 * Targeting Methods                                                      *
 	 **************************************************************************/
 	private Unit TargetClosestEnemy()
 	{
-		var closest = enemies.MinBy(unit => unit.GlobalPosition.DistanceSquaredTo(GlobalPosition));
-		TargetPosition = Globals.BattleScene.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
+		var closest = Enemies.MinBy(unit => unit.GlobalPosition.DistanceSquaredTo(GlobalPosition));
+		_targetPosition = Globals.BattleScene.TileMap.GlobalToMap(closest?.GlobalPosition ?? GlobalPosition);
 		return closest;
 	}
 
 	private Unit TargetRandomEnemy()
 	{
-		if (enemies.Count == 0)
+		if (Enemies.Count == 0)
 		{
-			TargetPosition = MapPosition;
+			_targetPosition = MapPosition;
 			return null;
 		}
-		var closest  = enemies.ElementAt(GD.RandRange(0, enemies.Count - 1));
-		TargetPosition = closest?.MapPosition ?? MapPosition;
+		var closest  = Enemies.ElementAt(GD.RandRange(0, Enemies.Count - 1));
+		_targetPosition = closest?.MapPosition ?? MapPosition;
 		return closest;
 	}
 
-	private void UpdateTargetPosition()
+	/// <summary>
+	///  Returns the next position the unit should move to. Looks towards the target and tries to move in that direction.
+	///  If the way forward is blocked it tries to move in other directions.
+	/// </summary>
+	/// <returns>An empty target tile or the current position</returns>
+	private Vector2I GetNextPosition()
 	{
-		TargetPosition = !IsInstanceValid(_target) ? MapPosition : _target.MapPosition;
-	}
-
-	private void MoveToTarget()
-	{
-		if (MapPosition == TargetPosition) return;
-		if (Globals.BattleScene.TileMap.IsSurrounded(MapPosition)) return;
-		
-		// var nextPosition = Globals.BattleScene.TileMap.GetNextPath(MapPosition, TargetPosition);
-		var nextPosition = getNextPosition();
-		
-		// nextPosition 
-		// nextPosition = Globals.BattleScene.TileMap.GetNextPath(MapPosition, TargetPosition);
-
-
-		if (nextPosition == MapPosition) return;
-
-		if (!Globals.BattleScene.TileMap.IsEmpty(nextPosition)) return;
-		Globals.BattleScene.TileMap.RemoveEntity(this);
-		Globals.BattleScene.TileMap.AddEntity(nextPosition, this, BattleTileMap.Unit);
-
-		var nextPositionGlobal = Globals.BattleScene.TileMap.MapToGlobal(nextPosition) + new Vector2((float)GD.RandRange(-5.0, 5.0), (float)GD.RandRange(-5.0, 5.0));
-		
-		_moveTween?.Kill();
-		_moveTween = CreateTween();
-		_moveTween.TweenProperty(this, "global_position", nextPositionGlobal, BattleScene.TimeStep);
-
-		_bobTween?.Kill();
-		_bobTween = CreateTween();
-		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, -5), BattleScene.TimeStep / 2);
-		_bobTween.TweenProperty(Sprite, "position", new Vector2(0, 0), BattleScene.TimeStep / 2);
-		CachedPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
-	}
-
-	private Vector2I getNextPosition()
-	{
-		var differance = TargetPosition - MapPosition;
+		var differance = _targetPosition - MapPosition;
 
 		var directions = new List<(Vector2I, bool)>
 		{
@@ -304,17 +326,52 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		return MapPosition;
 	}
 
-	private bool IsEmpty(Vector2I mapPos)
+	private bool IsEmpty(Vector2I mapPos) => Globals.BattleScene.TileMap.IsEmpty(mapPos) && Globals.BattleScene.TileMap.IsOnMap(mapPos);
+
+	/**************************************************************************
+	 * FX Methods                                                             *
+	 **************************************************************************/
+	/// <summary>
+	/// Plays a walking animation that moves the unit sprite to the next position.
+	/// </summary>
+	/// <param name="nextPositionGlobal">Position to animate movement towards from current position</param>
+	private void PlayMovementAnimation(Vector2 nextPositionGlobal)
 	{
-		return Globals.BattleScene.TileMap.IsEmpty(mapPos) && Globals.BattleScene.TileMap.IsOnMap(mapPos);
+		_moveTween?.Kill();
+		_moveTween = SpriteHolder.CreateTween();
+		_moveTween.TweenProperty(SpriteHolder, "global_position", nextPositionGlobal, BattleScene.TimeStep);
+
+		_bobTween?.Kill();
+		_bobTween = SpriteHolder.CreateTween();
+		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, -5), BattleScene.TimeStep / 2);
+		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, 0), BattleScene.TimeStep / 2);
 	}
 	
-		
+	private void PlayDamageAnimation()
+	{
+		_damageTween?.Kill();
+		_damageTween = SpriteHolder.CreateTween();
+		_damageTween.TweenProperty(SpriteHolder, "modulate", new Color(1, 0, 0), BattleScene.TimeStep / 5);
+		_damageTween.TweenProperty(SpriteHolder, "modulate", Colors.White, BattleScene.TimeStep /  5);
+	}
+	
+	public void PlayAttackAnimation()
+	{
+		// jiggle the unit
+		if (_jiggleTween != null) return;
+		_jiggleTween = BodySprite.CreateTween();
+		_jiggleTween.SetTrans(Tween.TransitionType.Quad);
+		_jiggleTween.SetEase(Tween.EaseType.Out);
+		_jiggleTween.TweenProperty(SpriteHolder, "rotation_degrees", 10, BattleScene.TimeStep /  5);
+		_jiggleTween.TweenProperty(SpriteHolder, "rotation_degrees", 0, BattleScene.TimeStep /  5);
+		_jiggleTween.TweenCallback(Callable.From(() => _jiggleTween = null));
+	}
+	
 	private void PlayDeathAnimation()
 	{
-		RemoveChild(Sprite);
-		Globals.BattleScene.AddChild(Sprite);
-
+		SpriteHolder.RemoveChild(BodySprite);
+		Globals.BattleScene.AddChild(BodySprite);
+		
 		var randomPos = new Vector2(GD.RandRange(-16, 16), GD.RandRange(8, 16));
 		var target = GlobalPosition + randomPos;
 
@@ -327,22 +384,24 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		{
 			targetDegrees = randomPos.X < 0 ? -90 + GD.RandRange(-10, 10) : 90 + GD.RandRange(-10, 10);
 		}
-
 		
-		Sprite.GlobalPosition = GlobalPosition;
-		Sprite.Modulate = new Color(.5f, .5f, .5f);
-		Sprite.ZIndex = -1;
+		BodySprite.GlobalPosition = GlobalPosition;
+		BodySprite.Modulate = new Color(.5f, .5f, .5f);
+		BodySprite.ZIndex = -1;
 
-		var deathTween = GetTree().CreateTween();
+		var deathTween = Globals.Tree.CreateTween();
 		deathTween.SetTrans(Tween.TransitionType.Sine);
-		deathTween.TweenProperty(Sprite, "global_position", target, BattleScene.TimeStep);
+		deathTween.TweenProperty(BodySprite, "global_position", target, BattleScene.TimeStep);
 		
-		var deathRotationTween = GetTree().CreateTween();
+		var deathRotationTween = Globals.Tree.CreateTween();
 		deathRotationTween.SetTrans(Tween.TransitionType.Quad);
 		deathRotationTween.SetEase(Tween.EaseType.In);
-		deathRotationTween.TweenProperty(Sprite, "rotation_degrees", targetDegrees, BattleScene.TimeStep);
+		deathRotationTween.TweenProperty(BodySprite, "rotation_degrees", targetDegrees, BattleScene.TimeStep);
+		
+		// This should clean up all of the other units on death other than their body.
+		SpriteHolder.QueueFree();
 	}
-
+	
 	private void PlayDeathSound()
 	{
 		var randomizer = new AudioStreamRandomizer();
@@ -351,7 +410,28 @@ public partial class Unit : Sprite2D, LayerTileMap.IEntity
 		var audio = new AudioStreamPlayer2D();
 		audio.Stream = randomizer;
 		audio.VolumeDb = -40;
-		Sprite.AddChild(audio);
+		BodySprite.AddChild(audio);
 		audio.Play();
+	}
+	
+	private void ShowText(int damage)
+	{
+		RichTextLabel text = new();
+		Globals.BattleScene.AddChild(text);
+		text.Text = "[color=red]" + damage.ToString() + "[/color]";
+		text.GlobalPosition = SpriteHolder.GlobalPosition;
+		text.CustomMinimumSize = new Vector2(100, 100);
+		text.BbcodeEnabled = true;
+
+		var labelTween = Globals.Tree.CreateTween();
+		labelTween.TweenProperty(text, "global_position", text.GlobalPosition + new Vector2(0, -50), 1.0f);
+		labelTween.TweenCallback(Callable.From(() =>
+		{
+			if (!GodotObject.IsInstanceValid(text)) return;
+			text.QueueFree();
+		}));
+		
+		var textColorTween = Globals.Tree.CreateTween();
+		textColorTween.TweenProperty(text, "modulate", new Color(1, 1, 1, 0), 1.0f);
 	}
 }
