@@ -23,7 +23,7 @@ public partial class Inventory : ITransferTarget
 	
 	int itemCount = 0;
 
-	public int CountItem(string item) => _items.TryGetValue(item, out var count) ? count : 0;
+	public int CountItem(string item) => !string.IsNullOrEmpty(item) && _items.TryGetValue(item, out var count) ? count : 0;
 	public int CountAllItems() => itemCount;
 	
 	public void Clear()

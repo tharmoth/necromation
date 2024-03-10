@@ -42,7 +42,7 @@ public partial class FactoryGUI : CanvasLayer
 			if (_openGui is TechGUI)
 				CloseGui();
 			else
-				OpenGui(new TechGUI());
+				TechGUI.Display();
 		}
 
 		if (Input.IsActionJustPressed("open_inventory"))

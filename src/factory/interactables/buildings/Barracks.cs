@@ -19,19 +19,23 @@ public class Barracks : Assembler
     private Commander _commander;
     
     /**************************************************************************
-     * Data Constants                                                         *
+     * Visuals Variables 													  *
      **************************************************************************/
-    private const int MaxInputItems = 50;
+    private readonly GpuParticles2D _particles;
 
     public Barracks(string category) : base("Barracks", category)
     {
-        Sprite.AddChild(Scene.Instantiate<GpuParticles2D>());
+        _particles = Scene.Instantiate<GpuParticles2D>();
+        Sprite.AddChild(_particles);
+        MaxInputItems = 200;
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (_commander == null || _commander.IsDead) SpawnCommander();
+        if (!GodotObject.IsInstanceValid(_commander)) SpawnCommander();
+        if (GetProgressPercent() > 0 && !_particles.Emitting) _particles.Emitting = true;
+        else if (GetProgressPercent() <= 0 && _particles.Emitting) _particles.Emitting = false;
     }
 
     protected override bool MaxOutputItemsReached()
@@ -63,12 +67,4 @@ public class Barracks : Assembler
         
     }
     #endregion
-    
-    private class BarracksInventory : Inventory
-    {
-        public override int GetMaxTransferAmount(string itemType)
-        { 
-            return itemType.Contains("Skeleton") ? MaxInputItems - CountAllItems() : 0;
-        }
-    }
 }

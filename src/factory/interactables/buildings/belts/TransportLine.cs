@@ -13,8 +13,6 @@ public partial class TransportLine : ITransferTarget
      */
     private bool initalized = false;
     private Vector2 _cachePosition;
-    private int _itemCount;
-
 
     private Vector2I _targetDirectionGlobal;
     public Vector2I TargetDirectionGlobal
@@ -35,6 +33,7 @@ public partial class TransportLine : ITransferTarget
     private List<Vector2> _targetLocations = new();
 
     public float _secondsPerItem = .5333f;
+    private const int MaxItems = 5;
     
     /**************************************************************************
      * Data                                                                   *
@@ -42,11 +41,6 @@ public partial class TransportLine : ITransferTarget
     
     private readonly List<GroundItem> _itemsOnBelt = new();
     private readonly TransportInventory _inventory = new();
-    
-    private class TransportInventory : Inventory
-    {
-        public override bool CanAcceptItems(string item, int count = 1) => CountAllItems() + count <= 5;
-    }
 
     /**************************************************************************
      * Properties                                                             *
@@ -61,7 +55,6 @@ public partial class TransportLine : ITransferTarget
     {
         _inventory.Listeners.Add(UpdateSprites);
         TargetDirectionGlobal = TargetDirectionGlobal;
-
     }
 
     public void Init(Vector2 globalPosition)
@@ -71,19 +64,10 @@ public partial class TransportLine : ITransferTarget
         {
             item.GlobalPosition = _cachePosition + GetTargetLocation(4);
         });
-        _itemCount = _inventory.CountAllItems();
     }
 
-    private bool initialized = false;
-    
     public void Process(double delta)
     {
-        if (!initialized)
-        {
-            initialized = true;
-            _itemCount = _inventory.CountAllItems();
-        }
-        
         for (var i = 0; i < Mathf.Min(_itemsOnBelt.Count, 4); i++)
         {
             var groundItem = _itemsOnBelt[i];
@@ -202,30 +186,24 @@ public partial class TransportLine : ITransferTarget
 
     public static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance = .001f) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
     public static bool IsEqualApprox(float a, float b, float tolerance = .001f) => Mathf.Abs(a - b) < tolerance;
-    
-    
-    
+
     #region ITransferTarget Implementation/
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item,  int count = 1) => _itemCount + count < 5;
-    public void Insert(string item, int count = 1)
-    {
-        if (!CanAcceptItems(item, count)) return;
-        _itemCount += count;
-        _inventory.Insert(item, count);
-    }
-
-    public bool Remove(string item, int count = 1)
-    {
-        _itemCount -= count;
-        return _inventory.Remove(item, count);
-    }
-
+    public bool CanAcceptItems(string item,  int count = 1) => _inventory.CanAcceptItems(item, count);
+    public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
+    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();
     public List<string> GetItems() => _inventory.GetItems();
     public List<Inventory> GetInventories() => _inventory.GetInventories();
+    private class TransportInventory : Inventory
+    {
+        public override int GetMaxTransferAmount(string itemType)
+        {
+            return Mathf.Max(0,MaxItems - CountAllItems());
+        }
+    }
     #endregion
 
     // This is needed for saveload where items are not placed in an inventory so the groundItems to get removed.

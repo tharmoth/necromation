@@ -9,6 +9,21 @@ public partial class CheatCodes : Node
 	
 	private readonly Queue<string> _keys = new();
 
+	public override void _Ready()
+	{
+		base._Ready();
+		
+		// Extra insurance against breaking builds.
+		if (!OS.IsDebugBuild()) return;
+		Database.Instance.Recipes
+			.Select(recipe => recipe.Products.First().Key)
+			.ToList()
+			.ForEach(item => Globals.PlayerInventory.Insert(item, 100));
+			
+		Globals.PlayerInventory.Insert("Coal Ore", 1000);
+		Globals.PlayerInventory.Insert("Bone Fragments", 1000);
+	}
+
 	public override void _UnhandledKeyInput(InputEvent @event)
 	{
 		base._UnhandledKeyInput(@event);

@@ -30,6 +30,11 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     private readonly GpuParticles2D _particles;
     private readonly PointLight2D _light = new();
     private Tween _animationTween;
+    
+    /**************************************************************************
+	 * Data Constants                                                         *
+	 **************************************************************************/
+    private const int MaxInputItems = 50;
 
     public Furnace()
 	{
@@ -166,19 +171,13 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    {
 		    _furnace = furnace;
 	    }
-		
-	    public override bool CanAcceptItems(string item, int count = 1)
-	    {
-		    var itemCount = CountItem(item);
-		    return _furnace._maxItems.ContainsKey(item) && itemCount < _furnace._maxItems[item];
-	    }
 	    
 	    public override int GetMaxTransferAmount(string itemType)
 	    {
 		    var currentCount = CountItem(itemType);
-		    if (_furnace._maxItems.TryGetValue(itemType, out var maxCount) && currentCount < maxCount * 50)
+		    if (_furnace._maxItems.TryGetValue(itemType, out var maxCount) && currentCount < MaxInputItems)
 		    {
-			    return maxCount * 50 - currentCount;
+			    return MaxInputItems - currentCount;
 		    }
 
 		    return 0;

@@ -50,12 +50,12 @@ public partial class ContainerGui : PanelContainer
 
 	private void UpdatePlayerInventory()
 	{
-		InventoryItem.UpdateInventory(_to, _from, InventoryList);
+		InventoryItem.UpdateInventory(_to, new List<Inventory> { _from }, InventoryList);
 	}
 	
 	private void UpdateSourceInventory()
 	{
-		InventoryItem.UpdateInventory(_from, _to, ContainerInventoryList);
+		InventoryItem.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
 	}
 
 	public override void _ExitTree()

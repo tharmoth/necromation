@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using Necromation;
 using Necromation.gui;
 
@@ -43,8 +44,8 @@ public partial class BarracksGui : PanelContainer
 		_to.Listeners.Add(UpdatePlayerInventory);
 		UpdatePlayerInventory();
 		
-		_barracks.GetInputInventory().Listeners.Add(UpdateSourceInventory);
-		UpdateSourceInventory();
+		_barracks.GetInputInventory().Listeners.Add(UpdateInputInventory);
+		UpdateInputInventory();
 		
 		_barracks.GetOutputInventory().Listeners.Add(UpdateOutputInventory);
 		UpdateOutputInventory();
@@ -58,24 +59,24 @@ public partial class BarracksGui : PanelContainer
 
 	private void UpdatePlayerInventory()
 	{
-		InventoryItem.UpdateInventory(_to, _barracks.GetInputInventory(), InventoryItemList);
+		InventoryItem.UpdateInventory(_to, new List<Inventory> { _barracks.GetInputInventory(), _barracks.GetOutputInventory() }, InventoryItemList);
 	}
 	
-	private void UpdateSourceInventory()
+	private void UpdateInputInventory()
 	{
-		InventoryItem.UpdateInventory(_barracks.GetInputInventory(), _to, SourceInventoryItemList);
+		InventoryItem.UpdateInventory(_barracks.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
 	}
 	
 	private void UpdateOutputInventory()
 	{
-		InventoryItem.UpdateInventory(_barracks.GetOutputInventory(), _to, OutputInventoryItemList);
+		InventoryItem.UpdateInventory(_barracks.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList);
 	}
 
 	public override void _ExitTree()
 	{
 		base._ExitTree();
 		_to?.Listeners.Remove(UpdatePlayerInventory);
-		_barracks?.GetInputInventory().Listeners.Remove(UpdateSourceInventory);
+		_barracks?.GetInputInventory().Listeners.Remove(UpdateInputInventory);
 		_barracks?.GetOutputInventory().Listeners.Remove(UpdateOutputInventory);
 	}
 }

@@ -37,7 +37,7 @@ public class Mine : Building, IInteractable, ITransferTarget
     private const int MaxInputItems = 200;
 
     private static readonly ImmutableList<string> ValidItems =
-        ImmutableList.Create("Stone Ore", "Bone Fragments", "Copper Ore", "Coal Ore", "Tin Ore");
+        ImmutableList.Create("Stone", "Bone Fragments", "Copper Ore", "Coal Ore", "Tin Ore");
     
     public Mine()
     {

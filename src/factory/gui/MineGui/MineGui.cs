@@ -56,7 +56,7 @@ public partial class MineGui : PanelContainer
 	
 	private void UpdateSourceInventory()
 	{
-		InventoryItem.UpdateInventory(_from, _to, ContainerInventoryList);
+		InventoryItem.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
 	}
 
 	public override void _ExitTree()

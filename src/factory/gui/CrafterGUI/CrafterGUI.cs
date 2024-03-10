@@ -11,9 +11,9 @@ public partial class CrafterGUI : Control
 	 **************************************************************************/
 	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/CrafterGUI.tscn");
 
-	/* ***********************************************************************
-	 * Child Accessors 													     *
-	 * ***********************************************************************/
+	/**************************************************************************
+	 * Child Accessors 													      *
+	 **************************************************************************/
 	private Container InventoryItemList => GetNode<Container>("%InventoryItemList");
 	private Container SourceInventoryItemList => GetNode<Container>("%SourceInventoryItemList");
 	private Container OutputInventoryItemList => GetNode<Container>("%OutputInventoryItemList");
@@ -50,7 +50,9 @@ public partial class CrafterGUI : Control
 		_crafter.GetOutputInventory().Listeners.Add(UpdateOutputInventory);
 		UpdateOutputInventory();
 
-		ItemSelectionItemBox.Init(to, _crafter);
+		// Furnaces use this to display the recipe selection gui and cannot have their recipe changed.
+		if (_crafter.GetRecipe() != null) ItemSelectionItemBox.Init(to, _crafter);
+		else ItemSelectionItemBox.Visible = false;
 		
 		if (_crafter is ProgressTracker.IProgress progress)
 		{
@@ -62,17 +64,17 @@ public partial class CrafterGUI : Control
 
 	private void UpdatePlayerInventory()
 	{
-		InventoryItem.UpdateInventory(_to, _crafter.GetInputInventory(), InventoryItemList);
+		InventoryItem.UpdateInventory(_to, new List<Inventory> { _crafter.GetInputInventory()  }, InventoryItemList);
 	}
 	
 	private void UpdateSourceInventory()
 	{
-		InventoryItem.UpdateInventory(_crafter.GetInputInventory(), _to, SourceInventoryItemList);
+		InventoryItem.UpdateInventory(_crafter.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
 	}
 	
 	private void UpdateOutputInventory()
 	{
-		InventoryItem.UpdateInventory(_crafter.GetOutputInventory(), _to, OutputInventoryItemList);
+		InventoryItem.UpdateInventory(_crafter.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList);
 	}
 
 	public override void _ExitTree()

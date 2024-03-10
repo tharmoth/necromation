@@ -100,7 +100,9 @@ public partial class ActionBarItem : ItemBox
 	{
 		base._UnhandledKeyInput(@event);
 		if (_index >= 9) return;
-		if (@event is InputEventKey { Pressed: true } eventKey && eventKey.Keycode == Key.Key0 + _index + 1)
+		if (@event is InputEventKey { Pressed: true } eventKey 
+		    && eventKey.Keycode == Key.Key0 + _index + 1 
+		    && Globals.PlayerInventory.CountItem(ItemType) > 0)
 		{
 			Globals.Player.Selected = ItemType;
 		}

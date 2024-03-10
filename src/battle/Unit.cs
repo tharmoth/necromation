@@ -211,6 +211,8 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	 **************************************************************************/
 	public void Damage(Unit source, int damage)
 	{
+		if (_hp < 0) return;
+		
 		PlayDamageAnimation();
 		ShowText(damage);
 		
@@ -221,7 +223,6 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 
 	private void OnDeath()
 	{
-		
 		PlayDeathAnimation();
 		PlayDeathSound();
 		

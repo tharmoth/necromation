@@ -205,7 +205,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			"Research Lab" => new ResearchLab(),
 			"Barracks" => new Barracks("recruitment"),
 			"Stone Chest" => new StoneChest(),
-			_ =>  throw new NotImplementedException()
+			_ => null
 		};
 	}
 	

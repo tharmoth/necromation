@@ -82,7 +82,7 @@ public partial class BattleScene : Scene
 		var deadCommanders =
 			Globals.BattleScene.Provence.Commanders.Where(commander => commander.Team != team).ToList();
 		deadCommanders.ForEach(commander => Globals.BattleScene.Provence.Commanders.Remove(commander));
-		deadCommanders.ForEach(commander => commander.QueueFree());
+		deadCommanders.ForEach(commander => commander.Kill());
 		Globals.BattleScene.QueueFree();
 
 		if (team == "Player" && Globals.MapScene.TileMap.GetProvinces().Count(province => province.Owner == "Player") == 2)

@@ -43,7 +43,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	/**************************************************************************
 	 * Data Constants                                                         *
 	 **************************************************************************/
-	private const int MaxInputItems = 50;
+	protected int MaxInputItems = 50;
 	
 	public Assembler(string itemType, string category)
 	{
@@ -85,7 +85,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	    return _outputInventory.CountItem(_recipe.Products.First().Key) > _recipe.Products.First().Value * 2;
     }
     
-    private void Animate()
+    protected virtual void Animate()
     {
 	    if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
 
@@ -158,7 +158,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 		    if (!ingredients.ContainsKey(itemType)) return 0;
 		    
 		    var currentCount = CountItem(itemType);
-		    return Mathf.Max(0,  MaxInputItems - currentCount);
+		    return Mathf.Max(0,  _assembler.MaxInputItems - currentCount);
 	    }
     }
     

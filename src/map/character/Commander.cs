@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Necromation.map.character;
@@ -10,7 +11,6 @@ public partial class Commander : Node2D, ITransferTarget
     public string Team { get; set; }
 
     public readonly Inventory Units;
-    public bool IsDead = false;
     private readonly Line2D _line = new();
     private readonly Sprite2D _sprite = new();
     
@@ -39,7 +39,7 @@ public partial class Commander : Node2D, ITransferTarget
     public void Kill()
     {
         _province.Commanders.Remove(this);
-        IsDead = true;
+        QueueFree();
     }
     
     public override void _Ready()
@@ -102,7 +102,9 @@ public partial class Commander : Node2D, ITransferTarget
         
         public override bool CanAcceptItems(string item, int count = 1)
         {
-            return CountItem(item) + count <= _commander.CommandCap && base.CanAcceptItems(item, count);
+            return Database.Instance.Units.Any(unit => unit.Name == item) 
+                   && CountAllItems() + count <= _commander.CommandCap 
+                   && base.CanAcceptItems(item, count);
         }
     }
     

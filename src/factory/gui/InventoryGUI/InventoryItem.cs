@@ -14,12 +14,12 @@ public partial class InventoryItem : ItemBox
 	/**************************************************************************
 	 * State Data          													  *
 	 **************************************************************************/
-	private Inventory _targetInventory;
+	private List<Inventory> _to;
 	private Inventory _sourceInventory;
 	private string _cachedSelected = "";
 	
 	// Static Accessor
-	public static void UpdateInventory(Inventory from, Inventory to, Container list)
+	public static void UpdateInventory(Inventory from, List<Inventory> to, Container list)
 	{
 		list.GetChildren().ToList().ForEach(child => child.QueueFree());
 		from.Items
@@ -28,32 +28,38 @@ public partial class InventoryItem : ItemBox
 	}
 	
 	// Static Accessor
-	private static void AddInventoryItem(KeyValuePair<string, int> item, Inventory from, Inventory to, Container list)
+	private static void AddInventoryItem(KeyValuePair<string, int> item, Inventory from, List<Inventory> to, Container list)
 	{
 		var inventoryItem = ItemScene.Instantiate<InventoryItem>();
 		inventoryItem.Init(from, to, item.Key, item.Value);
 		list.AddChild(inventoryItem);
 	}
 	
-	private void Init(Inventory source, Inventory target, string item, int count)
+	private void Init(Inventory source, List<Inventory> to, string item, int count)
 	{
 		ItemType = item;
 		CountLabel.Text = count.ToString();
-		_targetInventory = target;
+		_to = to;
 		_sourceInventory = source;
 		
 		Button.Pressed += () =>
 		{
-			if (_targetInventory == null || _sourceInventory == null)
+			if (_to == null || _sourceInventory == null)
 			{
 				Globals.Player.Selected = ItemType;
 				return;
 			}
 			var sourceCount = Input.IsActionPressed("shift") ? _sourceInventory.Items[ItemType] : 1;
-			var targetCapacity = _targetInventory.GetMaxTransferAmount(ItemType);
-			var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
 
-			Inventory.TransferItem(_sourceInventory, _targetInventory, ItemType, amountToTransfer);
+			foreach (var inventory in _to)
+			{
+				var targetCapacity = inventory.GetMaxTransferAmount(ItemType);
+				var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
+
+				if (amountToTransfer <= 0) continue;
+				Inventory.TransferItem(_sourceInventory, inventory, ItemType, amountToTransfer);
+				break;
+			}
 		};
 	}
 
