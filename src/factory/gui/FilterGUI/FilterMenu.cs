@@ -7,18 +7,18 @@ using Necromation;
 public partial class FilterMenu : PanelContainer
 {
 	private Container FilterList => GetNode<Container>("%FilterList");
-	private ActionBarItem _actionBarItem;
+	private HotBarItemBox _hotBarItemBox;
 	
-	public static void Display(ActionBarItem item)
+	public static void Display(HotBarItemBox itemBox)
 	{
 		var gui = GD.Load<PackedScene>("res://src/factory/gui/FilterGUI/filter_menu.tscn").Instantiate<FilterMenu>();
-		gui.Init(item);
+		gui.Init(itemBox);
 		Globals.FactoryScene.Gui.OpenGui(gui);
 	}
 
-	private void Init(ActionBarItem item)
+	private void Init(HotBarItemBox itemBox)
 	{
-		_actionBarItem = item;
+		_hotBarItemBox = itemBox;
 		UpdateInventory();
 	}
 
@@ -40,7 +40,7 @@ public partial class FilterMenu : PanelContainer
 	private void AddInventoryItem(KeyValuePair<string, int> item)
 	{
 		var itemBox = GD.Load<PackedScene>("res://src/factory/gui/FilterGUI/filter_item.tscn").Instantiate<FilterItem>();
-		itemBox.Init(item.Key, _actionBarItem);
+		itemBox.Init(item.Key, _hotBarItemBox);
 		FilterList.AddChild(itemBox);
 	}
 }

@@ -107,6 +107,7 @@ public partial class Inserter : Building, IRotatable
 
     private void Update()
     {
+        // TODO: reenable this performance boost.
         _hasInventoryChanged = true;
         _from = Globals.FactoryScene.TileMap.GetEntity(Input, FactoryTileMap.Building) as ITransferTarget;
         _to = Globals.FactoryScene.TileMap.GetEntity(Output, FactoryTileMap.Building) as ITransferTarget;
@@ -172,7 +173,7 @@ public partial class Inserter : Building, IRotatable
     // Attempts to transfer items from the from inventory to the to inventory.
     private string Transfer()
     {
-        _hasInventoryChanged = false;
+        _hasInventoryChanged = true;
         if (_from == null) return null;
         if (_belt != null)
         {

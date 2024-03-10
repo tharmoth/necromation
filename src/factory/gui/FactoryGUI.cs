@@ -20,6 +20,7 @@ public partial class FactoryGUI : CanvasLayer
 	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
 	private AudioStreamPlayer GuiOpenedAudio => GetNode<AudioStreamPlayer>("%GuiOpenedAudio");
 	private AudioStreamPlayer GuiClosedAudio => GetNode<AudioStreamPlayer>("%GuiClosedAudio");
+	public GridContainer HotBar => GetNode<GridContainer>("%HotBar");
 
 	/**************************************************************************
 	 * State Data          													  *

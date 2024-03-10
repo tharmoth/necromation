@@ -1,9 +1,11 @@
 using Godot;
 using System;
+using System.Linq;
+using System.Xml.Linq;
 using Necromation;
 using Necromation.gui;
 
-public partial class ActionBarItem : ItemBox
+public partial class HotBarItemBox : ItemBox
 {
 	private int _index;
 	private string _cachedSelected = "";
@@ -12,6 +14,12 @@ public partial class ActionBarItem : ItemBox
 	
 	public void SetFilter(string itemType)
 	{
+		if (string.IsNullOrEmpty(itemType))
+		{
+			ClearFilter();
+			return;
+		}
+		
 		// Update data
 		ItemType = itemType;
 
@@ -114,4 +122,49 @@ public partial class ActionBarItem : ItemBox
 		base._ExitTree();
 		Globals.PlayerInventory.Listeners.Remove(UpdateCount);
 	}
+	
+	#region Save/Load
+	/******************************************************************
+	 * Save/Load                                                      *
+	 ******************************************************************/
+	public static Godot.Collections.Dictionary<string, Variant> Save()
+	{
+		var dict = new Godot.Collections.Dictionary<string, Variant>
+		{
+			["ItemType"] = "HotBar"
+		};
+
+		var items = Globals.FactoryScene.Gui.HotBar.GetChildren().OfType<HotBarItemBox>().ToList();
+		for (var i = 0; i < items.Count; i++)
+		{
+			dict["HotBarItem" + i] = items[i].SaveItem();
+		}
+		return dict;
+	}
+	
+	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+	{
+		int index = 0;
+		while (nodeData.ContainsKey("HotBarItem" + index))
+		{
+			var data = (Godot.Collections.Dictionary<string, Variant>) nodeData["HotBarItem" + index];
+			var itemIndex = data["Index"].AsInt32();
+			Globals.FactoryScene.Gui.HotBar.GetChildren()
+				.OfType<HotBarItemBox>()
+				.First(itemBox => itemBox._index == itemIndex)
+				.SetFilter(data["ItemFilter"].ToString());
+			index++;
+		}
+	}
+
+	private Godot.Collections.Dictionary<string, Variant> SaveItem()
+	{
+		return new Godot.Collections.Dictionary<string, Variant>()
+		{
+			{ "ItemType", "HotBarItemBox" },
+			{ "Index", _index },
+			{ "ItemFilter", ItemType }
+		};
+	}
+	#endregion
 }
