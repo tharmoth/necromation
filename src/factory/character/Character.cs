@@ -105,6 +105,7 @@ public partial class Character : Node2D
 			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) Position = newPosition;
 		}
 
+		// Mine action should be here as it should repeat without inputevents.
 		if (_mineAction.ShouldMine()) _mineAction.Mine();
 		else _mineAction.Cancel();
 	}
@@ -112,16 +113,19 @@ public partial class Character : Node2D
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
+		// Gui input actions
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
 
 		var building = Globals.FactoryScene.TileMap.GetBuildingAtMouse();
 		
+		// Cursor Input Actions
 		if (_insertItemAction.ShouldInsert(building)) _insertItemAction.Insert(building);
 		else if (_removeItemAction.ShouldRemove(building)) _removeItemAction.Remove(building);
 		else if (_buildAction.ShouldBuild()) _buildAction.Build();
 		else if (_interactAction.ShouldInteract(building)) _interactAction.Interact(building);
 		
+		// Always Cancel removal if not removing
 		if (_removeBuildingAction.ShouldRemove()) _removeBuildingAction.RemoveBuilding(building);
 		else _removeBuildingAction.CancelRemoval();
 	}
