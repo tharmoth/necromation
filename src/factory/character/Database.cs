@@ -221,4 +221,35 @@ public class Database
         var file = files[GD.RandRange(0, files.Length - 1)].Replace(".import", "");
         return GD.Load<AudioStream>("res://res/sfx/death/" + file);
     }
+    
+    
+    #region Save/Load
+    /******************************************************************
+     * Save/Load                                                      *
+     ******************************************************************/
+    public static Godot.Collections.Dictionary<string, Variant> Save()
+    {
+        var dict = new Godot.Collections.Dictionary<string, Variant>
+        {
+            ["ItemType"] = "Technology"
+        };
+        for (var i = 0; i < Instance.Technologies.Count; i++)
+        {
+            dict["Technology" + i] = Instance.Technologies[i].Save();
+        }
+        return dict;
+    }
+
+    public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+    {
+        int index = 0;
+        while (nodeData.ContainsKey("Technology" + index))
+        {
+            var node = (Godot.Collections.Dictionary<string, Variant>) nodeData["Technology" + index];
+            var technology = Instance.Technologies.First(tech => tech.Name == node["Name"].ToString());
+            technology.Load(node);
+            index++;
+        }
+    }
+    #endregion
 }

@@ -61,6 +61,9 @@ public class SKSaveLoad
                 case "HotBar":
                     HotBarItemBox.Load(nodeData);
                     break;
+                case "Technology":
+                    Database.Load(nodeData);
+                    break;
                 default:
                     Resource.Load(nodeData);
                     break;
@@ -111,5 +114,9 @@ public class SKSaveLoad
         var hotbarData = HotBarItemBox.Save();
         var hotbarJson = Json.Stringify(hotbarData);
         saveGame.StoreLine(hotbarJson);
+        
+        var techData = Database.Save();
+        var techJson = Json.Stringify(techData);
+        saveGame.StoreLine(techJson);
     }
 }

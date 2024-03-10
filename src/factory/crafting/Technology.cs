@@ -21,7 +21,7 @@ public class Technology
         set
         {
             _progress = value;
-            if (_progress >= Count) Unlock();
+            if (_progress >= Count) Research();
         }
     }
 
@@ -42,7 +42,10 @@ public class Technology
         Description = description;
     }
 
-    public void Unlock()
+    /// <summary>
+    /// Adds the technology to the researched lists and unlocks the recipes.
+    /// </summary>
+    public void Research()
     {
         Researched = true;
         GD.Print("Researched " + Name);
@@ -52,8 +55,11 @@ public class Technology
         Globals.CurrentTechnology = null;
         Globals.FactoryScene.Gui.TechnologyComplete();
     }
-    
-    public void Lock()
+
+    /// <summary>
+    /// Removes the technology from the researched lists and re-locks the recipes. Used for Cheat codes and save/load.
+    /// </summary>
+    public void UnResearch()
     {
         Researched = false;
         var lockedRecipes = Database.Instance.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
@@ -64,5 +70,28 @@ public class Technology
         Globals.ResearchListeners.ForEach(listener => listener());
         Globals.CurrentTechnology = null;
         Globals.FactoryScene.Gui.TechnologyComplete();
+    }
+
+    public virtual Godot.Collections.Dictionary<string, Variant> Save()
+    {
+        var dict = new Godot.Collections.Dictionary<string, Variant>()
+        {
+            { "Name", Name },
+            { "Researched", Researched }
+        };
+        return dict;
+    }
+    
+    public void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+    {
+        var researched = nodeData["Researched"].AsBool();
+        if (researched)
+        {
+            Research();
+        }
+        else
+        {
+            UnResearch();
+        }
     }
 }

@@ -69,6 +69,10 @@ public partial class BuildingManager : Node
         }
     }
 
+    #region Save/Load
+    /******************************************************************
+     * Save/Load                                                      *
+     ******************************************************************/
     public virtual Godot.Collections.Dictionary<string, Variant> Save()
     {
         var dict = new Godot.Collections.Dictionary<string, Variant>();
@@ -97,4 +101,5 @@ public partial class BuildingManager : Node
             index++;
         }
     }
+    #endregion
 }

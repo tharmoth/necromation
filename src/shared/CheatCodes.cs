@@ -74,13 +74,13 @@ public partial class CheatCodes : Node
 		if (entered.EndsWith("``GOLDEN AGE"))
 		{
 			GD.Print("DARK AGE");
-			Database.Instance.Technologies.ToList().ForEach(tech => tech.Unlock());
+			Database.Instance.Technologies.ToList().ForEach(tech => tech.Research());
 		}
 		
 		if (entered.EndsWith("``DARK AGE"))
 		{
 			GD.Print("GOLDEN AGE");
-			Database.Instance.Technologies.ToList().ForEach(tech => tech.Lock());
+			Database.Instance.Technologies.ToList().ForEach(tech => tech.UnResearch());
 		}
 		
 		if (entered.EndsWith("``FPS"))
