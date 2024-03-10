@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cj30vq58x02yf"]
+
+[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="1_hjekg"]
+
+[node name="ItemBox" instance=ExtResource("1_hjekg")]

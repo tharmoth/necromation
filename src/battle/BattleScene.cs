@@ -10,8 +10,9 @@ using Necromation.map.character;
 public partial class BattleScene : Scene
 {
 	public const double TimeStep = .5;
-	public override CanvasLayer Gui => GetNode<BattleGUI>("%GUI");
+	public override BattleGUI Gui => GetNode<BattleGUI>("%GUI");
 	public BattleTileMap TileMap => GetNode<BattleTileMap>("%TileMap");
+
 	public Province Provence;
 
 	public override void _Ready()
@@ -24,7 +25,7 @@ public partial class BattleScene : Scene
 		if (Provence.Commanders.Count == 0)
 		{
 			var PlayerCommanderInfantry = new Commander(new Province(), "Player");
-			PlayerCommanderInfantry.Units.Insert("Skeleton Barbarian", 500);
+			PlayerCommanderInfantry.Units.Insert("Gravebreaker", 500);
 			Provence.Commanders.Add(PlayerCommanderInfantry);
 			
 			var EnemyCommanderInfantry = new Commander(new Province(), "Enemy");
@@ -33,7 +34,7 @@ public partial class BattleScene : Scene
 			
 			var PlayerCommanderArcher = new Commander(new Province(), "Player");
 			PlayerCommanderArcher.SpawnLocation = new Vector2I(0, 25);
-			PlayerCommanderArcher.Units.Insert("Skeleton Archer", 100);
+			PlayerCommanderArcher.Units.Insert("Skeleton Marksman", 100);
 			Provence.Commanders.Add(PlayerCommanderArcher);
 			
 			var EnemyCommanderArcher = new Commander(new Province(), "Enemy");

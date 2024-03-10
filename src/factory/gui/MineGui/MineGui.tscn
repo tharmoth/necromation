@@ -178,6 +178,3 @@ size_flags_vertical = 3
 
 [node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory" instance=ExtResource("6_ihkv5")]
 layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2

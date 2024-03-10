@@ -38,7 +38,7 @@
         "Copper Ringmail",
         "Copper Spear",
         "Skeleton Warrior",
-        "Skeleton Archer",
+        "Skeleton Marksman",
         "Short Bow",
         "Arrow"
       ],
@@ -55,7 +55,7 @@
       ],
       "unlocks" : [
         "Copper Warhammer",
-        "Skeleton Barbarian"
+        "Gravebreaker"
       ],
       "prerequisites" : [
         "Copperwork"
@@ -87,7 +87,7 @@
         "Bronze Breastplate",
         "Bronze Spear",
         "Bronze Warhammer",
-        "Skeleton Heavy Infantry"
+        "Dreadplate Phalanx"
       ],
       "prerequisites" : [
         "Bronzework"

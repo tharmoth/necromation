@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://2qisvnfbjyo6"
-path="res://.godot/imported/Skeleton Archer.png-134496508edae06a8b9d238fbf6ea677.ctex"
+path="res://.godot/imported/Skeleton Marksman.png-1a13ae4eaedeca838f20d124041cdc49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/unit/Skeleton Archer.png"
-dest_files=["res://.godot/imported/Skeleton Archer.png-134496508edae06a8b9d238fbf6ea677.ctex"]
+source_file="res://res/sprites/unit/Skeleton Marksman.png"
+dest_files=["res://.godot/imported/Skeleton Marksman.png-1a13ae4eaedeca838f20d124041cdc49.ctex"]
 
 [params]
 

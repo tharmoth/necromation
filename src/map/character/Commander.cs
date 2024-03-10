@@ -10,6 +10,7 @@ public partial class Commander : Node2D, ITransferTarget
     public string Team { get; set; }
 
     public readonly Inventory Units;
+    public bool IsDead = false;
     private readonly Line2D _line = new();
     private readonly Sprite2D _sprite = new();
     
@@ -38,6 +39,7 @@ public partial class Commander : Node2D, ITransferTarget
     public void Kill()
     {
         _province.Commanders.Remove(this);
+        IsDead = true;
     }
     
     public override void _Ready()

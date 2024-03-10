@@ -12,6 +12,7 @@ public partial class FactoryGUI : CanvasLayer
 	 ************************************************************************/
 	private Label FpsLabel => GetNode<Label>("%FpsLabel");
 	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
+	private Container ProgressPanel => GetNode<Container>("%ProgressPanel");
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
 	private ColorRect TopBar => GetNode<ColorRect>("%TopBar");
 	private ColorRect BottomBar => GetNode<ColorRect>("%BottomBar");
@@ -35,10 +36,32 @@ public partial class FactoryGUI : CanvasLayer
 		base._UnhandledInput(inputEvent);
 		if (!inputEvent.IsPressed()) return;
 		if (Input.IsActionJustPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_technology")) TechGUI.Display();
-		if (Input.IsActionJustPressed("open_inventory")) InventoryGUI.Display(Globals.PlayerInventory);
+
+		if (Input.IsActionJustPressed("open_technology"))
+		{
+			if (_openGui is TechGUI)
+				CloseGui();
+			else
+				OpenGui(new TechGUI());
+		}
+
+		if (Input.IsActionJustPressed("open_inventory"))
+		{
+			if (_openGui is InventoryGUI)
+				CloseGui();
+			else
+				InventoryGUI.Display(Globals.PlayerInventory);
+		}
+
+		if (Input.IsActionPressed("open_config"))
+		{
+			if (_openGui is ConfigurationGui)
+				CloseGui();
+			else
+				ConfigurationGui.Display();
+		}
+		
 		if (Input.IsActionJustPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
-		if (Input.IsActionPressed("open_config")) ConfigurationGui.Display();
 		if (Input.IsActionJustPressed("save")) SKSaveLoad.SaveGame(this);
 		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);
 	}
@@ -48,9 +71,7 @@ public partial class FactoryGUI : CanvasLayer
 	 ***************************************************************************/
 	public void OpenGui(Control gui)
 	{
-		var open = _openGui;
 		CloseGui();
-		if (IsInstanceValid(open) && open.GetType() == gui.GetType()) return;
 		_openGui = gui;
 		GuiOpenedAudio.Play();
 		AddChild(gui);
@@ -82,9 +103,8 @@ public partial class FactoryGUI : CanvasLayer
 
 	public void SetProgress(double value)
 	{
-		ProgressBar.Visible = true;
 		ProgressBar.Value = value * 100;
-		ProgressBar.Visible = value is < 1 and > 0;
+		ProgressPanel.Visible = value is < 1 and > 0;
 	}
 	
 	public void TechnologyComplete()

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnec064sup01l"
-path="res://.godot/imported/Skeleton Barbarian.png-4e0c126b3f4f093168616d5c0695c9f4.ctex"
+uid="uid://drdo7crkrlyvt"
+path="res://.godot/imported/Dreadplate Phalanx.png-9530b84369ede2b79e0cf66acac2fe8a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/unit/Skeleton Barbarian.png"
-dest_files=["res://.godot/imported/Skeleton Barbarian.png-4e0c126b3f4f093168616d5c0695c9f4.ctex"]
+source_file="res://res/sprites/unit/Dreadplate Phalanx.png"
+dest_files=["res://.godot/imported/Dreadplate Phalanx.png-9530b84369ede2b79e0cf66acac2fe8a.ctex"]
 
 [params]
 

@@ -7,7 +7,17 @@ using Necromation;
 
 public partial class Inventory : ITransferTarget
 {
-	public readonly List<Action> Listeners = new();
+	
+	private readonly List<Action> _listeners = new();
+
+	public List<Action> Listeners
+	{
+		get
+		{
+			return _listeners;
+		}
+	}
+
 	private readonly Dictionary<string, int> _items = new();
 	public ImmutableDictionary<string, int> Items => _items.ToImmutableDictionary();
 	

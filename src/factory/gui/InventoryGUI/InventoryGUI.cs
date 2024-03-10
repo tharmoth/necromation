@@ -35,7 +35,7 @@ public partial class InventoryGUI : Control
 	private void Init(Inventory inventory)
 	{
 		_inventory = inventory;
-		
+
 		_inventory.Listeners.Add(UpdatePlayerInventory);
 		UpdatePlayerInventory();
 		

@@ -16,9 +16,8 @@ public partial class InventoryRecipeBox : ItemBox
 	 * State Data          													  *
 	 **************************************************************************/
 	private Inventory TargetInventory { get; set; } = new();
-	
 	private Recipe _recipe = new();
-	
+
 	// Static Accessor
 	public static void UpdateRecipes(Inventory from, Container list)
 	{
@@ -44,17 +43,17 @@ public partial class InventoryRecipeBox : ItemBox
 		TargetInventory = inventory;
 		_recipe = recipe;
 		ItemType = _recipe.Products.Keys.First();
-		
+
 		Button.Pressed += () => _recipe.Craft(TargetInventory);
 		Button.Pressed += MusicManager.PlayCraft;
 		
-		TargetInventory?.Listeners.Add(Update);
-		Update();
+		TargetInventory.Listeners.Add(UpdateInventoryRecipeBox);
+		UpdateInventoryRecipeBox();
 		
 		IngrediantsPopup.Register(_recipe, Button);
 	}
 
-	private void Update()
+	private void UpdateInventoryRecipeBox()
 	{
 		if (TargetInventory == null) return;
 		Button.Disabled = !_recipe.CanCraft(TargetInventory);
@@ -70,6 +69,6 @@ public partial class InventoryRecipeBox : ItemBox
 	public override void _ExitTree()
 	{
 		base._ExitTree();
-		TargetInventory?.Listeners.Remove(Update);
+		TargetInventory.Listeners.Remove(UpdateInventoryRecipeBox);
 	}
 }

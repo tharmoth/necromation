@@ -8,7 +8,7 @@ using Necromation.interfaces;
 
 namespace Necromation;
 
-public partial class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IRotatable
+public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 {
 	/**************************************************************************
 	 * Building Implementation                                                *
@@ -22,8 +22,8 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
 	private float _time;
 	private Recipe _recipe;
 	private readonly string _category;
-    private Inventory _inputInventory;
-    private Inventory _outputInventory = new();
+    protected Inventory _inputInventory;
+    protected Inventory _outputInventory = new();
     
     /**************************************************************************
      * Visuals Variables 													  *
@@ -100,7 +100,7 @@ public partial class Assembler : Building, ICrafter, IInteractable, ITransferTar
     /**************************************************************************
 	 * IInteractable Methods                                                  *
 	 **************************************************************************/
-    public void Interact(Inventory playerInventory)
+    public virtual void Interact(Inventory playerInventory)
     {
 	    if (_recipe == null)
 	    {

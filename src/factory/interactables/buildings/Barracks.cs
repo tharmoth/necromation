@@ -1,59 +1,67 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Necromation.interfaces;
+using Necromation.map.character;
 
 namespace Necromation;
 
-public class Barracks : Building, IInteractable, ITransferTarget
+public class Barracks : Assembler
 {
     /**************************************************************************
-     * Building Implementation                                                *
+     * Hardcoded Scene Imports 											      *
      **************************************************************************/
-    public override string ItemType => "Barracks";
-    public override Vector2I BuildingSize => Vector2I.One * 3;
+    public static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/soul_storm.tscn");
     
-    /*
-     * Logic Variables
-     */
-    private BarracksInventory _inventory = new();
+    /**************************************************************************
+     * Logic Variables                                                        *
+     **************************************************************************/
+    private Commander _commander;
     
     /**************************************************************************
      * Data Constants                                                         *
      **************************************************************************/
     private const int MaxInputItems = 50;
 
-    public Barracks()
+    public Barracks(string category) : base("Barracks", category)
     {
-        Sprite.AddChild(GD.Load<PackedScene>("res://src/factory/interactables/buildings/soul_storm.tscn")
-            .Instantiate<GpuParticles2D>());
+        Sprite.AddChild(Scene.Instantiate<GpuParticles2D>());
     }
-    public override void _Ready()
+
+    public override void _Process(double delta)
     {
-        base._Ready();
-        Sprite.CallDeferred("add_child",
-            GD.Load<PackedScene>("res://src/factory/interactables/buildings/soul_storm.tscn").Instantiate<GpuParticles2D>());
+        base._Process(delta);
+        if (_commander == null || _commander.IsDead) SpawnCommander();
+    }
+
+    protected override bool MaxOutputItemsReached()
+    {
+        return _outputInventory.CountItem(GetRecipe().Products.First().Key) > GetRecipe().Products.First().Value * 200;
+    }
+    
+    private void SpawnCommander()
+    {
+        _commander = new Commander(Globals.MapScene.FactoryProvince, "Player");
+        Globals.MapScene.AddCommander(_commander, Globals.MapScene.FactoryProvince);
+        _outputInventory = _commander.Units;
     }
 
     #region IInteractable Implementation
     /**************************************************************************
      * IInteractable Methods                                                  *
      **************************************************************************/        
-    public void Interact(Inventory playerInventory)
+    public override void Interact(Inventory playerInventory)
     {
-        ContainerGui.Display(playerInventory, _inventory, ItemType);
+        if (GetRecipe() == null)
+        {
+            RecipeSelectionGui.Display(playerInventory, this);
+        }
+        else
+        {
+            BarracksGui.Display(playerInventory, this);
+        }
+        
     }
-    #endregion
-    
-    #region ITransferTarget Implementation
-    /**************************************************************************
-     * ITransferTarget Methods                                                *
-     **************************************************************************/
-    public bool CanAcceptItems(string item, int count = 1) => _inventory.CanAcceptItems(item, count);
-    public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
-    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
-    public string GetFirstItem() => _inventory.GetFirstItem();
-    public List<string> GetItems() => _inventory.GetItems();
-    public List<Inventory> GetInventories() => new() { _inventory };
     #endregion
     
     private class BarracksInventory : Inventory

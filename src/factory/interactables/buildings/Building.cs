@@ -203,7 +203,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			"Armory" => new Assembler("Armory", "recruitment"),
 			"House" => new Assembler("House", "population"),
 			"Research Lab" => new ResearchLab(),
-			"Barracks" => new Barracks(),
+			"Barracks" => new Barracks("recruitment"),
 			"Stone Chest" => new StoneChest(),
 			_ =>  throw new NotImplementedException()
 		};

@@ -11,7 +11,7 @@ public partial class DayNight : CanvasModulate
 	
 	[Export] private GradientTexture1D _gradient;
 	[Export] private double MINUTES_PER_SECOND = 1.2;
-	[Export] private float STARTING_HOUR = 0.0f;
+	[Export] private float STARTING_HOUR = 1.0f;
 
 	private double _time;
 

@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "Skeleton",
+      "name": "Awoken Skeleton",
         "weapons" : [
 
         ],
@@ -94,7 +94,7 @@
         ]
     },
     {
-      "name": "Skeleton Archer",
+      "name": "Skeleton Marksman",
         "weapons" : [
           "Long Bow"
         ],
@@ -103,7 +103,7 @@
         ]
     },
     {
-      "name": "Skeleton Barbarian",
+      "name": "Gravebreaker",
         "weapons" : [
             "Copper Warhammer"
         ],
@@ -112,7 +112,7 @@
         ]
     },
     {
-      "name": "Skeleton Heavy Infantry",
+      "name": "Dreadplate Phalanx",
         "weapons" : [
             "Bronze Spear"
         ],

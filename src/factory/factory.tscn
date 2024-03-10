@@ -222,20 +222,18 @@ layout_mode = 2
 [node name="PanelContainer" type="PanelContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer"]
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/PanelContainer"]
+[node name="ProgressPanel" type="PanelContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/PanelContainer"]
 unique_name_in_owner = true
-visible = false
+layout_mode = 2
+
+[node name="Outline" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/PanelContainer/ProgressPanel" instance=ExtResource("9_oba7v")]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/PanelContainer/ProgressPanel"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 show_percentage = false
-
-[node name="Outline" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/PanelContainer/ProgressBar" instance=ExtResource("9_oba7v")]
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-grow_horizontal = 1
-grow_vertical = 1
 
 [node name="Control" type="Control" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer"]
 layout_mode = 2
@@ -266,82 +264,122 @@ columns = 10
 [node name="ItemBox" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox2" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox3" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox4" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox5" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox6" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox7" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox8" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox9" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox10" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox11" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox12" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox13" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox14" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox15" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox16" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox17" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox18" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox19" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="ItemBox20" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/GridContainer" instance=ExtResource("6_lhutd")]
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="DropShadowDividerRight" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("8_jqtrb")]
 layout_mode = 2

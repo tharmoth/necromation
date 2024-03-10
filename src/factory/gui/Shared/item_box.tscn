@@ -7,6 +7,8 @@
 
 [node name="ItemBox" type="PanelContainer"]
 custom_minimum_size = Vector2(50, 50)
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_q0nbf")
 
 [node name="Outline" parent="." instance=ExtResource("2_3cet6")]

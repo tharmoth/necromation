@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drdo7crkrlyvt"
-path="res://.godot/imported/Skeleton Heavy Infantry.png-cefdd1726c41e5e20ce94fa1f8d791fa.ctex"
+uid="uid://b6bqgdvwlagdg"
+path="res://.godot/imported/Awoken Skeleton.png-979481765ab54e8a2986252e7f057fba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/unit/Skeleton Heavy Infantry.png"
-dest_files=["res://.godot/imported/Skeleton Heavy Infantry.png-cefdd1726c41e5e20ce94fa1f8d791fa.ctex"]
+source_file="res://res/sprites/unit/Awoken Skeleton.png"
+dest_files=["res://.godot/imported/Awoken Skeleton.png-979481765ab54e8a2986252e7f057fba.ctex"]
 
 [params]
 

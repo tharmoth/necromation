@@ -95,6 +95,7 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 
 	public override void _Process(double delta)
 	{
+		if (!Globals.BattleScene.Gui.Started) return;
 		
 		Cooldown += delta;
 		if (Cooldown < BattleScene.TimeStep || _hp <= 0) return;
@@ -215,11 +216,12 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		
 		_hp -= damage;
 		if (_hp < 0) OnDeath();
+		DeathCallbacks.ForEach(callback => callback(source));
 	}
 
 	private void OnDeath()
 	{
-		DeathCallbacks.ForEach(callback => callback(this));
+		
 		PlayDeathAnimation();
 		PlayDeathSound();
 		

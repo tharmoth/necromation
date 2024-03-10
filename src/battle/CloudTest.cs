@@ -22,7 +22,7 @@ public partial class CloudTest : Sprite2D
 	public override void _Process(double delta)
 	{
 		GlobalPosition += Direction * (float)delta * _speed;
-		if (!(GlobalPosition.X + GlobalPosition.Y + Texture.GetSize().X + Texture.GetSize().Y > 6400)) return;
+		if (!(GlobalPosition.X + GlobalPosition.Y > 6400 + (Texture.GetSize().X + Texture.GetSize().Y) * Scale.X)) return;
 		GetParent<CloudRegionSpawner>().Spawn(0);
 		QueueFree();
 	}

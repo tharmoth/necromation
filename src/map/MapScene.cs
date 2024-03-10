@@ -17,6 +17,8 @@ public partial class MapScene : Scene
 	public Sprite2D SelectedSprite;
 	public Province SelectedProvince;
 	public Commander SelectedCommander;
+	
+	public Province FactoryProvince => TileMap.GetProvence(FactoryPosition);
 
 	public static Vector2I FactoryPosition => new(4, 2);
 
@@ -25,18 +27,16 @@ public partial class MapScene : Scene
 		TurnListeners.Add(() => SelectedCommander = null);
 	}
 
-	
-
 	public override void OnOpen()
 	{
-		if (Globals.FactoryScene.TileMap == null) return;
-		
-		var prov = TileMap.GetProvence(MapScene.FactoryPosition);
-		foreach (var barracks in Globals.FactoryScene.TileMap.GetEntitiesOfType(nameof(Barracks)).OfType<Barracks>())
-		{
-			var inventory = barracks.GetInventories().First();
-			Inventory.TransferAllTo(inventory, prov.Units);
-		}
+
+	}
+	
+	public void AddCommander(Commander commander, Province province)
+	{
+		commander.GlobalPosition = province.GlobalPosition;
+		province.Commanders.Add(commander);
+		Globals.MapScene.AddChild(commander);
 	}
 
 	public override void OnClose() {}

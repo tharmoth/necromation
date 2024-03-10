@@ -69,6 +69,8 @@ public partial class MapGui : CanvasLayer
 			Globals.MapScene.UpdateListeners.ForEach(listener => listener());
 		};
 	}
+	
+
 
 	private void EndTurn()
 	{

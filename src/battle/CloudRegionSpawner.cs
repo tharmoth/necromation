@@ -21,7 +21,7 @@ public partial class CloudRegionSpawner : Control
 		
 		
 		var spawn = new CloudTest();
-		spawn.GlobalPosition = pointOnLine + spawn.Direction * offset - spawn.Texture.GetSize();
+		spawn.GlobalPosition = pointOnLine + spawn.Direction * offset - spawn.Texture.GetSize() * spawn.Scale.X;
 		
 		CallDeferred("add_child", spawn);
 	}

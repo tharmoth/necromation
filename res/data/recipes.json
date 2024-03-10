@@ -314,19 +314,32 @@
       }
     },
     {
-      "name" : "Skeleton Archer",
+      "name" : "Awoken Skeleton",
+      "time" : 1.0,
+      "category": "recruitment",
+      "ingredients": {
+        "Skeleton" : 1
+      },
+      "products": {
+        "Awoken Skeleton": 1
+      }
+    },
+    {
+      "name" : "Skeleton Marksman",
         "time" : 10.0,
+        "category": "recruitment",
         "ingredients": {
           "Short Bow": 1,
           "Arrow": 12,
           "Skeleton" : 1
         },
         "products": {
-          "Skeleton Archer": 1
+          "Skeleton Marksman": 1
         }
     },
     {
       "name" : "Skeleton Warrior",
+      "category": "recruitment",
       "time" : 10.0,
       "ingredients": {
         "Copper Spear": 1,
@@ -338,25 +351,27 @@
       }
     },
     {
-      "name" : "Skeleton Heavy Infantry",
+      "name" : "Dreadplate Phalanx",
+      "category": "recruitment",
       "time" : 10.0,
       "ingredients": {
         "Skeleton Warrior": 1,
         "Bronze Breastplate": 1
       },
       "products": {
-        "Skeleton Heavy Infantry": 1
+        "Dreadplate Phalanx": 1
       }
     },
     {
-      "name" : "Skeleton Barbarian",
+      "name" : "Gravebreaker",
+      "category": "recruitment",
       "time" : 10.0,
       "ingredients": {
         "Copper Warhammer": 1,
         "Skeleton" : 1
       },
       "products": {
-        "Skeleton Barbarian": 1
+        "Gravebreaker": 1
       }
     }
   ]

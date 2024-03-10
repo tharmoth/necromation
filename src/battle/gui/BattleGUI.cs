@@ -12,11 +12,19 @@ public partial class BattleGUI : CanvasLayer
 	
     private bool _initialized = false;
     private bool _complete = false;
+
+    private const double MusteringDelay = 3;
+    private double _time = 0;
+    private bool _startCountdown = false;
+    public bool Started = false;
     
     public override void _Process(double delta)
     {
         base._Process(delta);
 
+        if (_startCountdown) _time += delta;
+        if (_time > MusteringDelay) Started = true;
+        
         if (!_initialized) SetupKillCounts();
         
         if (Input.IsActionJustPressed("return_to_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
@@ -36,6 +44,7 @@ public partial class BattleGUI : CanvasLayer
     private void SetupKillCounts()
     {
         _initialized = true;
+        _startCountdown = true;
         var enemies = Globals.UnitManager.GetGroup("Enemy");
 		
         foreach (var unit in enemies)

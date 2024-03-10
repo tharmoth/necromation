@@ -67,6 +67,8 @@ size_flags_vertical = 4
 [node name="ItemSelectionItemBox" parent="MarginContainer/VBoxContainer/TitleRow/PanelContainer" instance=ExtResource("6_okvu0")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 [node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow"]
 custom_minimum_size = Vector2(30, 30)
