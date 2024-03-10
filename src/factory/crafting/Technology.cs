@@ -47,6 +47,7 @@ public class Technology
     /// </summary>
     public void Research()
     {
+        if (Researched) return;
         Researched = true;
         GD.Print("Researched " + Name);
         var unlockedRecipes = Database.Instance.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
