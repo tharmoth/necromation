@@ -86,7 +86,7 @@ public class MusicManager
         stream.AddStream(0, GD.Load<AudioStream>("res://res/sfx/crafting/zapsplat_foley_wet_sand_hand_dig_in_005_41513.mp3"));
         stream.AddStream(0, GD.Load<AudioStream>("res://res/sfx/crafting/zapsplat_foley_wet_sand_hand_dig_in_006_41514.mp3"));
         SfxPlayer.Stream = stream;
-        SfxPlayer.VolumeDb = -20;
+        SfxPlayer.VolumeDb = -30;
         SfxPlayer.PitchScale = .8f;
         SfxPlayer.CallDeferred("play");
     }

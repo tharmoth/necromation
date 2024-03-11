@@ -3,14 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.gui;
 using Necromation.map;
 using Necromation.map.character;
 
 public partial class FactoryScene : Scene
 {
+	/**************************************************************************
+	 * Child Accessors 													      *
+	 **************************************************************************/
+	public CraftingQueue CraftingQueue => GetNode<CraftingQueue>("%CraftingQueue");
 	public FactoryTileMap TileMap => GetNode<FactoryTileMap>("%TileMap");
 	public Node2D GroundItemHolder;
 	
+	/**************************************************************************
+	 * State Data          													  *
+	 **************************************************************************/
 	private bool _initialized = false;
 	public Timer AttackTimer;
 	private bool attacked = false;

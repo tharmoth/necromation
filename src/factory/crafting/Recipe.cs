@@ -67,4 +67,14 @@ public class Recipe
     {
         return Database.Instance.GetTexture(Products.Keys.First());
     }
+    
+    public int GetMaxCraftable(Inventory inventory)
+    {
+        var max = int.MaxValue;
+        foreach (var (type, amount) in Ingredients)
+        {
+            max = Math.Min(max, inventory.CountItem(type) / amount);
+        }
+        return max;
+    }
 }

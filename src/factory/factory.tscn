@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=37 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -8,6 +8,7 @@
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="3_5rf83"]
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="3_fy5x1"]
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="5_06d3l"]
+[ext_resource type="Script" path="res://src/factory/gui/CraftingQueue/CraftingQueueGUI.cs" id="5_6ke2a"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="6_kka5s"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
@@ -166,6 +167,7 @@ unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Control" type="MarginContainer" parent="GUI/PanelContainer/VBoxContainer"]
@@ -185,6 +187,12 @@ mouse_filter = 2
 
 [node name="Left" type="VBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main"]
 layout_mode = 2
+mouse_filter = 2
+
+[node name="CraftingQueue" type="HBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Left"]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_6ke2a")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Left"]
 layout_mode = 2
@@ -209,6 +217,7 @@ layout_mode = 2
 [node name="Center" type="VBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 alignment = 2
 
 [node name="GridContainer" type="GridContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center"]
@@ -265,63 +274,83 @@ columns = 10
 
 [node name="ItemBox" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox2" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox3" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox4" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox5" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox6" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox7" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox8" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox9" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox10" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox11" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox12" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox13" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox14" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox15" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox16" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox17" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox18" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox19" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="ItemBox20" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("9_od7oa")]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="DropShadowDividerRight" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("8_jqtrb")]
 layout_mode = 2
@@ -486,6 +515,7 @@ script = ExtResource("18_nrhn7")
 script = ExtResource("23_g3xjq")
 
 [node name="CraftingQueue" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("26_a45ds")
 
 [node name="TiltShift" type="CanvasLayer" parent="."]

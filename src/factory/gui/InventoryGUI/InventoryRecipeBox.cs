@@ -44,16 +44,16 @@ public partial class InventoryRecipeBox : ItemBox
 		_recipe = recipe;
 		ItemType = _recipe.Products.Keys.First();
 
-		Button.Pressed += () =>
+		Button.GuiInput += @event =>
 		{
-			int numToCraft = 1;
+			int numToCraft;
 			if (Input.IsKeyPressed(Key.Shift)) numToCraft = CountLabel.Text.ToInt();
-			else if (Input.IsKeyPressed(Key.Ctrl)) numToCraft = Math.Min(CountLabel.Text.ToInt(), 5);
-			
-			for (int i = 0; i < numToCraft; i++)
-			{
-				Globals.CraftingQueue.AddRecipe(_recipe);
-			}
+			else if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Right, Pressed: true }) numToCraft = 5;
+			else if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Middle, Pressed: true }) numToCraft = 10;
+			else if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }) numToCraft = 1;
+			else return;
+			if (numToCraft <= 0) return;
+			Globals.FactoryScene.CraftingQueue.QueueRecipe(_recipe.Name, numToCraft);
 		};
 		
 		TargetInventory.Listeners.Add(UpdateInventoryRecipeBox);
