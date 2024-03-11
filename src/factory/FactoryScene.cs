@@ -57,7 +57,7 @@ public partial class FactoryScene : Scene
 		// 	attacked = true;
 		// 	AttackTimer = new Timer();
 		// 	AddChild(AttackTimer);
-		// 	AttackProvince = Globals.MapScene.TileMap.GetProvinces().Where(province => province.Owner == "Player")
+		// 	AttackProvince = Globals.MapScene.TileMap.Provinces.Where(province => province.Owner == "Player")
 		// 		.MinBy(_ => GD.Randf());
 		// 	
 		// 	GD.Print("attack incoming!");

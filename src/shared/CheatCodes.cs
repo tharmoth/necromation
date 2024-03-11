@@ -45,14 +45,14 @@ public partial class CheatCodes : Node
 		if (entered.EndsWith("``ONOTHEIST"))
 		{
 			GD.Print("POLYTHEIST");
-			Globals.MapScene.TileMap.GetProvinces().ForEach(province => province.Owner = "Player");
+			Globals.MapScene.TileMap.Provinces.ForEach(province => province.Owner = "Player");
 			Globals.FactoryScene.TileMap.OnOpen();
 		}
 
 		if (entered.EndsWith("``POLYTHEIST"))
 		{
 			GD.Print("MONOTHEIST");
-			Globals.MapScene.TileMap.GetProvinces().ForEach(province => province.Owner = "Enemy");
+			Globals.MapScene.TileMap.Provinces.ForEach(province => province.Owner = "Enemy");
 			Globals.FactoryScene.TileMap.OnOpen();
 		}
 		

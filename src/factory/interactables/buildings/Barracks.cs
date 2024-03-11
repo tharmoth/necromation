@@ -16,7 +16,7 @@ public class Barracks : Assembler
     /**************************************************************************
      * Logic Variables                                                        *
      **************************************************************************/
-    private Commander _commander;
+    public Commander Commander { get; private set; }
     
     /**************************************************************************
      * Visuals Variables 													  *
@@ -33,7 +33,7 @@ public class Barracks : Assembler
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (!GodotObject.IsInstanceValid(_commander)) SpawnCommander();
+        if (!GodotObject.IsInstanceValid(Commander)) SpawnCommander();
         if (GetProgressPercent() > 0 && !_particles.Emitting) _particles.Emitting = true;
         else if (GetProgressPercent() <= 0 && _particles.Emitting) _particles.Emitting = false;
     }
@@ -45,9 +45,11 @@ public class Barracks : Assembler
     
     private void SpawnCommander()
     {
-        _commander = new Commander(Globals.MapScene.FactoryProvince, "Player");
-        Globals.MapScene.AddCommander(_commander, Globals.MapScene.FactoryProvince);
-        _outputInventory = _commander.Units;
+        var test = Globals.MapScene.Commanders.Where(commy => commy.Team == "Player").ToList();
+        Commander = Globals.MapScene.Commanders.FirstOrDefault(commander => commander.BarracksId == Id) 
+                     ?? new Commander(Globals.MapScene.FactoryProvince, "Player");
+        Commander.BarracksId = Id;
+        _outputInventory = Commander.Units;
     }
 
     #region IInteractable Implementation

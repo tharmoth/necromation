@@ -58,6 +58,7 @@ layout_mode = 2
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"HeaderSmall"
 text = "Technology"
 
 [node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow" instance=ExtResource("5_86yqx")]
@@ -74,6 +75,9 @@ _action = "close_gui"
 
 [node name="Outline" parent="MarginContainer/VBoxContainer/PanelContainer/TitleRow/CloseButton" instance=ExtResource("7_u14t4")]
 layout_mode = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

@@ -45,7 +45,7 @@ public partial class ArmySetup : PanelContainer
 		CommanderList.GetChildren().ToList().ForEach(child => child.QueueFree());
 		_province.Commanders
 			.Where(commander => commander.Team == "Player")
-			.OrderBy(commander => commander.Name)
+			.OrderBy(commander => commander.CommanderName)
 			.ToList().ForEach(AddCommander);
 	}
 	
@@ -58,8 +58,8 @@ public partial class ArmySetup : PanelContainer
 	
 	private void UpdateProvince()
 	{
-		ProvenceNameLabel.Text = _province.Name + ",";
-		UnitCountLabel.Text = _province.Units.CountAllItems().ToString();
+		ProvenceNameLabel.Text = _province.ProvinceName + ",";
+		UnitCountLabel.Text = _province.Units.CountItems().ToString();
 	}
 
 	private void SetupProvince()

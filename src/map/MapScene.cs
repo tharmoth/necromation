@@ -8,35 +8,37 @@ using Necromation.map.character;
 
 public partial class MapScene : Scene
 {
-	public MapTileMap TileMap => GetNode<MapTileMap>("%TileMap");
-	public override MapGui Gui => GetNode<MapGui>("%GUI");
+	/**************************************************************************
+	 * Utility Accessors    											      *
+	 **************************************************************************/
+	public List<Province> Provinces => TileMap.Provinces;
+	public List<Commander> Commanders => TileMap.Provinces.SelectMany(province => province.Commanders).ToList();
+	public Province FactoryProvince => TileMap.GetProvence(FactoryPosition);
+	public static Vector2I FactoryPosition => new(4, 2);
 	
+	/**************************************************************************
+	 * Child Accessors 													      *
+	 **************************************************************************/
+	public override MapGui Gui => GetNode<MapGui>("%GUI");
+	public MapTileMap TileMap => GetNode<MapTileMap>("%TileMap");
+	
+	/**************************************************************************
+	 * Logic Variables                                                        *
+	 **************************************************************************/
 	public readonly List<Action> TurnListeners = new();
 	public readonly List<Action> UpdateListeners = new();
-    
 	public Sprite2D SelectedSprite;
 	public Province SelectedProvince;
-	public Commander SelectedCommander;
-	
-	public Province FactoryProvince => TileMap.GetProvence(FactoryPosition);
-
-	public static Vector2I FactoryPosition => new(4, 2);
+	public readonly List<Commander> SelectedCommanders = new();
 
 	public MapScene()
 	{
-		TurnListeners.Add(() => SelectedCommander = null);
+		TurnListeners.Add(() => SelectedCommanders.Clear());
 	}
 
 	public override void OnOpen()
 	{
 
-	}
-	
-	public void AddCommander(Commander commander, Province province)
-	{
-		commander.GlobalPosition = province.GlobalPosition;
-		province.Commanders.Add(commander);
-		Globals.MapScene.AddChild(commander);
 	}
 
 	public override void OnClose() {}

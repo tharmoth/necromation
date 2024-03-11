@@ -43,7 +43,7 @@ public partial class FactoryTileMap : LayerTileMap
 		AddProvence(location, true);
 	}
 	
-	private void AddProvence(Vector2I location, bool spawnResource)
+	public void AddProvence(Vector2I location, bool spawnResource)
 	{
 		if (_provences.Contains(location)) return;
 		_provences.Add(location);
@@ -133,7 +133,7 @@ public partial class FactoryTileMap : LayerTileMap
 
 	public void OnOpen()
 	{
-		Globals.MapScene.TileMap.GetProvinces()
+		Globals.MapScene.TileMap.Provinces
 			.Where(province => province.Owner == "Player")
 			.Select(province => province.MapPosition)
 			.ToList()
@@ -146,7 +146,7 @@ public partial class FactoryTileMap : LayerTileMap
 		AddLayer(Building);
 		AddLayer(Resource);
 		
-		foreach (var province in Globals.MapScene.TileMap.GetProvinces())
+		foreach (var province in Globals.MapScene.TileMap.Provinces)
 		{
 			AddFog(province.MapPosition);
 		}
@@ -177,31 +177,5 @@ public partial class FactoryTileMap : LayerTileMap
 	public IEntity GetResourceAtMouse()
 	{
 		return GetEntity(GetGlobalMousePosition(), Resource);
-	}
-	
-	public virtual Godot.Collections.Dictionary<string, Variant> Save()
-	{
-		var dict =  new Godot.Collections.Dictionary<string, Variant>()
-		{
-			{ "ItemType", "BuildingTilemap" },
-		};
-		foreach (var provence in _provences)	
-		{
-			dict["Provence" + _provences.IndexOf(provence) + "X"] = provence.X;
-			dict["Provence" + _provences.IndexOf(provence) + "Y"] = provence.Y;
-		}
-		return dict;
-	}
-	
-	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
-	{
-		for (var i = 0; i < nodeData.Count; i++)
-		{
-			if (!nodeData.ContainsKey("Provence" + i + "X")) continue;
-			var province = new Vector2I((int)nodeData["Provence" + i + "X"], (int)nodeData["Provence" + i + "Y"]);
-			Globals.MapScene.TileMap.GetProvence(province).Commanders.Clear();
-			Globals.MapScene.TileMap.GetProvence(province).Owner = "Player";
-			Globals.FactoryScene.TileMap.AddProvence(province, false);
-		}
 	}
 }

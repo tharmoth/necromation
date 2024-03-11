@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=36 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -26,6 +26,7 @@
 [ext_resource type="Script" path="res://src/factory/BuildingManager.cs" id="23_g3xjq"]
 [ext_resource type="Texture2D" uid="uid://cfafwwpbyr8yn" path="res://res/sprites/particles/SoftLight.png" id="23_hyyce"]
 [ext_resource type="Shader" path="res://src/factory/tilt_shift.gdshader" id="25_p0fnd"]
+[ext_resource type="Script" path="res://src/factory/crafting/CraftingQueue.cs" id="26_a45ds"]
 [ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="27_0iq17"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
@@ -474,15 +475,18 @@ energy = 0.5
 texture = ExtResource("23_hyyce")
 texture_scale = 3.0
 
-[node name="Cheatcodes" type="Node" parent="."]
-script = ExtResource("18_nrhn7")
-
 [node name="GroundItemHolder" type="Node2D" parent="."]
 unique_name_in_owner = true
 y_sort_enabled = true
 
+[node name="Cheatcodes" type="Node" parent="."]
+script = ExtResource("18_nrhn7")
+
 [node name="BuildingManager" type="Node" parent="."]
 script = ExtResource("23_g3xjq")
+
+[node name="CraftingQueue" type="Node" parent="."]
+script = ExtResource("26_a45ds")
 
 [node name="TiltShift" type="CanvasLayer" parent="."]
 

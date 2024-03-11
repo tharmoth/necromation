@@ -7,7 +7,19 @@ using Necromation.map.character;
 
 public partial class MapTileMap : SKTileMap
 {
+	/**************************************************************************
+	 * Utility Property                                                       *
+	 **************************************************************************/
+	public List<Province> Provinces => _provences.Values.ToList();
+	
+	/**************************************************************************
+	 * State Variables                                                        *
+	 **************************************************************************/
 	private readonly Dictionary<Vector2I, Province> _provences = new();
+	
+	/**************************************************************************
+	 * Data Constants                                                         *
+	 **************************************************************************/
 	public const int TileSize = 32;
 
 	public MapTileMap()
@@ -15,10 +27,7 @@ public partial class MapTileMap : SKTileMap
 		foreach (var location in GetUsedCells(0))
 		{
 			var provence = new Province();
-			
 			_provences.Add(location, provence);
-
-			
 		}
 	}
 	
@@ -27,86 +36,50 @@ public partial class MapTileMap : SKTileMap
 		base._Ready();
 		foreach (var (location, provence) in _provences)
 		{
-			InitProvence(provence, location == MapScene.FactoryPosition ? "Player" : "Enemy");
-			Globals.MapScene.CallDeferred("add_child", provence);
-			foreach (var commander in provence.Commanders)
-			{
-				Globals.MapScene.CallDeferred("add_child", commander);
-			}
+			provence.Init(location == MapScene.FactoryPosition ? "Player" : "Enemy");
+
 		}
 	}
-
-	private  void InitProvence(Province provence, string team)
-	{
-		provence.Owner = team;
-		if (team == "Player" && Globals.FactoryScene != null) return;
-		
-		var meleeCommander = new Commander(provence, team);
-		meleeCommander.Team = team;
-		provence.Commanders.Add(meleeCommander);
-		
-		var rangedCommander = new Commander(new Province(), "Enemy");
-		rangedCommander.Team = team;
-		rangedCommander.SpawnLocation = new Vector2I(30, 25);
-		provence.Commanders.Add(rangedCommander);
-		
-		var provinceLocation = _provences.FirstOrDefault(pair => pair.Value == provence).Key;
-		var dis = Mathf.Abs(provinceLocation.X - MapScene.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - MapScene.FactoryPosition.Y);
-		
-		switch (dis)
-		{
-			case 0:
-				break;
-			case 1:
-				meleeCommander.Units.Insert("Rabble", 10);
-				break;
-			case 2:
-				meleeCommander.Units.Insert("Infantry", 10);
-				rangedCommander.Units.Insert("Archer", 10);
-				break;
-			case 3:
-				meleeCommander.Units.Insert("Infantry", 50);
-				rangedCommander.Units.Insert("Archer", 25);
-				break;
-			case 4:
-				meleeCommander.Units.Insert("Infantry", 100);
-				rangedCommander.Units.Insert("Archer", 50);
-				break;
-			case 5:
-				meleeCommander.Units.Insert("Barbarian", 200);
-				meleeCommander.Units.Insert("Heavy Infantry", 50);
-				rangedCommander.Units.Insert("Archer", 100);
-				break;
-			case 6:
-				meleeCommander.Units.Insert("Elite Infantry", 400);
-				meleeCommander.Units.Insert("Barbarian", 400);
-				break;
-		}
-		
-		if (team == "Player")
-		{
-			meleeCommander.Units.Clear();
-			meleeCommander.Units.Insert("Elite Infantry", 1000);
-		}
-	}
-
-	public void MoveUnitsToFromFactory()
-	{
-
-	}
-
+	
 	public Province GetProvence(Vector2I position)
 	{
 		return _provences.TryGetValue(position, out var provence) ? provence : null;
 	}
-	
-	public List<Province> GetProvinces()
-	{
-		return _provences.Values.ToList();
-	}
-	
+
 	public Vector2I GetLocation(Province provence)
 	{
 		return _provences.FirstOrDefault(pair => pair.Value == provence).Key;
 	}
+	
+	#region Save/Load
+	/******************************************************************
+	 * Save/Load                                                      *
+	 ******************************************************************/
+	public virtual Godot.Collections.Dictionary<string, Variant> Save()
+	{
+		var dict =  new Godot.Collections.Dictionary<string, Variant>()
+		{
+			{ "ItemType", "Map" },
+		};
+		
+		int index = 0;
+		foreach (var provence in _provences.Values)
+		{
+			dict["Provence" + index++] = provence.Save();
+		}
+
+		return dict;
+	}
+	
+	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+	{
+		int index = 0;
+		while (nodeData.ContainsKey("Provence" + index))
+		{
+			var data = (Godot.Collections.Dictionary<string, Variant>) nodeData["Provence" + index];
+			Province.Load(data);
+			index++;
+		}
+	}
+	#endregion
 }

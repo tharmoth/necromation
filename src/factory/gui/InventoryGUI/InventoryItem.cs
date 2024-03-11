@@ -21,7 +21,8 @@ public partial class InventoryItem : ItemBox
 	// Static Accessor
 	public static void UpdateInventory(Inventory from, List<Inventory> to, Container list)
 	{
-		list.GetChildren().ToList().ForEach(child => child.QueueFree());
+		// Free instead of queuefree so that MapSquad can detect if empty.
+		list.GetChildren().ToList().ForEach(child => child.Free());
 		from.Items
 			.OrderBy(item => item.Key)
 			.ToList().ForEach(item => InventoryItem.AddInventoryItem(item, from, to, list));

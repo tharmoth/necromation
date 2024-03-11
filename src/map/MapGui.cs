@@ -55,22 +55,9 @@ public partial class MapGui : CanvasLayer
 			RecruitGui.Visible = true;
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_map") && Globals.MapScene.SelectedProvince.Owner == "Player") SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
+		if (Input.IsActionJustPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
 		if (Input.IsActionJustPressed("end_turn")) EndTurn();
-		if (Input.IsActionJustPressed("add_squad"))
-		{
-			var commander = new Commander(Globals.MapScene.SelectedProvince, "Player");
-			commander.GlobalPosition = Globals.MapScene.SelectedProvince.GlobalPosition;
-			Globals.MapScene.SelectedProvince.Commanders.Add(commander);
-			Globals.MapScene.AddChild(commander);
-			CloseGui();
-			MainGui.Visible = false;
-			GuiStack.Push(ArmySetup.Display(Globals.MapScene.SelectedProvince));
-			Globals.MapScene.UpdateListeners.ForEach(listener => listener());
-		};
 	}
-	
-
 
 	private void EndTurn()
 	{
@@ -85,7 +72,7 @@ public partial class MapGui : CanvasLayer
 
 	public void Battle()
 	{
-		Globals.MapScene.TileMap.GetProvinces().ForEach(province =>
+		Globals.MapScene.TileMap.Provinces.ForEach(province =>
 		{
 			var teams = province.Commanders.GroupBy(leader => leader.Team).ToList();
 			
@@ -98,6 +85,7 @@ public partial class MapGui : CanvasLayer
 
 	public void CloseGui()
 	{
+		if (GuiStack.Count == 0) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
 		GuiStack.TryPop(out var gui);
 		gui?.QueueFree();
 		
@@ -123,9 +111,19 @@ public partial class MapGui : CanvasLayer
 			unitString += unit + " x" + count + "\n";
 		}
 		if (unitString == "") unitString = "no units\n";
-		SelectedLabel.Text = provence.Name + "\n" + unitString;
 		
-		_factoryButton.Disabled = provence.Owner != "Player";
+		
+		// _factoryButton.Disabled = provence.Owner != "Player";
 		_armyButton.Disabled = provence.Owner != "Player";
+
+		// if (OS.IsDebugBuild())
+		// {
+		// 	unitString += "\nDebug: \n";
+		// 	unitString += provence.MapPosition.ToString() + "\n";
+		// 	unitString += provence.Owner + "\n";
+		// 	unitString += provence.Commanders.Count + " commanders" + "\n";
+		// }
+		
+		SelectedLabel.Text = provence.ProvinceName + "\n" + unitString;
 	}
 }

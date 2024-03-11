@@ -8,10 +8,9 @@ public partial class ArmySetupCommander : PanelContainer
 {
 	private Label NameLabel => GetNode<Label>("%NameLabel");
 	private Label UnitCountLabel => GetNode<Label>("%UnitCountLabel");
-	private Label SquadCountLabel => GetNode<Label>("%SquadCountLabel");
 	private Container SquadList => GetNode<Container>("%SquadList");
 
-	private Commander _commander = new(new Province(), "Player");
+	private Commander _commander;
 	
 	public void Init(Commander commander)
 	{
@@ -34,9 +33,8 @@ public partial class ArmySetupCommander : PanelContainer
 
 	private void Update()
 	{
-		NameLabel.Text = _commander.Name;
-		UnitCountLabel.Text = _commander.Units.CountAllItems() + "/" + _commander.CommandCap;
-		SquadCountLabel.Text = "1/" + _commander.SquadCap;
+		NameLabel.Text = _commander.CommanderName;
+		UnitCountLabel.Text = _commander.Units.CountItems() + "/" + _commander.CommandCap;
 	}
 
 	private void UpdateSquads()

@@ -28,7 +28,7 @@ public partial class InventoryGUI : Control
 	{
 		var gui = Scene.Instantiate<InventoryGUI>();
 		gui.Init(inventory);
-		Globals.FactoryScene.Gui.OpenGui(gui);
+		Globals.FactoryScene.Gui.Open(gui);
 	}
 
 	// Constructor workaround.

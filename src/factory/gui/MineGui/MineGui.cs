@@ -30,7 +30,7 @@ public partial class MineGui : PanelContainer
 	{
 		var gui = Scene.Instantiate<MineGui>();
 		gui.Init(to, from, progress, title);
-		Globals.FactoryScene.Gui.OpenGui(gui);
+		Globals.FactoryScene.Gui.Open(gui);
 	}
 	
 	// Constructor workaround.

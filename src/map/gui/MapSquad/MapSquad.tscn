@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=3 uid="uid://l8t312qknmii"]
+
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_cueol"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="1_u6ur1"]
+[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="2_64fw1"]
+[ext_resource type="Script" path="res://src/map/gui/MapSquad/MapSquad.cs" id="2_rfvjr"]
+
+[node name="MapSquad" type="PanelContainer"]
+custom_minimum_size = Vector2(120, 120)
+theme = ExtResource("1_cueol")
+script = ExtResource("2_rfvjr")
+
+[node name="Background" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0.6, 0.6, 0.6, 1)
+
+[node name="Outline" parent="." instance=ExtResource("1_u6ur1")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Title" type="Label" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Bone Brigade"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="UnitsList" type="HBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ItemBox" parent="MarginContainer/UnitsList" instance=ExtResource("2_64fw1")]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/UnitsList"]
+layout_mode = 2
+text = "No Units!"
+
+[node name="ActionLabel" type="Label" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+text = "Move"

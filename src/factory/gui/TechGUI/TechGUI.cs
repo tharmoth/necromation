@@ -26,7 +26,7 @@ public partial class TechGUI : PanelContainer
 	{
 		var gui = Scene.Instantiate<TechGUI>();
 		gui.Init();
-		Globals.FactoryScene.Gui.OpenGui(gui);
+		Globals.FactoryScene.Gui.Open(gui);
 	}
 
 	// Constructor workaround.

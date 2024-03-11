@@ -20,6 +20,8 @@ public partial class BarracksGui : PanelContainer
 	private ItemSelectionItemBox ItemSelectionItemBox => GetNode<ItemSelectionItemBox>("%ItemSelectionItemBox");
 	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
 	private Label Title => GetNode<Label>("%Title");
+	private Button SquadPlacement => GetNode<Button>("%SquadPlacement");
+	private Label UnitCountLabel => GetNode<Label>("%UnitCountLabel");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -32,7 +34,7 @@ public partial class BarracksGui : PanelContainer
 	{
 		var gui = Scene.Instantiate<BarracksGui>();
 		gui.Init(to, barracks);
-		Globals.FactoryScene.Gui.OpenGui(gui);
+		Globals.FactoryScene.Gui.Open(gui);
 	}
 
 	// Constructor workaround.
@@ -54,7 +56,9 @@ public partial class BarracksGui : PanelContainer
 		
 		ProgressBar.Init(barracks);
 		
-		Title.Text = barracks.ItemType;
+		Title.Text = barracks.ItemType + " - " + barracks.Commander.CommanderName;
+		
+		SquadPlacement.Pressed += () => BarracksBoxDraw.Display(barracks.Commander);
 	}
 
 	private void UpdatePlayerInventory()
@@ -70,6 +74,7 @@ public partial class BarracksGui : PanelContainer
 	private void UpdateOutputInventory()
 	{
 		InventoryItem.UpdateInventory(_barracks.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList);
+		UnitCountLabel.Text = _barracks.GetOutputInventory().CountItems().ToString() + " / " + _barracks.Commander.CommandCap;
 	}
 
 	public override void _ExitTree()

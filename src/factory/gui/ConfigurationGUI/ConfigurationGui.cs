@@ -11,7 +11,7 @@ public partial class ConfigurationGui : PanelContainer
 	public static void Display()
 	{
 		var gui = GD.Load<PackedScene>("res://src/factory/gui/ConfigurationGUI/configuration_gui.tscn").Instantiate<ConfigurationGui>();
-		Globals.FactoryScene.Gui.OpenGui(gui);
+		Globals.FactoryScene.Gui.Open(gui);
 	}
 
 	public override void _Ready()

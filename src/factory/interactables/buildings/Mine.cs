@@ -101,7 +101,7 @@ public class Mine : Building, IInteractable, ITransferTarget
      **************************************************************************/
     private bool MaxOutputItemsReached()
     {
-        return _inventory.CountAllItems() >= MaxInputItems;
+        return _inventory.CountItems() >= MaxInputItems;
     }
     
     private void Animate()
@@ -160,7 +160,7 @@ public class Mine : Building, IInteractable, ITransferTarget
         public override int GetMaxTransferAmount(string itemType)
         {
             if (!ValidItems.Contains(itemType)) return 0;
-            var currentCount = CountAllItems();
+            var currentCount = CountItems();
             return Mathf.Max(0,  MaxInputItems - currentCount);
         }
     }

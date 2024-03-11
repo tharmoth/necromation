@@ -11,7 +11,7 @@ public class SKSaveLoad
     // path independent.
     public static void LoadGame(Node baseNode)
     {
-        if (!FileAccess.FileExists("user://savegame.save"))
+        if (!FileAccess.FileExists("user://savegame.json"))
         {
             return; // Error! We don't have a save to load.
         }
@@ -28,7 +28,7 @@ public class SKSaveLoad
 
         // Load the file line by line and process that dictionary to restore the object
         // it represents.
-        using var saveGame = FileAccess.Open("user://savegame.save", FileAccess.ModeFlags.Read);
+        using var saveGame = FileAccess.Open("user://savegame.json", FileAccess.ModeFlags.Read);
 
         while (saveGame.GetPosition() < saveGame.GetLength())
         {
@@ -45,15 +45,10 @@ public class SKSaveLoad
 
             // Get the data from the JSON object
             var nodeData = new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
-
-            if (Building.IsBuilding(nodeData["ItemType"].ToString())) Building.Load(nodeData);
-            else switch (nodeData["ItemType"].ToString())
+            switch (nodeData["ItemType"].ToString())
             {
                 case "Character":
                     Character.Load(nodeData);
-                    break;
-                case "BuildingTilemap":
-                    FactoryTileMap.Load(nodeData);
                     break;
                 case "BuildingManager":
                     BuildingManager.Load(nodeData);
@@ -63,6 +58,9 @@ public class SKSaveLoad
                     break;
                 case "Technology":
                     Database.Load(nodeData);
+                    break;
+                case "Map":
+                    MapTileMap.Load(nodeData);
                     break;
                 default:
                     Resource.Load(nodeData);
@@ -77,7 +75,7 @@ public class SKSaveLoad
     // dict of relevant variables.
     public static void SaveGame(Node baseNode)
     {
-        using var saveGame = FileAccess.Open("user://savegame.save", FileAccess.ModeFlags.Write);
+        using var saveGame = FileAccess.Open("user://savegame.json", FileAccess.ModeFlags.Write);
 
         var saveNodes = baseNode.GetTree().GetNodesInGroup("Persist");
         foreach (Node saveNode in saveNodes)
@@ -102,21 +100,21 @@ public class SKSaveLoad
         var playerData = Globals.Player.Save();
         var playerJson = Json.Stringify(playerData);
         saveGame.StoreLine(playerJson);
-
-        var mapData = Globals.FactoryScene.TileMap.Save();
-        var mapJson = Json.Stringify(mapData);
-        saveGame.StoreLine(mapJson);
         
         var buildingData = Globals.BuildingManager.Save();
         var buildingJson = Json.Stringify(buildingData);
         saveGame.StoreLine(buildingJson);
 
-        var hotbarData = HotBarItemBox.Save();
-        var hotbarJson = Json.Stringify(hotbarData);
-        saveGame.StoreLine(hotbarJson);
+        var hotBarData = HotBarItemBox.Save();
+        var hotBarJson = Json.Stringify(hotBarData);
+        saveGame.StoreLine(hotBarJson);
         
         var techData = Database.Save();
         var techJson = Json.Stringify(techData);
         saveGame.StoreLine(techJson);
+
+        var mapData = Globals.MapScene.TileMap.Save();
+        var mapJson = Json.Stringify(mapData);
+        saveGame.StoreLine(mapJson);
     }
 }

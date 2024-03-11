@@ -38,7 +38,7 @@ public partial class UnitSpawner : Node2D
 
 	private void PlaceUnitsInRectangle()
 	{
-		var positions = GetPositions(_commander.Units.CountAllItems());
+		var positions = GetPositions(_commander.Units.CountItems());
 		
 		foreach (var entry in _commander.Units.Items)
 		{

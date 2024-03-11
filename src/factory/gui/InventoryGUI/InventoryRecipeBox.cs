@@ -44,8 +44,17 @@ public partial class InventoryRecipeBox : ItemBox
 		_recipe = recipe;
 		ItemType = _recipe.Products.Keys.First();
 
-		Button.Pressed += () => _recipe.Craft(TargetInventory);
-		Button.Pressed += MusicManager.PlayCraft;
+		Button.Pressed += () =>
+		{
+			int numToCraft = 1;
+			if (Input.IsKeyPressed(Key.Shift)) numToCraft = CountLabel.Text.ToInt();
+			else if (Input.IsKeyPressed(Key.Ctrl)) numToCraft = Math.Min(CountLabel.Text.ToInt(), 5);
+			
+			for (int i = 0; i < numToCraft; i++)
+			{
+				Globals.CraftingQueue.AddRecipe(_recipe);
+			}
+		};
 		
 		TargetInventory.Listeners.Add(UpdateInventoryRecipeBox);
 		UpdateInventoryRecipeBox();

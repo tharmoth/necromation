@@ -100,7 +100,7 @@ public partial class TransportLine : ITransferTarget
 
     public int GetItemCount(string item = null)
     {
-        if (item == null) return _inventory.CountAllItems();
+        if (item == null) return _inventory.CountItems();
         return _inventory.CountItem(item);
     }
 
@@ -131,9 +131,9 @@ public partial class TransportLine : ITransferTarget
 
     private void UpdateSprites()
     {
-        while (_inventory.CountAllItems() != _itemsOnBelt.Count)
+        while (_inventory.CountItems() != _itemsOnBelt.Count)
         {
-            if (_inventory.CountAllItems() < _itemsOnBelt.Count)
+            if (_inventory.CountItems() < _itemsOnBelt.Count)
             {
                 RemoveItem();
             }
@@ -201,7 +201,7 @@ public partial class TransportLine : ITransferTarget
     {
         public override int GetMaxTransferAmount(string itemType)
         {
-            return Mathf.Max(0,MaxItems - CountAllItems());
+            return Mathf.Max(0,MaxItems - CountItems());
         }
     }
     #endregion

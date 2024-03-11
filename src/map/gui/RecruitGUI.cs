@@ -37,7 +37,7 @@ public partial class RecruitGUI : Control
 
 	private void Recruit(string type)
 	{
-		Globals.MapScene.SelectedProvince?.Recruit(type);
+		// Globals.MapScene.SelectedProvince?.Recruit(type);
 		Update();
 	}
 
@@ -48,9 +48,9 @@ public partial class RecruitGUI : Control
 		
 		var label = GetNode<Label>("%RecruitList");
 		label.Text = "";
-		foreach (var (name, count) in provence.RecruitQueue.OrderBy(pair => pair.Key))
-		{
-			label.Text += "Recruit " + name + " x" + count + "\n";
-		}
+		// foreach (var (name, count) in provence.RecruitQueue.OrderBy(pair => pair.Key))
+		// {
+		// 	label.Text += "Recruit " + name + " x" + count + "\n";
+		// }
 	}
 }

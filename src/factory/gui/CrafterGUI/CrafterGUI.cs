@@ -32,7 +32,7 @@ public partial class CrafterGUI : Control
 	{
 		var gui = Scene.Instantiate<CrafterGUI>();
 		gui.Init(to, crafter);
-		Globals.FactoryScene.Gui.OpenGui(gui);
+		Globals.FactoryScene.Gui.Open(gui);
 	}
 
 	// Constructor workaround.

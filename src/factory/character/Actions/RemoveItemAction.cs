@@ -20,7 +20,7 @@ public class RemoveItemAction
         return string.IsNullOrEmpty(Globals.Player.Selected) && Input.IsMouseButtonPressed(MouseButton.Left) &&
                Input.IsKeyPressed(Key.Ctrl) &&
                building is ITransferTarget transfer &&
-               GetRemoveInventories(transfer).Any(inventory => inventory.CountAllItems() > 0);
+               GetRemoveInventories(transfer).Any(inventory => inventory.CountItems() > 0);
     }
     
     public void Remove(LayerTileMap.IEntity building)

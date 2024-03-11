@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -6,33 +7,47 @@ namespace Necromation.map.character;
 
 public partial class Commander : Node2D, ITransferTarget
 {
+    /**************************************************************************
+     * Utility Property                                                       *
+     **************************************************************************/
     public Vector2I MapPosition => Globals.MapScene.TileMap.GlobalToMap(GlobalPosition);
-    public string Name { get; } = MapUtils.GetRandomCommanderName();
-    public string Team { get; set; }
 
+    /**************************************************************************
+     * Logic Variables                                                        *
+     **************************************************************************/
+    // Note: If you add more state data here make sure to serialize it in Save/Load
+    public readonly string CommanderName;
+    public readonly string Team;
     public readonly Inventory Units;
+    private Province _province;
+    private Vector2I _targetLocation;
+    public Vector2I SpawnLocation = new(25, 25);
+    /// <summary> Associates this commander with a barracks in the factory. Used for save/load. </summary>
+    public string BarracksId = null;
+
+    /**************************************************************************
+     * Visuals Variables 													  *
+     **************************************************************************/
     private readonly Line2D _line = new();
     private readonly Sprite2D _sprite = new();
     
-    private Vector2I _targetLocation;
-    private Province _province;
-
-    /*
-     * RPG Stats
-     */
+    /**************************************************************************
+     * RPG Constants     													  *
+     **************************************************************************/
     public int CommandCap = 200;
-    public int SquadCap = 3;
-    public Vector2I SpawnLocation = new(25, 25);
-
-    public Commander(Province province, string team)
+    
+    public Commander(Province province, string team, string name = null)
     {
         _province = province;
         _sprite.Texture = Database.Instance.GetTexture("Player");
         _sprite.Scale = new Vector2(0.25f, 0.25f);
         Units = new CommanderInventory(this);
         Team = team;
+        CommanderName = name ?? MapUtils.GetRandomCommanderName();
         
         AddChild(_sprite);
+        
+        province.AddCommander(this);
     }
     
     // Deconstructor
@@ -57,15 +72,17 @@ public partial class Commander : Node2D, ITransferTarget
     public override void _Input(InputEvent @event)
     {
         base._Input(@event);
-        _line.Width = Globals.MapScene.SelectedCommander == this ? 4 : 8;
-        _line.Modulate = Globals.MapScene.SelectedCommander == this ? Colors.White : new Color(1, 1, 1, 0.5f);
+        
+        _line.Width = Globals.MapScene.SelectedCommanders.Contains(this) ? 4 : 8;
+        _line.Modulate = Globals.MapScene.SelectedCommanders.Contains(this) ? Colors.White : new Color(.56f, .56f, .56f, 0.25f);
+        _line.ZIndex = Globals.MapScene.SelectedCommanders.Contains(this) ? 2 : 1;
     }
 
     public override void _UnhandledInput(InputEvent @event)
     {
         base._UnhandledInput(@event);
-        
-        if (Globals.MapScene.SelectedCommander != this) return;
+
+        if (!Globals.MapScene.SelectedCommanders.Contains(this)) return;
 
         if (!Input.IsActionJustPressed("right_click")) return;
 
@@ -91,23 +108,6 @@ public partial class Commander : Node2D, ITransferTarget
         _province.Commanders.Add(this);
         GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(_province));
     }
-    
-    private partial class CommanderInventory : Inventory
-    {
-        private readonly Commander _commander;
-        public CommanderInventory(Commander commander) : base()
-        {
-            _commander = commander;
-        }
-        
-        public override bool CanAcceptItems(string item, int count = 1)
-        {
-            return Database.Instance.Units.Any(unit => unit.Name == item) 
-                   && CountAllItems() + count <= _commander.CommandCap 
-                   && base.CanAcceptItems(item, count);
-        }
-    }
-    
     #region ITransferTarget Implementation
     /**************************************************************************
      * ITransferTarget Methods                                                *
@@ -118,5 +118,60 @@ public partial class Commander : Node2D, ITransferTarget
     public string GetFirstItem() => Units.GetFirstItem();
     public List<string> GetItems() => Units.GetItems();
     public List<Inventory> GetInventories() => Units.GetInventories();
+    
+    private class CommanderInventory : Inventory
+    {
+        private readonly Commander _commander;
+        public CommanderInventory(Commander commander) : base()
+        {
+            _commander = commander;
+        }
+
+        public override int GetMaxTransferAmount(string itemType)
+        {
+            if (!Database.Instance.Units.Any(unit => unit.Name == itemType)) return 0;
+            return Mathf.Max(0, _commander.CommandCap - CountItems());
+        }
+    }
+    #endregion
+    
+    #region Save/Load
+    /******************************************************************
+     * Save/Load                                                      *
+     ******************************************************************/
+    
+    public virtual Godot.Collections.Dictionary<string, Variant> Save()
+    {
+        var dict =  new Godot.Collections.Dictionary<string, Variant>()
+        {
+            { "ItemType", "Commander" },
+            { "Name", CommanderName },
+            { "Team", Team },
+            { "Units", Units.Save() },
+            { "PosX", MapPosition.X },
+            { "PosY", MapPosition.Y },
+            { "SpawnX", SpawnLocation.X },
+            { "SpawnY", SpawnLocation.Y },
+            { "TargetX", _targetLocation.X },
+            { "TargetY", _targetLocation.Y },
+            { "BarracksId", BarracksId }
+        };
+        
+        return dict;
+    }
+	
+    public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
+    {
+        var name = nodeData["Name"].ToString();
+        var team = nodeData["Team"].ToString();
+        var mapPosition = new Vector2I(nodeData["PosX"].AsInt32(), nodeData["PosY"].AsInt32());
+        var province = Globals.MapScene.TileMap.GetProvence(mapPosition);
+
+        var commander = new Commander(province, team, name);
+        commander.Units.Load(nodeData["Units"].AsGodotDictionary());
+        commander.SpawnLocation = new Vector2I(nodeData["SpawnX"].AsInt32(), nodeData["SpawnY"].AsInt32());;
+        commander._targetLocation = new Vector2I(nodeData["TargetX"].AsInt32(), nodeData["TargetY"].AsInt32());;
+        commander.BarracksId = nodeData["BarracksId"].ToString();
+    }
     #endregion
 }

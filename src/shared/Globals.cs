@@ -17,6 +17,8 @@ public class Globals
     // The gui puts items in the players hands. Belts move the player.
     public static Character Player;
     
+    public static CraftingQueue CraftingQueue;
+    
     // Avoids having all of the C# buildings in the tree. This lets classes access the manager without the scene tree.
     public static BuildingManager BuildingManager;
     

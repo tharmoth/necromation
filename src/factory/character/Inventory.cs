@@ -24,7 +24,7 @@ public partial class Inventory : ITransferTarget
 	int itemCount = 0;
 
 	public int CountItem(string item) => !string.IsNullOrEmpty(item) && _items.TryGetValue(item, out var count) ? count : 0;
-	public int CountAllItems() => itemCount;
+	public int CountItems() => itemCount;
 	
 	public void Clear()
 	{
@@ -59,6 +59,11 @@ public partial class Inventory : ITransferTarget
 	 **************************************************************************/
 	public void Insert(string item, int count = 1)
 	{
+		if (GetMaxTransferAmount(item) < count)
+		{
+			GD.PrintErr("Inventory.Insert: Item count exceeds capacity. Item: " + item+ " Count: " + count);
+			return;
+		}
 		_items.TryGetValue(item, out var currentCount);
 		_items[item] = currentCount + count;
 		itemCount += count;
@@ -96,7 +101,11 @@ public partial class Inventory : ITransferTarget
 		foreach (var entry in dictionary)
 		{
 			// This shouldn't happen unless the file is an old version or manually edited.
-			if (!CanAcceptItems(entry.Key.ToString(), (int)entry.Value)) continue;
+			if (!CanAcceptItems(entry.Key.ToString(), (int)entry.Value))
+			{
+				GD.PrintErr("Inventory.Load: Item count exceeds capacity. Item: " + entry.Key + " Count: " + entry.Value);
+				continue;
+			}
 			_items.Add(entry.Key.ToString(), (int)entry.Value);
 			itemCount += (int)entry.Value;
 		}

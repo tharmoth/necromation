@@ -213,14 +213,18 @@ public partial class Character : Node2D
 		if (cache != Selected) ClickAudio.Play();
 	}
 	
+	#region Save/Load
+	/******************************************************************
+	 * Save/Load                                                      *
+	 ******************************************************************/
 	public virtual Godot.Collections.Dictionary<string, Variant> Save()
 	{
 		var dict =  new Godot.Collections.Dictionary<string, Variant>()
 		{
 			{ "ItemType", "Character" },
-			{ "PosX", Position.X }, // Vector2 is not supported by JSON
+			{ "PosX", Position.X },
 			{ "PosY", Position.Y },
-			{"Inventory0", _inventory.Save()}
+			{ "PlayerInventory", _inventory.Save() }
 		};
 		return dict;
 	}
@@ -228,6 +232,7 @@ public partial class Character : Node2D
 	public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
 	{
 		Globals.Player.Position = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);
-		Globals.Player._inventory.Load((Godot.Collections.Dictionary)nodeData["Inventory0"]);
+		Globals.Player._inventory.Load((Godot.Collections.Dictionary)nodeData["PlayerInventory"]);
 	}
+	#endregion
 }

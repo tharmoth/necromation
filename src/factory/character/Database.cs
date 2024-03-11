@@ -15,7 +15,6 @@ public class Database
     public readonly IReadOnlyList<UnitDef> Units = LoadUnitDefs();
     
     public readonly List<Recipe> UnlockedRecipes = new();
-    public readonly List<Recipe> ResearchedTechnologies = new();
     
     private readonly Dictionary<string, Texture2D> _textureCache = new();
     

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Necromation;
@@ -25,12 +26,12 @@ public partial class FactoryGUI : CanvasLayer
 	/**************************************************************************
 	 * State Data          													  *
 	 **************************************************************************/
-	private Control _openGui;
+	private readonly Stack<Control> _guiStack = new();
 	
 	/***************************************************************************
 	 * Properties  														       *
 	 ***************************************************************************/
-	public bool IsAnyGuiOpen() => _openGui != null;
+	public bool IsAnyGuiOpen() => _guiStack.Count != 0;
 
 	public override void _UnhandledInput(InputEvent inputEvent)
 	{
@@ -40,7 +41,7 @@ public partial class FactoryGUI : CanvasLayer
 
 		if (Input.IsActionJustPressed("open_technology"))
 		{
-			if (_openGui is TechGUI)
+			if (_guiStack.Count > 0 && _guiStack.Peek() is TechGUI)
 				CloseGui();
 			else
 				TechGUI.Display();
@@ -48,7 +49,7 @@ public partial class FactoryGUI : CanvasLayer
 
 		if (Input.IsActionJustPressed("open_inventory"))
 		{
-			if (_openGui is InventoryGUI)
+			if (_guiStack.Count > 0 && _guiStack.Peek() is InventoryGUI)
 				CloseGui();
 			else
 				InventoryGUI.Display(Globals.PlayerInventory);
@@ -56,7 +57,7 @@ public partial class FactoryGUI : CanvasLayer
 
 		if (Input.IsActionPressed("open_config"))
 		{
-			if (_openGui is ConfigurationGui)
+			if (_guiStack.Count > 0 && _guiStack.Peek() is ConfigurationGui)
 				CloseGui();
 			else
 				ConfigurationGui.Display();
@@ -70,22 +71,39 @@ public partial class FactoryGUI : CanvasLayer
 	/***************************************************************************
 	 * Public API Methods  													   *
 	 ***************************************************************************/
-	public void OpenGui(Control gui)
+	/// <summary>
+	/// Opens a GUI without closing other GUIs.
+	/// </summary>
+	/// <param name="gui">The new GUI to add to the stack</param>
+	public void Push(Control gui)
 	{
-		CloseGui();
-		_openGui = gui;
+		_guiStack.Push(gui);
+		GuiOpenedAudio.Play();
+		AddChild(gui);
+	}
+	
+	/// <summary>
+	/// Opens a GUI and closes all other GUIs.
+	/// </summary>
+	/// <param name="gui">The new GUI to open</param>
+	public void Open(Control gui)
+	{
+		while (_guiStack.Count > 0)
+		{
+			CloseGui();
+		}
+		_guiStack.Push(gui);
 		GuiOpenedAudio.Play();
 		AddChild(gui);
 	}
 	
 	public void CloseGui()
 	{
-		if (IsInstanceValid(_openGui))
-		{
-			_openGui?.QueueFree();
-			GuiClosedAudio.Play();
-		}
-		_openGui = null;
+		if (_guiStack.Count == 0) return;
+		var topGui = _guiStack.Pop();
+		if (!IsInstanceValid(topGui)) return;
+		topGui.QueueFree();
+		GuiClosedAudio.Play();
 	}
 		
 	public void ToggleCinematicMode()

@@ -18,7 +18,7 @@ public class MapUtils
     
     public static string GetRandomCommanderName()
     {
-        return GetRandomLine("res://res/data/EdgyNames.txt", _commanderNames);
+        return GetRandomLine("res://res/data/Names2.txt", _commanderNames);
     }
     
     private static string GetRandomLine(string filepath, List<string> usedNames)

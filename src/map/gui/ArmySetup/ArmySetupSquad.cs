@@ -55,7 +55,7 @@ public partial class ArmySetupSquad : PanelContainer
 		SquadPlacement.GuiInput += (e) =>
 		{
 			if (e is not InputEventMouseButton mouseButton || !mouseButton.IsPressed()) return;
-			BoxDraw.Display(_commander);
+			BarracksBoxDraw.Display(_commander);
 		};
 	}
 
@@ -93,7 +93,7 @@ public partial class ArmySetupSquad : PanelContainer
 
 	public void Update()
 	{
-		UnitCountLabel.Text = Squad.CountAllItems().ToString() + " Units";
+		UnitCountLabel.Text = Squad.CountItems().ToString() + " Units";
 		AddMissingUnits();
 		RemoveExtraUnits();
 	}

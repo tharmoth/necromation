@@ -56,6 +56,7 @@ layout_mode = 2
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/TitleRow"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"HeaderSmall"
 text = "Mine"
 
 [node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("4_0p8fd")]
@@ -72,6 +73,9 @@ _action = "close_gui"
 
 [node name="Outline" parent="MarginContainer/VBoxContainer/TitleRow/CloseButton" instance=ExtResource("6_ihkv5")]
 layout_mode = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

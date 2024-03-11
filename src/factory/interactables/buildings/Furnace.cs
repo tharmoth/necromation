@@ -94,7 +94,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 **************************************************************************/
     protected virtual bool MaxOutputItemsReached()
     {
-	    return GetOutputInventory().CountAllItems() >= 200;
+	    return GetOutputInventory().CountItems() >= 200;
     }
     
     /**************************************************************************

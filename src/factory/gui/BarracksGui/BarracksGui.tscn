@@ -1,6 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://c7aejushuligv"]
+[gd_scene load_steps=12 format=3 uid="uid://c7aejushuligv"]
 
 [ext_resource type="Script" path="res://src/factory/gui/BarracksGui/BarracksGui.cs" id="1_aaqnu"]
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_dmp2e"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_3hsy0"]
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="3_lyjcv"]
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="4_jb5ym"]
@@ -8,10 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://cvn2ithtvvp85" path="res://src/factory/gui/CrafterGUI/ItemSelectionItemBox.tscn" id="5_r2ir6"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="6_2ojxy"]
 [ext_resource type="Texture2D" uid="uid://df0vkwm5lx4c5" path="res://res/sprites/Arrow-right.png" id="7_da7t7"]
-[ext_resource type="Script" path="res://src/map/gui/ArmySetup/ArmySetupSquad.cs" id="8_0u5tc"]
-[ext_resource type="Texture2D" uid="uid://ti2aa2bvwhet" path="res://res/sprites/unit/Skeleton Warrior.png" id="9_ohsax"]
-[ext_resource type="PackedScene" uid="uid://cj30vq58x02yf" path="res://src/factory/gui/BarracksGui/UnitSelectionItemBox.tscn" id="10_aitav"]
-[ext_resource type="Texture2D" uid="uid://c2lvsbtr85b8u" path="res://res/sprites/Dot.png" id="11_sv1ei"]
 [ext_resource type="Texture2D" uid="uid://dkrc6yyui6nlx" path="res://res/sprites/Arrow-down.png" id="12_067ju"]
 [ext_resource type="Script" path="res://src/factory/gui/ProgressTracker.cs" id="13_qmfwk"]
 
@@ -28,6 +25,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_dmp2e")
 script = ExtResource("1_aaqnu")
 
 [node name="DropShadowBorder" parent="." instance=ExtResource("2_3hsy0")]
@@ -54,6 +52,7 @@ layout_mode = 2
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/TitleRow"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"HeaderSmall"
 text = "Barracks"
 
 [node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("4_jb5ym")]
@@ -81,6 +80,9 @@ _action = "close_gui"
 
 [node name="Outline" parent="MarginContainer/VBoxContainer/TitleRow/CloseButton" instance=ExtResource("6_2ojxy")]
 layout_mode = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -174,117 +176,62 @@ theme_override_constants/margin_top = 22
 theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 22
 
-[node name="SquadContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CommanderInfoRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
+layout_mode = 2
+
+[node name="CommanderBattleOrders" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Orders"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer" instance=ExtResource("6_2ojxy")]
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
+layout_mode = 2
+
+[node name="SquadPlacement" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Position"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer2" instance=ExtResource("6_2ojxy")]
+layout_mode = 2
+
+[node name="CommandInfoPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer" instance=ExtResource("6_2ojxy")]
+[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/CommandInfoPanel"]
 layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="SquadPanel" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 alignment = 1
 
-[node name="SquadRow" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel"]
-custom_minimum_size = Vector2(500, 0)
+[node name="UnitLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/CommandInfoPanel/VBoxContainer"]
 layout_mode = 2
-script = ExtResource("8_0u5tc")
+text = "Units: "
 
-[node name="SquadMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow"]
+[node name="UnitCountLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/CommandInfoPanel/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+text = "120/200"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="UnitsBox" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer"]
+[node name="OutputInventoryItemList" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 10
-
-[node name="UnitList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/UnitsBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/UnitsBox/UnitList"]
-layout_mode = 2
-size_flags_horizontal = 3
-expand_mode = 1
-stretch_mode = 3
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/UnitsBox/UnitList/TextureRect2"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_ohsax")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SquadRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 1
-
-[node name="OutputInventoryItemList" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="ItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow" instance=ExtResource("10_aitav")]
-layout_mode = 2
-
-[node name="InfoPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow/InfoPanel"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="SquadPlacement" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow/InfoPanel/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("11_sv1ei")
-
-[node name="SquadInfo" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow/InfoPanel/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="UnitCountLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow/InfoPanel/HBoxContainer/SquadInfo"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "60 Units"
-
-[node name="OrdersLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/SquadContainer/MarginContainer/SquadPanel/SquadRow/SquadMargin/VBoxContainer/SquadRow/InfoPanel/HBoxContainer/SquadInfo"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_vertical = 8
-text = "<Set Battle Orders>"
 
 [node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory" instance=ExtResource("6_2ojxy")]
 layout_mode = 2

@@ -25,7 +25,7 @@ public partial class RecipeSelectionGui : Control
 	{
 		var gui =Scene.Instantiate<RecipeSelectionGui>();
 		gui.Init(targetInventory, crafter);
-		Globals.FactoryScene.Gui.OpenGui(gui);
+		Globals.FactoryScene.Gui.Open(gui);
 	}
 
 	// Constructor workaround.

@@ -11,16 +11,25 @@ using Necromation.sk;
 
 public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker.IProgress
 {
-	private Vector2 _globalPosition;
+	/**************************************************************************
+	 * Utility Property                                                       *
+	 **************************************************************************/
+	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 	public Vector2 GlobalPosition
 	{
 		get => _globalPosition;
 		set => _globalPosition = value;
 	}
-	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
-	public readonly Sprite2D Sprite = new();
+	protected Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
+	public string Id => _id;
 	
-	private VisibleOnScreenNotifier2D Notifier = new();
+	/**************************************************************************
+	 * Logic Variables                                                        *
+	 **************************************************************************/
+	private Vector2 _globalPosition;
+	protected bool IsOnScreen = true;
+	// Unique identifier for communicating data linked to the Map/Battle on save/load
+	private string _id = Guid.NewGuid().ToString();
 	
 	/**************************************************************************
 	 * Visuals Variables 													  *
@@ -29,8 +38,8 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	private static readonly AudioStream PlaceSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 	private AudioStreamPlayer2D _audio = new();
 	private GpuParticles2D _particles;
-
-	protected bool IsOnScreen = true;
+	public readonly Sprite2D Sprite = new();
+	private VisibleOnScreenNotifier2D Notifier = new();
 
 	protected Building()
 	{
@@ -169,9 +178,6 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			}
 		}
 	}
-	
-
-	protected Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
 
 	/******************************************************************
 	 * Abstract methods                                               *
@@ -242,8 +248,9 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		var dict =  new Godot.Collections.Dictionary<string, Variant>()
 		{
 			{ "ItemType", ItemType },
-			{ "PosX", _globalPosition.X }, // Vector2 is not supported by JSON
-			{ "PosY", _globalPosition.Y },
+			{ "Id", Id},
+			{ "PosX", GlobalPosition.X }, // Vector2 is not supported by JSON
+			{ "PosY", GlobalPosition.Y },
 			{ "Orientation", Orientation.ToString() }
 		};
 		if (this is ICrafter crafter)
@@ -285,6 +292,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		
 		building.GlobalPosition = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);
 		building._audio.Stream = null;
+		building._id = nodeData["Id"].ToString();
 		Globals.BuildingManager.AddBuilding(building, building.GlobalPosition);
 	}
 	#endregion
