@@ -20,7 +20,8 @@ public partial class BarracksGui : PanelContainer
 	private ItemSelectionItemBox ItemSelectionItemBox => GetNode<ItemSelectionItemBox>("%ItemSelectionItemBox");
 	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
 	private Label Title => GetNode<Label>("%Title");
-	private Button SquadPlacement => GetNode<Button>("%SquadPlacement");
+	private Button OrdersButton => GetNode<Button>("%OrdersButton");
+	private Button PositionButton => GetNode<Button>("%PositionButton");
 	private Label UnitCountLabel => GetNode<Label>("%UnitCountLabel");
 	
 	/**************************************************************************
@@ -58,7 +59,8 @@ public partial class BarracksGui : PanelContainer
 		
 		Title.Text = barracks.ItemType + " - " + barracks.Commander.CommanderName;
 		
-		SquadPlacement.Pressed += () => BarracksBoxDraw.Display(barracks.Commander);
+		PositionButton.Pressed += () => BarracksBoxDraw.Display(barracks.Commander);
+		OrdersButton.Pressed += () => CommandsGui.Display(barracks.Commander);
 	}
 
 	private void UpdatePlayerInventory()

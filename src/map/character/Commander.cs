@@ -24,6 +24,18 @@ public partial class Commander : Node2D, ITransferTarget
     public Vector2I SpawnLocation = new(25, 25);
     /// <summary> Associates this commander with a barracks in the factory. Used for save/load. </summary>
     public string BarracksId = null;
+    
+    public Command CurrentCommand = Command.None;
+    public enum Command
+    {
+        None, HoldAndAttack, Fire, HoldAndFire, FireAndKeepDistance
+    }
+    
+    public Target TargetType = Target.Closest;
+    public enum Target
+    {
+        Closest, Archers, Cavalry, Rearmost
+    }
 
     /**************************************************************************
      * Visuals Variables 													  *

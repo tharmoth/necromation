@@ -30,6 +30,5 @@ public class Globals
     public static FactoryScene FactoryScene => SceneManager.FactoryScene;
     public static MapScene MapScene => SceneManager.MapScene;
     public static BattleScene BattleScene => SceneManager.BattleScene;
-    
     public static SceneTree Tree => SceneManager.SceneTree;
 }

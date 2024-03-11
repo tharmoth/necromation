@@ -1,0 +1,314 @@
+[gd_scene load_steps=12 format=3 uid="uid://lg7mu6p4hmyv"]
+
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_sk2ro"]
+[ext_resource type="Script" path="res://src/factory/gui/CraftingQueue/CraftingQueueGUI.cs" id="2_6e5ff"]
+[ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="3_t8jrn"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="4_ndgbu"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="5_uhmrx"]
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="6_xovth"]
+[ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/HotBarGUI/HotBarItemBox.tscn" id="7_r6q4i"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="8_5eard"]
+[ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="9_kmhka"]
+[ext_resource type="Script" path="res://src/factory/gui/ResearchProgressBar.cs" id="10_sejvr"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="11_l62sx"]
+
+[node name="PanelContainer" type="PanelContainer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_sk2ro")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="TopBar" type="ColorRect" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Control" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("1_sk2ro")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_edit_lock_ = true
+
+[node name="Main" type="PanelContainer" parent="VBoxContainer/Control"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Left" type="VBoxContainer" parent="VBoxContainer/Control/Main"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CraftingQueue" type="HBoxContainer" parent="VBoxContainer/Control/Main/Left"]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_6e5ff")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Control/Main/Left"]
+layout_mode = 2
+
+[node name="AttackLabel" type="Label" parent="VBoxContainer/Control/Main/Left/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Attack Incoming"
+
+[node name="FpsLabel" type="Label" parent="VBoxContainer/Control/Main/Left"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "FPS: "
+script = ExtResource("3_t8jrn")
+
+[node name="Spacer" type="Control" parent="VBoxContainer/Control/Main/Left"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Center" type="VBoxContainer" parent="VBoxContainer/Control/Main"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Control/Main/Center"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 50
+columns = 3
+
+[node name="Control2" type="Control" parent="VBoxContainer/Control/Main/Center/GridContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/Control/Main/Center/GridContainer"]
+layout_mode = 2
+
+[node name="ProgressPanel" type="PanelContainer" parent="VBoxContainer/Control/Main/Center/GridContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Outline" parent="VBoxContainer/Control/Main/Center/GridContainer/PanelContainer/ProgressPanel" instance=ExtResource("4_ndgbu")]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/Control/Main/Center/GridContainer/PanelContainer/ProgressPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+show_percentage = false
+
+[node name="Control" type="Control" parent="VBoxContainer/Control/Main/Center/GridContainer"]
+layout_mode = 2
+
+[node name="DropShadowDividerLeft" parent="VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("5_uhmrx")]
+layout_mode = 2
+
+[node name="DropShadowBorder" parent="VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("6_xovth")]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 20
+
+[node name="HotBar" type="GridContainer" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+columns = 10
+
+[node name="ItemBox" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox2" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox3" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox4" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox5" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox6" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox7" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox8" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox9" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox10" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox11" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox12" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox13" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox14" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox15" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox16" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox17" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox18" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox19" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="ItemBox20" parent="VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder/MarginContainer2/HotBar" instance=ExtResource("7_r6q4i")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="DropShadowDividerRight" parent="VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("8_5eard")]
+layout_mode = 2
+
+[node name="Right" type="VBoxContainer" parent="VBoxContainer/Control/Main"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="DropShadowBorder" parent="VBoxContainer/Control/Main/Right" instance=ExtResource("6_xovth")]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/Control/Main/Right/DropShadowBorder"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/Control/Main/Right/DropShadowBorder/MarginContainer2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Control/Main/Right/DropShadowBorder/MarginContainer2/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Control/Main/Right/DropShadowBorder/MarginContainer2/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Researching: Nothing"
+horizontal_alignment = 1
+script = ExtResource("9_kmhka")
+
+[node name="Outline" parent="VBoxContainer/Control/Main/Right/DropShadowBorder/MarginContainer2/PanelContainer/VBoxContainer" instance=ExtResource("4_ndgbu")]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/Control/Main/Right/DropShadowBorder/MarginContainer2/PanelContainer/VBoxContainer/Outline"]
+layout_mode = 2
+script = ExtResource("10_sejvr")
+
+[node name="Outline4" parent="VBoxContainer/Control/Main/Right" instance=ExtResource("4_ndgbu")]
+layout_mode = 2
+
+[node name="FactoryToMapButton" type="Button" parent="VBoxContainer/Control/Main/Right/Outline4"]
+unique_name_in_owner = true
+z_index = -1
+layout_mode = 2
+text = "Map (M)"
+script = ExtResource("11_l62sx")
+_action = "open_map"
+
+[node name="Outline3" parent="VBoxContainer/Control/Main/Right" instance=ExtResource("4_ndgbu")]
+layout_mode = 2
+
+[node name="TechnologyButton" type="Button" parent="VBoxContainer/Control/Main/Right/Outline3"]
+z_index = -1
+layout_mode = 2
+text = "Technology (T)"
+script = ExtResource("11_l62sx")
+
+[node name="Outline5" parent="VBoxContainer/Control/Main/Right" instance=ExtResource("4_ndgbu")]
+layout_mode = 2
+
+[node name="InventoryButton" type="Button" parent="VBoxContainer/Control/Main/Right/Outline5"]
+z_index = -1
+layout_mode = 2
+text = "Inventory (E)"
+script = ExtResource("11_l62sx")
+_action = "open_inventory"
+
+[node name="Outline2" parent="VBoxContainer/Control/Main/Right" instance=ExtResource("4_ndgbu")]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="VBoxContainer/Control/Main/Right/Outline2"]
+z_index = -1
+layout_mode = 2
+text = "Save
+"
+script = ExtResource("11_l62sx")
+_action = "save"
+
+[node name="Outline" parent="VBoxContainer/Control/Main/Right" instance=ExtResource("4_ndgbu")]
+layout_mode = 2
+
+[node name="LoadButton" type="Button" parent="VBoxContainer/Control/Main/Right/Outline"]
+z_index = -1
+layout_mode = 2
+text = "Load"
+script = ExtResource("11_l62sx")
+_action = "load"
+
+[node name="BottomBar" type="ColorRect" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+color = Color(0, 0, 0, 1)

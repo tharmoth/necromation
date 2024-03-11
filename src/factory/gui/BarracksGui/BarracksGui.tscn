@@ -188,7 +188,8 @@ layout_mode = 2
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
 layout_mode = 2
 
-[node name="CommanderBattleOrders" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer"]
+[node name="OrdersButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Orders"
@@ -199,7 +200,7 @@ layout_mode = 2
 [node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
 layout_mode = 2
 
-[node name="SquadPlacement" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer2"]
+[node name="PositionButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
