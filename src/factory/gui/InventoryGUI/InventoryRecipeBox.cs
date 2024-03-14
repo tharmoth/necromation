@@ -47,12 +47,23 @@ public partial class InventoryRecipeBox : ItemBox
 		Button.GuiInput += @event =>
 		{
 			int numToCraft;
-			if (Input.IsKeyPressed(Key.Shift)) numToCraft = CountLabel.Text.ToInt();
-			else if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Right, Pressed: true }) numToCraft = 5;
-			else if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Middle, Pressed: true }) numToCraft = 10;
-			else if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }) numToCraft = 1;
-			else return;
-			if (numToCraft <= 0) return;
+			switch (@event)
+			{
+				case InputEventMouseButton { Pressed: true } when Input.IsKeyPressed(Key.Shift):
+					numToCraft = CountLabel.Text.ToInt();
+					break;
+				case InputEventMouseButton { ButtonIndex: MouseButton.Right, Pressed: true }:
+					numToCraft = 5;
+					break;
+				case InputEventMouseButton { ButtonIndex: MouseButton.Middle, Pressed: true }:
+					numToCraft = 10;
+					break;
+				case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }:
+					numToCraft = 1;
+					break;
+				default:
+					return;
+			}
 			Globals.FactoryScene.CraftingQueue.QueueRecipe(_recipe.Name, numToCraft);
 		};
 		

@@ -8,6 +8,8 @@ using Necromation.map.character;
 
 public partial class UnitSpawner : Node2D
 {
+	public Vector2I MapPosition => Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
+	
 	private readonly Commander _commander;
 	private readonly string _team = "Player";
 
@@ -30,6 +32,8 @@ public partial class UnitSpawner : Node2D
 		}
 		
 		CallDeferred("_spawn");
+
+		if (!Globals.BattleScene.TileMap.IsOnMap(MapPosition)) throw new Exception("UnitSpawner is not on the map!");
 	}
 
 	private void _spawn() {
@@ -39,7 +43,7 @@ public partial class UnitSpawner : Node2D
 	private void PlaceUnitsInRectangle()
 	{
 		var positions = GetPositions(_commander.Units.CountItems());
-		
+		bool first = true;
 		foreach (var entry in _commander.Units.Items)
 		{
 			for (int i = 0; i < entry.Value; i++)
@@ -48,7 +52,8 @@ public partial class UnitSpawner : Node2D
 				var empty = Globals.BattleScene.TileMap.GetNearestEmpty(position);
 				var global = Globals.BattleScene.TileMap.MapToGlobal(empty);
 				
-				var unit = new Unit(entry.Key, global,  _commander);
+				var unit = new Unit(entry.Key, global, _commander, first);
+				first = false;
 
 				Globals.UnitManager.AddUnit(unit);
 			}	

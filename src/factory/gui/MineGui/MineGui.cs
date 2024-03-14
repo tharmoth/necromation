@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.factory.gui;
 
-public partial class MineGui : PanelContainer
+public partial class MineGui : DeferredUpdate
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
@@ -39,30 +40,18 @@ public partial class MineGui : PanelContainer
 		_to = to;
 		_from = from;
 		
-		_to.Listeners.Add(UpdatePlayerInventory);
-		UpdatePlayerInventory();
-		
-		from.Listeners.Add(UpdateSourceInventory);
-		UpdateSourceInventory();
+		AddUpdateListeners(new List<Inventory> { _to, _from });
 
 		Title.Text = title;
 		ProgressBar.Init(progress);
-	}
-
-	private void UpdatePlayerInventory()
-	{
-		InventoryItem.UpdateInventory(_to, null, InventoryList);
+		
+		Update();
 	}
 	
-	private void UpdateSourceInventory()
+	protected override void Update()
 	{
+		InventoryItem.UpdateInventory(_to, null, InventoryList);
 		InventoryItem.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
-	}
-
-	public override void _ExitTree()
-	{
-		base._ExitTree();
-		_to?.Listeners.Remove(UpdatePlayerInventory);
-		_from?.Listeners.Remove(UpdateSourceInventory);
+		Dirty = false;
 	}
 }

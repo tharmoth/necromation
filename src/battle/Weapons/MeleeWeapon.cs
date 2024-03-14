@@ -7,7 +7,7 @@ namespace Necromation.map.battle.Weapons;
 
 public class MeleeWeapon : Weapon
 {
-    public MeleeWeapon(string name, int range, int damage, int hands, int cooldown) : base(name, range, damage, hands, cooldown)
+    public MeleeWeapon(string name, int range, int damage, int hands, int cooldown, int ammo) : base(name, range, damage, hands, cooldown, ammo)
     {
     }
 

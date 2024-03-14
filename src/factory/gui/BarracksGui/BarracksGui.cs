@@ -2,9 +2,10 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Necromation;
+using Necromation.factory.gui;
 using Necromation.gui;
 
-public partial class BarracksGui : PanelContainer
+public partial class BarracksGui : DeferredUpdate
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
@@ -43,15 +44,8 @@ public partial class BarracksGui : PanelContainer
 	{
 		_to = to;
 		_barracks = barracks;
-		
-		_to.Listeners.Add(UpdatePlayerInventory);
-		UpdatePlayerInventory();
-		
-		_barracks.GetInputInventory().Listeners.Add(UpdateInputInventory);
-		UpdateInputInventory();
-		
-		_barracks.GetOutputInventory().Listeners.Add(UpdateOutputInventory);
-		UpdateOutputInventory();
+
+		AddUpdateListeners(new List<Inventory> { _to, _barracks.GetInputInventory(), _barracks.GetOutputInventory() });
 
 		ItemSelectionItemBox.Init(to, _barracks);
 		
@@ -63,27 +57,12 @@ public partial class BarracksGui : PanelContainer
 		OrdersButton.Pressed += () => CommandsGui.Display(barracks.Commander);
 	}
 
-	private void UpdatePlayerInventory()
+	protected override void Update()
 	{
 		InventoryItem.UpdateInventory(_to, new List<Inventory> { _barracks.GetInputInventory(), _barracks.GetOutputInventory() }, InventoryItemList);
-	}
-	
-	private void UpdateInputInventory()
-	{
 		InventoryItem.UpdateInventory(_barracks.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
-	}
-	
-	private void UpdateOutputInventory()
-	{
 		InventoryItem.UpdateInventory(_barracks.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList);
 		UnitCountLabel.Text = _barracks.GetOutputInventory().CountItems().ToString() + " / " + _barracks.Commander.CommandCap;
-	}
-
-	public override void _ExitTree()
-	{
-		base._ExitTree();
-		_to?.Listeners.Remove(UpdatePlayerInventory);
-		_barracks?.GetInputInventory().Listeners.Remove(UpdateInputInventory);
-		_barracks?.GetOutputInventory().Listeners.Remove(UpdateOutputInventory);
+		Dirty = false;
 	}
 }

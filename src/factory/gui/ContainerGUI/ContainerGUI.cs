@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.factory.gui;
 using Necromation.gui;
 
-public partial class ContainerGui : PanelContainer
+public partial class ContainerGui : DeferredUpdate
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
@@ -39,29 +40,14 @@ public partial class ContainerGui : PanelContainer
 		_to = to;
 		_from = from;
 		
-		_to.Listeners.Add(UpdatePlayerInventory);
-		UpdatePlayerInventory();
-		
-		from.Listeners.Add(UpdateSourceInventory);
-		UpdateSourceInventory();
+		AddUpdateListeners(new List<Inventory> { _to, _from });
 
 		Title.Text = title;
 	}
 
-	private void UpdatePlayerInventory()
+	protected override void Update()
 	{
 		InventoryItem.UpdateInventory(_to, new List<Inventory> { _from }, InventoryList);
-	}
-	
-	private void UpdateSourceInventory()
-	{
 		InventoryItem.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
-	}
-
-	public override void _ExitTree()
-	{
-		base._ExitTree();
-		_to?.Listeners.Remove(UpdatePlayerInventory);
-		_from?.Listeners.Remove(UpdateSourceInventory);
 	}
 }

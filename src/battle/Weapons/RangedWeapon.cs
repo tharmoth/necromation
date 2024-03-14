@@ -7,8 +7,9 @@ namespace Necromation.map.battle.Weapons;
 
 public class RangedWeapon : Weapon
 {
-    public RangedWeapon(string name, int range, int damage, int hands, int cooldown) : base(name, range, damage, hands, cooldown)
+    public RangedWeapon(string name, int range, int damage, int hands, int cooldown, int ammo) : base(name, range, damage, hands, cooldown, ammo)
     {
+
     }
     
     protected override void Attack(Unit wielder, Unit target)
@@ -17,7 +18,6 @@ public class RangedWeapon : Weapon
         var targetLocs = Globals.BattleScene.TileMap.GetTilesInRadius(target.MapPosition, 2).ToList();
         var targetLoc = targetLocs[GD.RandRange(0, targetLocs.Count - 1)];
         Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, targetLoc, hit => ApplyDamage(wielder, hit)));
-        wielder.Ammo--;
         PlayFiredSound(wielder);
     }
     
@@ -56,10 +56,5 @@ public class RangedWeapon : Weapon
         wielder.Audio.Stream = randomizer;
         wielder.Audio.VolumeDb = -20;
         wielder.Audio.Play();
-    }
-
-    protected override bool CanAttack(Unit wielder, List<Unit> targets, int range)
-    {
-        return wielder.Ammo != 0 && base.CanAttack(wielder, targets, range);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Necromation;
 using Necromation.battle;
+using Necromation.battle.Weapons;
 using Necromation.map;
 using Necromation.map.battle.Weapons;
 using Necromation.map.character;
@@ -25,6 +26,8 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	public double Cooldown = GD.RandRange(0, BattleScene.TimeStep);
 	public readonly  List<Weapon> Weapons = new();
 	public readonly List<Armor> Armor = new();
+	public readonly Mount Mount = new();
+	private double moveCooldown = BattleScene.TimeStep;
 	private readonly Commander _commander;
 	public readonly string Team;
 	public readonly string UnitType;
@@ -48,16 +51,16 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	 * RPG Data Variables 													  *
 	 **************************************************************************/
 	private int _hp = 10;
-	public int Ammo = 12;
 	public readonly int Strength = 10;
-	
+	public Dictionary<Weapon, int> Ammo = new();
+
 	/// <summary>
 	/// Constructor loads in the units data and sets up the appropriate RPG data and Visuals.
 	/// </summary>
 	/// <param name="unitType">String used to load in unit data and update commander on death</param>
 	/// <param name="position">Global position that the unit is located at on start</param>
 	/// <param name="commander">This units commander, used to update unit counts on death</param>
-	public Unit(string unitType, Vector2 position, Commander commander)
+	public Unit(string unitType, Vector2 position, Commander commander, bool first = false)
 	{
 		UnitType = unitType;
 		_commander = commander;
@@ -67,10 +70,15 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		var def = Database.Instance.Units.First(unit => unit.Name == unitType);
 		foreach (var weapon in def.Weapons)
 		{
-			Weapons.Add(Database.Instance.Equpment.OfType<Weapon>().First(weaponData => weaponData.Name == weapon));
+			var weaponData = Database.Instance.Equpment.OfType<Weapon>().First(weaponData => weaponData.Name == weapon);
+			Weapons.Add(weaponData);
+			Ammo.Add(weaponData, weaponData.Ammo);
 		}
-		Weapons.Add(new MeleeWeapon("Fist", 1, 1, 1, 1));
-		
+
+		var fist = new MeleeWeapon("Fist", 1, 1, 1, 1, -1);
+		Weapons.Add(fist);
+		Ammo.Add(fist, fist.Ammo);
+
 		foreach (var armor in def.Armor)
 		{
 			Armor.Add(Database.Instance.Equpment.OfType<Armor>().First(armorDef => armorDef.Name == armor));
@@ -79,8 +87,20 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		BodySprite.Texture = Database.Instance.GetTexture(UnitType, "unit");
 		BodySprite.Scale = new Vector2(.125f, .125f);
 		BodySprite.FlipH = Team != "Player";
-		
-		SpriteHolder.AddChild(BodySprite); 
+
+		if (def.Mount != "None")
+		{
+			Mount = new Mount();
+			// BodySprite.Modulate = new Color(1, 0, 0);
+			moveCooldown = BattleScene.TimeStep / 3;
+			if (first)
+			{
+				BodySprite.Texture = Database.Instance.GetTexture("Bannerhorse", "unit");
+			}
+
+		}
+
+	SpriteHolder.AddChild(BodySprite); 
 		SpriteHolder.AddChild(Audio);
 		Globals.UnitManager.AddToGroup(this, Team);
 		
@@ -91,23 +111,46 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	{
 		base._Ready();
 		SpriteHolder.GlobalPosition = GlobalPosition;
+		switch (_commander.CurrentCommand)
+		{
+			case Commander.Command.None:
+				break;
+			case Commander.Command.HoldAndAttack:
+				Cooldown += BattleScene.TimeStep * 12;
+				break;
+			case Commander.Command.Fire:
+				break;
+			case Commander.Command.HoldAndFire:
+				break;
+			case Commander.Command.FireAndKeepDistance:
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
 	}
 
 	public override void _Process(double delta)
 	{
 		if (!Globals.BattleScene.Gui.Started) return;
 		
-		Cooldown += delta;
-		if (Cooldown < BattleScene.TimeStep || _hp <= 0) return;
-		Cooldown = 0;
+		Cooldown -= delta;
+		if (Cooldown >= 0 || _hp <= 0) return;
 
 		// Walk through the units state machine every time the cooldown is over and attack if possible.
-		UpdateTargetPosition();
-		if (AttackDeclump()) return;
-		ChooseOrKeepTarget();
+		// State Machine Flow
+		// 1. Choose a target from the list of desired targets.
+		// 2. Attack the desired target if possible (with reduced range).
+		// 3. Attack any adjacent enemies
+		// 4. Move Towards the targets location
+		// 5. Attack the desired target if possible. (with full range).
 		
+		if (!Globals.UnitManager.IsUnitAlive(_target)) ChooseDesiredTarget();
+		else UpdateTargetPosition();
+		
+		if (AttackDesiredTargetDeclump()) return;
+		if (AttackAdjacent()) return;
 		if (MoveToTarget()) return;
-		if (Attack()) return;
+		if (AttackDesiredTarget()) return;
 	}
 	
 	/**************************************************************************
@@ -125,40 +168,34 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	}
 	
 	/// <summary>
-	/// Attempts to make an attack with any weapon with reduced range to try and declump the units.
-	/// </summary>
-	/// <returns>
-	/// True if an action was taken.
-	/// False if no action was taken.
-	/// </returns>
-	private bool AttackDeclump()
-	{
-		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttackDeclump(this, Enemies)))
-		{
-			weapon.Attack(this);
-			return true;
-		}
-
-		return false;
-	}
-	
-	/// <summary>
 	/// Randomly choose a new target or keep the current one. Used to help with unit pathing getting stuck.
 	/// </summary>
-	private void ChooseOrKeepTarget()
+	private void ChooseDesiredTarget()
 	{
 		if (Globals.UnitManager.IsUnitAlive(_target)) return;
-		var rand = GD.Randf();
-		if (rand < 0.25)
+
+		switch (_commander.TargetType)
 		{
-			_target = TargetRandomEnemy();
-			UpdateTargetPosition();
-		}
-		else if (rand < 0.5)
-		{
-			_target = TargetClosestEnemy();
-			UpdateTargetPosition();
-		}
+			case Commander.Target.Closest:
+				_target = TargetClosestEnemy();
+				break;
+			case Commander.Target.Archers:
+				_target = TargetArcher();
+				break;
+			case Commander.Target.Cavalry:
+				_target = TargetClosestEnemy();
+				break;
+			case Commander.Target.Rearmost:
+				_target = TargetRearmostEnemy();
+				break;
+			case Commander.Target.Random:
+				_target = TargetRandomEnemy();
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
+		};
+		
+		if (_target == null) _target = TargetRandomEnemy();
 	}
 	
 	/// <summary>
@@ -184,20 +221,56 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		
 		PlayMovementAnimation(nextPositionGlobal);
 		GlobalPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
-
+		Cooldown = moveCooldown;
 		return true;
 	}
 	
 	/// <summary>
-	/// Attempts to make an attack with any weapon.
+	/// Attempts to make an attack  against the desired target  with any weapon with reduced range to try and declump the units.
 	/// </summary>
 	/// <returns>
 	/// True if an action was taken.
 	/// False if no action was taken.
 	/// </returns>
-	private bool Attack()
+	private bool AttackDesiredTargetDeclump()
 	{
-		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, Enemies)))
+		if (_target == null) return false;
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttackDeclump(this, new List<Unit> { _target })))
+		{
+			weapon.Attack(this);
+			return true;
+		}		
+		return false;
+	}
+	
+	/// <summary>
+	/// Attempts to make an attack against the desired target with any weapon.
+	/// </summary>
+	/// <returns>
+	/// True if an action was taken.
+	/// False if no action was taken.
+	/// </returns>
+	private bool AttackDesiredTarget()
+	{
+		if (_target == null) return false;
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, new List<Unit> { _target })))
+		{
+			weapon.Attack(this);
+			return true;
+		}		
+		return false;
+	}
+	
+	/// <summary>
+	/// Attempts to attack any adjacent enemy with any weapon.
+	/// </summary>
+	/// <returns>
+	/// True if an action was taken.
+	/// False if no action was taken.
+	/// </returns>
+	private bool AttackAdjacent()
+	{
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, Enemies, 1)))
 		{
 			weapon.Attack(this);
 			return true;
@@ -217,7 +290,8 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		ShowText(damage);
 		
 		_hp -= damage;
-		if (_hp < 0) OnDeath();
+		if (_hp > 0) return; 
+		OnDeath();
 		DeathCallbacks.ForEach(callback => callback(source));
 	}
 
@@ -252,6 +326,22 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		_targetPosition = closest?.MapPosition ?? MapPosition;
 		return closest;
 	}
+	
+	private Unit TargetRearmostEnemy()
+	{
+		var rearmost = Enemies.MaxBy(unit => unit.GlobalPosition.DistanceSquaredTo(GlobalPosition));
+		_targetPosition = Globals.BattleScene.TileMap.GlobalToMap(rearmost?.GlobalPosition ?? GlobalPosition);
+		return rearmost;
+	}
+
+	private Unit TargetArcher()
+	{
+		var archers = Enemies.Where(unit => unit.UnitType.Contains("Archer")).ToList();
+		if (archers.Count == 0) return TargetRandomEnemy();
+		var archer = archers.ElementAt(GD.RandRange(0, archers.Count - 1));
+		_targetPosition = Globals.BattleScene.TileMap.GlobalToMap(archer?.GlobalPosition ?? GlobalPosition);
+		return archer;
+	}
 
 	/// <summary>
 	///  Returns the next position the unit should move to. Looks towards the target and tries to move in that direction.
@@ -261,6 +351,7 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	private Vector2I GetNextPosition()
 	{
 		var differance = _targetPosition - MapPosition;
+		differance = new Vector2I(differance.X * 3, differance.Y);
 
 		var directions = new List<(Vector2I, bool)>
 		{
@@ -340,14 +431,16 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	/// <param name="nextPositionGlobal">Position to animate movement towards from current position</param>
 	private void PlayMovementAnimation(Vector2 nextPositionGlobal)
 	{
+		BodySprite.FlipH = nextPositionGlobal.X < GlobalPosition.X;
+		
 		_moveTween?.Kill();
 		_moveTween = SpriteHolder.CreateTween();
-		_moveTween.TweenProperty(SpriteHolder, "global_position", nextPositionGlobal, BattleScene.TimeStep);
+		_moveTween.TweenProperty(SpriteHolder, "global_position", nextPositionGlobal, moveCooldown);
 
 		_bobTween?.Kill();
 		_bobTween = SpriteHolder.CreateTween();
-		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, -5), BattleScene.TimeStep / 2);
-		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, 0), BattleScene.TimeStep / 2);
+		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, -5), moveCooldown / 2);
+		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, 0), moveCooldown / 2);
 	}
 	
 	private void PlayDamageAnimation()

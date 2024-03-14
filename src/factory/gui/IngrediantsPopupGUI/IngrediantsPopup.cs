@@ -6,6 +6,20 @@ using Necromation.gui;
 
 public partial class IngrediantsPopup : PanelContainer
 {
+	/**************************************************************************
+	 * Hardcoded Scene Imports 											      *
+	 **************************************************************************/
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/IngrediantsPopupGUI/ingrediants_popup.tscn");
+
+	/**************************************************************************
+	 * Child Accessors 													      *
+	 **************************************************************************/
+	private Label RecipeNameLabel => GetNode<Label>("%RecipeNameLabel");
+	private VBoxContainer Rows => GetNode<VBoxContainer>("%Rows");
+	private Label CraftingTimeLabel => GetNode<Label>("%CraftingTimeLabel");
+	private DropShadowBorder DropShadowBorder => GetNode<DropShadowBorder>("%DropShadowBorder");
+	
+	
 	public static void Register(Recipe recipe, Control control)
 	{
 		IngrediantsPopup popup = null;
@@ -41,26 +55,25 @@ public partial class IngrediantsPopup : PanelContainer
 	public static IngrediantsPopup DisplayPopup(Recipe recipe)
 	{
 		Globals.FactoryScene.Gui.GetChildren().OfType<IngrediantsPopup>().ToList().ForEach(popup => popup.QueueFree());
-		var popup = (IngrediantsPopup) GD.Load<PackedScene>("res://src/factory/gui/IngrediantsPopupGUI/ingrediants_popup.tscn").Instantiate();
+		var popup = Scene.Instantiate<IngrediantsPopup>();
 		popup._recipe = recipe;
 		Globals.FactoryScene.Gui.AddChild(popup);
 		return popup;
 	}
 
 	private Recipe _recipe;
-	private DropShadowBorder DropShadowBorder => GetNode<DropShadowBorder>("%DropShadowBorder");
+	
 
 	public override void _Ready()
 	{
 		if (_recipe == null) throw new ArgumentException("Recipe popup recipe cannot be null when added to tree");
-
 		Size = Vector2.Zero;
 		
 		_recipe.Products.First().Deconstruct(out var product, out var amount);
-		GetNode<Label>("%RecipeNameLabel").Text = product + (amount == 1 ? "" : " x" + amount);
-		GetNode<Label>("%CraftingTimeLabel").Text = _recipe.Time + "s Crafting Time";
+		RecipeNameLabel.Text = product + (amount == 1 ? "" : " x" + amount);
+		CraftingTimeLabel.Text = _recipe.Time + "s Crafting Time";
 		
-		GetNode<VBoxContainer>("%Rows").GetChildren().ToList().ForEach(node => node.Free());
+		Rows.GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
 		
 		var tween = CreateTween();

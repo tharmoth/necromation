@@ -48,6 +48,20 @@
       "description" : "Forge copper into weapons and armor."
     },
     {
+      "name": "Advanced Research",
+      "count": 50,
+      "ingredients": [
+        "experiment"
+      ],
+      "unlocks" : [
+        "Experiment 2"
+      ],
+      "prerequisites" : [
+
+      ],
+      "description" : "Delve deeper into the mysteries of the world."
+    },
+    {
       "name": "Heavy Weaponry",
       "count": 100,
       "ingredients": [
@@ -93,6 +107,22 @@
         "Bronzework"
       ],
       "description" : "Forge bronze into weapons and armor."
+    },
+    {
+      "name": "Bronze Mastery",
+      "count": 100,
+      "ingredients": [
+        "experiment 2"
+      ],
+      "unlocks" : [
+        "Undead Legionary",
+        "Gravebound Charger"
+      ],
+      "prerequisites" : [
+        "Bronze Metalworking"
+      ],
+      "description" : "Forge bronze into fine weapons and armor."
     }
+    
   ]
 }

@@ -21,27 +21,43 @@ public partial class InventoryItem : ItemBox
 	// Static Accessor
 	public static void UpdateInventory(Inventory from, List<Inventory> to, Container list)
 	{
-		// Free instead of queuefree so that MapSquad can detect if empty.
-		list.GetChildren().ToList().ForEach(child => child.Free());
-		from.Items
-			.OrderBy(item => item.Key)
-			.ToList().ForEach(item => InventoryItem.AddInventoryItem(item, from, to, list));
+		AddMissing(from, to, list);
+		RemoveExtra(from, list);
 	}
 	
 	// Static Accessor
-	private static void AddInventoryItem(KeyValuePair<string, int> item, Inventory from, List<Inventory> to, Container list)
+	private static void AddInventoryItem(string item, Inventory from, List<Inventory> to, Container list)
 	{
 		var inventoryItem = ItemScene.Instantiate<InventoryItem>();
-		inventoryItem.Init(from, to, item.Key, item.Value);
+		inventoryItem.Init(from, to, item);
 		list.AddChild(inventoryItem);
 	}
 	
-	private void Init(Inventory source, List<Inventory> to, string item, int count)
+	private static void AddMissing(Inventory from, List<Inventory> to, Container list)
+	{
+		foreach (var (item, count) in from.Items)
+		{
+			var itemBox = list.GetChildren().OfType<InventoryItem>().FirstOrDefault(box => box.ItemType == item);
+			if (itemBox != null) continue;
+			AddInventoryItem(item, from, to, list);
+		}
+	}
+
+	private static void RemoveExtra(Inventory from, Container list)
+	{
+		list.GetChildren().OfType<InventoryItem>()
+			.Where(inventoryItem => from.CountItem(inventoryItem.ItemType) == 0)
+			.ToList()
+			.ForEach(item => item.QueueFree());
+	}
+	
+	private void Init(Inventory source, List<Inventory> to, string item)
 	{
 		ItemType = item;
-		CountLabel.Text = count.ToString();
+		CountLabel.Text = source.CountItem(item).ToString();
 		_to = to;
 		_sourceInventory = source;
+		source.Listeners.Add(UpdateCount);
 		
 		Button.Pressed += () =>
 		{
@@ -56,12 +72,16 @@ public partial class InventoryItem : ItemBox
 			{
 				var targetCapacity = inventory.GetMaxTransferAmount(ItemType);
 				var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
-
 				if (amountToTransfer <= 0) continue;
 				Inventory.TransferItem(_sourceInventory, inventory, ItemType, amountToTransfer);
 				break;
 			}
 		};
+	}
+
+	private void UpdateCount()
+	{
+		CountLabel.Text = _sourceInventory.CountItem(ItemType).ToString();
 	}
 
 	protected override void UpdateIcon()
@@ -83,5 +103,11 @@ public partial class InventoryItem : ItemBox
 		if (_cachedSelected == Globals.Player.Selected || string.IsNullOrEmpty(ItemType)) return;
 		_cachedSelected = Globals.Player.Selected;
 		UpdateIcon();
+	}
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		_sourceInventory.Listeners.Remove(UpdateCount);
 	}
 }

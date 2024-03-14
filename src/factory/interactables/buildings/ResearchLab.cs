@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Necromation.interfaces;
 
@@ -31,9 +32,11 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
             _researchedAmount = 0;
             return;
         }
-
-        if (!GetItems().Contains("Experiment")) return;
-        Remove("Experiment");
+    
+        
+        
+        if (!GetItems().Contains(Globals.CurrentTechnology.Ingredients[0])) return;
+        Remove(Globals.CurrentTechnology.Ingredients[0]);
         _isResearching = true;
     }
 

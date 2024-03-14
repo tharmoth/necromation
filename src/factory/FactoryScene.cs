@@ -13,8 +13,9 @@ public partial class FactoryScene : Scene
 	 * Child Accessors 													      *
 	 **************************************************************************/
 	public CraftingQueue CraftingQueue => GetNode<CraftingQueue>("%CraftingQueue");
-	public FactoryTileMap TileMap => GetNode<FactoryTileMap>("%TileMap");
+	public FactoryTileMap TileMap;
 	public Node2D GroundItemHolder;
+	public Sprite2D CursorSprite => GetNode<Sprite2D>("%CursorSprite");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -36,6 +37,7 @@ public partial class FactoryScene : Scene
 		base._Ready();
 		// Cache this here for performance reasons so we don't have to access the tree.
 		GroundItemHolder = GetNode<Node2D>("GroundItemHolder");
+		TileMap = GetNode<FactoryTileMap>("%TileMap");
 		// GetNode<GpuParticles2D>("%Party").SpeedScale = 0;
 	}
 

@@ -46,8 +46,8 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     // Private fields
     private float _secondsPerItem = .5333f;
     private float Speed => FactoryTileMap.TileSize / _secondsPerItem;
-    private Vector2I Output => MapPosition + TargetDirectionGlobal;
-    private Vector2I Input => MapPosition - TargetDirectionGlobal;
+    protected Vector2I Output => MapPosition + TargetDirectionGlobal;
+    protected Vector2I Input => MapPosition - TargetDirectionGlobal;
     private static Vector2I TargetDirectionLocal => new (0, -1);
     private AudioStreamPlayer2D _audio = new();
 

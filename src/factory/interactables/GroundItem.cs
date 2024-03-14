@@ -51,5 +51,6 @@ public class GroundItem
     public void Free()
     {
         RenderingServer.CanvasItemClear(_renderingServerId);
+        RenderingServer.FreeRid(_renderingServerId);
     }
 }

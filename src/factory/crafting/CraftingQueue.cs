@@ -29,6 +29,8 @@ public partial class CraftingQueue : Node
         var playerInventory = Globals.PlayerInventory;
         var amountToCraft = Mathf.Min(count, recipe.GetMaxCraftable(playerInventory));
         
+        if (amountToCraft <= 0) return;
+        
         //Add the ingredients from the player inventory to the crafting queue
         foreach (var (type, amount) in recipe.Ingredients)
         {
@@ -51,6 +53,10 @@ public partial class CraftingQueue : Node
         var playerInventory = Globals.PlayerInventory;
         var amountToCancel = Mathf.Min(countToCancel, item.Count);
         
+        item.Count -= countToCancel;
+        if (item.Count <= 0) _queue.Remove(item);
+        if (amountToCancel <= 0) return;
+        
         // Give the player back the canceled items.
         foreach (var (type, amount) in recipe.Ingredients)
         {
@@ -58,10 +64,6 @@ public partial class CraftingQueue : Node
         }
         
         MusicManager.PlayCraft();
-        
-        item.Count -= countToCancel;
-        if (item.Count <= 0) _queue.Remove(item);
-        
         Listeners.ForEach(listener => listener());
     }
 
@@ -81,7 +83,7 @@ public partial class CraftingQueue : Node
         recipe.Craft(_inventory, Globals.PlayerInventory);
         MusicManager.PlayCraft();
         
-        if (craftingQueueItem.Count == 0) _queue.RemoveAt(0);
+        if (craftingQueueItem.Count <= 0) _queue.RemoveAt(0);
         
         Listeners.ForEach(listener => listener());
     }

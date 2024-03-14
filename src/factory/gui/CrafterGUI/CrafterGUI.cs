@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Necromation;
+using Necromation.factory.gui;
 using Necromation.gui;
 
-public partial class CrafterGUI : Control
+public partial class CrafterGUI : DeferredUpdate
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
@@ -40,15 +41,8 @@ public partial class CrafterGUI : Control
 	{
 		_to = to;
 		_crafter = crafter;
-		
-		_to.Listeners.Add(UpdatePlayerInventory);
-		UpdatePlayerInventory();
-		
-		_crafter.GetInputInventory().Listeners.Add(UpdateSourceInventory);
-		UpdateSourceInventory();
-		
-		_crafter.GetOutputInventory().Listeners.Add(UpdateOutputInventory);
-		UpdateOutputInventory();
+
+		AddUpdateListeners(new List<Inventory> { _to, _crafter.GetInputInventory(), _crafter.GetOutputInventory() });
 
 		// Furnaces use this to display the recipe selection gui and cannot have their recipe changed.
 		if (_crafter.GetRecipe() != null) ItemSelectionItemBox.Init(to, _crafter);
@@ -62,26 +56,11 @@ public partial class CrafterGUI : Control
 		Title.Text = _crafter.ItemType;
 	}
 
-	private void UpdatePlayerInventory()
+	protected override void Update()
 	{
 		InventoryItem.UpdateInventory(_to, new List<Inventory> { _crafter.GetInputInventory()  }, InventoryItemList);
-	}
-	
-	private void UpdateSourceInventory()
-	{
 		InventoryItem.UpdateInventory(_crafter.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
-	}
-	
-	private void UpdateOutputInventory()
-	{
 		InventoryItem.UpdateInventory(_crafter.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList);
-	}
-
-	public override void _ExitTree()
-	{
-		base._ExitTree();
-		_to?.Listeners.Remove(UpdatePlayerInventory);
-		_crafter?.GetInputInventory().Listeners.Remove(UpdateSourceInventory);
-		_crafter?.GetOutputInventory().Listeners.Remove(UpdateOutputInventory);
+		Dirty = false;
 	}
 }

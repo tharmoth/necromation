@@ -37,24 +37,6 @@ format = 2
 layer_0/tile_data = PackedInt32Array(0, 0, 0, 2, 0, 0, 1, 0, 0, 65537, 0, 0, 65536, 0, 0, 65538, 0, 0, 131074, 0, 0, 131073, 0, 0, 131072, 0, 0, 3, 0, 0, 65539, 0, 0, 131075, 0, 0, 196611, 0, 0, 196610, 0, 0, 196609, 0, 0, 196608, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 196616, 0, 0, 131080, 0, 0, 65544, 0, 0, 8, 0, 0, 7, 0, 0, 6, 0, 0, 5, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 196612, 0, 0, 196613, 0, 0, 196614, 0, 0, 196615, 0, 0, 131079, 0, 0, 65543, 0, 0, 65542, 0, 0, 65541, 0, 0, 131077, 0, 0, 131078, 0, 0)
 script = ExtResource("2_xas5k")
 
-[node name="PanelContainer" type="PanelContainer" parent="TileMap"]
-offset_right = 128.0
-offset_bottom = 128.0
-scale = Vector2(0.25, 0.25)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect" type="ColorRect" parent="TileMap/PanelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="TileMap/PanelContainer"]
-layout_mode = 2
-theme = ExtResource("5_prveb")
-text = "yeetwood yeet association"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(144, 81)
@@ -294,10 +276,6 @@ visible = false
 points = PackedVector2Array(19, 80, 46, 81)
 width = 8.0
 
-[node name="SelectedSprite" type="Sprite2D" parent="."]
-unique_name_in_owner = true
-texture = ExtResource("9_w144y")
-
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -100
 
@@ -308,3 +286,11 @@ texture = ExtResource("11_8qgol")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_brqa8")
+
+[node name="Cursor" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="SelectedSprite" type="Sprite2D" parent="Cursor"]
+unique_name_in_owner = true
+position = Vector2(8, -2)
+texture = ExtResource("9_w144y")

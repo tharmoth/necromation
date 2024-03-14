@@ -211,6 +211,9 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			"Research Lab" => new ResearchLab(),
 			"Barracks" => new Barracks("recruitment"),
 			"Stone Chest" => new StoneChest(),
+			"Void Chest" => new VoidChest(),
+			"Infinite Chest" => new InfiniteChest(),
+			"Loader" => new Loader(orientation),
 			_ => null
 		};
 	}
@@ -234,6 +237,9 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			"Stone Chest" => true,
 			"Exporter" => true,
 			"Importer" => true,
+			"Void Chest" => true,
+			"Infinite Chest" => true,
+			"Loader" => true,
 			_ => false
 		};
 	}

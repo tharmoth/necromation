@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.factory.gui;
 using Necromation.gui;
 
-public partial class InventoryGUI : Control
+public partial class InventoryGUI : DeferredUpdate
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
@@ -35,31 +36,23 @@ public partial class InventoryGUI : Control
 	private void Init(Inventory inventory)
 	{
 		_inventory = inventory;
-
-		_inventory.Listeners.Add(UpdatePlayerInventory);
-		UpdatePlayerInventory();
 		
-		Globals.ResearchListeners.Add(UpdateRecipes);
-		UpdateRecipes();
+		Globals.ResearchListeners.Add(FlagDirty);
+		AddUpdateListeners(new List<Inventory> { _inventory });
 	}
-	
-	private void UpdatePlayerInventory()
+
+	protected override void Update()
 	{
 		InventoryItem.UpdateInventory(_inventory, null, InventoryItemList);
+		InventoryRecipeBox.UpdateRecipes(_inventory, RecipeButtonList);	
+		Dirty = false;
 	}
-	
-	private void UpdateRecipes()
-	{
-		InventoryRecipeBox.UpdateRecipes(_inventory, RecipeButtonList);
-	}
-	
-	
+
 	public override void _ExitTree()
 	{
 		base._ExitTree();
 		// Godot Signals are automatically disconnected when the node is freed
 		// But since we are using C# events, we need to manually disconnect them
-		Globals.ResearchListeners.Remove(UpdateRecipes);
-		_inventory.Listeners.Remove(UpdatePlayerInventory);
+		Globals.ResearchListeners.Remove(FlagDirty);
 	}
 }

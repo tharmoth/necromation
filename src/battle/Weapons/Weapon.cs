@@ -12,22 +12,25 @@ public abstract  class Weapon
     protected readonly double Cooldown = 1;
     public readonly string Name;
     public readonly int Hands = 1;
+    public readonly int Ammo;
     
     private Unit _target;
 
-    protected Weapon(string name, int range, int damage, int hands, int cooldown)
+    protected Weapon(string name, int range, int damage, int hands, int cooldown, int ammo)
     {
         Name = name;
         Range = range;
         Damage = damage;
         Cooldown = cooldown;
         Hands = hands;
+        Ammo = ammo;
     }
 
     public void Attack(Unit wielder)
     {
         Attack(wielder, _target);
-        wielder.Cooldown = -1 * Cooldown * BattleScene.TimeStep;
+        wielder.Cooldown = Cooldown * BattleScene.TimeStep;
+        wielder.Ammo[this]--;
     }
     
     protected abstract void Attack(Unit wielder, Unit target);
@@ -42,8 +45,9 @@ public abstract  class Weapon
         return CanAttack(wielder, targets, Range);
     }
     
-    protected virtual bool CanAttack(Unit wielder, List<Unit> targets, int range)
+    public virtual bool CanAttack(Unit wielder, List<Unit> targets, int range)
     {
+        if (wielder.Ammo[this] == 0) return false; 
         var targetCount = targets
             .Count(unit => unit.GlobalPosition.DistanceTo(wielder.GlobalPosition) <= range * 32);
         if (targetCount == 0)

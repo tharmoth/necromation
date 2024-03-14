@@ -24,6 +24,7 @@ public class InteractAction
     public void Interact(LayerTileMap.IEntity building)
     {
         if (building is not IInteractable interactable) return;
+        Globals.Player.Selected = null;
         interactable.Interact(_inventory);
     }
 }

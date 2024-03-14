@@ -34,7 +34,7 @@ public partial class Commander : Node2D, ITransferTarget
     public Target TargetType = Target.Closest;
     public enum Target
     {
-        Closest, Archers, Cavalry, Rearmost
+        Closest, Archers, Cavalry, Rearmost, Random
     }
 
     /**************************************************************************

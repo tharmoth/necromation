@@ -57,7 +57,7 @@ public partial class Inventory : ITransferTarget
 	/**************************************************************************
 	 * ITransferTarget Methods                                                *
 	 **************************************************************************/
-	public void Insert(string item, int count = 1)
+	public virtual void Insert(string item, int count = 1)
 	{
 		if (GetMaxTransferAmount(item) < count)
 		{
@@ -69,7 +69,7 @@ public partial class Inventory : ITransferTarget
 		itemCount += count;
 		Listeners.ForEach(listener => listener());
 	}
-	public bool Remove(string item, int count = 1)
+	public virtual bool Remove(string item, int count = 1)
 	{
 		if (!_items.TryGetValue(item, out var currentCount) || currentCount < count) return false;
 		currentCount -= count;

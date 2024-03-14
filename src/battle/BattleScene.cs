@@ -24,23 +24,73 @@ public partial class BattleScene : Scene
 		
 		if (Provence.Commanders.Count == 0)
 		{
-			var PlayerCommanderInfantry = new Commander(new Province(), "Player");
-			PlayerCommanderInfantry.Units.Insert("Gravebreaker", 500);
-			Provence.Commanders.Add(PlayerCommanderInfantry);
+			// var PlayerCommanderInfantry = new Commander(Provence, "Player");
+			// PlayerCommanderInfantry.SpawnLocation = new Vector2I(0, 0);
+			// PlayerCommanderInfantry.Units.Insert("Gravebreaker", 500);
 			
-			var EnemyCommanderInfantry = new Commander(new Province(), "Enemy");
-			EnemyCommanderInfantry.Units.Insert("Barbarian", 500);
-			Provence.Commanders.Add(EnemyCommanderInfantry);
+			var playerCavNorth = new Commander(Provence, "Player");
+			playerCavNorth.CurrentCommand = Commander.Command.HoldAndAttack;
+			playerCavNorth.TargetType = Commander.Target.Archers;
+			playerCavNorth.SpawnLocation = new Vector2I(20, 70);
+			playerCavNorth.Units.Insert("Gravebound Charger", 25);
 			
-			var PlayerCommanderArcher = new Commander(new Province(), "Player");
-			PlayerCommanderArcher.SpawnLocation = new Vector2I(0, 25);
-			PlayerCommanderArcher.Units.Insert("Skeleton Marksman", 100);
-			Provence.Commanders.Add(PlayerCommanderArcher);
+			var playerCavSouth = new Commander(Provence, "Player");
+			playerCavSouth.CurrentCommand = Commander.Command.HoldAndAttack;
+			playerCavSouth.TargetType = Commander.Target.Archers;
+			playerCavSouth.SpawnLocation = new Vector2I(20, -20);
+			playerCavSouth.Units.Insert("Gravebound Charger", 25);
 			
-			var EnemyCommanderArcher = new Commander(new Province(), "Enemy");
-			EnemyCommanderArcher.SpawnLocation = new Vector2I(30, 25);
-			EnemyCommanderArcher.Units.Insert("Archer", 100);
-			Provence.Commanders.Add(EnemyCommanderArcher);
+			var playerInfantry = new Commander(Provence, "Player");
+			// playerInfantry.CurrentCommand = Commander.Command.HoldAndAttack;
+			playerInfantry.TargetType = Commander.Target.Closest;
+			playerInfantry.SpawnLocation = new Vector2I(20, 25);
+			playerInfantry.Units.Insert("Undead Legionary", 150);
+			
+			var playerInfantry2 = new Commander(Provence, "Player");
+			// playerInfantry.CurrentCommand = Commander.Command.HoldAndAttack;
+			playerInfantry2.TargetType = Commander.Target.Closest;
+			playerInfantry2.SpawnLocation = new Vector2I(20, 25);
+			playerInfantry2.Units.Insert("Undead Legionary", 150);
+			
+			var playerInfantry3 = new Commander(Provence, "Player");
+			// playerInfantry.CurrentCommand = Commander.Command.HoldAndAttack;
+			playerInfantry3.TargetType = Commander.Target.Closest;
+			playerInfantry3.SpawnLocation = new Vector2I(20, 25);
+			playerInfantry3.Units.Insert("Undead Legionary", 150);
+			
+			var playerInfantry4 = new Commander(Provence, "Player");
+			// playerInfantry.CurrentCommand = Commander.Command.HoldAndAttack;
+			playerInfantry4.TargetType = Commander.Target.Closest;
+			playerInfantry4.SpawnLocation = new Vector2I(20, 25);
+			playerInfantry4.Units.Insert("Undead Legionary", 150);
+			
+			var playerArchers = new Commander(Provence, "Player");
+			// playerArchers.CurrentCommand = Commander.Command.HoldAndAttack;
+			playerArchers.TargetType = Commander.Target.Random;
+			playerArchers.SpawnLocation = new Vector2I(0, 25);
+			playerArchers.Units.Insert("Skeleton Marksman", 100);
+			
+			var enemyInfantry = new Commander(Provence, "Enemy");
+			enemyInfantry.SpawnLocation = new Vector2I(25, 25);
+			enemyInfantry.Units.Insert("Infantry", 200);
+			
+			var enemyInfantry2 = new Commander(Provence, "Enemy");
+			enemyInfantry2.SpawnLocation = new Vector2I(25, 25);
+			enemyInfantry2.Units.Insert("Infantry", 200);
+			
+			var enemyInfantry3 = new Commander(Provence, "Enemy");
+			enemyInfantry3.SpawnLocation = new Vector2I(25, 25);
+			enemyInfantry3.Units.Insert("Infantry", 200);
+			
+						
+			var enemyInfantry4 = new Commander(Provence, "Enemy");
+			enemyInfantry4.SpawnLocation = new Vector2I(25, 25);
+			enemyInfantry4.Units.Insert("Infantry", 200);
+			
+			var enemyArchers = new Commander(Provence, "Enemy");
+			enemyArchers.TargetType = Commander.Target.Random;
+			enemyArchers.SpawnLocation = new Vector2I(50, 25);
+			enemyArchers.Units.Insert("Archer", 100);
 		}
 		
 		foreach(var commander in Provence.Commanders)

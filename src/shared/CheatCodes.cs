@@ -14,6 +14,7 @@ public partial class CheatCodes : Node
 		base._Ready();
 		
 		// Extra insurance against breaking builds.
+		if (true) return;
 		if (!OS.IsDebugBuild()) return;
 		Database.Instance.Recipes
 			.Select(recipe => recipe.Products.First().Key)
@@ -22,6 +23,10 @@ public partial class CheatCodes : Node
 			
 		Globals.PlayerInventory.Insert("Coal Ore", 1000);
 		Globals.PlayerInventory.Insert("Bone Fragments", 1000);
+		Globals.PlayerInventory.Insert("Void Chest", 1000);
+		Globals.PlayerInventory.Insert("Infinite Chest", 1000);
+		Globals.PlayerInventory.Insert("Loader", 1000);
+        
 	}
 
 	public override void _UnhandledKeyInput(InputEvent @event)

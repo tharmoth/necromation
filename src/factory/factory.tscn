@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=38 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -29,6 +29,7 @@
 [ext_resource type="Shader" path="res://src/factory/tilt_shift.gdshader" id="25_p0fnd"]
 [ext_resource type="Script" path="res://src/factory/crafting/CraftingQueue.cs" id="26_a45ds"]
 [ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="27_0iq17"]
+[ext_resource type="Texture2D" uid="uid://do55dpcqke10p" path="res://res/sprites/unit/Gravebound Charger.png" id="30_f2ivr"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
 streams_count = 1
@@ -145,6 +146,7 @@ amount = 2800
 [node name="GUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 2
+follow_viewport_enabled = true
 script = ExtResource("2_pkiw0")
 
 [node name="PanelContainer" type="PanelContainer" parent="GUI"]
@@ -541,3 +543,11 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="DayNight" parent="." instance=ExtResource("27_0iq17")]
+
+[node name="CursorLayor" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="CursorSprite" type="Sprite2D" parent="CursorLayor"]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("30_f2ivr")

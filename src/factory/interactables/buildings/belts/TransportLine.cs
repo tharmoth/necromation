@@ -33,6 +33,7 @@ public partial class TransportLine : ITransferTarget
     private List<Vector2> _targetLocations = new();
 
     public float _secondsPerItem = .5333f;
+    // public float _secondsPerItem = 1.0f;
     private const int MaxItems = 5;
     
     /**************************************************************************
@@ -60,10 +61,10 @@ public partial class TransportLine : ITransferTarget
     public void Init(Vector2 globalPosition)
     {
         _cachePosition = globalPosition;
-        _itemsOnBelt.ForEach(item =>
+        for (int i = 0; i < _itemsOnBelt.Count; i++)
         {
-            item.GlobalPosition = _cachePosition + GetTargetLocation(4);
-        });
+            _itemsOnBelt[i].GlobalPosition = _cachePosition + GetTargetLocation(i);
+        }
     }
 
     public void Process(double delta)
@@ -74,6 +75,7 @@ public partial class TransportLine : ITransferTarget
             if (groundItem.CacheIndex != i)
             {
                 var targetLocation = _cachePosition + GetTargetLocation(i);
+                
                 // Slide the item along the belt until it reaches the bottom of the belt.
                 if (groundItem.GlobalPosition.DistanceTo(targetLocation) > Speed * (float)delta)
                 {
@@ -96,6 +98,11 @@ public partial class TransportLine : ITransferTarget
         }
         
         initalized = true;
+    }
+
+    private void GetNextItem()
+    {
+        
     }
 
     public int GetItemCount(string item = null)
@@ -171,6 +178,11 @@ public partial class TransportLine : ITransferTarget
         if (IsEqualApprox(item.GlobalPosition, Vector2.Zero, 1))
         {
             item.GlobalPosition = _cachePosition + GetTargetLocation(_itemsOnBelt.Count - 1);
+        }
+        else
+        {
+            int i = 0;
+            i++;
         }
     }
     

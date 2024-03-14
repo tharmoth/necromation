@@ -29,6 +29,7 @@ public partial class TechPanel : PanelContainer
 		}
 		
 		TitleLabel.Text = Tech.Name;
+		CostTexture.Texture = Database.Instance.GetTexture(Tech.Ingredients.First());
 		CostLabel.Text = Tech.Count.ToString();
 		DescriptionLabel.Text = Tech.Description;
 

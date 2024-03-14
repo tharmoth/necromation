@@ -124,13 +124,14 @@ public class Database
         var range =  dict.TryGetValue("range", out var rangeVariant) ? rangeVariant.As<int>() : 1;
         var protection =  dict.TryGetValue("protection", out var protectionVariant) ? protectionVariant.As<int>() : 1;
         var weight =  dict.TryGetValue("weight", out var weightVariant) ? weightVariant.As<int>() : 1;
-        var hands = dict.TryGetValue("hands", out var handsVariant) ? weightVariant.As<int>() : 1;
+        var hands = dict.TryGetValue("hands", out var handsVariant) ? handsVariant.As<int>() : 1;
+        var ammo = dict.TryGetValue("ammo", out var ammoVariant) ? ammoVariant.As<int>() : -1;
         
 
         return type switch
         {
-            "melee" => new MeleeWeapon(name, range, damage, hands, 1),
-            "ranged" => new RangedWeapon(name, range, damage, hands, 6),
+            "melee" => new MeleeWeapon(name, range, damage, hands, 1, ammo),
+            "ranged" => new RangedWeapon(name, range, damage, hands, 6, ammo),
             "armor" => new Armor(name, protection, weight),
             _ => null
         };
@@ -160,7 +161,8 @@ public class Database
         {
             Name = name,
             Weapons = dict.TryGetValue("weapons", out var weapons) ? weapons.As<Godot.Collections.Array<string>>().ToList() : new List<string>(),
-            Armor = dict.TryGetValue("armor", out var armor) ? armor.As<Godot.Collections.Array<string>>().ToList() : new List<string>()
+            Armor = dict.TryGetValue("armor", out var armor) ? armor.As<Godot.Collections.Array<string>>().ToList() : new List<string>(),
+            Mount = dict.TryGetValue("mount", out var mount) ? mount.AsString() : "None"
         };
     }
     
@@ -169,6 +171,7 @@ public class Database
         public string Name;
         public List<string> Weapons;
         public List<string> Armor;
+        public string Mount = "None";
     }
     #endregion
 
@@ -197,7 +200,7 @@ public class Database
         if (!FileAccess.FileExists(path))
         {
             GD.PrintErr("Failed to load texture: " + name);
-            return new Texture2D();
+            return type == "unit" ? GetTexture("Awoken Skeleton") : new Texture2D();
         }
         
         texture = GD.Load<Texture2D>(path.Replace(".import", ""));
