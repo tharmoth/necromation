@@ -81,9 +81,13 @@ public partial class CraftingQueue : Node
         craftingQueueItem.Count--;
         var recipe = Database.Instance.GetRecipe(craftingQueueItem.RecipeName);
         recipe.Craft(_inventory, Globals.PlayerInventory);
-        MusicManager.PlayCraft();
-        
-        if (craftingQueueItem.Count <= 0) _queue.RemoveAt(0);
+
+
+        if (craftingQueueItem.Count <= 0)
+        {
+            _queue.RemoveAt(0);
+            MusicManager.PlayCraft();
+        }
         
         Listeners.ForEach(listener => listener());
     }

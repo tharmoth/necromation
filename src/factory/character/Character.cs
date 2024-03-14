@@ -72,9 +72,6 @@ public partial class Character : Node2D
 	public override void _Process(double delta)
 	{
 		if (Globals.FactoryScene.TileMap.GetEntity(MapPosition, FactoryTileMap.Building) is Belt belt) belt.MovePlayer(this, delta);
-		
-		// Return if a gui is open
-		if (Globals.FactoryScene.Gui.IsAnyGuiOpen()) return;
 
 		// Process button presses
 		if (!_removeBuildingAction.IsRemoving)
@@ -85,8 +82,10 @@ public partial class Character : Node2D
 			if (Input.IsActionPressed("up")) newPosition += new Vector2(0, -Speed * (float)delta);
 			if (Input.IsActionPressed("down")) newPosition += new Vector2(0, Speed * (float)delta);
 			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) Position = newPosition;
-			
 		}
+		
+		// Return if a gui is open
+		if (Globals.FactoryScene.Gui.IsAnyGuiOpen()) return;
 
 		// Mine action should be here as it should repeat without inputevents.
 		if (_mineAction.ShouldMine()) _mineAction.Mine();

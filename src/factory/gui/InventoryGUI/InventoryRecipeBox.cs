@@ -13,6 +13,11 @@ public partial class InventoryRecipeBox : ItemBox
 	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_recipe_box.tscn");
 	
 	/**************************************************************************
+	 * Child Accessors 													      *
+	 **************************************************************************/
+	private ColorRect CannotCraftRect => GetNode<ColorRect>("%CannotCraftRect");
+	
+	/**************************************************************************
 	 * State Data          													  *
 	 **************************************************************************/
 	private Inventory TargetInventory { get; set; } = new();
@@ -84,6 +89,7 @@ public partial class InventoryRecipeBox : ItemBox
 			currentCraftableCount = Math.Min(currentCraftableCount, TargetInventory.CountItem(item) / count);
 		}
 		CountLabel.Text = currentCraftableCount.ToString();
+		CannotCraftRect.Visible = currentCraftableCount == 0;
 	}
 	
 	public override void _ExitTree()

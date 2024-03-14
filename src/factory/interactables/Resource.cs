@@ -18,24 +18,27 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     private Tween _progressTween;
     private Tween _jiggleTween;
     private Sprite2D _sprite = new();
-    private ProgressBar _progressBar = new();
     private AudioStreamPlayer2D _audio = new();
     private AudioStreamPlayer2D _bonusAudio = new();
     
     private GpuParticles2D _particles = GD.Load<PackedScene>("res://src/factory/interactables/buildings/drilling.tscn").Instantiate<GpuParticles2D>();
+    
+    private float _progressPercent;
+    public float ProgressPercent
+    {
+        get => _progressPercent;
+        set
+        {
+            _progressPercent = value;
+            Globals.FactoryScene.Gui.SetProgress(value);
+        }
+    }
     
     public Resource(string itemType)
     {
         Type = itemType;
         _sprite.Texture = Database.Instance.GetTexture(Type);
         AddChild(_sprite);
-        
-        _progressBar.Scale = new Vector2(0.25f, 0.25f);
-        _progressBar.Position -= new Vector2(16, -6);
-        _progressBar.Size = new Vector2(128, 28);
-        _progressBar.ShowPercentage = false;
-        _progressBar.Visible = false;
-        // AddChild(_progressBar);
 
         var stream = new AudioStreamRandomizer();
         stream.AddStream(0, GD.Load<AudioStream>("res://res/sfx/zapsplat_industrial_pick_axe_single_hit_on_rock_002_103427.mp3"));
@@ -85,13 +88,12 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     public void Interact(Inventory playerInventory)
     {
         if (!CanInteract() || _progressTween != null) return;
-        
-        _progressBar.Value = 0;
-        _progressBar.Visible = true;
+
+        ProgressPercent = 0;
 
         _progressTween?.Kill();
         _progressTween = CreateTween();
-        _progressTween.TweenProperty(_progressBar, "value", 100, _duration);
+        _progressTween.TweenProperty(this, "ProgressPercent", 1.0f, _duration);
         _progressTween.TweenCallback(Callable.From(() => Complete(playerInventory)));
         
         _jiggleTween?.Kill();
@@ -106,8 +108,7 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     protected void Complete(Inventory playerInventory)
     {
         _progressTween = null;
-        _progressBar.Value = 0;
-        _progressBar.Visible = false;
+        ProgressPercent = 1.0f;
         _particles.Emitting = false;
 
         playerInventory.Insert(Type);
@@ -137,8 +138,7 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     {
         _progressTween?.Kill();
         _progressTween = null;
-        _progressBar.Value = 0;
-        _progressBar.Visible = false;
+        ProgressPercent = 0;
         _particles.Emitting = false;
     }
 

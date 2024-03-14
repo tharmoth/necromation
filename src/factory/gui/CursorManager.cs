@@ -36,12 +36,10 @@ public partial class CursorManager : Node
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		UpdateSelected();
-		UpdatePosition();
-		
+
 		if (Globals.Player.Selected == _cachedSelected) return;
 		_cachedSelected = Globals.Player.Selected;
-		
+		UpdateSelected();
 	}
 	
 	private void UpdateSelected()
@@ -69,7 +67,7 @@ public partial class CursorManager : Node
 	
 	public override void _Input(InputEvent @event)
 	{
-
+		UpdatePosition();
 	}
 
 	private void UpdatePosition()
@@ -93,7 +91,7 @@ public partial class CursorManager : Node
 		}
 
 		// Mark that the cursor is over a gui. Will be unmarked if it is not over a gui in UnhandledInput.
-		_cursorOverGui = false;
+		_cursorOverGui = true;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)

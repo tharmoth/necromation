@@ -91,8 +91,22 @@ public partial class IngrediantsPopup : PanelContainer
 
 	private void AddRow(string name, int amount)
 	{
-		var label = new Label();
-		label.Text = amount + " x " + name;
+		RichTextLabel label = new();
+
+		var playerCount = Globals.PlayerInventory.CountItem(name);
+		if (playerCount >= amount)
+		{
+			label.Text += amount + " x " + name;
+		}
+		else
+		{
+			label.Text += "[color=ef9698]" + playerCount + "/" + amount + " x " + name + "[/color]";
+		}
+		label.AutowrapMode = TextServer.AutowrapMode.Off;
+		label.BbcodeEnabled = true;
+		label.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		label.SizeFlagsVertical = SizeFlags.Fill;
+		label.FitContent = true;
 		
 		var texture = new TextureRect();
 		texture.Texture = Database.Instance.GetTexture(name);
