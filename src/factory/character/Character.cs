@@ -28,17 +28,9 @@ public partial class Character : Node2D
 	/**************************************************************************
 	 * Cursor and Building Placement                                          *
 	 *************************************************************************/
-	private Tween _cursorColorTween;
-	private Sprite2D _cursorSprite;
-	private Building _buildingInHand;
-	private int _rotationDegrees;
-	public IRotatable.BuildingOrientation Orientation => IRotatable.GetOrientationFromDegrees(_rotationDegrees);
-	private string _selected;
-	public string Selected
-	{
-		get => _selected;
-		set => SetSelected(value);
-	}
+	public int SelectionRotationDegrees;
+	public IRotatable.BuildingOrientation SelectionOrientation => IRotatable.GetOrientationFromDegrees(SelectionRotationDegrees);
+	public string Selected;
 
 	/**************************************************************************
 	 * Actions                                                                *
@@ -75,20 +67,10 @@ public partial class Character : Node2D
 	public override void _Ready()
 	{
 		AddToGroup("player");
-		_cursorSprite = new Sprite2D();
-		_cursorSprite.ZIndex = 100;
-		_cursorSprite.Visible = false;
-		_cursorSprite.Texture =  Database.Instance.GetTexture("Selection");
-		Globals.FactoryScene.CallDeferred("add_child", _cursorSprite);
 	}
 	
 	public override void _Process(double delta)
 	{
-		// Process mouseover
-		if (Selected != null) SelectedPreview();
-		else if (Globals.FactoryScene.TileMap.GetBuildingAtMouse() != null || Globals.FactoryScene.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
-		else _cursorSprite.Visible = false;
-
 		if (Globals.FactoryScene.TileMap.GetEntity(MapPosition, FactoryTileMap.Building) is Belt belt) belt.MovePlayer(this, delta);
 		
 		// Return if a gui is open
@@ -113,6 +95,7 @@ public partial class Character : Node2D
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
+
 		// Gui input actions
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
@@ -135,70 +118,9 @@ public partial class Character : Node2D
 	 ******************************************************************/
 	public void RotateSelection()
 	{
-		if (!Building.IsBuilding(_selected) || Building.GetBuilding(_selected, Orientation) is not IRotatable) return;
-		_rotationDegrees += 90;
-		if (_rotationDegrees == 360) _rotationDegrees = 0;
-	}
-	
-	/******************************************************************
-	 * Mouseover                                                      *
-	 ******************************************************************/
-	private void MouseoverEntity()
-	{
-		_cursorSprite.Visible = true;
-		_cursorSprite.Modulate = Colors.White;
-		_cursorSprite.Position = Globals.FactoryScene.TileMap.ToMap(GetGlobalMousePosition());
-
-		if (_cursorColorTween != null) return;
-
-		_cursorColorTween = GetTree().CreateTween();
-		_cursorColorTween.TweenProperty(_cursorSprite, "modulate", Colors.Transparent, 0.5f);
-		_cursorColorTween.TweenProperty(_cursorSprite, "modulate", Colors.White, 0.5f);
-		_cursorColorTween.TweenCallback(Callable.From(() => _cursorColorTween = null));
-	}
-
-	private void SelectedPreview()
-	{
-		_cursorColorTween?.Kill();
-		_cursorColorTween = null;
-		_cursorSprite.Visible = true;
-		_cursorSprite.RotationDegrees = _rotationDegrees;
-		_cursorSprite.Position = Globals.FactoryScene.TileMap.ToMap(GetGlobalMousePosition());
-		_cursorSprite.Modulate = Colors.White;
-		
-		if (!Building.IsBuilding(Selected)) return;
-
-		if (_buildingInHand is IRotatable rotatable)
-			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(_rotationDegrees);
-		
-		if (_buildingInHand.BuildingSize.X % 2 == 0) _cursorSprite.Position += new Vector2(16, 0);
-		if (_buildingInHand.BuildingSize.Y % 2 == 0) _cursorSprite.Position += new Vector2(0, 16);
-		
-		_cursorSprite.Modulate = _buildingInHand.CanPlaceAt(GetGlobalMousePosition())
-			? new Color(0, 1, 0, 0.5f)
-			: new Color(1, 0, 0, 0.5f);
-	}
-	
-	private void SetSelected(string value)
-	{
-		_selected = value;
-		_cursorSprite.Texture = _selected == null
-			? Database.Instance.GetTexture("Selection")
-			: Database.Instance.GetTexture(_selected);
-
-		_cursorSprite.Scale = !Building.IsBuilding(_selected)
-			? new Vector2(32 / (float)_cursorSprite.Texture.GetWidth(), 32 / (float)_cursorSprite.Texture.GetHeight())
-			: new Vector2(1, 1);
-
-		if (Building.IsBuilding(Selected))
-		{
-			_buildingInHand = Building.GetBuilding(Selected, Orientation);
-			if (_buildingInHand is not IRotatable) _rotationDegrees = 0;
-		}
-		else
-		{
-			_buildingInHand = null;
-		}
+		if (!Building.IsBuilding(Selected) || Building.GetBuilding(Selected, SelectionOrientation) is not IRotatable) return;
+		SelectionRotationDegrees += 90;
+		if (SelectionRotationDegrees == 360) SelectionRotationDegrees = 0;
 	}
 	
 	/******************************************************************

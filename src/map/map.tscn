@@ -287,10 +287,6 @@ texture = ExtResource("11_8qgol")
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_brqa8")
 
-[node name="Cursor" type="CanvasLayer" parent="."]
-layer = 3
-
-[node name="SelectedSprite" type="Sprite2D" parent="Cursor"]
+[node name="SelectedSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(8, -2)
 texture = ExtResource("9_w144y")

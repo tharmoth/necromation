@@ -20,7 +20,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		get => _globalPosition;
 		set => _globalPosition = value;
 	}
-	protected Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
+	public Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
 	public string Id => _id;
 	
 	/**************************************************************************

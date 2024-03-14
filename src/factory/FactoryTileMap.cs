@@ -7,6 +7,7 @@ using Godot.Collections;
 using Necromation;
 using Necromation.map;
 using Necromation.sk;
+using Resource = Necromation.Resource;
 
 public partial class FactoryTileMap : LayerTileMap
 {
@@ -169,13 +170,13 @@ public partial class FactoryTileMap : LayerTileMap
 		return Globals.FactoryScene.TileMap.GetEntity(mapPos, Resource) != null;
 	}
 
-	public IEntity GetBuildingAtMouse()
+	public Building GetBuildingAtMouse()
 	{
-		return GetEntity(GetGlobalMousePosition(), Building);
+		return GetEntity(GetGlobalMousePosition(), Building) as Building;
 	}
 	
-	public IEntity GetResourceAtMouse()
+	public Resource GetResourceAtMouse()
 	{
-		return GetEntity(GetGlobalMousePosition(), Resource);
+		return GetEntity(GetGlobalMousePosition(), Resource) as Resource;
 	}
 }

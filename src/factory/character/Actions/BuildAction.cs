@@ -20,7 +20,7 @@ public class BuildAction
     
     public bool Build()
     {
-        var building = Building.GetBuilding(Globals.Player.Selected, Globals.Player.Orientation);
+        var building = Building.GetBuilding(Globals.Player.Selected, Globals.Player.SelectionOrientation);
         if (!_inventory.Items.ContainsKey(building.ItemType))
         {
             Globals.Player.Selected = null;

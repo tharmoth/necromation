@@ -66,7 +66,15 @@ public partial class InventoryItem : ItemBox
 				Globals.Player.Selected = ItemType;
 				return;
 			}
-			var sourceCount = Input.IsActionPressed("shift") ? _sourceInventory.Items[ItemType] : 1;
+
+			var sourceCount = 1;
+			if (Input.IsActionPressed("shift"))
+			{
+				sourceCount = _sourceInventory.Items[ItemType];
+			} else if (Input.IsActionPressed("control"))
+			{
+				sourceCount = Math.Min(5, _sourceInventory.Items[ItemType]);
+			}
 
 			foreach (var inventory in _to)
 			{
