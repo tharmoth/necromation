@@ -47,6 +47,42 @@ public class BuildAction
         Globals.BuildingManager.AddBuilding(building, position);
 
         if(!_inventory.Items.ContainsKey(building.ItemType)) Globals.Player.Selected = null;
+
+        PlayBuildAnimation();
         return true;
+    }
+
+    private Tween buildTween;
+    
+    
+    private void PlayBuildAnimation()
+    {
+        if (buildTween != null) return;
+        var sprite = Globals.Player.Hands;
+        sprite.Visible = true;
+        sprite.Position = Vector2.Zero;
+
+        buildTween = Globals.Tree.CreateTween();
+        buildTween.SetEase(Tween.EaseType.In);
+        buildTween.SetTrans(Tween.TransitionType.Quart);
+        
+        buildTween.TweenInterval(.05f);
+        buildTween.TweenProperty(sprite, "position:y", -96, .5f);
+        buildTween.TweenInterval(.5f);
+        buildTween.TweenCallback(Callable.From(() => sprite.Visible = false));
+        buildTween.TweenCallback(Callable.From(() => buildTween = null));
+        
+        var jiggletween = Globals.Tree.CreateTween();
+        jiggletween.TweenInterval(.25f);
+        
+        var tweenTime = 1.0f;
+        var jiggleCount = 5;
+        for (int i = 0; i < 2; i++)
+        {
+            jiggletween.TweenProperty(sprite, "position:x", 
+                GD.RandRange(-12, 12), .1);
+        }
+		
+        jiggletween.TweenProperty(sprite, "position:x", 0, .1);
     }
 }

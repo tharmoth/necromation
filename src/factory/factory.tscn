@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=42 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -26,11 +26,14 @@
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
 [ext_resource type="Script" path="res://src/factory/BuildingManager.cs" id="23_g3xjq"]
 [ext_resource type="Texture2D" uid="uid://cfafwwpbyr8yn" path="res://res/sprites/particles/SoftLight.png" id="23_hyyce"]
+[ext_resource type="Texture2D" uid="uid://8ybyljlq1nvu" path="res://res/sprites/Player2.png" id="23_vsfrk"]
+[ext_resource type="Texture2D" uid="uid://cs1hp40el17pt" path="res://res/sprites/hands.png" id="24_c65jo"]
 [ext_resource type="Shader" path="res://src/factory/tilt_shift.gdshader" id="25_p0fnd"]
 [ext_resource type="Script" path="res://src/factory/crafting/CraftingQueue.cs" id="26_a45ds"]
 [ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="27_0iq17"]
 [ext_resource type="Script" path="res://src/factory/gui/CursorManager.cs" id="30_ilgnm"]
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="31_o81rd"]
+[ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="32_aktb2"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
 streams_count = 1
@@ -485,10 +488,14 @@ position = Vector2(2459, 1778)
 script = ExtResource("2_vcqpu")
 
 [node name="Sprite2D" type="Sprite2D" parent="Character"]
-scale = Vector2(2, 2)
-texture = ExtResource("1_4vku0")
-region_enabled = true
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("23_vsfrk")
 region_rect = Rect2(64, 0, 32, 32)
+
+[node name="Hands" type="Sprite2D" parent="Character/Sprite2D"]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("24_c65jo")
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 unique_name_in_owner = true
@@ -577,3 +584,13 @@ text = "testtttttttttttttt"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+clip_children = 1
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+
+[node name="Sprite2D" type="Sprite2D" parent="ColorRect"]
+position = Vector2(35, 33)
+texture = ExtResource("32_aktb2")

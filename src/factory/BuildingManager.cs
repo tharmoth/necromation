@@ -31,7 +31,7 @@ public partial class BuildingManager : Node
         };
         building.Sprite.TreeExited += building._ExitTree;
         building.GlobalPosition = globalPosition;
-        Globals.FactoryScene.AddChild(building.Sprite);
+        Globals.FactoryScene.AddChild(building.ClipRect);
     }
     
     public override void _Process(double delta)

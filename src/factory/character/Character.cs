@@ -19,6 +19,7 @@ public partial class Character : Node2D
 	 **************************************************************************/
 	public PointLight2D Light => GetNode<PointLight2D>("%Light");
 	private AudioStreamPlayer ClickAudio => GetNode<AudioStreamPlayer>("%ClickAudio");
+	public Sprite2D Hands => GetNode<Sprite2D>("%Hands");
 	
 	/**************************************************************************
 	 * Logic Variables                                                        *

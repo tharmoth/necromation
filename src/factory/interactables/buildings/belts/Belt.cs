@@ -13,6 +13,9 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public override string ItemType => "Belt";
     public TransportLine LeftLine { get; private set; }
     public TransportLine RightLine { get; private set; }
+
+    public float Rotation => Mathf.DegToRad(RotationDegrees);
+    public float RotationDegrees => IRotatable.GetDegreesFromOrientation(Orientation);
     
     private IRotatable.BuildingOrientation _orientation;
     public override IRotatable.BuildingOrientation Orientation
@@ -80,8 +83,8 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         LeftLine.TargetDirectionGlobal = TargetDirectionGlobal;
         RightLine.TargetDirectionGlobal = TargetDirectionGlobal;
             
-        LeftLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(Sprite.GlobalRotation));
-        RightLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(Sprite.GlobalRotation));
+        LeftLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(Rotation));
+        RightLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(Rotation));
         
         // When this belt is placed, update the input and output of all adjacent belts
         GetAdjacent().Values.Where(belt => belt != null).ToList().ForEach(belt => belt.UpdateInputOutput(belt, belt.GetAdjacent()));
@@ -182,7 +185,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     
     private Belt GetBeltInDirection(Vector2 direction)
     {
-        var global = Sprite.ToGlobal(direction * FactoryTileMap.TileSize);
+        var global = GlobalPosition + direction.Rotated(Rotation) * FactoryTileMap.TileSize;
         var map = Globals.FactoryScene.TileMap.GlobalToMap(global);
         var entity = Globals.FactoryScene.TileMap.GetEntity(map, FactoryTileMap.Building);
 

@@ -67,6 +67,7 @@ public class Mine : Building, IInteractable, ITransferTarget
     public override void _Process(double delta)
     {
         base._Process(delta);
+        if (!BuildComplete) return;
         if (GetMaxTransferAmount(_resource.ItemType) == 0)
         {
             if (_audio.Playing) _audio.Stop();

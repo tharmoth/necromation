@@ -114,11 +114,11 @@ public partial class Inserter : Building, IRotatable
         _belt = _to as Belt;
         if (_belt != null)
         {
-            _insertLeft = TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees + 90, RotationDegrees)
-                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees, RotationDegrees - 90)
-                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees, RotationDegrees - 180)
-                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees - 270, RotationDegrees)
-                          || TransportLine.IsEqualApprox(_belt.Sprite.RotationDegrees - 180, RotationDegrees);
+            _insertLeft = TransportLine.IsEqualApprox(_belt.RotationDegrees + 90, RotationDegrees)
+                          || TransportLine.IsEqualApprox(_belt.RotationDegrees, RotationDegrees - 90)
+                          || TransportLine.IsEqualApprox(_belt.RotationDegrees, RotationDegrees - 180)
+                          || TransportLine.IsEqualApprox(_belt.RotationDegrees - 270, RotationDegrees)
+                          || TransportLine.IsEqualApprox(_belt.RotationDegrees - 180, RotationDegrees);
         }
         
         ResetListeners();

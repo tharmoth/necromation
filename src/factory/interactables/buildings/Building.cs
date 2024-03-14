@@ -34,29 +34,39 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	/**************************************************************************
 	 * Visuals Variables 													  *
 	 **************************************************************************/
-	private static readonly PackedScene ParticleScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/place_particles.tscn");
+	// private static readonly PackedScene ParticleScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/place_particles.tscn");
+	private static readonly PackedScene ParticleScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/dirt.tscn");
 	private static readonly AudioStream PlaceSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
+	private static readonly AudioStream GrindSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_transport_bicycle_ride_gravel_onboard_pov_10530.mp3");
+
 	private AudioStreamPlayer2D _audio = new();
 	private GpuParticles2D _particles;
 	public readonly Sprite2D Sprite = new();
 	private VisibleOnScreenNotifier2D Notifier = new();
+	public ColorRect ClipRect = new();
+	protected bool BuildComplete = false;
 
 	protected Building()
 	{
-		Sprite.AddChild(_audio);
-		
 		Notifier.ScreenEntered += () => IsOnScreen = true;
 		Notifier.ScreenExited += () => IsOnScreen = false;
-		Sprite.AddChild(Notifier);
 		
-		_audio.Stream = PlaceSound;
+		
+		_audio.Stream = GrindSound;
 		
 		_particles = ParticleScene.Instantiate<GpuParticles2D>();
 		_particles.OneShot = true;
-		_particles.Emitting = true;
 		_particles.ZAsRelative = true;
 		_particles.ZIndex = -1;
-		Sprite.CallDeferred("add_child", _particles);
+		
+		Sprite.AddChild(_audio);
+		// Sprite.AddChild(_particles);
+		Sprite.AddChild(Notifier);
+		
+		ClipRect.AddChild(_particles);
+		ClipRect.AddChild(Sprite);
+		ClipRect.ClipChildren = CanvasItem.ClipChildrenMode.Only;
+		ClipRect.MouseFilter = Control.MouseFilterEnum.Ignore;
 	}
 
 	public virtual void _Process(double delta)
@@ -109,21 +119,92 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			Sprite.Texture = Database.Instance.GetTexture(ItemType);
 		// }
 
+		
 		GlobalPosition = Globals.FactoryScene.TileMap.ToMap(GlobalPosition);
-		Sprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(GlobalPosition);
-		Sprite.GlobalPosition += GetSpriteOffset();
+
 
 		var positions = GetOccupiedPositions(GlobalPosition);
 		positions.ForEach(pos => Globals.FactoryScene.TileMap.AddEntity(pos, this, FactoryTileMap.Building));
-		
-		// Avoid death on load
-		_audio.CallDeferred("play");
+
+		PlayBuildAnimation();
 	}
 
 	public virtual void _ExitTree()
 	{
 		Globals.FactoryScene.TileMap.RemoveEntity(this);
 	}
+
+	private void PlayBuildAnimation()
+	{
+		_particles.Emitting = true;
+		ClipRect.GlobalPosition = GlobalPosition + GetSpriteOffset() - new Vector2(32 * BuildingSize.X, 32 * BuildingSize.Y) / 2;
+		ClipRect.CustomMinimumSize = new Vector2(32 * BuildingSize.X, 32 * BuildingSize.Y);
+		
+		// Add some margins
+		ClipRect.GlobalPosition -= Vector2.One * 4;
+		ClipRect.CustomMinimumSize += Vector2.One * 8;
+		
+		// Avoid death on load
+		_audio.CallDeferred("play", (float)GD.RandRange(0.0f, 20.0f));
+		_audio.VolumeDb = -20;
+		_audio.PitchScale = .25f;
+
+		var spriteTargetPos = Globals.FactoryScene.TileMap.ToMap(GlobalPosition) + GetSpriteOffset();
+		Sprite.GlobalPosition = spriteTargetPos;
+		Sprite.GlobalPosition -= Vector2.Up * 32 * BuildingSize.Y;
+		Sprite.GlobalPosition -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
+
+		var tweenTime = 1.0f;
+		
+		var tweeny = Globals.Tree.CreateTween();
+		tweeny.TweenProperty(Sprite, "global_position:y", spriteTargetPos.Y, tweenTime);
+		var tweeny2 = Globals.Tree.CreateTween();
+		tweeny2.SetEase(Tween.EaseType.InOut);
+		
+
+		var jiggleCount = 5;
+		for (int i = 0; i < jiggleCount - 1; i++)
+		{
+			tweeny2.TweenProperty(Sprite, "global_position:x", 
+				spriteTargetPos.X + GD.RandRange(-3, 3), tweenTime / jiggleCount);
+		}
+		
+		tweeny2.TweenProperty(Sprite, "global_position:x", spriteTargetPos.X, tweenTime / jiggleCount);
+		tweeny2.TweenCallback(Callable.From(() => _audio.Stop()));
+		tweeny2.TweenCallback(Callable.From(() => BuildComplete = true));
+	}
+	
+	private void PlayRemoveAnimation()
+	{
+		_particles.Emitting = true;
+		// Avoid death on load
+		_audio.CallDeferred("play", (float)GD.RandRange(0.0f, 20.0f));
+		_audio.VolumeDb = -20;
+		_audio.PitchScale = .25f;
+
+		var spriteTargetPos =Sprite.GlobalPosition;
+		spriteTargetPos -= Vector2.Up * 32 * BuildingSize.Y;
+		spriteTargetPos -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
+
+		var tweenTime = 1.0f;
+		
+		var tweeny = Globals.Tree.CreateTween();
+		tweeny.TweenProperty(Sprite, "global_position:y", spriteTargetPos.Y, tweenTime);
+		var tweeny2 = Globals.Tree.CreateTween();
+		tweeny2.SetEase(Tween.EaseType.InOut);
+
+		var jiggleCount = 5;
+		for (int i = 0; i < jiggleCount - 1; i++)
+		{
+			tweeny2.TweenProperty(Sprite, "global_position:x", 
+				spriteTargetPos.X + GD.RandRange(-3, 3), tweenTime / jiggleCount);
+		}
+		
+		tweeny2.TweenProperty(Sprite, "global_position:x", spriteTargetPos.X, tweenTime / jiggleCount);
+		tweeny2.TweenCallback(Callable.From(() => _audio.Stop()));
+		tweeny2.TweenCallback(Callable.From(() => ClipRect.QueueFree()));
+	}
+	
 
 	/******************************************************************
 	 * Public Methods                                                 *
@@ -150,7 +231,6 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	{
 		Globals.FactoryScene.TileMap.RemoveEntity(this);
 		Globals.BuildingManager.RemoveBuilding(this);
-		Globals.FactoryScene.Gui.PlayBuildingRemovedAudio();
 		
 		if (to != null)
 		{
@@ -158,9 +238,8 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			to.Insert(ItemType);
 			SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, 0));
 		}
-		
-		Sprite.Visible = false;
-		Sprite.QueueFree();
+
+		PlayRemoveAnimation();
 	}
 
 	protected void TransferInventories(Inventory to)
