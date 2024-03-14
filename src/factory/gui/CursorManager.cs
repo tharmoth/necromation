@@ -11,6 +11,7 @@ public partial class CursorManager : Node
 	private Sprite2D CursorItemSprite => GetNode<Sprite2D>("%CursorItemSprite");
 	private Sprite2D CursorBuildingSprite => GetNode<Sprite2D>("%CursorBuildingSprite");
 	private Sprite2D CursorEntitySprite => GetNode<Sprite2D>("%CursorEntitySprite");
+	private Label CursorItemCount => GetNode<Label>("%CursorItemCount");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -20,12 +21,27 @@ public partial class CursorManager : Node
 	private Building _buildingInHand;
 	private string _cachedSelected = "";
 
+	public override void _Ready()
+	{
+		base._Ready();
+		Globals.PlayerInventory.Listeners.Add(UpdateLabel);
+	}
+
+	private void UpdateLabel()
+	{
+		var count = Globals.Player.Selected != null ? Globals.PlayerInventory.CountItem(Globals.Player.Selected) : 0;
+		CursorItemCount.Text = count != 0 ? count.ToString() : "";
+	}
+
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
+		UpdateSelected();
+		UpdatePosition();
+		
 		if (Globals.Player.Selected == _cachedSelected) return;
 		_cachedSelected = Globals.Player.Selected;
-		UpdateSelected();
+		
 	}
 	
 	private void UpdateSelected()
@@ -47,10 +63,18 @@ public partial class CursorManager : Node
 		{
 			_buildingInHand = null;
 		}
+
+		UpdateLabel();
 	}
 	
 	public override void _Input(InputEvent @event)
 	{
+
+	}
+
+	private void UpdatePosition()
+	{
+		CursorItemCount.Position = Globals.Player.GetGlobalMousePosition() + new Vector2(16, 16);
 		// Process mouseover
 		if (Globals.Player.Selected != null && Building.IsBuilding(Globals.Player.Selected) && !_cursorOverGui) SelectedBuildingPreview();
 		else if (Globals.Player.Selected != null) SelectedItemPreview();
@@ -69,7 +93,7 @@ public partial class CursorManager : Node
 		}
 
 		// Mark that the cursor is over a gui. Will be unmarked if it is not over a gui in UnhandledInput.
-		_cursorOverGui = true;
+		_cursorOverGui = false;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)

@@ -40,7 +40,7 @@ public class Barracks : Assembler
 
     protected override bool MaxOutputItemsReached()
     {
-        return _outputInventory.CountItem(GetRecipe().Products.First().Key) > GetRecipe().Products.First().Value * 200;
+        return _outputInventory.CountItem(GetRecipe().Products.First().Key) >= GetRecipe().Products.First().Value * 200;
     }
     
     private void SpawnCommander()

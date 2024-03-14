@@ -214,8 +214,8 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		var nextPosition = GetNextPosition();
 		if (nextPosition == MapPosition) return false;
 		if (!Globals.BattleScene.TileMap.IsEmpty(nextPosition)) return false;
-		
-		Globals.BattleScene.TileMap.RemoveEntity(this);
+
+		Globals.BattleScene.TileMap.RemoveEntity(MapPosition, BattleTileMap.Unit);
 		Globals.BattleScene.TileMap.AddEntity(nextPosition, this, BattleTileMap.Unit);
 		var nextPositionGlobal = Globals.BattleScene.TileMap.MapToGlobal(nextPosition) + new Vector2((float)GD.RandRange(-5.0, 5.0), (float)GD.RandRange(-5.0, 5.0));
 		

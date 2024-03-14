@@ -85,21 +85,27 @@ public partial class Character : Node2D
 			if (Input.IsActionPressed("up")) newPosition += new Vector2(0, -Speed * (float)delta);
 			if (Input.IsActionPressed("down")) newPosition += new Vector2(0, Speed * (float)delta);
 			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) Position = newPosition;
+			
 		}
 
 		// Mine action should be here as it should repeat without inputevents.
 		if (_mineAction.ShouldMine()) _mineAction.Mine();
 		else _mineAction.Cancel();
+		
+		ProcessInput();
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
-
 		// Gui input actions
 		if (Input.IsActionJustPressed("rotate")) RotateSelection();
 		if (Input.IsActionJustPressed("clear_selection")) QPick();
+		ProcessInput();
+	}
 
+	private void ProcessInput()
+	{
 		var building = Globals.FactoryScene.TileMap.GetBuildingAtMouse();
 		
 		// Cursor Input Actions
@@ -112,6 +118,7 @@ public partial class Character : Node2D
 		if (_removeBuildingAction.ShouldRemove()) _removeBuildingAction.RemoveBuilding(building);
 		else _removeBuildingAction.CancelRemoval();
 	}
+	
 
 	/******************************************************************
 	 * Public Methods                                                 *
