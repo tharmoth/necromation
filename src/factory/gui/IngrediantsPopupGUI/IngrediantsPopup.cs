@@ -75,7 +75,7 @@ public partial class IngrediantsPopup : PanelContainer
 		
 		Rows.GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
-		
+
 		var tween = CreateTween();
 		DropShadowBorder.DisableBlur();
 		Modulate = Colors.Transparent;

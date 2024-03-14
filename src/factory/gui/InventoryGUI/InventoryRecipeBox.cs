@@ -26,12 +26,8 @@ public partial class InventoryRecipeBox : ItemBox
 	// Static Accessor
 	public static void UpdateRecipes(Inventory from, Container list)
 	{
-		list.GetChildren().ToList().ForEach(child => child.QueueFree());
-
-		Database.Instance.UnlockedRecipes
-			.OrderBy(recipe => recipe.Name)
-			.Where(recipe => recipe.Category is "None" or "hands")
-			.ToList().ForEach(recipe => InventoryRecipeBox.AddRecipe(from, recipe, list));
+		AddMissing(from, list);
+		RemoveExtra(list);
 	}
 	
 	// Static Accessor
@@ -40,6 +36,23 @@ public partial class InventoryRecipeBox : ItemBox
 		var craftingItem = Scene.Instantiate<InventoryRecipeBox>();
 		craftingItem.Init(from, recipe);
 		list.AddChild(craftingItem);
+	}
+	
+	private static void AddMissing(Inventory from, Container list)
+	{
+		Database.Instance.UnlockedRecipes
+			.OrderBy(recipe => recipe.Name)
+			.Where(recipe => recipe.Category is "None" or "hands")
+			.Where(recipe => list.GetChildren().OfType<InventoryRecipeBox>().FirstOrDefault(box => box._recipe == recipe) == null)
+			.ToList().ForEach(recipe => AddRecipe(from, recipe, list));
+	}
+
+	private static void RemoveExtra(Container list)
+	{
+		list.GetChildren().OfType<InventoryRecipeBox>()
+			.Where(recipeBox => !Database.Instance.UnlockedRecipes.Contains(recipeBox._recipe))
+			.ToList()
+			.ForEach(item => item.QueueFree());
 	}
 
 	// Constructor workaround.

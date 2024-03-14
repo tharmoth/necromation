@@ -573,4 +573,7 @@ unique_name_in_owner = true
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
-text = "test"
+text = "testtttttttttttttt"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
