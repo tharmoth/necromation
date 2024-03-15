@@ -12,6 +12,11 @@ using Resource = Necromation.Resource;
 
 public partial class Character : Node2D
 {
+	private static readonly Texture2D SouthTexture = GD.Load<Texture2D>("res://res/sprites/Player-south.png");
+	private static readonly Texture2D EastTexture = GD.Load<Texture2D>("res://res/sprites/Player-east.png");
+	private static readonly Texture2D NorthTexture = GD.Load<Texture2D>("res://res/sprites/Player-north.png");
+
+	
 	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 	
 	/**************************************************************************
@@ -20,6 +25,7 @@ public partial class Character : Node2D
 	public PointLight2D Light => GetNode<PointLight2D>("%Light");
 	private AudioStreamPlayer ClickAudio => GetNode<AudioStreamPlayer>("%ClickAudio");
 	public Sprite2D Hands => GetNode<Sprite2D>("%Hands");
+	public Sprite2D Body => GetNode<Sprite2D>("%Body");
 	
 	/**************************************************************************
 	 * Logic Variables                                                        *
@@ -46,7 +52,7 @@ public partial class Character : Node2D
 	/**************************************************************************
 	 * Data Constants                                                         *
 	 **************************************************************************/
-	private const float Speed = 200;
+	private const float Speed = 300;
 	
 	public Character()
 	{
@@ -80,12 +86,28 @@ public partial class Character : Node2D
 		// Process button presses
 		if (!_removeBuildingAction.IsRemoving)
 		{
-			var newPosition = Position;
-			if (Input.IsActionPressed("right")) newPosition += new Vector2(Speed * (float)delta, 0);
-			if (Input.IsActionPressed("left")) newPosition += new Vector2(-Speed * (float)delta, 0);
-			if (Input.IsActionPressed("up")) newPosition += new Vector2(0, -Speed * (float)delta);
-			if (Input.IsActionPressed("down")) newPosition += new Vector2(0, Speed * (float)delta);
-			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) Position = newPosition;
+			
+			var direction = new Vector2(
+				Input.GetAxis("left", "right"), Input.GetAxis("up", "down")
+			);
+			
+			var newPosition = GlobalPosition + direction.Normalized() * Speed * (float)delta;
+			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) GlobalPosition = newPosition;
+			
+			if (direction.Length() > 0)
+			{
+				Body.Texture = Mathf.Abs(direction.X) > 0 ? EastTexture : direction.Y > 0 ? SouthTexture : NorthTexture;
+				Body.FlipH = direction.X switch
+				{
+					< 0 => true,
+					> 0 => false,
+					_ => Body.FlipH
+				};
+			}
+			else
+			{
+				Body.Texture = SouthTexture;
+			}
 		}
 		
 		// Return if a gui is open

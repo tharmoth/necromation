@@ -19,7 +19,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	private static readonly PackedScene ParticleScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/dirt.tscn");
 	private static readonly AudioStream PlaceSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_foley_boots_wellington_rubber_pair_set_down_grass_001_105602.mp3");
 	private static readonly AudioStream GrindSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_transport_bicycle_ride_gravel_onboard_pov_10530.mp3");
-
+	
 	/**************************************************************************
 	 * Utility Property                                                       *
 	 **************************************************************************/
@@ -191,11 +191,6 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 
 		var tweenTest = Globals.Tree.CreateTween();
 		tweenTest.TweenProperty(ClipRect, "position:y", clipTarget, tweenTime);
-		tweenTest.TweenCallback(Callable.From(() =>
-		{
-			GD.Print("Tween Complete");
-			GD.Print(ClipRect.Position);
-		}));
 	}
 	
 

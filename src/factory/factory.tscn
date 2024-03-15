@@ -25,8 +25,8 @@
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
 [ext_resource type="Script" path="res://src/factory/BuildingManager.cs" id="23_g3xjq"]
+[ext_resource type="Texture2D" uid="uid://8ybyljlq1nvu" path="res://res/sprites/Player-south.png" id="23_hi424"]
 [ext_resource type="Texture2D" uid="uid://cfafwwpbyr8yn" path="res://res/sprites/particles/SoftLight.png" id="23_hyyce"]
-[ext_resource type="Texture2D" uid="uid://8ybyljlq1nvu" path="res://res/sprites/Player2.png" id="23_vsfrk"]
 [ext_resource type="Texture2D" uid="uid://cs1hp40el17pt" path="res://res/sprites/hands.png" id="24_c65jo"]
 [ext_resource type="Shader" path="res://src/factory/tilt_shift.gdshader" id="25_p0fnd"]
 [ext_resource type="Script" path="res://src/factory/crafting/CraftingQueue.cs" id="26_a45ds"]
@@ -488,12 +488,14 @@ z_index = 99
 position = Vector2(2459, 1778)
 script = ExtResource("2_vcqpu")
 
-[node name="Sprite2D" type="Sprite2D" parent="Character"]
+[node name="Body" type="Sprite2D" parent="Character"]
+unique_name_in_owner = true
+modulate = Color(0.180392, 0.0745098, 0.270588, 1)
 scale = Vector2(0.15, 0.15)
-texture = ExtResource("23_vsfrk")
+texture = ExtResource("23_hi424")
 region_rect = Rect2(64, 0, 32, 32)
 
-[node name="Hands" type="Sprite2D" parent="Character/Sprite2D"]
+[node name="Hands" type="Sprite2D" parent="Character/Body"]
 unique_name_in_owner = true
 visible = false
 texture = ExtResource("24_c65jo")
@@ -586,14 +588,18 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Node2D"]
 clip_children = 1
 z_index = 2
 custom_minimum_size = Vector2(64, 64)
-offset_right = 64.0
-offset_bottom = 64.0
+offset_left = 55.0
+offset_top = 44.0
+offset_right = 119.0
+offset_bottom = 108.0
 
-[node name="Sprite2D" type="Sprite2D" parent="ColorRect"]
+[node name="Sprite2D" type="Sprite2D" parent="Node2D/ColorRect"]
 modulate = Color(1, 1, 1, 0.501961)
 z_index = 2
 material = ExtResource("34_y6o8j")

@@ -53,6 +53,7 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	private int _hp = 10;
 	public readonly int Strength = 10;
 	public Dictionary<Weapon, int> Ammo = new();
+	public bool IsMoving => _moveTween != null;
 
 	/// <summary>
 	/// Constructor loads in the units data and sets up the appropriate RPG data and Visuals.

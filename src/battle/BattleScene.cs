@@ -10,7 +10,7 @@ using Necromation.map.character;
 public partial class BattleScene : Scene
 {
 	public const double TimeStep = .5;
-	private BattleGUI _battleGui;
+	private BattleGUI _battleGui => GetNode<BattleGUI>("%GUI");
 	public override BattleGUI Gui => _battleGui;
 	public BattleTileMap TileMap;
 
@@ -21,7 +21,6 @@ public partial class BattleScene : Scene
 		base._Ready();
 		MusicManager.PlayBattleMusic();
 		TileMap = GetNode<BattleTileMap>("%TileMap");
-		_battleGui = GetNode<BattleGUI>("%GUI");
 			
 		if (Provence == null) Provence = new Province();
 		

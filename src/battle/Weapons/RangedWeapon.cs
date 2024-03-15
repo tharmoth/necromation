@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Necromation.sk;
@@ -17,6 +18,13 @@ public class RangedWeapon : Weapon
         wielder.PlayAttackAnimation();
         var targetLocs = Globals.BattleScene.TileMap.GetTilesInRadius(target.MapPosition, 2).ToList();
         var targetLoc = targetLocs[GD.RandRange(0, targetLocs.Count - 1)];
+
+        var difference = wielder.MapPosition - target.MapPosition;
+        var differenceFloat = ((Vector2)difference).Normalized();
+        var tilesToLead = new Vector2I(Mathf.CeilToInt(Mathf.Abs(differenceFloat.X)) * Mathf.Sign(differenceFloat.X), Mathf.CeilToInt(Mathf.Abs(differenceFloat.Y)) * Mathf.Sign(differenceFloat.Y));
+
+        // If the target is moving, lead the target by guessing they will be closer to the wielder in the future
+        if (target.IsMoving && difference.Length() > 5) targetLoc += tilesToLead;
         
         var type = Name switch
         {
@@ -38,10 +46,13 @@ public class RangedWeapon : Weapon
 
         var adjustedDamage = damage - armor + damageRoll - armorRoll;
 
+        GD.Print(wielder.UnitType + " hit " + target.UnitType + " for " + adjustedDamage + " damage.");
+        
         if (adjustedDamage <= 0) return;
         
         target.Damage(wielder, adjustedDamage);
         PlayHitSound(target);
+        
     }
 
     private void PlayHitSound(Unit target)

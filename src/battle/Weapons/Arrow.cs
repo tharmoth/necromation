@@ -18,10 +18,14 @@ public partial class Arrow : Sprite2D
     private float _progress;
     
     private readonly Action<Unit> _damage;
+    
+    private bool _hit = false;
+
+    private string _type;
 
     public Arrow(Vector2I startTile, Vector2I targetTile, Action<Unit> damage, string type)
     {
-        
+        _type = type;
         _damage = damage;
         Texture = Database.Instance.GetTexture(type);
         
@@ -29,7 +33,8 @@ public partial class Arrow : Sprite2D
             32 / (float)Texture.GetHeight());
 
         _startPosition = Globals.BattleScene.TileMap.MapToGlobal(startTile);
-        _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile);
+        _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile) + new Vector2(GD.RandRange(-BattleTileMap.TileSize, BattleTileMap.TileSize),
+            GD.RandRange(-BattleTileMap.TileSize, BattleTileMap.TileSize));
         var distance = _startPosition.DistanceTo(Globals.BattleScene.TileMap.MapToGlobal(targetTile));
         _stepScale = Speed / distance;
         
@@ -40,21 +45,28 @@ public partial class Arrow : Sprite2D
 
     public override void _Process(double delta)
     {
+        if (_hit) return;
         _progress += _stepScale * (float)delta;
         _progress = Mathf.Clamp(_progress, 0, 1);
+
         var parabola = 1.0f - 4.0f * Mathf.Pow(_progress - 0.5f, 2);
         var nextPosition = _startPosition.Lerp(_targetPosition, _progress);
-         nextPosition.Y -= parabola * ArcHeight;
+        nextPosition.Y -= parabola * ArcHeight;
+        LookAt(nextPosition);
         GlobalPosition = nextPosition;
         
-        Rotation = Mathf.Atan2(_targetPosition.Y - nextPosition.Y, _targetPosition.X - nextPosition.X);
+        // Rotation = Mathf.Atan2(_targetPosition.Y - nextPosition.Y, _targetPosition.X - nextPosition.X);
+        if (_type == "Pilum") Rotation += Mathf.Pi / 4;
         
         // If the arrow has reached the target, remove it
         if (!(nextPosition.DistanceTo(_targetPosition) < 10)) return;
 
         var hit = Globals.BattleScene.TileMap.GetEntity(MapPosition, BattleTileMap.Unit);
         if (hit is Unit unit) _damage(unit);
-        QueueFree();
+        Modulate = new Color(.5f, .5f, .5f);
+        _hit = true;
+        ZIndex = -1;
+        // QueueFree();
     }
 
     // public override void _Draw()
