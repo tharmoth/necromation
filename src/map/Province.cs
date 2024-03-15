@@ -128,6 +128,7 @@ public partial class Province : Node2D, ITransferTarget
      * ITransferTarget Methods                                                *
      **************************************************************************/
     public bool CanAcceptItems(string item, int count = 1) => Units.CanAcceptItems(item, count);
+    public bool CanAcceptItemsInserter(string item, int count = 1) => Units.CanAcceptItemsInserter(item, count);
     public void Insert(string item, int count = 1) => Units.Insert(item, count);
     public bool Remove(string item, int count = 1) => Units.Remove(item, count);
     public string GetFirstItem() => Units.GetFirstItem();

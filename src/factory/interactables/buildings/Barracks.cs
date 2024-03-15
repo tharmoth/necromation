@@ -37,11 +37,6 @@ public class Barracks : Assembler
         if (GetProgressPercent() > 0 && !_particles.Emitting) _particles.Emitting = true;
         else if (GetProgressPercent() <= 0 && _particles.Emitting) _particles.Emitting = false;
     }
-
-    protected override bool MaxOutputItemsReached()
-    {
-        return _outputInventory.CountItem(GetRecipe().Products.First().Key) >= GetRecipe().Products.First().Value * 200;
-    }
     
     private void SpawnCommander()
     {

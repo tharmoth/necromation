@@ -7,6 +7,7 @@ namespace Necromation;
 public interface ITransferTarget
 {
     public bool CanAcceptItems(string item, int count = 1) => GetMaxTransferAmount(item) >= count;
+    public bool CanAcceptItemsInserter(string item, int count = 1);
     public void Insert(string item, int count = 1);
     public bool Remove(string item, int count = 1);
     public List<string> GetItems();

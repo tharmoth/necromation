@@ -5,9 +5,3 @@
 
 [node name="ItemBox" instance=ExtResource("1_vi0ub")]
 script = ExtResource("2_v18sd")
-
-[node name="CannotCraftRect" type="ColorRect" parent="MarginContainer" index="1"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-color = Color(0.65098, 0.235294, 0.270588, 0.376471)

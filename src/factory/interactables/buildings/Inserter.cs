@@ -204,7 +204,7 @@ public partial class Inserter : Building, IRotatable
         {
              foreach (var item in _from.GetItems())
             {
-                if (string.IsNullOrEmpty(item) || !_to.CanAcceptItems(item)) continue;
+                if (string.IsNullOrEmpty(item) || !_to.CanAcceptItemsInserter(item)) continue;
                 
                 var b = Inventory.TransferItem(_from, _to, item);
                 Animate(item);

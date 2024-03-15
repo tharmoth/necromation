@@ -167,6 +167,7 @@ public class Mine : Building, IInteractable, ITransferTarget
     }
     
     public bool CanAcceptItems(string item, int count = 1) => false;
+    public bool CanAcceptItemsInserter(string item, int count = 1) => _inventory.CanAcceptItemsInserter(item, count);
     public void Insert(string item, int count = 1) { }
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();

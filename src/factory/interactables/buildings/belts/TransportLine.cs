@@ -204,6 +204,7 @@ public partial class TransportLine : ITransferTarget
      * ITransferTarget Methods                                                *
      **************************************************************************/
     public bool CanAcceptItems(string item,  int count = 1) => _inventory.CanAcceptItems(item, count);
+    public bool CanAcceptItemsInserter(string item,  int count = 1) => _inventory.CanAcceptItemsInserter(item, count);
     public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();

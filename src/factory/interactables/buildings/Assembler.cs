@@ -57,7 +57,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	public override void _Process(double delta)
     {
 	    base._Process(delta);
-    	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
+    	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || !CanHoldOutputItems())
     	{
     		_time = 0;
     		return;
@@ -70,7 +70,25 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     	_time = 0;
     	_recipe.Craft(_inputInventory, _outputInventory);
     }
-        
+
+	private bool CanHoldOutputItems()
+	{
+		foreach (var (item, count) in _recipe.Products)
+		{
+			if (!_outputInventory.CanAcceptItems(item, count)) return false;
+		}
+		return true;
+	}
+	
+	private bool MaxAutocraftReached()
+	{
+		foreach (var (item, count) in _recipe.Products)
+		{
+			if (_outputInventory.CountItem(item) >= count * 3) return true;
+		}
+		return false;
+	}
+
     public override float GetProgressPercent()
     {
 	    if (_recipe == null) return 0;
@@ -80,12 +98,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	/**************************************************************************
 	 * Protected Methods                                                      *
 	 **************************************************************************/
-    protected virtual bool MaxOutputItemsReached()
-    {
-	    return _outputInventory.CountItem(_recipe.Products.First().Key) > _recipe.Products.First().Value * 2;
-    }
-    
-    protected virtual void Animate()
+    protected void Animate()
     {
 	    if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
 
@@ -163,6 +176,16 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     }
     
     public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
+    public bool CanAcceptItemsInserter(string item, int count = 1)
+    {
+	    var ingredients = GetRecipe().Ingredients;
+	    if (MaxAutocraftReached() || !ingredients.TryGetValue(item, out var recipeCount)) return false;
+
+	    var max = recipeCount * 3;
+	    var currentCount = _inputInventory.CountItem(item);
+	    return currentCount + count <= max && _inputInventory.CanAcceptItemsInserter(item, count);
+    }
+
     public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _outputInventory.Remove(item, count);
     public List<string> GetItems() => _outputInventory.GetItems();

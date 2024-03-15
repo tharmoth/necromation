@@ -58,6 +58,7 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
     {
         return item == "Experiment" && GetInventories().TrueForAll(inventory => inventory.CountItem(item) < 10);
     }
+    public bool CanAcceptItemsInserter(string item, int count = 1) => _inventory.CanAcceptItemsInserter(item, count);
     public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
     public string GetFirstItem() => _inventory.GetFirstItem();

@@ -16,6 +16,8 @@ public partial class ItemBox : PanelContainer
 	protected TextureRect Icon => GetNode<TextureRect>("%Icon");
 	protected Label CountLabel => GetNode<Label>("%CountLabel");
 	protected Button Button => GetNode<Button>("%Button");
+	protected ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
+	protected ColorRect ColorRect => GetNode<ColorRect>("%ColorRect");
 	
 	private string _itemType;
 	public string ItemType

@@ -14,11 +14,6 @@ public partial class CraftingQueueItemBox : ItemBox
 	private static readonly PackedScene ItemScene = GD.Load<PackedScene>("res://src/factory/gui/CraftingQueue/CraftingQueueItemBox.tscn");
 
 	/**************************************************************************
-	 * Child Accessors         												  *
-	 **************************************************************************/
-	private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
-	
-	/**************************************************************************
 	 * State Data          													  *
 	 **************************************************************************/
 	private CraftingQueue.CraftingQueueItem _item;
@@ -44,6 +39,7 @@ public partial class CraftingQueueItemBox : ItemBox
 		_item = item;
 		ItemType = Database.Instance.GetRecipe(item.RecipeName).Products.First().Key;
 		CountLabel.Text = item.Count.ToString();
+		ProgressBar.Visible = true;
 		ProgressBar.Value = 0;
 		
 		Button.GuiInput += @event =>

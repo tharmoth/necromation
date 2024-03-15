@@ -59,8 +59,8 @@ public partial class CrafterGUI : DeferredUpdate
 	protected override void Update()
 	{
 		InventoryItem.UpdateInventory(_to, new List<Inventory> { _crafter.GetInputInventory()  }, InventoryItemList);
-		InventoryItem.UpdateInventory(_crafter.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
-		InventoryItem.UpdateInventory(_crafter.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList);
+		CrafterItemBox.UpdateInventory(_crafter.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList, _crafter.GetRecipe(), true);
+		CrafterItemBox.UpdateInventory(_crafter.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList, _crafter.GetRecipe(), false);
 		Dirty = false;
 	}
 }

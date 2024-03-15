@@ -284,6 +284,11 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         return LeftLine.GetItemCount() + count < 5 || RightLine.GetItemCount() + count < 5;
     }
     
+    public bool CanAcceptItemsInserter(string item,  int count = 1)
+    {
+        return LeftLine.GetItemCount() + count < 5 || RightLine.GetItemCount() + count < 5;
+    }
+    
     public void Insert(string item, int count = 1)
     { 
         // if the position is to the left of the center of the building, insert into the left belt

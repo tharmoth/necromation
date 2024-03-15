@@ -185,6 +185,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     }
     
     public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
+    public bool CanAcceptItemsInserter(string item, int count = 1) => _inputInventory.CanAcceptItemsInserter(item, count);
     public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _outputInventory.Remove(item, count);
     public List<string> GetItems() => _outputInventory.GetItems();

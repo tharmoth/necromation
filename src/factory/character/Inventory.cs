@@ -85,7 +85,8 @@ public partial class Inventory : ITransferTarget
 		Listeners.ForEach(listener => listener());
 		return true;
 	}
-	public virtual bool CanAcceptItems(string item, int count = 1) => GetMaxTransferAmount(item) >= count;
+	public bool CanAcceptItems(string item, int count = 1) => GetMaxTransferAmount(item) >= count;
+	public virtual bool CanAcceptItemsInserter(string item,  int count = 1) => CanAcceptItems(item, count);
 	public string GetFirstItem() => _items.Keys.FirstOrDefault();
 	public List<string> GetItems() => _items.Keys.ToList();
 	public List<Inventory> GetInventories() => new() { this };
