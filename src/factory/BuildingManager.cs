@@ -22,16 +22,16 @@ public partial class BuildingManager : Node
     public void AddBuilding(Building building, Vector2 globalPosition)
     {
         var first = true;
-        building.Sprite.TreeEntered += () =>
+        building.BaseNode.TreeEntered += () =>
         {
             if (!first) return;
             first = false;
             building._Ready();
             _buildings.Add(building);
         };
-        building.Sprite.TreeExited += building._ExitTree;
+        building.BaseNode.TreeExited += building._ExitTree;
         building.GlobalPosition = globalPosition;
-        Globals.FactoryScene.AddChild(building.ClipRect);
+        Globals.FactoryScene.AddChild(building.BaseNode);
     }
     
     public override void _Process(double delta)

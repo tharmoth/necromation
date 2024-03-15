@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
+using Necromation.sk;
 
 namespace Necromation;
 
@@ -40,6 +41,7 @@ public partial class Inserter : Building, IRotatable
     
     // The rotation of the inserter. This isn't a node for performance so we'll have to store it manually.
     private float RotationDegrees;
+    private float Rotation => Mathf.DegToRad(RotationDegrees);
     // The orientation of the inserter. This is used to determine the input and output positions of the inserter.
     // Can be one of the four cardinal directions.
     private IRotatable.BuildingOrientation _orientation;
@@ -50,6 +52,7 @@ public partial class Inserter : Building, IRotatable
         {
             _orientation = value;
             Sprite.RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
+            GhostSprite.RotationDegrees = Sprite.RotationDegrees;
             RotationDegrees = Sprite.RotationDegrees;
         }
     }
@@ -97,6 +100,8 @@ public partial class Inserter : Building, IRotatable
         _range = range;
         Sprite.AddChild(SpriteInHand);
         Sprite.ZIndex = 2;
+        Sprite.ZAsRelative = false;
+        ClipRect.ZIndex = 2;
         
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/PM_MPRINTER_DPA4060_6_Printer_Printing_Individual_Cycle_Servo_Motor_Toner_Close_Perspectiv_328.mp3");
         _audio.Attenuation = 25.0f;
@@ -127,6 +132,7 @@ public partial class Inserter : Building, IRotatable
     public override void _Ready()
     {
         base._Ready();
+
         Orientation = _orientation;
         Globals.FactoryScene.TileMap.listeners.Add(Update);
         Update();

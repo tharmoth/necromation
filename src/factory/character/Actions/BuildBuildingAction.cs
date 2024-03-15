@@ -4,11 +4,20 @@ using Necromation.interactables.interfaces;
 
 namespace Necromation.factory.character.Actions;
 
-public class BuildAction
+public partial class BuildBuildingAction : Node
 {
+    /**************************************************************************
+     * Logic Variables                                                        *
+     **************************************************************************/
     private readonly Inventory _inventory;
     
-    public BuildAction(Inventory inventory)
+    /**************************************************************************
+     * Visuals Variables 													  *
+     **************************************************************************/
+    private Tween _buildAnimationTween;
+    private bool _mouseReleased = true;
+    
+    public BuildBuildingAction(Inventory inventory)
     {
         _inventory = inventory;
     }
@@ -52,31 +61,32 @@ public class BuildAction
         return true;
     }
 
-    private Tween buildTween;
-    
-    
+    public override void _Input(InputEvent @event)
+    {
+        base._Input(@event);
+        if (@event is InputEventMouseButton { Pressed: false, ButtonIndex: MouseButton.Left }) _mouseReleased = true;
+    }
+
     private void PlayBuildAnimation()
     {
-        if (buildTween != null) return;
+        if (_buildAnimationTween != null || !_mouseReleased) return;
+        _mouseReleased = false;
         var sprite = Globals.Player.Hands;
         sprite.Visible = true;
         sprite.Position = Vector2.Zero;
 
-        buildTween = Globals.Tree.CreateTween();
-        buildTween.SetEase(Tween.EaseType.In);
-        buildTween.SetTrans(Tween.TransitionType.Quart);
+        _buildAnimationTween = Globals.Tree.CreateTween();
+        _buildAnimationTween.SetEase(Tween.EaseType.In);
+        _buildAnimationTween.SetTrans(Tween.TransitionType.Quart);
         
-        buildTween.TweenInterval(.05f);
-        buildTween.TweenProperty(sprite, "position:y", -96, .5f);
-        buildTween.TweenInterval(.5f);
-        buildTween.TweenCallback(Callable.From(() => sprite.Visible = false));
-        buildTween.TweenCallback(Callable.From(() => buildTween = null));
+        _buildAnimationTween.TweenInterval(.05f);
+        _buildAnimationTween.TweenProperty(sprite, "position:y", -96, .5f);
+        _buildAnimationTween.TweenInterval(.5f);
+        _buildAnimationTween.TweenCallback(Callable.From(() => sprite.Visible = false));
+        _buildAnimationTween.TweenCallback(Callable.From(() => _buildAnimationTween = null));
         
         var jiggletween = Globals.Tree.CreateTween();
         jiggletween.TweenInterval(.25f);
-        
-        var tweenTime = 1.0f;
-        var jiggleCount = 5;
         for (int i = 0; i < 2; i++)
         {
             jiggletween.TweenProperty(sprite, "position:x", 

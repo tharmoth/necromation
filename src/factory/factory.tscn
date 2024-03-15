@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=43 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -34,6 +34,7 @@
 [ext_resource type="Script" path="res://src/factory/gui/CursorManager.cs" id="30_ilgnm"]
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="31_o81rd"]
 [ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="32_aktb2"]
+[ext_resource type="Material" uid="uid://43qm0tq10fps" path="res://src/factory/shaders/greyscale.tres" id="34_y6o8j"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
 streams_count = 1
@@ -587,10 +588,14 @@ autowrap_mode = 0
 
 [node name="ColorRect" type="ColorRect" parent="."]
 clip_children = 1
+z_index = 2
 custom_minimum_size = Vector2(64, 64)
 offset_right = 64.0
 offset_bottom = 64.0
 
 [node name="Sprite2D" type="Sprite2D" parent="ColorRect"]
-position = Vector2(35, 33)
+modulate = Color(1, 1, 1, 0.501961)
+z_index = 2
+material = ExtResource("34_y6o8j")
+position = Vector2(30, 73)
 texture = ExtResource("32_aktb2")

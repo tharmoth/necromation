@@ -25,6 +25,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         {
             _orientation = value;
             Sprite.RotationDegrees = IRotatable.GetDegreesFromOrientation(value);
+            GhostSprite.RotationDegrees = Sprite.RotationDegrees;
         }
     }
     
@@ -78,6 +79,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         Orientation = _orientation;
         Sprite.RotationDegrees = IRotatable.GetDegreesFromOrientation(_orientation);
         Sprite.Texture = GD.Load<Texture2D>("res://res/sprites/buildings/BeltAnimated.png");
+        // ClipRect.CustomMinimumSize = new Vector2(FactoryTileMap.TileSize, FactoryTileMap.TileSize);
         // _audio.Play();
         
         LeftLine.TargetDirectionGlobal = TargetDirectionGlobal;

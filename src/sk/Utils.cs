@@ -44,4 +44,14 @@ public class Utils
         damage += rolls.Sum() + addition;
         return damage;
     }
+
+    public static Vector2 Abs(Vector2 vector2)
+    {
+	    return new Vector2(Math.Abs(vector2.X), Math.Abs(vector2.Y));
+    }
+
+    public static float Max(Vector2 vector2)
+    {
+	    return Math.Max(vector2.X, vector2.Y);
+    }
 }

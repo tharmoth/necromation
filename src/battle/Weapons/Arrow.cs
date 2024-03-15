@@ -7,7 +7,7 @@ public partial class Arrow : Sprite2D
 {
     public Vector2I MapPosition => Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
     
-    private const float Speed = 800;
+    private const float Speed = 400;
     private readonly float ArcHeight;
     
     private readonly Vector2 _startPosition;
@@ -17,14 +17,17 @@ public partial class Arrow : Sprite2D
     
     private float _progress;
     
-    private static readonly Texture2D _texture2D =  Database.Instance.GetTexture("Arrow");
     private readonly Action<Unit> _damage;
 
-    public Arrow(Vector2I startTile, Vector2I targetTile, Action<Unit> damage)
+    public Arrow(Vector2I startTile, Vector2I targetTile, Action<Unit> damage, string type)
     {
+        
         _damage = damage;
-        Texture = _texture2D;
-        Scale = new Vector2(0.25f, 0.25f);
+        Texture = Database.Instance.GetTexture(type);
+        
+        Scale = new Vector2(32 / (float)Texture.GetWidth(),
+            32 / (float)Texture.GetHeight());
+
         _startPosition = Globals.BattleScene.TileMap.MapToGlobal(startTile);
         _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile);
         var distance = _startPosition.DistanceTo(Globals.BattleScene.TileMap.MapToGlobal(targetTile));
@@ -54,10 +57,10 @@ public partial class Arrow : Sprite2D
         QueueFree();
     }
 
-    public override void _Draw()
-    {
-        base._Draw();
-        DrawCircle(new Vector2(0, 0), 11, Colors.Black);
-        DrawCircle(new Vector2(0, 0), 10, Colors.Red);
-    }
+    // public override void _Draw()
+    // {
+    //     base._Draw();
+    //     DrawCircle(new Vector2(0, 0), 11, Colors.Black);
+    //     DrawCircle(new Vector2(0, 0), 10, Colors.Red);
+    // }
 }

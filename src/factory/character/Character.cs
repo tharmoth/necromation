@@ -36,7 +36,7 @@ public partial class Character : Node2D
 	/**************************************************************************
 	 * Actions                                                                *
 	 *************************************************************************/
-	private readonly BuildAction _buildAction;
+	private readonly BuildBuildingAction _buildBuildingAction;
 	private readonly InsertItemAction _insertItemAction;
 	private readonly InteractAction _interactAction;
 	private readonly MineAction _mineAction;
@@ -50,12 +50,15 @@ public partial class Character : Node2D
 	
 	public Character()
 	{
-		_buildAction = new BuildAction(_inventory);
+		_buildBuildingAction = new BuildBuildingAction(_inventory);
+		_removeBuildingAction = new RemoveBuildingAction(_inventory);
 		_insertItemAction = new InsertItemAction(_inventory);
 		_interactAction = new InteractAction(_inventory);
 		_mineAction = new MineAction(_inventory);
-		_removeBuildingAction = new RemoveBuildingAction(_inventory);
 		_removeItemAction = new RemoveItemAction(_inventory);
+		
+		AddChild(_buildBuildingAction);
+		AddChild(_removeBuildingAction);
 	}
 	
 	public override void _EnterTree()
@@ -111,7 +114,7 @@ public partial class Character : Node2D
 		// Cursor Input Actions
 		if (_insertItemAction.ShouldInsert(building)) _insertItemAction.Insert(building);
 		else if (_removeItemAction.ShouldRemove(building)) _removeItemAction.Remove(building);
-		else if (_buildAction.ShouldBuild()) _buildAction.Build();
+		else if (_buildBuildingAction.ShouldBuild()) _buildBuildingAction.Build();
 		else if (_interactAction.ShouldInteract(building)) _interactAction.Interact(building);
 		
 		// Always Cancel removal if not removing

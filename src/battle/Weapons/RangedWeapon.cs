@@ -17,7 +17,14 @@ public class RangedWeapon : Weapon
         wielder.PlayAttackAnimation();
         var targetLocs = Globals.BattleScene.TileMap.GetTilesInRadius(target.MapPosition, 2).ToList();
         var targetLoc = targetLocs[GD.RandRange(0, targetLocs.Count - 1)];
-        Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, targetLoc, hit => ApplyDamage(wielder, hit)));
+        
+        var type = Name switch
+        {
+            "Pilum" => "Pilum",
+            _ => "Arrow"
+        };
+        
+        Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, targetLoc, hit => ApplyDamage(wielder, hit), type));
         PlayFiredSound(wielder);
     }
     

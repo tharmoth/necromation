@@ -50,8 +50,8 @@ public class Mine : Building, IInteractable, ITransferTarget
         _audio.PitchScale = .5f;
         _audio.Finished += () => _audio.Play();
         Sprite.AddChild(_audio);
-        
         Sprite.AddChild(_particles);
+        _particles.Emitting = false;
     }
 
     public override void _Ready()
