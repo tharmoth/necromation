@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://lbatg01khpfb"]
+[gd_scene load_steps=13 format=3 uid="uid://lbatg01khpfb"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_8six3"]
 [ext_resource type="Script" path="res://src/factory/gui/CrafterGUI/CrafterGUI.cs" id="1_tdwk2"]
@@ -7,10 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="4_n6jta"]
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="5_y5mff"]
 [ext_resource type="PackedScene" uid="uid://cvn2ithtvvp85" path="res://src/factory/gui/CrafterGUI/ItemSelectionItemBox.tscn" id="6_okvu0"]
-[ext_resource type="Texture2D" uid="uid://dkrc6yyui6nlx" path="res://res/sprites/Arrow-down.png" id="6_sqb8d"]
 [ext_resource type="Texture2D" uid="uid://df0vkwm5lx4c5" path="res://res/sprites/Arrow-right.png" id="8_6m0iw"]
 [ext_resource type="Script" path="res://src/factory/gui/ProgressTracker.cs" id="8_hppbb"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="8_orngy"]
+[ext_resource type="PackedScene" uid="uid://cikqsuksjidww" path="res://src/factory/gui/CrafterGUI/CrafterItemBox.tscn" id="10_11d8x"]
+[ext_resource type="Texture2D" uid="uid://c5c704m0vpf0p" path="res://res/sprites/buildings/Assembler.png" id="10_suifj"]
 
 [node name="CrafterGUI" type="PanelContainer"]
 custom_minimum_size = Vector2(900, 500)
@@ -123,6 +124,10 @@ layout_mode = 2
 layout_mode = 2
 alignment = 1
 
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows"]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="Control" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -141,51 +146,64 @@ texture = ExtResource("8_6m0iw")
 stretch_mode = 3
 flip_h = true
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows"]
-modulate = Color(0.6, 0.6, 0.6, 1)
-layout_mode = 2
-size_flags_vertical = 3
-texture = ExtResource("8_6m0iw")
-stretch_mode = 3
-flip_h = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="CrafterInventory" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 5
+alignment = 1
 
-[node name="SourceInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory"]
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 2
+texture = ExtResource("10_suifj")
+stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory"]
 layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 24
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
 theme_override_constants/margin_top = 22
 theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 22
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-horizontal_scroll_mode = 0
 
-[node name="SourceInventoryItemList" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/ScrollContainer"]
+[node name="SourceInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="SourceInventoryItemList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/SourceInventory"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory" instance=ExtResource("8_orngy")]
+[node name="CrafterItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/SourceInventory/SourceInventoryItemList" instance=ExtResource("10_11d8x")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="HBoxContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -193,37 +211,29 @@ size_flags_vertical = 1
 show_percentage = false
 script = ExtResource("8_hppbb")
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer/MarginContainer"]
 modulate = Color(0.6, 0.6, 0.6, 1)
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("6_sqb8d")
-stretch_mode = 2
+texture = ExtResource("8_6m0iw")
+stretch_mode = 5
 
-[node name="OutputInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("8_orngy")]
 layout_mode = 2
-size_flags_horizontal = 3
+
+[node name="OutputInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2"]
+layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 22
-theme_override_constants/margin_right = 22
-theme_override_constants/margin_bottom = 22
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="OutputInventoryItemList" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory/MarginContainer/ScrollContainer"]
+[node name="OutputInventoryItemList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/OutputInventory"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory" instance=ExtResource("8_orngy")]
+[node name="CrafterItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/OutputInventory/OutputInventoryItemList" instance=ExtResource("10_11d8x")]
+layout_mode = 2
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer" instance=ExtResource("8_orngy")]
 layout_mode = 2

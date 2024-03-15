@@ -31,6 +31,7 @@ public partial class CursorManager : Node
 	{
 		var count = Globals.Player.Selected != null ? Globals.PlayerInventory.CountItem(Globals.Player.Selected) : 0;
 		CursorItemCount.Text = count != 0 ? count.ToString() : "";
+		if (count == 0) Globals.Player.Selected = null;
 	}
 
 	public override void _Process(double delta)

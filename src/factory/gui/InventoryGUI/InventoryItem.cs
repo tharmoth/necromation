@@ -58,33 +58,41 @@ public partial class InventoryItem : ItemBox
 		_to = to;
 		_sourceInventory = source;
 		source.Listeners.Add(UpdateCount);
-		
-		Button.Pressed += () =>
+
+		Button.Pressed += ButtonPress;
+	}
+
+	/// <summary>
+	/// When an inventory button is pressed, do one of two things:<br />
+	/// 1. If shift or control is pressed try to transfer items to the target directly.<br />
+	/// 2. If no shift or control is pressed or there is no valid target, select the item for the player to use.
+	/// </summary>
+	private void ButtonPress()
+	{
+		var sourceCount = 0;
+		if (Input.IsActionPressed("shift"))
 		{
-			if (_to == null || _sourceInventory == null)
-			{
-				Globals.Player.Selected = ItemType;
-				return;
-			}
+			sourceCount = _sourceInventory.CountItem(ItemType);
+		} 
+		else if (Input.IsActionPressed("control"))
+		{
+			sourceCount = Math.Min(5, _sourceInventory.CountItem(ItemType));
+		}
+			
+		if (_to == null || _sourceInventory == null || sourceCount == 0)
+		{
+			Globals.Player.Selected = ItemType;
+			return;
+		}
 
-			var sourceCount = 1;
-			if (Input.IsActionPressed("shift"))
-			{
-				sourceCount = _sourceInventory.Items[ItemType];
-			} else if (Input.IsActionPressed("control"))
-			{
-				sourceCount = Math.Min(5, _sourceInventory.Items[ItemType]);
-			}
-
-			foreach (var inventory in _to)
-			{
-				var targetCapacity = inventory.GetMaxTransferAmount(ItemType);
-				var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
-				if (amountToTransfer <= 0) continue;
-				Inventory.TransferItem(_sourceInventory, inventory, ItemType, amountToTransfer);
-				break;
-			}
-		};
+		foreach (var inventory in _to)
+		{
+			var targetCapacity = inventory.GetMaxTransferAmount(ItemType);
+			var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
+			if (amountToTransfer <= 0) continue;
+			Inventory.TransferItem(_sourceInventory, inventory, ItemType, amountToTransfer);
+			break;
+		}
 	}
 
 	private void UpdateCount()

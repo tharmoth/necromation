@@ -3,5 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="1_tbr5a"]
 [ext_resource type="Script" path="res://src/factory/gui/CrafterGUI/CrafterItemBox.cs" id="2_viwoj"]
 
-[node name="ItemBox" instance=ExtResource("1_tbr5a")]
+[node name="CrafterItemBox" instance=ExtResource("1_tbr5a")]
 script = ExtResource("2_viwoj")
+
+[node name="Button" parent="MarginContainer" index="0"]
+button_mask = 7

@@ -54,27 +54,6 @@ public partial class HotBarItemBox : ItemBox
 		if (ItemType != null) CountLabel.Text = Globals.PlayerInventory.CountItem(ItemType).ToString();
 	}
 	
-	protected override void UpdateIcon()
-	{
-		if (Globals.Player.Selected == ItemType && !string.IsNullOrEmpty(ItemType))
-		{
-			Icon.Visible = true;
-			Icon.Texture = Database.Instance.GetTexture("BoneHand");
-			return;
-		}
-		base.UpdateIcon();
-	}
-	
-	// Switch the icon to the BoneHand when the item is selected.
-	public override void _Process(double delta)
-	{
-		base._Process(delta);
-
-		if (_cachedSelected == Globals.Player.Selected || string.IsNullOrEmpty(ItemType)) return;
-		_cachedSelected = Globals.Player.Selected;
-		UpdateIcon();
-	}
-
 	// Either select the item, show the filter menu, or clear the slot
 	private void ButtonPressed(InputEvent @event)
 	{
