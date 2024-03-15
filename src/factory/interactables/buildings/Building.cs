@@ -83,7 +83,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		GhostSprite.ZIndex = 100;
 
 		BaseNode.AddChild(_particles);
-		// BaseNode.AddChild(GhostSprite);
+		BaseNode.AddChild(GhostSprite);
 		BaseNode.AddChild(ClipRect);
 	}
 
@@ -116,25 +116,17 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		Sprite.Texture = Database.Instance.GetTexture(ItemType);
 		
 		var spriteSize = Utils.Max(Sprite.Texture.GetSize());
-		var shit = GetSpriteOffset() - new Vector2(spriteSize, spriteSize) / 2;
-		ClipRect.Position = shit;
+		ClipRect.Position = GetSpriteOffset() - new Vector2(spriteSize, spriteSize) / 2;
 		ClipRect.CustomMinimumSize = new Vector2(spriteSize, spriteSize);
-		// Add some margins
-		ClipRect.Position -= Vector2.One * 4;
 		ClipRect.CustomMinimumSize += Vector2.One * 8;
 		
-		GD.Print("Shitty " + shit);
-		ClipRect.Position = shit;
-		GD.Print("Clippy " + ClipRect.GlobalPosition);
-
 		GhostSprite.Texture = Database.Instance.GetTexture(ItemType);
 		GhostSprite.GlobalPosition = GlobalPosition + GetSpriteOffset();
-		
 
 		var particleMaterial = (ParticleProcessMaterial) _particles.ProcessMaterial;
 		particleMaterial.EmissionBoxExtents = new Vector3(16 * BuildingSize.X, 16 * BuildingSize.Y, 0);
 		_particles.GlobalPosition = GlobalPosition + GetSpriteOffset();
-		
+
 		PlayBuildAnimation();
 	}
 
@@ -145,74 +137,65 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 
 	private void PlayBuildAnimation()
 	{
+		var clipTarget = ClipRect.Position.Y;
+		ClipRect.Position += Vector2.Up * Utils.Max(Sprite.Texture.GetSize());
+		
+		var spriteTarget = Sprite.Texture.GetSize() / 2;
+		Sprite.Position = spriteTarget;
+		Sprite.Position -= Vector2.Up * Utils.Max(Sprite.Texture.GetSize()) * 2;
+		Sprite.Position -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
+		
+		Animate(spriteTarget, clipTarget, () =>
+		{
+			BuildComplete = true;
+			GhostSprite.Visible = false;
+		});
+	}
+
+	private void PlayRemoveAnimation()
+	{
+		var clipTarget = ClipRect.Position.Y - Utils.Max(Sprite.Texture.GetSize());
+		
+		var spriteTarget = Sprite.Position;
+		spriteTarget -= Vector2.Up * Utils.Max(Sprite.Texture.GetSize()) * 2;
+		spriteTarget -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
+		
+		Animate(spriteTarget, clipTarget, BaseNode.QueueFree);
+	}
+
+	private void Animate(Vector2 spriteTarget, float clipTarget, Action onComplete)
+	{
 		_particles.Emitting = true;
 
 		_audio.CallDeferred("play", (float)GD.RandRange(0.0f, 20.0f));
 		_audio.VolumeDb = -20;
 		_audio.PitchScale = .25f;
-
-		var spriteTargetPos = Sprite.Texture.GetSize() / 2;
-		Sprite.Position = spriteTargetPos;
-		Sprite.Position -= Vector2.Up * Utils.Max(Sprite.Texture.GetSize()) * 2;
-		Sprite.Position -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
 
 		var tweenTime = .5 * BuildingSize.Y;
 		
 		var yTween = Globals.Tree.CreateTween();
-		yTween.TweenProperty(Sprite, "position:y", spriteTargetPos.Y, tweenTime);
+		yTween.TweenProperty(Sprite, "position:y", spriteTarget.Y, tweenTime);
 		var xTween = Globals.Tree.CreateTween();
 		xTween.SetEase(Tween.EaseType.InOut);
 		
 		var jiggleCount = 5;
-		for (int i = 0; i < jiggleCount - 1; i++)
+		for (var i = 0; i < jiggleCount - 1; i++)
 		{
 			xTween.TweenProperty(Sprite, "position:x", 
-				spriteTargetPos.X + GD.RandRange(-3, 3), tweenTime / jiggleCount);
+				spriteTarget.X + GD.RandRange(-3, 3), tweenTime / jiggleCount);
 		}
 		
-		xTween.TweenProperty(Sprite, "position:x", spriteTargetPos.X, tweenTime / jiggleCount);
+		xTween.TweenProperty(Sprite, "position:x", spriteTarget.X, tweenTime / jiggleCount);
 		xTween.TweenCallback(Callable.From(() => _audio.Stop()));
-		xTween.TweenCallback(Callable.From(() => BuildComplete = true));
-		xTween.TweenCallback(Callable.From(() => GhostSprite.Visible = false));
+		xTween.TweenCallback(Callable.From(onComplete));
 
-		var target = ClipRect.Position.Y;
-		
-		var yTween2 = Globals.Tree.CreateTween();
-		yTween2.TweenProperty(ClipRect, "position:y", target, tweenTime);
-		
-		ClipRect.Position += Vector2.Up * Utils.Max(Sprite.Texture.GetSize());
-	}
-	
-	private void PlayRemoveAnimation()
-	{
-		_particles.Emitting = true;
-		// Avoid death on load
-		_audio.CallDeferred("play", (float)GD.RandRange(0.0f, 20.0f));
-		_audio.VolumeDb = -20;
-		_audio.PitchScale = .25f;
-
-		var spriteTargetPos =Sprite.GlobalPosition;
-		spriteTargetPos -= Vector2.Up * 32 * BuildingSize.Y;
-		spriteTargetPos -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
-
-		var tweenTime = 1.0f;
-		
-		var tweeny = Globals.Tree.CreateTween();
-		tweeny.TweenProperty(Sprite, "global_position:y", spriteTargetPos.Y, tweenTime);
-		var tweeny2 = Globals.Tree.CreateTween();
-		tweeny2.SetEase(Tween.EaseType.InOut);
-
-		var jiggleCount = 5;
-		for (int i = 0; i < jiggleCount - 1; i++)
+		var tweenTest = Globals.Tree.CreateTween();
+		tweenTest.TweenProperty(ClipRect, "position:y", clipTarget, tweenTime);
+		tweenTest.TweenCallback(Callable.From(() =>
 		{
-			tweeny2.TweenProperty(Sprite, "global_position:x", 
-				spriteTargetPos.X + GD.RandRange(-3, 3), tweenTime / jiggleCount);
-		}
-		
-		tweeny2.TweenProperty(Sprite, "global_position:x", spriteTargetPos.X, tweenTime / jiggleCount);
-		tweeny2.TweenCallback(Callable.From(() => _audio.Stop()));
-		tweeny2.TweenCallback(Callable.From(() => ClipRect.QueueFree()));
-		
+			GD.Print("Tween Complete");
+			GD.Print(ClipRect.Position);
+		}));
 	}
 	
 
