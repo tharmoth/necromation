@@ -11,10 +11,9 @@ public partial class CraftingQueue : Node
     public readonly List<Action> Listeners = new();
     public ImmutableList<CraftingQueueItem> Queue => _queue.ToImmutableList();
     public double Time => _time;
-    public const double TimePerCraft = 15;
+    public const double TimePerCraft = .5;
     
     private readonly List<CraftingQueueItem> _queue = new();
-    private readonly Inventory _inventory = new();
     private double _time;
 
     /// <summary>
@@ -30,142 +29,96 @@ public partial class CraftingQueue : Node
         
         if (amountToCraft <= 0) return;
         
-        var subRecipeQueue = new List<CraftingQueueItem>();
-        while (amountToCraft > 0)
-        {
-            amountToCraft--;
-            CraftRecursive(playerInventory, recipe, subRecipeQueue);
-        }
+        CraftRecursive(playerInventory, recipe, amountToCraft);
 
-        _queue.AddRange(subRecipeQueue);
-        
         Listeners.ForEach(listener => listener());
     }
 
-    private void testytest(Inventory sourceInventory, Recipe recipe)
+    private void CraftRecursive(Inventory sourceInventory, Recipe recipe, int amountToCraft)
     {
-        var stack = new Stack<CraftingQueueItem2> {};
-        stack.Push(new CraftingQueueItem2(recipe, 1, false));
+        var itemsToQueue = new List<CraftingQueueItem>();
+        var stack = new Stack<CraftingQueueItem>();
+        stack.Push(new CraftingQueueItem(recipe, amountToCraft));
 
         while (stack.Count > 0)
         {
             var itemToAdd = stack.Pop();
-
+            itemsToQueue.Add(itemToAdd);
+            
             foreach (var (item, count) in itemToAdd.Recipe.Ingredients)
             {
+                var countToAdd = count * itemToAdd.Count;
                 var sourceCount = sourceInventory.CountItem(item);
-                if (sourceCount < count)
+                var itemsNeeded = Mathf.Max(0, countToAdd - sourceCount);
+                Inventory.TransferItem(sourceInventory, itemToAdd.Inventory, item, countToAdd - itemsNeeded);
+                
+                if (itemsNeeded <= 0) continue;
+                var subRecipe = Database.Instance.Recipes.First(databaseRecipe => databaseRecipe.Products.ContainsKey(item));
+                subRecipe.Products.TryGetValue(item, out var itemsPerCraft);
+                    
+                var recipeCraftsNeeded = Mathf.CeilToInt(itemsNeeded / (float) itemsPerCraft);
+                var craftingQueueItem = new CraftingQueueItem(subRecipe, recipeCraftsNeeded, itemToAdd)
                 {
-                    var subRecipe = Database.Instance.Recipes.First(databaseRecipe => databaseRecipe.Products.ContainsKey(item));
-                    subRecipe.Products.TryGetValue(item, out var subCount);
-                    var itemsNeeded = count - sourceCount;
-                    var recipeCraftsNeeded = Mathf.CeilToInt(itemsNeeded / (float) subCount);
-                    stack.Push(new CraftingQueueItem2(subRecipe, recipeCraftsNeeded, true));
-                    Inventory.TransferItem(sourceInventory, _inventory, item, count - itemsNeeded);
-                }
-                else
-                {
-                    Inventory.TransferItem(sourceInventory, _inventory, item, count);
-                }
+                    Extra = recipeCraftsNeeded * itemsPerCraft - itemsNeeded
+                };
+                stack.Push(craftingQueueItem);
+                itemToAdd.Children.Add(craftingQueueItem);
             }
         }
+
+        itemsToQueue.Reverse();
+        _queue.AddRange(itemsToQueue);
     }
 
-    public class CraftingQueueItem2
+    public class CraftingQueueItem
     {
         // public int Index => Globals.FactoryScene.CraftingQueue._queue.ToList().IndexOf(this);
         public readonly Recipe Recipe;
         public int Count;
-        public bool IsPrerequisite;
+        public CraftingQueueItem Parent;
+        public List<CraftingQueueItem> Children = new();
+        public int Extra;
+        public Inventory Inventory = new();
         
-        public CraftingQueueItem2(Recipe recipe, int count, bool isPrerequisite)
+        public CraftingQueueItem(Recipe recipe, int count, CraftingQueueItem parent = null)
         {
             Recipe = recipe;
             Count = count;
-            IsPrerequisite = isPrerequisite;
+            Parent = parent;
         }
     }
-
-    private void CraftRecursive(Inventory inventory, Recipe recipe, List<CraftingQueueItem> recipeQueue, CraftingQueueItem parent = null)
-    {
-        if (!recipeQueue.Select(queueRecipe => queueRecipe.Recipe).Contains(recipe))
-        {
-            recipeQueue.Insert(0, new CraftingQueueItem(recipe, 1, parent));
-        }
-        else
-        {
-            recipeQueue.First(queueRecipe => queueRecipe.Recipe == recipe).Count++;
-        }
-        
-        var subParent = recipeQueue.First(queueRecipe => queueRecipe.Recipe == recipe);
-        
-        // Go through each ingredient and if the inventory does not have enough, craft the ingredient
-        // If the ingredient is not craftable, return false
-        foreach (var (type, amount) in recipe.Ingredients)
-        {
-            var amountInInventory = inventory.CountItem(type);
-            
-            var amountQueued = 0;
-            if (amountInInventory < amount)
-            {
-                var subRecipe = Database.Instance.GetRecipe(type);
-                
-                while (amountInInventory + amountQueued < amount)
-                {
-                    var subQueuedItem = recipeQueue.FirstOrDefault(queueRecipe => queueRecipe.Recipe == recipe);
-                    if (subQueuedItem != null && subQueuedItem.Extra > 0)
-                    {
-                        subQueuedItem.Extra--;
-                        amountQueued++;
-                    }
-                    else
-                    {
-                        subRecipe.Products.TryGetValue(type, out var subAmount);
-                        amountQueued += subAmount;
-                        CraftRecursive(inventory, subRecipe, recipeQueue, subParent);
-                    }
-                }
-
-                if (amountInInventory + amountQueued > amount)
-                {
-                    recipeQueue.First(queueRecipe => queueRecipe.Recipe == subRecipe).Extra += amountInInventory + amountQueued - amount;
-                }
-            }
-
-            Inventory.TransferItem(inventory, _inventory, type, amount - amountQueued);
-        }
-    }
-    
     
     /// <summary>
     /// Removes the given amount of crafts from the crafting queue item.
     /// If the crafting queue item then has no items it is removed.
     /// </summary>
-    /// <param name="item"> Item in the queue to remove crafts from. </param>
+    /// <param name="craftingQueueItem"> Item in the queue to remove crafts from. </param>
     /// <param name="countToCancel"> Number of crafts of that recipe to cancel. </param>
-    public void CancelItem(CraftingQueueItem item, int countToCancel)
+    public void CancelItem(CraftingQueueItem craftingQueueItem, int countToCancel)
     {
-        var recipe = item.Recipe;
+        var recipe = craftingQueueItem.Recipe;
         var playerInventory = Globals.PlayerInventory;
-        var numCraftsToCancel = Mathf.Min(countToCancel, item.Count);
+        var numCraftsToCancel = Mathf.Min(countToCancel, craftingQueueItem.Count);
         
-        item.Count -= countToCancel;
-        if (item.Count <= 0) _queue.Remove(item);
+        craftingQueueItem.Count -= countToCancel;
+        if (craftingQueueItem.Count <= 0) _queue.Remove(craftingQueueItem);
         if (numCraftsToCancel <= 0) return;
         
         // Give the player back the canceled items.
         foreach (var (type, amount) in recipe.Ingredients)
         {
-            Inventory.TransferItem(_inventory, playerInventory, type, amount * numCraftsToCancel);
+            var amountToTransfer = Math.Min(amount * numCraftsToCancel, craftingQueueItem.Inventory.CountItem(type));
+            Inventory.TransferItem(craftingQueueItem.Inventory, playerInventory, type, amountToTransfer);
+        }
+        
+        if (craftingQueueItem.Parent != null)
+        {
+            CancelItem(craftingQueueItem.Parent, craftingQueueItem.Parent.Count);
         }
 
-        if (item.Parent != null)
+        foreach (var childItem in craftingQueueItem.Children)
         {
-            CancelItem(item.Parent, item.Parent.Count);
-            foreach (var (type, amount) in recipe.Products)
-            {
-                playerInventory.Remove(type, amount * numCraftsToCancel);
-            }
+            childItem.Parent = null;
         }
         
         MusicManager.PlayCraft();
@@ -186,35 +139,15 @@ public partial class CraftingQueue : Node
         craftingQueueItem.Count--;
         var recipe = craftingQueueItem.Recipe;
 
-        recipe.Craft(_inventory, craftingQueueItem.Parent != null ? _inventory : Globals.PlayerInventory);
-
+        recipe.Craft(craftingQueueItem.Inventory, craftingQueueItem.Parent == null ? Globals.PlayerInventory : craftingQueueItem.Parent.Inventory);
 
         if (craftingQueueItem.Count <= 0)
         {
             _queue.RemoveAt(0);
-            if (craftingQueueItem.Extra > 0)
-            {
-                Inventory.TransferItem(_inventory, Globals.PlayerInventory, recipe.Products.First().Key, craftingQueueItem.Extra);
-            }
             MusicManager.PlayCraft();
+            Inventory.TransferAllTo(craftingQueueItem.Inventory, Globals.PlayerInventory);
         }
         
         Listeners.ForEach(listener => listener());
-    }
-    
-    public class CraftingQueueItem
-    {
-        public int Index => Globals.FactoryScene.CraftingQueue._queue.ToList().IndexOf(this);
-        public readonly Recipe Recipe;
-        public int Count;
-        public CraftingQueueItem Parent;
-        public int Extra;
-        
-        public CraftingQueueItem(Recipe recipe, int count, CraftingQueueItem parent = null)
-        {
-            Recipe = recipe;
-            Count = count;
-            Parent = parent;
-        }
     }
 }
