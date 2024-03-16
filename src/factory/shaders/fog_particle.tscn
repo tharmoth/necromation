@@ -35,9 +35,10 @@ turbulence_initial_displacement_max = 100.0
 
 [node name="Node2D" type="GPUParticles2D"]
 position = Vector2(320, 320)
-amount = 1000
+amount = 750
 process_material = SubResource("ParticleProcessMaterial_b2d3x")
 texture = ExtResource("1_l1xke")
 lifetime = 3.0
 preprocess = 30.0
+speed_scale = 0.1
 visibility_rect = Rect2(-996.678, -865.876, 1983.04, 1884.04)

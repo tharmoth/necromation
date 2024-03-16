@@ -157,7 +157,6 @@ deconstruct={
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=2
 anti_aliasing/screen_space_roughness_limiter/amount=4.0
 anti_aliasing/screen_space_roughness_limiter/limit=1.0
 anti_aliasing/quality/msaa_2d=1

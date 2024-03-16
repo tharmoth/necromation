@@ -16,6 +16,7 @@ public partial class FactoryScene : Scene
 	public FactoryTileMap TileMap;
 	public Node2D GroundItemHolder;
 	public Sprite2D CursorSprite => GetNode<Sprite2D>("%CursorSprite");
+	public DayNight DayNight => GetNode<DayNight>("%DayNight");
 	
 	/**************************************************************************
 	 * State Data          													  *

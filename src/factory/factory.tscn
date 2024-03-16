@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=42 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -33,9 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="27_0iq17"]
 [ext_resource type="Script" path="res://src/factory/gui/CursorManager.cs" id="30_ilgnm"]
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="31_o81rd"]
-[ext_resource type="Texture2D" uid="uid://bddp18nssk6hf" path="res://res/sprites/fow-mask.png" id="34_hqptb"]
-[ext_resource type="Material" uid="uid://43qm0tq10fps" path="res://src/factory/shaders/greyscale.tres" id="34_y6o8j"]
-[ext_resource type="Texture2D" uid="uid://cn0irlwg3xiag" path="res://res/sprites/fow.png" id="36_msa2f"]
+[ext_resource type="Texture2D" uid="uid://dqq2mlyd2uvyi" path="res://res/sprites/fow2.png" id="34_fha0a"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
 streams_count = 1
@@ -554,6 +552,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="DayNight" parent="." instance=ExtResource("27_0iq17")]
+unique_name_in_owner = true
 
 [node name="CursorManager" type="Node" parent="."]
 script = ExtResource("30_ilgnm")
@@ -589,21 +588,5 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="Node2D" type="Node2D" parent="."]
-visible = false
-z_index = 4096
-position = Vector2(2880, 1600)
-scale = Vector2(0.313, 0.313)
-
-[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
-scale = Vector2(1, 1)
-texture = ExtResource("36_msa2f")
-
-[node name="ColorRect" type="Sprite2D" parent="Node2D"]
-clip_children = 1
-z_index = 2
-texture = ExtResource("34_hqptb")
-
-[node name="Sprite2D" type="Sprite2D" parent="Node2D/ColorRect"]
-material = ExtResource("34_y6o8j")
-texture = ExtResource("36_msa2f")
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("34_fha0a")

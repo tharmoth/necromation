@@ -7,6 +7,8 @@ public partial class ConfigurationGui : PanelContainer
 {
 	// The container that is used to display our checkboxes. It starts with dummy items so It should be cleared.
 	private Container Options => GetNode<Container>("%Options");
+	private HSlider HSlider => GetNode<HSlider>("%HSlider");
+	private Label TimeLabel => GetNode<Label>("%TimeLabel");
 	
 	public static void Display()
 	{
@@ -18,7 +20,7 @@ public partial class ConfigurationGui : PanelContainer
 	{
 		base._Ready();
 		
-		Options.GetChildren().ToList().ForEach(node => node.QueueFree());
+		Options.GetChildren().OfType<CheckBox>().ToList().ForEach(node => node.QueueFree());
 		
 		var checkBox = new CheckBox();
 		checkBox.Text =	"Animate Inserters";
@@ -53,5 +55,15 @@ public partial class ConfigurationGui : PanelContainer
 			Globals.FactoryScene.Gui.ToggleCinematicMode();
 		};
 		Options.AddChild(checkBox5);
+		
+		HSlider.Value = Globals.FactoryScene.DayNight.GetHour();
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		var dayNight = Globals.FactoryScene.DayNight;
+		dayNight.SetHour((float)HSlider.Value); 
+		TimeLabel.Text = $"{dayNight.GetHour()}:00";
 	}
 }

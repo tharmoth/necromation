@@ -87,8 +87,39 @@ horizontal_scroll_mode = 0
 [node name="Options" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer/Options"]
 layout_mode = 2
 text = "Enable Yeet
 "
+
+[node name="Time" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer/Options"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer/Options/Time"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer/Options/Time/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer/Options/Time/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Time of Day:"
+
+[node name="TimeLabel" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer/Options/Time/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/PanelContainer2/MarginContainer/ScrollContainer/Options/Time/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 24.0
+step = 0.25
+tick_count = 24
+ticks_on_borders = true

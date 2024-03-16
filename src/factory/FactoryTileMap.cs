@@ -31,23 +31,22 @@ public partial class FactoryTileMap : LayerTileMap
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 		
 		Sprite2D sprite = new();
-		sprite.Texture = Database.Instance.GetTexture("fow");
-		var scaler = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
+		sprite.Texture = Database.Instance.GetTexture("fow2");
+		var scaler = (TileSize * ProvinceSize) / (sprite.Texture.GetSize().X - 192);
 		sprite.Scale = new Vector2(scaler, scaler);
-		
-		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;;
+		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2 - Vector2.One * 96;
 		sprite.Centered = true;
 		sprite.ZIndex = 1000;
-		
-		GpuParticles2D particles = Scene.Instantiate<GpuParticles2D>();
-		particles.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;
-		particles.ZIndex = 1000;
+		CanvasItemMaterial material = new();
+		material.BlendMode = CanvasItemMaterial.BlendModeEnum.PremultAlpha;
+		sprite.Material = material;
+		Globals.FactoryScene.CallDeferred("add_child", sprite);
 		
 		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
-		Globals.FactoryScene.CallDeferred("add_child", particles);
-		_fogs.Add(location, particles);
+		// Globals.FactoryScene.CallDeferred("add_child", sprite);
+		_fogs.Add(location, sprite);
 		
-		SpawnGrass(startpos);
+		// SpawnGrass(startpos);
 	}
 	
 	public void AddProvence(Vector2I location)
@@ -88,7 +87,7 @@ public partial class FactoryTileMap : LayerTileMap
 				// SetCell(0, coords, 0, randomvec);
 			}
 		}
-		
+		SpawnGrass(startpos);
 		
 		
 		if (_fogs.TryGetValue(location, out var fog)) fog?.QueueFree();

@@ -156,12 +156,26 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		Animate(spriteTarget, clipTarget, () =>
 		{
 			BuildComplete = true;
-			GhostSprite.Visible = false;
+			GhostSprite.QueueFree();
+			
+			// Annoyingly ClipRect has a pretty high performance impact when being draw on screen,
+			// so we remove it after the animation is complete.
+			ClipRect.RemoveChild(Sprite);
+			BaseNode.AddChild(Sprite);
+			BaseNode.RemoveChild(ClipRect);
+			Sprite.GlobalPosition = GlobalPosition + GetSpriteOffset();
 		});
 	}
 
 	private void PlayRemoveAnimation()
 	{
+		// Annoyingly ClipRect has a pretty high performance impact when being draw on screen,
+		// so we have to re add it before the animation.
+		BaseNode.AddChild(ClipRect);
+		BaseNode.RemoveChild(Sprite);
+		ClipRect.AddChild(Sprite);
+		Sprite.Position = Sprite.Texture.GetSize() / 2;
+		
 		var clipTarget = ClipRect.Position.Y - Utils.Max(Sprite.Texture.GetSize());
 		
 		var spriteTarget = Sprite.Position;

@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnj3kmsmythfa"]
+
+[ext_resource type="Script" path="res://src/sk/SKViewportScreenshot.cs" id="1_ayphu"]
+[ext_resource type="PackedScene" uid="uid://diwrf123tv15a" path="res://src/factory/shaders/fog_particle.tscn" id="2_t7bae"]
+[ext_resource type="PackedScene" uid="uid://csccrf1y0jkwi" path="res://src/factory/shaders/grass_particles.tscn" id="3_vuyav"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_ayphu")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(320, 320)
+
+[node name="Node2D2" parent="." instance=ExtResource("3_vuyav")]
+visible = false
+position = Vector2(320, 320)
+
+[node name="Node2D" parent="." instance=ExtResource("2_t7bae")]
