@@ -70,11 +70,45 @@ public class Recipe
     
     public int GetMaxCraftable(Inventory inventory)
     {
-        var max = int.MaxValue;
-        foreach (var (type, amount) in Ingredients)
+        // Recursively find the max amount of this recipe that can be crafted if missing ingredients are crafted until
+        // the inventory runs out of necessary resources
+
+        if (this is not { Category: "None" or "Hand" }) return 0;
+
+        var copy = new Inventory(inventory);
+        var max = 0;
+        while (CraftRecursive(copy, this))
         {
-            max = Math.Min(max, inventory.CountItem(type) / amount);
+            max++;
         }
+        
+        // Old Method
+        // var max = int.MaxValue;
+        // foreach (var (type, amount) in Ingredients)
+        // {
+        //     max = Math.Min(max, inventory.CountItem(type) / amount);
+        // }
         return max;
+    }
+
+    private bool CraftRecursive(Inventory inventory, Recipe recipe)
+    {
+        // Go through each ingredient and if the inventory does not have enough, craft the ingredient
+        // If the ingredient is not craftable, return false
+        foreach (var (type, amount) in recipe.Ingredients)
+        {
+            if (inventory.CountItem(type) >= amount) continue;
+            var subRecipe = Database.Instance.GetRecipe(type);
+            if (subRecipe is not { Category: "None" or "Hand" }) return false;
+            while (inventory.CountItem(type) < amount)
+            {
+                var success = CraftRecursive(inventory, subRecipe);
+                if (!success) return false;
+            }
+        }
+        
+        // If all ingredients are craftable, craft the recipe
+        recipe.Craft(inventory);
+        return true;
     }
 }

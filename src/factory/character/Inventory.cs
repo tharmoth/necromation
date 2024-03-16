@@ -33,6 +33,14 @@ public partial class Inventory : ITransferTarget
 			Remove(item, _items[item]);
 		}
 	}
+	
+	public Inventory() { }
+	
+	public Inventory(Inventory inventory)
+	{
+		_items = new Dictionary<string, int>(inventory._items);
+		itemCount = inventory.itemCount;
+	}
 
 	/**************************************************************************
 	 * Utility Methods                                                        *

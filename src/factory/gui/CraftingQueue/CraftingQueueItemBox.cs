@@ -37,7 +37,7 @@ public partial class CraftingQueueItemBox : ItemBox
 	private void Init(CraftingQueue.CraftingQueueItem item)
 	{
 		_item = item;
-		ItemType = Database.Instance.GetRecipe(item.RecipeName).Products.First().Key;
+		ItemType = item.Recipe.Products.First().Key;
 		CountLabel.Text = item.Count.ToString();
 		ProgressBar.Visible = true;
 		ProgressBar.Value = 0;

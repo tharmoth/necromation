@@ -12,21 +12,7 @@ public partial class CheatCodes : Node
 	public override void _Ready()
 	{
 		base._Ready();
-		
-		// Extra insurance against breaking builds.
-		if (true) return;
-		if (!OS.IsDebugBuild()) return;
-		Database.Instance.Recipes
-			.Select(recipe => recipe.Products.First().Key)
-			.ToList()
-			.ForEach(item => Globals.PlayerInventory.Insert(item, 100));
-			
-		Globals.PlayerInventory.Insert("Coal Ore", 1000);
-		Globals.PlayerInventory.Insert("Bone Fragments", 1000);
-		Globals.PlayerInventory.Insert("Void Chest", 1000);
-		Globals.PlayerInventory.Insert("Infinite Chest", 1000);
-		Globals.PlayerInventory.Insert("Loader", 1000);
-        
+		if (OS.IsDebugBuild()) Add100AllItems();
 	}
 
 	public override void _UnhandledKeyInput(InputEvent @event)
@@ -60,15 +46,8 @@ public partial class CheatCodes : Node
 			Globals.MapScene.TileMap.Provinces.ForEach(province => province.Owner = "Enemy");
 			Globals.FactoryScene.TileMap.OnOpen();
 		}
-		
-		if(entered.EndsWith("``ROBIN"))
-		{
-			GD.Print("SHERIFF OF NOTTINGHAM");
-			Database.Instance.Recipes
-				.Select(recipe => recipe.Products.First().Key)
-				.ToList()
-				.ForEach(item => Globals.PlayerInventory.Insert(item, 100));
-		}
+
+		if (entered.EndsWith("``ROBIN")) Add100AllItems();
 		
 		if (entered.EndsWith("``SHERIFF"))
 		{
@@ -92,5 +71,23 @@ public partial class CheatCodes : Node
 		{
 			Globals.FactoryScene.Gui.ToggleFps();
 		}
+	}
+
+	private void Add100AllItems()
+	{
+		GD.Print("SHERIFF OF NOTTINGHAM");
+		Database.Instance.Recipes
+			.Select(recipe => recipe.Products.First().Key)
+			.ToList()
+			.ForEach(item => Globals.PlayerInventory.Insert(item, 100));
+			
+		Globals.PlayerInventory.Insert("Coal Ore", 100);
+		Globals.PlayerInventory.Insert("Bone Fragments", 100);
+		Globals.PlayerInventory.Insert("Copper Ore", 100);
+		Globals.PlayerInventory.Insert("Stone", 100);
+		Globals.PlayerInventory.Insert("Tin Ore", 100);
+		Globals.PlayerInventory.Insert("Void Chest", 100);
+		Globals.PlayerInventory.Insert("Infinite Chest", 100);
+		Globals.PlayerInventory.Insert("Loader", 100);
 	}
 }

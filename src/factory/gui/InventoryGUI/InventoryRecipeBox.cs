@@ -37,7 +37,7 @@ public partial class InventoryRecipeBox : ItemBox
 	{
 		Database.Instance.UnlockedRecipes
 			.OrderBy(recipe => recipe.Name)
-			.Where(recipe => recipe.Category is "None" or "hands")
+			// .Where(recipe => recipe.Category is "None" or "hands")
 			.Where(recipe => list.GetChildren().OfType<InventoryRecipeBox>().FirstOrDefault(box => box._recipe == recipe) == null)
 			.ToList().ForEach(recipe => AddRecipe(from, recipe, list));
 	}
@@ -77,7 +77,7 @@ public partial class InventoryRecipeBox : ItemBox
 				default:
 					return;
 			}
-			Globals.FactoryScene.CraftingQueue.QueueRecipe(_recipe.Name, numToCraft);
+			Globals.FactoryScene.CraftingQueue.QueueRecipe(_recipe, numToCraft);
 		};
 		
 		TargetInventory.Listeners.Add(UpdateInventoryRecipeBox);
@@ -89,13 +89,10 @@ public partial class InventoryRecipeBox : ItemBox
 	private void UpdateInventoryRecipeBox()
 	{
 		if (TargetInventory == null) return;
-		Button.Disabled = !_recipe.CanCraft(TargetInventory);
-		Icon.Modulate = _recipe.CanCraft(TargetInventory) ? Colors.White : new Color(.5f, .5f, .5f);
-		var currentCraftableCount = int.MaxValue;
-		foreach (var (item, count) in _recipe.Ingredients)
-		{
-			currentCraftableCount = Math.Min(currentCraftableCount, TargetInventory.CountItem(item) / count);
-		}
+		var currentCraftableCount = _recipe.GetMaxCraftable(TargetInventory);
+		
+		Button.Disabled = currentCraftableCount == 0;
+		Icon.Modulate = currentCraftableCount == 0 ? new Color(.5f, .5f, .5f) : Colors.White;
 		CountLabel.Text = currentCraftableCount.ToString();
 		ColorRect.Visible = currentCraftableCount == 0;
 	}
