@@ -17,7 +17,11 @@ public partial class FactoryTileMap : LayerTileMap
 	public const int ProvinceSize = 20;
 	public const int ProvinceGap = 0;
 	private readonly List<Vector2I> _provences = new();
-	private readonly System.Collections.Generic.Dictionary<Vector2I, Sprite2D> _fogs = new();
+	private readonly System.Collections.Generic.Dictionary<Vector2I, Node2D> _fogs = new();
+	
+	public static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/shaders/fog_particle.tscn");
+	
+	private readonly HashSet<Vector2I> _buildable = new();
 
 	private void AddFog(Vector2I location)
 	{
@@ -34,9 +38,16 @@ public partial class FactoryTileMap : LayerTileMap
 		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;;
 		sprite.Centered = true;
 		sprite.ZIndex = 1000;
+		
+		GpuParticles2D particles = Scene.Instantiate<GpuParticles2D>();
+		particles.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;
+		particles.ZIndex = 1000;
+		
 		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
-		Globals.FactoryScene.CallDeferred("add_child", sprite);
-		_fogs.Add(location, sprite);
+		Globals.FactoryScene.CallDeferred("add_child", particles);
+		_fogs.Add(location, particles);
+		
+		SpawnGrass(startpos);
 	}
 	
 	public void AddProvence(Vector2I location)
@@ -72,28 +83,35 @@ public partial class FactoryTileMap : LayerTileMap
 					randomvec = new Vector2I(GD.RandRange(4, 7), GD.RandRange(0, 3));
 				}
 
+				_buildable.Add(coords);
+				
 				// SetCell(0, coords, 0, randomvec);
 			}
 		}
 		
-		Sprite2D sprite = new();
-		sprite.Texture = Database.Instance.GetTexture("soil2");
-		var scaler = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
-		sprite.Scale = new Vector2(scaler, scaler);
-		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2;
-		sprite.Centered = true;
-		sprite.ZIndex = -99;
+		
+		
+		if (_fogs.TryGetValue(location, out var fog)) fog?.QueueFree();
+	}
+
+	private void SpawnGrass(Vector2I startpos)
+	{
+		Sprite2D soilSprite = new();
+		soilSprite.Texture = Database.Instance.GetTexture("soil2");
+		var scaler = (TileSize * ProvinceSize) / soilSprite.Texture.GetSize().X;
+		soilSprite.Scale = new Vector2(scaler, scaler);
+		soilSprite.GlobalPosition = startpos + scaler * soilSprite.Texture.GetSize() / 2;
+		soilSprite.Centered = true;
+		soilSprite.ZIndex = -99;
 		// We need to fix the edges to enable rotation.
 		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
-		Globals.FactoryScene.CallDeferred("add_child", sprite);
+		Globals.FactoryScene.CallDeferred("add_child", soilSprite);
 
 		var grassTexture = Database.Instance.GetTexture("Grass2");
 		var grassTexture2 = Database.Instance.GetTexture("Grass5");
 		PropSpawner spawner = new(PropSpawner.RandomType.Particles, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .75f);
 		spawner.GlobalPosition = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
-		
-		if (_fogs.TryGetValue(location, out var fog)) fog?.QueueFree();
 	}
 	
 	private void SpawnResource(Vector2I location)
@@ -157,7 +175,7 @@ public partial class FactoryTileMap : LayerTileMap
 	
 	public override bool IsOnMap(Vector2I mapPos)
 	{
-		return true;
+		return _buildable.Contains(mapPos);
 	}
 
 	public bool IsBuildable(Vector2I mapPos)

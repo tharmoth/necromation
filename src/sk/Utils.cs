@@ -54,4 +54,7 @@ public class Utils
     {
 	    return Math.Max(vector2.X, vector2.Y);
     }
+
+    public static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance = .001f) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
+    public static bool IsEqualApprox(float a, float b, float tolerance = .001f) => Mathf.Abs(a - b) < tolerance;
 }

@@ -97,6 +97,12 @@ public class Mine : Building, IInteractable, ITransferTarget
         return base.CanPlaceAt(position) && GetOccupiedPositions(position).Any(Globals.FactoryScene.TileMap.IsResource);
     }
     
+    public override void Remove(Inventory to, bool quietly = false)
+    {
+        base.Remove(to, quietly);
+        if (_particles.Emitting) _particles.Emitting = false;
+    }
+    
     /**************************************************************************
      * Private Methods                                                        *
      **************************************************************************/

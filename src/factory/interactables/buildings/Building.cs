@@ -43,8 +43,9 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	/**************************************************************************
 	 * Visuals Variables 													  *
 	 **************************************************************************/
-	public readonly Node2D BaseNode = new ();
+	public readonly Node2D BaseNode = new();
 	public readonly Sprite2D Sprite = new();
+	public readonly Sprite2D OutlineSprite = new();
 	
 	protected readonly Sprite2D GhostSprite = new();
 	protected readonly ColorRect ClipRect = new();
@@ -70,7 +71,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		_particles.OneShot = true;
 		_particles.ZAsRelative = true;
 		_particles.ZIndex = -1;
-		
+
 		Sprite.AddChild(_audio);
 		Sprite.AddChild(_notifier);
 		
@@ -84,6 +85,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 
 		BaseNode.AddChild(_particles);
 		BaseNode.AddChild(GhostSprite);
+		BaseNode.AddChild(OutlineSprite);
 		BaseNode.AddChild(ClipRect);
 	}
 
@@ -109,6 +111,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		IsOnScreen = _notifier.IsOnScreen();
 		GlobalPosition = Globals.FactoryScene.TileMap.ToMap(GlobalPosition);
 		BaseNode.GlobalPosition = GlobalPosition;
+		OutlineSprite.Scale = new Vector2(BuildingSize.X, BuildingSize.Y);
 
 		var positions = GetOccupiedPositions(GlobalPosition);
 		positions.ForEach(pos => Globals.FactoryScene.TileMap.AddEntity(pos, this, FactoryTileMap.Building));
@@ -122,6 +125,11 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		
 		GhostSprite.Texture = Database.Instance.GetTexture(ItemType);
 		GhostSprite.GlobalPosition = GlobalPosition + GetSpriteOffset();
+		
+		OutlineSprite.Texture = Database.Instance.GetTexture("Selection");
+		OutlineSprite.GlobalPosition = GlobalPosition + GetSpriteOffset();
+		OutlineSprite.Visible = false;
+		OutlineSprite.ZIndex = 1;
 
 		var particleMaterial = (ParticleProcessMaterial) _particles.ProcessMaterial;
 		particleMaterial.EmissionBoxExtents = new Vector3(16 * BuildingSize.X, 16 * BuildingSize.Y, 0);
@@ -184,8 +192,17 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			xTween.TweenProperty(Sprite, "position:x", 
 				spriteTarget.X + GD.RandRange(-3, 3), tweenTime / jiggleCount);
 		}
-		
 		xTween.TweenProperty(Sprite, "position:x", spriteTarget.X, tweenTime / jiggleCount);
+
+		xTween.TweenProperty(Sprite, "position", 
+			new Vector2(spriteTarget.X + GD.RandRange(-3, 3),spriteTarget.Y + GD.RandRange(-3, 3) ), tweenTime / jiggleCount);
+		
+		xTween.TweenProperty(Sprite, "position", 
+			new Vector2(spriteTarget.X + GD.RandRange(-3, 3),spriteTarget.Y + GD.RandRange(-3, 3) ), tweenTime / jiggleCount);
+		
+		xTween.TweenProperty(Sprite, "position", 
+			spriteTarget, tweenTime / jiggleCount);
+		
 		xTween.TweenCallback(Callable.From(() => _audio.Stop()));
 		xTween.TweenCallback(Callable.From(onComplete));
 
@@ -215,22 +232,22 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		return positions;
 	}
 
-	public virtual void Remove(Inventory to)
+	public virtual void Remove(Inventory to, bool quietly = false)
 	{
 		Globals.FactoryScene.TileMap.RemoveEntity(this);
 		Globals.BuildingManager.RemoveBuilding(this);
 		
 		if (to != null)
 		{
-			TransferInventories(to);
+			TransferInventories(to, quietly);
 			to.Insert(ItemType);
-			SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, 0));
+			if (!quietly) SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, 0));
 		}
 
 		PlayRemoveAnimation();
 	}
 
-	protected void TransferInventories(Inventory to)
+	protected void TransferInventories(Inventory to, bool quietly)
 	{
 		int labelOffset = 1;
 		if (this is not ITransferTarget inputTarget) return;
@@ -241,7 +258,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 				var count = from.CountItem(item);
 				Inventory.TransferItem(from, to, item, count);
 				var remaining = to.CountItem(item);
-				SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", Sprite.GlobalPosition + new Vector2(0, labelOffset++ * 20));
+				if (!quietly) SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", Sprite.GlobalPosition + new Vector2(0, labelOffset++ * 20));
 			}
 		}
 	}

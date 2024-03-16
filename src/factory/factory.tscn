@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=44 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -33,8 +33,9 @@
 [ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="27_0iq17"]
 [ext_resource type="Script" path="res://src/factory/gui/CursorManager.cs" id="30_ilgnm"]
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="31_o81rd"]
-[ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="32_aktb2"]
+[ext_resource type="Texture2D" uid="uid://bddp18nssk6hf" path="res://res/sprites/fow-mask.png" id="34_hqptb"]
 [ext_resource type="Material" uid="uid://43qm0tq10fps" path="res://src/factory/shaders/greyscale.tres" id="34_y6o8j"]
+[ext_resource type="Texture2D" uid="uid://cn0irlwg3xiag" path="res://res/sprites/fow.png" id="36_msa2f"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
 streams_count = 1
@@ -589,19 +590,20 @@ scroll_active = false
 autowrap_mode = 0
 
 [node name="Node2D" type="Node2D" parent="."]
+visible = false
+z_index = 4096
+position = Vector2(2880, 1600)
+scale = Vector2(0.313, 0.313)
 
-[node name="ColorRect" type="ColorRect" parent="Node2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
+scale = Vector2(1, 1)
+texture = ExtResource("36_msa2f")
+
+[node name="ColorRect" type="Sprite2D" parent="Node2D"]
 clip_children = 1
 z_index = 2
-custom_minimum_size = Vector2(64, 64)
-offset_left = 55.0
-offset_top = 44.0
-offset_right = 119.0
-offset_bottom = 108.0
+texture = ExtResource("34_hqptb")
 
 [node name="Sprite2D" type="Sprite2D" parent="Node2D/ColorRect"]
-modulate = Color(1, 1, 1, 0.501961)
-z_index = 2
 material = ExtResource("34_y6o8j")
-position = Vector2(30, 73)
-texture = ExtResource("32_aktb2")
+texture = ExtResource("36_msa2f")

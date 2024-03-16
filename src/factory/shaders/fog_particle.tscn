@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://diwrf123tv15a"]
+
+[ext_resource type="Texture2D" uid="uid://cvuvgmy6k2lro" path="res://res/sprites/particles/smoke_07.png" id="1_l1xke"]
+
+[sub_resource type="Gradient" id="Gradient_cm0cc"]
+offsets = PackedFloat32Array(0, 0.146825, 0.849206, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.713726, 0.713726, 0.713726, 1, 0.713726, 0.713726, 0.713726, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xfd5n"]
+gradient = SubResource("Gradient_cm0cc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b2d3x"]
+emission_shape = 3
+emission_box_extents = Vector3(320, 320, 1)
+particle_flag_disable_z = true
+direction = Vector3(1, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+angular_velocity_min = -2.0
+angular_velocity_max = 2.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_min = -720.0
+angle_max = 720.0
+scale_min = 0.25
+scale_max = 0.5
+color = Color(1, 1, 1, 0.411765)
+color_ramp = SubResource("GradientTexture1D_xfd5n")
+turbulence_noise_strength = 7.35
+turbulence_noise_speed_random = 4.0
+turbulence_influence_min = 1.0
+turbulence_influence_max = 1.0
+turbulence_initial_displacement_min = 100.0
+turbulence_initial_displacement_max = 100.0
+
+[node name="Node2D" type="GPUParticles2D"]
+position = Vector2(320, 320)
+amount = 1000
+process_material = SubResource("ParticleProcessMaterial_b2d3x")
+texture = ExtResource("1_l1xke")
+lifetime = 3.0
+preprocess = 30.0
+visibility_rect = Rect2(-996.678, -865.876, 1983.04, 1884.04)

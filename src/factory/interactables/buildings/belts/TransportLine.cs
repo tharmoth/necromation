@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Godot;
 using Necromation.interactables.interfaces;
+using Necromation.sk;
 
 namespace Necromation.interactables.belts;
 
@@ -175,7 +176,7 @@ public partial class TransportLine : ITransferTarget
     private void AddItem(GroundItem item)
     {
         _itemsOnBelt.Add(item);
-        if (IsEqualApprox(item.GlobalPosition, Vector2.Zero, 1))
+        if (Utils.IsEqualApprox(item.GlobalPosition, Vector2.Zero, 1))
         {
             item.GlobalPosition = _cachePosition + GetTargetLocation(_itemsOnBelt.Count - 1);
         }
@@ -195,9 +196,6 @@ public partial class TransportLine : ITransferTarget
         item.Free();
         return item;
     }
-
-    public static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance = .001f) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
-    public static bool IsEqualApprox(float a, float b, float tolerance = .001f) => Mathf.Abs(a - b) < tolerance;
 
     #region ITransferTarget Implementation/
     /**************************************************************************

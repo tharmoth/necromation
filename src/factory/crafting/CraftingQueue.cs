@@ -42,27 +42,30 @@ public partial class CraftingQueue : Node
 
         while (stack.Count > 0)
         {
-            var itemToAdd = stack.Pop();
-            itemsToQueue.Add(itemToAdd);
+            var toAddItem = stack.Pop();
+            itemsToQueue.Add(toAddItem);
             
-            foreach (var (item, count) in itemToAdd.Recipe.Ingredients)
+            foreach (var (type, count) in toAddItem.Recipe.Ingredients)
             {
-                var countToAdd = count * itemToAdd.Count;
-                var sourceCount = sourceInventory.CountItem(item);
-                var itemsNeeded = Mathf.Max(0, countToAdd - sourceCount);
-                Inventory.TransferItem(sourceInventory, itemToAdd.Inventory, item, countToAdd - itemsNeeded);
+                var toAddCount = count * toAddItem.Count;
+                var sourceCount = sourceInventory.CountItem(type);
+                var neededCount = Mathf.Max(0, toAddCount - sourceCount);
+                Inventory.TransferItem(sourceInventory, toAddItem.Inventory, type, toAddCount - neededCount);
                 
-                if (itemsNeeded <= 0) continue;
-                var subRecipe = Database.Instance.Recipes.First(databaseRecipe => databaseRecipe.Products.ContainsKey(item));
-                subRecipe.Products.TryGetValue(item, out var itemsPerCraft);
-                    
-                var recipeCraftsNeeded = Mathf.CeilToInt(itemsNeeded / (float) itemsPerCraft);
-                var craftingQueueItem = new CraftingQueueItem(subRecipe, recipeCraftsNeeded, itemToAdd)
+                if (neededCount <= 0) continue;
+                var subRecipe = Database.Instance.Recipes
+                    .Where(dRecipe => dRecipe is { Category: "None" or "hands" })
+                    .First(databaseRecipe => databaseRecipe.Products.ContainsKey(type));
+                subRecipe.Products.TryGetValue(type, out var itemsPerCraft);
+                
+                // Calculate the minimum number of crafts to get the needed amount of items.
+                var recipeCraftsNeeded = Mathf.CeilToInt(neededCount / (float) itemsPerCraft);
+                var craftingQueueItem = new CraftingQueueItem(subRecipe, recipeCraftsNeeded, toAddItem)
                 {
-                    Extra = recipeCraftsNeeded * itemsPerCraft - itemsNeeded
+                    Extra = recipeCraftsNeeded * itemsPerCraft - neededCount
                 };
                 stack.Push(craftingQueueItem);
-                itemToAdd.Children.Add(craftingQueueItem);
+                toAddItem.Children.Add(craftingQueueItem);
             }
         }
 
@@ -70,9 +73,14 @@ public partial class CraftingQueue : Node
         _queue.AddRange(itemsToQueue);
     }
 
+    /// <summary>
+    /// <para>Data Construct used to represent an Item the the queue. Keeps track of dependants and dependees in order to
+    /// Cancel the crafting of this item. </para>
+    ///
+    /// <para>I Feel like this class could be refactored to be simpler, but this was the easiest implementation.</para>
+    /// </summary>
     public class CraftingQueueItem
     {
-        // public int Index => Globals.FactoryScene.CraftingQueue._queue.ToList().IndexOf(this);
         public readonly Recipe Recipe;
         public int Count;
         public CraftingQueueItem Parent;
@@ -118,7 +126,7 @@ public partial class CraftingQueue : Node
 
         foreach (var childItem in craftingQueueItem.Children)
         {
-            childItem.Parent = null;
+            CancelItem(childItem, childItem.Count);
         }
         
         MusicManager.PlayCraft();

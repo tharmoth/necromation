@@ -25,13 +25,14 @@ public class InsertItemAction
         if (building is not ITransferTarget transfer) return;
         
         var count = 0;
+        var item = Globals.Player.Selected;
 	
-        count = Mathf.Min(transfer.GetMaxTransferAmount(Globals.Player.Selected), _inventory.CountItem(Globals.Player.Selected));
+        count = Mathf.Min(transfer.GetMaxTransferAmount(item), _inventory.CountItem(item));
         Inventory.TransferItem(_inventory, transfer.GetInputInventory(), Globals.Player.Selected, count);
 
-        var remaining = _inventory.CountItem(Globals.Player.Selected);
+        var remaining = _inventory.CountItem(item);
 
-        SKFloatingLabel.Show("-" + count + " " + Globals.Player.Selected + " (" + remaining + ")" , ((Building)transfer).GlobalPosition);
+        SKFloatingLabel.Show("-" + count + " " + item + " (" + remaining + ")" , ((Building)transfer).GlobalPosition);
 		
         if (remaining == 0) Globals.Player.Selected = "";
 	

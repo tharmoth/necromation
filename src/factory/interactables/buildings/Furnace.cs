@@ -41,8 +41,10 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    _inputInventory = new FurnaceInventory(this);
 	    
 	    _particles = ParticleScene.Instantiate<GpuParticles2D>();
+	    _particles.Emitting = false;
 	    Sprite.AddChild(_particles);
 	    
+	    _light.Visible = false;
 	    _light.Texture = Database.Instance.GetTexture("SoftLight");
 	    _light.Color = Colors.Yellow;
 	    _light.TextureScale = .3f;
@@ -61,6 +63,8 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     
     public override void _Process(double delta)
     {
+	    if (!BuildComplete) return;
+	    
 	    base._Process(delta);
     	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
     	{
@@ -68,14 +72,15 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 		    _recipe = Database.Instance.Recipes
 			    .Where(recipe => recipe.Category == GetCategory())
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
-		    _animationTween?.Kill();
-		    _particles.Emitting = false;
-		    _light.Visible = false;
+		    if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
+		    {
+			    StopWorkingAnimation();
+		    }
     		return;
     	}
 
     	_time += (float)delta;
-	    Animate();
+	    PlayWorkingAnimation();
 
     	if (GetProgressPercent() < 1.0f) return;
     	_time = 0;
@@ -87,6 +92,12 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     {
 	    if (_recipe == null) return 0;
 	    return _time / _recipe.Time;
+    }
+    
+    public override void Remove(Inventory to, bool quietly = false)
+    {
+	    base.Remove(to, quietly);
+	    StopWorkingAnimation();
     }
 
 	/**************************************************************************
@@ -100,7 +111,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     /**************************************************************************
      * Private Methods                                                        *
      **************************************************************************/
-    private void Animate()
+    private void PlayWorkingAnimation()
     {
 	    if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
 
@@ -112,6 +123,13 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    
 	    _particles.Emitting = true;
 	    _light.Visible = true;
+    }
+
+    private void StopWorkingAnimation()
+    {
+	    _animationTween?.Kill();
+	    _particles.Emitting = false;
+	    _light.Visible = false;
     }
     
     // Caches the maximum amount of items that can be inserted into the furnace by reading unlocked recipes.

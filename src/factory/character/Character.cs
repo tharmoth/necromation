@@ -48,6 +48,7 @@ public partial class Character : Node2D
 	private readonly MineAction _mineAction;
 	private readonly RemoveBuildingAction _removeBuildingAction;
 	private readonly RemoveItemAction _removeItemAction;
+	private readonly DeconstructAction _deconstructAction = new();
 	
 	/**************************************************************************
 	 * Data Constants                                                         *
@@ -65,6 +66,7 @@ public partial class Character : Node2D
 		
 		AddChild(_buildBuildingAction);
 		AddChild(_removeBuildingAction);
+		AddChild(_deconstructAction);
 	}
 	
 	public override void _EnterTree()

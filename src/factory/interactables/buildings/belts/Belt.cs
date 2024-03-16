@@ -110,7 +110,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
             RightLine.Process(delta);
         }
 
-
         if (!IsOnScreen || !Config.AnimateBelts) return;
         // Move the frame forward 8 times every .5333 seconds
         var seconds = Time.GetTicksMsec() / 1000.0;
@@ -118,16 +117,16 @@ public partial class Belt : Building, ITransferTarget, IRotatable
         if (Sprite.Frame != frame) Sprite.Frame = frame;
     }
     
-    public override void Remove(Inventory to)
+    public override void Remove(Inventory to, bool quietly = false)
     {
         var adjacent = GetAdjacent();
-        base.Remove(to);
+        base.Remove(to, quietly);
         adjacent.Values.Where(belt => belt != null).ToList().ForEach(belt => UpdateInputOutput(belt, belt.GetAdjacent()));
         UpdateInputOutput(null, adjacent);
     }
     
     /**************************************************************************
-     * Protected Overides Methods                                             *
+     * Protected Overrides Methods                                             *
      **************************************************************************/
     public override bool CanPlaceAt(Vector2 position)
     {

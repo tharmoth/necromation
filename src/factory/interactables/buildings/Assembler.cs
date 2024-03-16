@@ -134,7 +134,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     // Assemblers add their contents to the players inventory when the recipe is changed.
     public void SetRecipe(Inventory dumpInventory, Recipe recipe)
     {
-	    if (dumpInventory != null) TransferInventories(dumpInventory);
+	    if (dumpInventory != null) TransferInventories(dumpInventory, false);
 
 	    _outlineSprite.Visible = true;
 	    _outlineSprite.Scale = new Vector2(48 / _outlineSprite.Texture.GetSize().X, 48 / _outlineSprite.Texture.GetSize().Y);

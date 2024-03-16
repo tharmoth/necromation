@@ -39,6 +39,7 @@ public partial class CrafterItemBox : ItemBox
 	
 	private static void AddMissing(Inventory from, List<Inventory> to, Container list, Recipe recipe, bool isInput)
 	{
+		if (recipe == null) return;
 		foreach (var (item, count) in isInput ? recipe.Ingredients : recipe.Products)
 		{
 			var itemBox = list.GetChildren().OfType<CrafterItemBox>().FirstOrDefault(box => box.ItemType == item);
@@ -49,6 +50,7 @@ public partial class CrafterItemBox : ItemBox
 
 	private static void RemoveExtra(Inventory from, Container list, Recipe recipe, bool isInput)
 	{
+		if (recipe == null) return;
 		var items = isInput ? recipe.Ingredients : recipe.Products;
 		
 		list.GetChildren().OfType<CrafterItemBox>()
