@@ -46,7 +46,7 @@ public partial class FactoryTileMap : LayerTileMap
 		// Globals.FactoryScene.CallDeferred("add_child", sprite);
 		_fogs.Add(location, sprite);
 		
-		// SpawnGrass(startpos);
+		SpawnGrass(startpos);
 	}
 	
 	public void AddProvence(Vector2I location)

@@ -7,13 +7,18 @@ namespace Necromation;
 
 public partial class ResearchLab : Building, ITransferTarget, IInteractable
 {
-    private Inventory _inventory = new();
+    private ResearchLabInventory _inventory = new();
     
     public override Vector2I BuildingSize => Vector2I.One * 3;
     public override string ItemType => "Research Lab";
 
     private bool _isResearching;
     private double _researchedAmount = 0;
+    
+    /**************************************************************************
+     * Visuals Variables 													  *
+     **************************************************************************/
+    private Tween _animationTween;
 
     public override void _Process(double delta)
     {
@@ -27,17 +32,27 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
         {
             _researchedAmount += delta / 30;
             Globals.CurrentTechnology.Progress += delta / 30;
+            Animate();
             if (_researchedAmount < 1.0f) return;
             _isResearching = false;
             _researchedAmount = 0;
             return;
         }
-    
-        
-        
+
         if (!GetItems().Contains(Globals.CurrentTechnology.Ingredients[0])) return;
         Remove(Globals.CurrentTechnology.Ingredients[0]);
         _isResearching = true;
+    }
+    
+    protected void Animate()
+    {
+        if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
+
+        _animationTween?.Kill();
+        _animationTween = Globals.Tree.CreateTween();
+        _animationTween.TweenProperty(Sprite, "scale", new Vector2(.85f, .85f), 1f);
+        _animationTween.TweenProperty(Sprite, "scale", Vector2.One, 1f);
+        _animationTween.TweenCallback(Callable.From(() => _animationTween.Kill()));
     }
 
     #region IInteractable Implementation
@@ -54,10 +69,18 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
     /**************************************************************************
      * ITransferTarget Methods                                                *
      **************************************************************************/
-    public bool CanAcceptItems(string item, int count = 1)
+    private class ResearchLabInventory : Inventory
     {
-        return item == "Experiment" && GetInventories().TrueForAll(inventory => inventory.CountItem(item) < 10);
+        public override int GetMaxTransferAmount(string itemType)
+        {
+            if (!itemType.Contains("Experiment")) return 0;
+
+            var currentCount = CountItem(itemType);
+            return Mathf.Max(0,  10 - currentCount);
+        }
     }
+    
+    public bool CanAcceptItems(string item, int count = 1) => _inventory.CanAcceptItems(item, count);
     public bool CanAcceptItemsInserter(string item, int count = 1) => _inventory.CanAcceptItemsInserter(item, count);
     public void Insert(string item, int count = 1) => _inventory.Insert(item, count);
     public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);

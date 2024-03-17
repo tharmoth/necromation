@@ -4,7 +4,7 @@
       "name": "Automation",
       "count": 20,
       "ingredients": [
-          "experiment"
+          "Experiment"
       ],
       "unlocks" : [
         "Underground Belt"
@@ -18,7 +18,7 @@
       "name": "Advanced Inserters",
       "count": 20,
       "ingredients": [
-        "experiment"
+        "Experiment"
       ],
       "unlocks" : [
         "Long Inserter"
@@ -32,7 +32,7 @@
       "name": "Copperwork",
       "count": 20,
       "ingredients": [
-        "experiment"
+        "Experiment"
       ],
       "unlocks" : [
         "Copper Ringmail",
@@ -51,7 +51,7 @@
       "name": "Advanced Research",
       "count": 50,
       "ingredients": [
-        "experiment"
+        "Experiment"
       ],
       "unlocks" : [
         "Experiment 2"
@@ -65,7 +65,7 @@
       "name": "Heavy Weaponry",
       "count": 100,
       "ingredients": [
-        "experiment 2"
+        "Experiment 2"
       ],
       "unlocks" : [
         "Copper Warhammer",
@@ -80,7 +80,7 @@
       "name": "Bronzework",
       "count": 100,
       "ingredients": [
-        "experiment 2"
+        "Experiment 2"
       ],
       "unlocks" : [
         "Bronze Bar",
@@ -95,7 +95,7 @@
       "name": "Bronze Metalworking",
       "count": 100,
       "ingredients": [
-        "experiment 2"
+        "Experiment 2"
       ],
       "unlocks" : [
         "Bronze Breastplate",
@@ -112,7 +112,7 @@
       "name": "Bronze Mastery",
       "count": 100,
       "ingredients": [
-        "experiment 2"
+        "Experiment 2"
       ],
       "unlocks" : [
         "Undead Legionary",

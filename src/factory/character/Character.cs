@@ -93,8 +93,16 @@ public partial class Character : Node2D
 				Input.GetAxis("left", "right"), Input.GetAxis("up", "down")
 			);
 			
-			var newPosition = GlobalPosition + direction.Normalized() * Speed * (float)delta;
-			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPosition))) GlobalPosition = newPosition;
+			var movement = direction.Normalized() * Speed * (float)delta;
+
+			var newPositionX = GlobalPosition + new Vector2(movement.X, 0);
+			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPositionX)) &&
+			    Globals.FactoryScene.TileMap.GetEntity(newPositionX, FactoryTileMap.Building) is null or Belt or Inserter) GlobalPosition = newPositionX;
+			
+			var newPositionY = GlobalPosition + new Vector2(0, movement.Y);
+			if (Globals.FactoryScene.TileMap.IsOnMap(Globals.FactoryScene.TileMap.GlobalToMap(newPositionY)) &&
+			    Globals.FactoryScene.TileMap.GetEntity(newPositionY, FactoryTileMap.Building) is null or Belt or Inserter) GlobalPosition = newPositionY;
+
 			
 			if (direction.Length() > 0)
 			{

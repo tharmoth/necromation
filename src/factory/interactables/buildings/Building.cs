@@ -230,7 +230,10 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	 ******************************************************************/
 	public virtual bool CanPlaceAt(Vector2 position)
 	{
-		return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable);
+		var playerPos = Globals.Player.MapPosition;
+		
+		return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable) && 
+		       GetOccupiedPositions(position).All(pos => pos != playerPos);
 	}
 	
 	public List<Vector2I> GetOccupiedPositions(Vector2 position)

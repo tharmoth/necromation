@@ -21,6 +21,7 @@ public partial class CrafterGUI : DeferredUpdate
 	private ItemSelectionItemBox ItemSelectionItemBox => GetNode<ItemSelectionItemBox>("%ItemSelectionItemBox");
 	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
 	private Label Title => GetNode<Label>("%Title");
+	private TextureRect BuildingTexture => GetNode<TextureRect>("%BuildingTexture");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -54,6 +55,8 @@ public partial class CrafterGUI : DeferredUpdate
 		}
 		
 		Title.Text = _crafter.ItemType;
+		
+		BuildingTexture.Texture = Database.Instance.GetTexture(_crafter.ItemType);
 	}
 
 	protected override void Update()

@@ -490,6 +490,7 @@ script = ExtResource("2_vcqpu")
 [node name="Body" type="Sprite2D" parent="Character"]
 unique_name_in_owner = true
 modulate = Color(0.180392, 0.0745098, 0.270588, 1)
+position = Vector2(0, -32)
 scale = Vector2(0.15, 0.15)
 texture = ExtResource("23_hi424")
 region_rect = Rect2(64, 0, 32, 32)
@@ -513,6 +514,7 @@ pitch_scale = 0.8
 [node name="Light" type="PointLight2D" parent="Character"]
 unique_name_in_owner = true
 energy = 0.5
+range_z_max = 999
 texture = ExtResource("23_hyyce")
 texture_scale = 3.0
 
