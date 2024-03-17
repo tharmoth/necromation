@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Godot;
+using Necromation;
 using Necromation.gui;
 using Necromation.map.battle.Weapons;
 using FileAccess = Godot.FileAccess;
@@ -233,7 +234,8 @@ public class Database
     {
         var dict = new Godot.Collections.Dictionary<string, Variant>
         {
-            ["ItemType"] = "Technology"
+            ["ItemType"] = "Technology",
+            ["CurrentTech"] = Globals.CurrentTechnology.Name
         };
         for (var i = 0; i < Instance.Technologies.Count; i++)
         {
@@ -252,6 +254,9 @@ public class Database
             technology.Load(node);
             index++;
         }
+        
+        var currentTech = nodeData.TryGetValue("CurrentTech", out var current) ? current.As<string>() : null;
+        Globals.CurrentTechnology = Instance.Technologies.FirstOrDefault(tech => tech.Name == currentTech);
     }
     #endregion
 }

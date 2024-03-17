@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -53,6 +54,8 @@ public class Technology
         var unlockedRecipes = Database.Instance.Recipes.Where(recipe => Unlocks.Contains(recipe.Name)).ToList();
         Database.Instance.UnlockedRecipes.AddRange(unlockedRecipes);
         Globals.ResearchListeners.ForEach(listener => listener());
+        
+        if (Globals.CurrentTechnology != this) return;
         Globals.CurrentTechnology = null;
         Globals.FactoryScene.Gui.TechnologyComplete();
     }
@@ -78,7 +81,8 @@ public class Technology
         var dict = new Godot.Collections.Dictionary<string, Variant>()
         {
             { "Name", Name },
-            { "Researched", Researched }
+            { "Researched", Researched },
+            { "Progress", _progress }
         };
         return dict;
     }
@@ -94,5 +98,7 @@ public class Technology
         {
             UnResearch();
         }
+        var progress = nodeData.TryGetValue("Progress", out var current) ? current.As<double>() : 0;
+        _progress = progress;
     }
 }
