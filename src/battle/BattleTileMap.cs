@@ -14,8 +14,8 @@ public partial class BattleTileMap : LayerTileMap
 	private readonly AStar2D _grid = new();
 	private System.Collections.Generic.Dictionary<Vector2I, int> cells = new();
 	
-	private const int X = 100;
-	private const int Y = 100;
+	public const int X = 250;
+	public const int Y = 250;
 	
 	public override void _EnterTree()
 	{

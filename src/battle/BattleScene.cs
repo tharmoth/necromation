@@ -102,13 +102,13 @@ public partial class BattleScene : Scene
 			if (commander.Team == "Player")
 			{
 				var spawnLocation = commander.SpawnLocation;
-				spawnLocation = spawnLocation + new Vector2I(0, 25);
+				spawnLocation += new Vector2I(BattleTileMap.X / 10, BattleTileMap.Y / 2);
 				spawner.GlobalPosition = Globals.BattleScene.TileMap.MapToGlobal(spawnLocation);
 			}
 			else
 			{
 				var spawnLocation = commander.SpawnLocation;
-				spawnLocation = spawnLocation + new Vector2I(50, 25);
+				spawnLocation += new Vector2I(BattleTileMap.X / 2 + BattleTileMap.X / 10, BattleTileMap.Y / 2);
 				spawner.GlobalPosition = Globals.BattleScene.TileMap.MapToGlobal(spawnLocation);
 			}
 			

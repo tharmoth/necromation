@@ -3,20 +3,27 @@ using System;
 
 public partial class CloudRegionSpawner : Control
 {
+	
+			
+	float xSize = BattleTileMap.TileSize * BattleTileMap.X;
+	float ySize = BattleTileMap.TileSize * BattleTileMap.Y;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		for (int i = 0; i < 100; i++)
+
+		
+		for (int i = 0; i < 750; i++)
 		{
-			var offset = GD.RandRange(0, 6400);
+			var offset = (float) GD.RandRange(0.0f, ySize + xSize);
 			Spawn(offset);
 		}
 	}
 
 	public void Spawn(float offset)
 	{
-		var bottomPoint = new Vector2(-3200, 3200);
-		var topPoint = new Vector2(3200, -3200);
+		var bottomPoint = new Vector2(-xSize, xSize);
+		var topPoint = new Vector2(ySize, -ySize);
 		var pointOnLine = bottomPoint.Lerp(topPoint, GD.Randf());
 		
 		

@@ -61,13 +61,13 @@ public partial class CrafterItemBox : ItemBox
 	
 	private void Init(Inventory source, List<Inventory> to, string item, int count, bool isInput)
 	{
+		_sourceInventory = source;
+		_to = to;
 		ItemType = item;
 		_count = count;
 		_isInput = isInput;
-		CountLabel.Text = source.CountItem(item).ToString();
-		_to = to;
-		_sourceInventory = source;
-		source.Listeners.Add(UpdateCount);
+		
+		_sourceInventory.Listeners.Add(UpdateCount);
 		UpdateCount();
 		// a63c4560
 		// b1832660

@@ -45,8 +45,6 @@ public class RangedWeapon : Weapon
         var damageRoll = Utils.RollDice("2d6");
 
         var adjustedDamage = damage - armor + damageRoll - armorRoll;
-
-        GD.Print(wielder.UnitType + " hit " + target.UnitType + " for " + adjustedDamage + " damage.");
         
         if (adjustedDamage <= 0) return;
         

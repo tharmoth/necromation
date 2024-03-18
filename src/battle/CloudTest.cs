@@ -5,6 +5,8 @@ public partial class CloudTest : Sprite2D
 {
 	float _speed = 100;
 	public Vector2 Direction = new Vector2(1, 1).Normalized();
+	float xSize = BattleTileMap.TileSize * BattleTileMap.X;
+	float ySize = BattleTileMap.TileSize * BattleTileMap.Y;
 
 	public CloudTest()
 	{
@@ -22,7 +24,9 @@ public partial class CloudTest : Sprite2D
 	public override void _Process(double delta)
 	{
 		GlobalPosition += Direction * (float)delta * _speed;
-		if (!(GlobalPosition.X + GlobalPosition.Y > 6400 + (Texture.GetSize().X + Texture.GetSize().Y) * Scale.X)) return;
+		var max = xSize + ySize + (Texture.GetSize().X + Texture.GetSize().Y) * Scale.X;
+		var current = GlobalPosition.X + GlobalPosition.Y;
+		if (current < max) return;
 		GetParent<CloudRegionSpawner>().Spawn(0);
 		QueueFree();
 	}

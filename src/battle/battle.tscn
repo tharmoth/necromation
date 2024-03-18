@@ -95,7 +95,7 @@ script = ExtResource("1_jh312")
 [node name="CloudRegion" type="Control" parent="."]
 clip_children = 1
 clip_contents = true
-custom_minimum_size = Vector2(3200, 3200)
+custom_minimum_size = Vector2(8000, 8000)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
