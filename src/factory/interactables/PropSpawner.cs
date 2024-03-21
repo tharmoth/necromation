@@ -148,6 +148,7 @@ public partial class PropSpawner : Node2D
 		party = GD.Load<PackedScene>("res://src/factory/shaders/grass_particles.tscn").Instantiate<GpuParticles2D>();
 		AddChild(party);
 		party.ZIndex = -98;
+		party.Scale = new Vector2(_radius, _radius);
 		var tweeny = Globals.Tree.CreateTween();
 		tweeny.TweenInterval(1);
 		tweeny.TweenCallback(Callable.From(() => party.SpeedScale = 0));

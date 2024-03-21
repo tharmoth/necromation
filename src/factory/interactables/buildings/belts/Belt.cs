@@ -95,6 +95,8 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
     public override void _PhysicsProcess(double delta)
     {
+        if (!BuildComplete) return;
+        
         if (Config.ProcessBeltsInPhysics)
         {
             LeftLine.Process(delta);
@@ -104,6 +106,8 @@ public partial class Belt : Building, ITransferTarget, IRotatable
 
     public override void _Process(double delta)
     {
+        if (!BuildComplete) return;
+        
         if (!Config.ProcessBeltsInPhysics)
         {
             LeftLine.Process(delta);

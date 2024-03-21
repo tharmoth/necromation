@@ -26,6 +26,8 @@ public class Globals
     // I think this should probably go somewhere else. Maybe associated with the player?
     public static Technology CurrentTechnology;
     public static List<Action> ResearchListeners = new();
+
+    public static int Souls;
     
     public static FactoryScene FactoryScene => SceneManager.FactoryScene;
     public static MapScene MapScene => SceneManager.MapScene;

@@ -46,6 +46,17 @@ public class Barracks : Assembler
         Commander.BarracksId = Id;
         _outputInventory = Commander.Units;
     }
+    
+    protected override bool MaxAutocraftReached()
+    {
+        return _outputInventory.CountItems() >= Commander.CommandCap;
+    }
+    
+    public override void Remove(Inventory to, bool quietly = false)
+    {
+        base.Remove(to, quietly);
+        Commander.Kill();
+    }
 
     #region IInteractable Implementation
     /**************************************************************************

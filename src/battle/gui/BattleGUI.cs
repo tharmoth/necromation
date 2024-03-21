@@ -60,6 +60,7 @@ public partial class BattleGUI : CanvasLayer
                 if (killer.Team == "Enemy") _enemyStats[killer.UnitType].IncrementKills();
                 else _playerStats[killer.UnitType].IncrementKills();
                 _enemyStats[unit.UnitType].IncrementDeaths();
+                Globals.Souls++;
             });
         }
 

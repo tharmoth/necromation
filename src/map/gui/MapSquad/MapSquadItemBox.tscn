@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfbyi1jtpqqty"]
+
+[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="1_43nyx"]
+[ext_resource type="Script" path="res://src/map/gui/MapSquad/MapSquadItemBox.cs" id="2_nscsg"]
+
+[node name="ItemBox" instance=ExtResource("1_43nyx")]
+script = ExtResource("2_nscsg")

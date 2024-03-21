@@ -80,7 +80,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 		return true;
 	}
 	
-	private bool MaxAutocraftReached()
+	protected virtual bool MaxAutocraftReached()
 	{
 		foreach (var (item, count) in _recipe.Products)
 		{
@@ -178,6 +178,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
     public bool CanAcceptItemsInserter(string item, int count = 1)
     {
+	    if (_recipe == null) return false;
 	    var ingredients = GetRecipe().Ingredients;
 	    if (MaxAutocraftReached() || !ingredients.TryGetValue(item, out var recipeCount)) return false;
 

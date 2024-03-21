@@ -119,6 +119,7 @@ public partial class BattleScene : Scene
 	public override void OnOpen()
 	{
 		Provence = Globals.MapScene.SelectedProvince;
+		Camera.GlobalPosition = new Vector2(BattleTileMap.X / 2.0f, BattleTileMap.Y / 2.0f) * BattleTileMap.TileSize;
 	}
 
 	public override void OnClose()

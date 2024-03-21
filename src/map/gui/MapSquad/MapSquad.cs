@@ -61,7 +61,7 @@ public partial class MapSquad : PanelContainer
 	
 	private void UpdateUnitList()
 	{
-		ItemBox.UpdateInventory(_commander.Units, UnitsList);
+		MapSquadItemBox.UpdateSquad(_commander.Units, UnitsList);
 		if (UnitsList.GetChildren().Count == 0) UnitsList.AddChild(new Label { Text = "No Units!" });
 	}
 

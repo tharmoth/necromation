@@ -15,8 +15,9 @@ public partial class FactoryScene : Scene
 	public CraftingQueue CraftingQueue => GetNode<CraftingQueue>("%CraftingQueue");
 	public FactoryTileMap TileMap;
 	public Node2D GroundItemHolder;
-	public Sprite2D CursorSprite => GetNode<Sprite2D>("%CursorSprite");
 	public DayNight DayNight => GetNode<DayNight>("%DayNight");
+	
+	private CanvasLayer CursorLayer => GetNode<CanvasLayer>("%CursorLayer");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -61,6 +62,7 @@ public partial class FactoryScene : Scene
 	{
 		MusicManager.PlayAmbiance();
 		TileMap.OnOpen();
+		CursorLayer.Visible = true;
 		
 		// if (AttackTimer == null && Globals.MapScene.TileMap
 		// 	    .GetProvinces().Count(province => province.Owner == "Player") >= 4)
@@ -91,5 +93,8 @@ public partial class FactoryScene : Scene
 		// }
 	}
 
-	public override void OnClose() {}
+	public override void OnClose()
+	{
+		CursorLayer.Visible = false;
+	}
 }

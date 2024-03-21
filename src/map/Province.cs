@@ -49,6 +49,7 @@ public partial class Province : Node2D, ITransferTarget
         panelContainer.Scale = Vector2.One * labelScale;
         panelContainer.Size = Vector2.One * (MapTileMap.TileSize * 1 / labelScale * .8f);
         panelContainer.Position = Vector2.One * (-MapTileMap.TileSize / 2.0f * .8f);
+        panelContainer.MouseFilter = Control.MouseFilterEnum.Ignore;
         AddChild(panelContainer);
 
         var label = new Label();
@@ -57,9 +58,9 @@ public partial class Province : Node2D, ITransferTarget
         label.VerticalAlignment = VerticalAlignment.Bottom;
         label.AutowrapMode = TextServer.AutowrapMode.Word;
         label.SizeFlagsVertical = Control.SizeFlags.ShrinkEnd;
+        label.MouseFilter = Control.MouseFilterEnum.Ignore;
         label.AddThemeColorOverride("font_color", new Color(.8f, .8f, .8f, .8f));
         panelContainer.AddChild(label);
-
     }
 
     public override void _Ready()
@@ -69,58 +70,6 @@ public partial class Province : Node2D, ITransferTarget
         GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(MapPosition);
         _flagSprite.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(this));
         _flagSprite.GlobalPosition -= Vector2.One * MapTileMap.TileSize / 4.0f;
-    }
-    
-    /**************************************************************************
-     * Initialization                                                         *
-     **************************************************************************/
-    public void Init(string team)
-    {
-        Owner = team;
-        Globals.MapScene.CallDeferred("add_child", this);
-        
-        if (team == "Player" && Globals.FactoryScene != null) return;
-        
-		
-        var meleeCommander = new Commander(this, team);
-        var meleeCommander2 = new Commander(this, team);
-        var meleeCommander3 = new Commander(this, team);
-        var rangedCommander = new Commander(this, team);
-        rangedCommander.SpawnLocation = new Vector2I(30, 25);
-		
-        var provinceLocation = MapPosition;
-        var dis = Mathf.Abs(provinceLocation.X - MapScene.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - MapScene.FactoryPosition.Y);
-		
-        switch (dis)
-        {
-            case 0:
-                break;
-            case 1:
-                meleeCommander.Units.Insert("Rabble", 10);
-                break;
-            case 2:
-                meleeCommander.Units.Insert("Infantry", 10);
-                rangedCommander.Units.Insert("Archer", 10);
-                break;
-            case 3:
-                meleeCommander.Units.Insert("Infantry", 50);
-                rangedCommander.Units.Insert("Archer", 25);
-                break;
-            case 4:
-                meleeCommander.Units.Insert("Infantry", 100);
-                rangedCommander.Units.Insert("Archer", 50);
-                break;
-            case 5:
-                meleeCommander.Units.Insert("Barbarian", 200);
-                meleeCommander2.Units.Insert("Heavy Infantry", 50);
-                rangedCommander.Units.Insert("Archer", 100);
-                break;
-            case 6:
-                meleeCommander.Units.Insert("Elite Infantry", 200);
-                meleeCommander2.Units.Insert("Barbarian", 200);
-                meleeCommander3.Units.Insert("Barbarian", 200);
-                break;
-        }
     }
     
     #region ITransferTarget Implementation

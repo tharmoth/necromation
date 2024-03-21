@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="3_fy5x1"]
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="5_06d3l"]
 [ext_resource type="Script" path="res://src/factory/gui/CraftingQueue/CraftingQueueGUI.cs" id="5_6ke2a"]
+[ext_resource type="Script" path="res://src/factory/gui/SoulsLabel.cs" id="6_3hhbs"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="6_kka5s"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
@@ -33,7 +34,6 @@
 [ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="27_0iq17"]
 [ext_resource type="Script" path="res://src/factory/gui/CursorManager.cs" id="30_ilgnm"]
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="31_o81rd"]
-[ext_resource type="Texture2D" uid="uid://dqq2mlyd2uvyi" path="res://res/sprites/fow2.png" id="34_fha0a"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
 streams_count = 1
@@ -207,6 +207,10 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Attack Incoming"
+
+[node name="SoulsLabel" type="Label" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Left"]
+layout_mode = 2
+script = ExtResource("6_3hhbs")
 
 [node name="FpsLabel" type="Label" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Left"]
 unique_name_in_owner = true
@@ -533,6 +537,7 @@ unique_name_in_owner = true
 script = ExtResource("26_a45ds")
 
 [node name="TiltShift" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Control" type="Control" parent="TiltShift"]
 layout_mode = 3
@@ -568,27 +573,18 @@ texture = ExtResource("31_o81rd")
 unique_name_in_owner = true
 z_index = 4096
 
-[node name="CursorLayor" type="CanvasLayer" parent="CursorManager"]
+[node name="CursorLayer" type="CanvasLayer" parent="CursorManager"]
+unique_name_in_owner = true
 layer = 128
+visible = false
 follow_viewport_enabled = true
 
-[node name="CursorItemCount" type="Label" parent="CursorManager/CursorLayor"]
+[node name="CursorItemCount" type="Label" parent="CursorManager/CursorLayer"]
 unique_name_in_owner = true
 offset_top = 6.0
 offset_right = 40.0
 offset_bottom = 33.0
 text = "5"
 
-[node name="CursorItemSprite" type="Sprite2D" parent="CursorManager/CursorLayor"]
+[node name="CursorItemSprite" type="Sprite2D" parent="CursorManager/CursorLayer"]
 unique_name_in_owner = true
-
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-text = "testtttttttttttttt"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("34_fha0a")

@@ -61,7 +61,7 @@ public partial class ItemBox : PanelContainer
 		list.AddChild(inventoryItem);
 	}
 
-	private void Init(string item, int count)
+	protected void Init(string item, int count)
 	{
 		ItemType = item;
 		CountLabel.Text = count.ToString();

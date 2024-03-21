@@ -235,7 +235,7 @@ public class Database
         var dict = new Godot.Collections.Dictionary<string, Variant>
         {
             ["ItemType"] = "Technology",
-            ["CurrentTech"] = Globals.CurrentTechnology.Name
+            ["CurrentTech"] = Globals.CurrentTechnology != null ? Globals.CurrentTechnology.Name : "None"
         };
         for (var i = 0; i < Instance.Technologies.Count; i++)
         {

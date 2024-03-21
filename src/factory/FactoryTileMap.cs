@@ -168,8 +168,6 @@ public partial class FactoryTileMap : LayerTileMap
 		{
 			AddFog(province.MapPosition);
 		}
-		
-		AddProvence(MapScene.FactoryPosition);
 	}
 	
 	public override bool IsOnMap(Vector2I mapPos)
