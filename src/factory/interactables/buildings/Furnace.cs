@@ -50,6 +50,8 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    _light.TextureScale = .3f;
 	    _light.Position = new Vector2(0, 24);
 	    Sprite.AddChild(_light);
+	    
+	    UpdateAllowedIngredients();
 	}
     
     public override void _Ready()
@@ -193,7 +195,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    public override int GetMaxTransferAmount(string itemType)
 	    {
 		    var currentCount = CountItem(itemType);
-		    if (_furnace._maxItems.TryGetValue(itemType, out var maxCount) && currentCount < MaxInputItems)
+		    if (_furnace._maxItems.ContainsKey(itemType) && currentCount < MaxInputItems)
 		    {
 			    return MaxInputItems - currentCount;
 		    }

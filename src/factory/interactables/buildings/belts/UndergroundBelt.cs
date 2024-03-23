@@ -33,7 +33,7 @@ public partial class UndergroundBelt : Belt
 
     public override void _Ready()
     {
-        GD.Print("Placed Underground Belt at " + MapPosition + " with orientation " + Orientation);
+        // GD.Print("Placed Underground Belt at " + MapPosition + " with orientation " + Orientation);
         // Look for belts that might be the enterance to this one. do this before belt._Ready() is called and rotates things.
         for (var i = 1; i <= Range; i++)
         {
@@ -41,17 +41,17 @@ public partial class UndergroundBelt : Belt
             var entity = Globals.FactoryScene.TileMap.GetEntity(position, FactoryTileMap.Building);
             if (entity is Belt belty)
             {
-                GD.Print("Checking " + entity + " at " + position + " with orientation " + belty.Orientation);
+                // GD.Print("Checking " + entity + " at " + position + " with orientation " + belty.Orientation);
             }
             else
             {
-                GD.Print("No belt at " + position);
+                // GD.Print("No belt at " + position);
             }
             
             if (entity is UndergroundBelt belt && belt.Orientation  == Orientation)
             {
                 _isEntrance = !belt._isEntrance;
-                GD.Print("Found belt at " + position + " with orientation " + belt.Orientation + " and isEntrance " + belt._isEntrance);
+                // GD.Print("Found belt at " + position + " with orientation " + belt.Orientation + " and isEntrance " + belt._isEntrance);
                 break;
             }
         }
@@ -66,10 +66,10 @@ public partial class UndergroundBelt : Belt
         // Globals.Player.RotateSelection();
 
         if (_isEntrance) return;
-        Sprite.GlobalRotation += 2 * Mathf.Pi;
+        Sprite.GlobalRotation = IRotatable.GetRadiansFromOrientation(IRotatable.GetOppositeOrientation(Orientation));;
         // We want to flip the lanes for the exit.
-        LeftLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(Sprite.GlobalRotation));
-        RightLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(Sprite.GlobalRotation));
+        LeftLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(Rotation));
+        RightLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(Rotation));
     }
     
     public override bool CanPlaceAt(Vector2 position)

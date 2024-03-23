@@ -164,6 +164,9 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			BaseNode.AddChild(Sprite);
 			BaseNode.RemoveChild(ClipRect);
 			Sprite.GlobalPosition = GlobalPosition + GetSpriteOffset();
+			
+			_particles.Emitting = false;
+			_particles.Visible = false;
 		});
 	}
 
@@ -193,6 +196,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	private void Animate(Vector2 spriteTarget, float clipTarget, Action onComplete)
 	{
 		_particles.Emitting = true;
+		_particles.Visible = true;
 
 		_audio.CallDeferred("play", (float)GD.RandRange(0.0f, 20.0f));
 		_audio.VolumeDb = -20;

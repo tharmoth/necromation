@@ -113,6 +113,7 @@ public partial class Inventory : ITransferTarget
 			if (!CanAcceptItems(entry.Key.ToString(), (int)entry.Value))
 			{
 				GD.PrintErr("Inventory.Load: Item count exceeds capacity. Item: " + entry.Key + " Count: " + entry.Value);
+				CanAcceptItems(entry.Key.ToString(), (int)entry.Value);
 				continue;
 			}
 			_items.Add(entry.Key.ToString(), (int)entry.Value);

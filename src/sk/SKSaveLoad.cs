@@ -77,6 +77,11 @@ public class SKSaveLoad
     {
         using var saveGame = FileAccess.Open("user://savegame.json", FileAccess.ModeFlags.Write);
 
+        // We need to save this first or furnace recipes will mess up on load.
+        var techData = Database.Save();
+        var techJson = Json.Stringify(techData);
+        saveGame.StoreLine(techJson);
+        
         var saveNodes = baseNode.GetTree().GetNodesInGroup("Persist");
         foreach (Node saveNode in saveNodes)
         {
@@ -108,10 +113,6 @@ public class SKSaveLoad
         var hotBarData = HotBarItemBox.Save();
         var hotBarJson = Json.Stringify(hotBarData);
         saveGame.StoreLine(hotBarJson);
-        
-        var techData = Database.Save();
-        var techJson = Json.Stringify(techData);
-        saveGame.StoreLine(techJson);
 
         var mapData = Globals.MapScene.TileMap.Save();
         var mapJson = Json.Stringify(mapData);

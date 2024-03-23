@@ -1,4 +1,5 @@
 ﻿using System;
+using Godot;
 
 namespace Necromation.interactables.interfaces;
 
@@ -43,4 +44,6 @@ public interface IRotatable
         BuildingOrientation.WestEast => 270,
         _ => throw new ArgumentOutOfRangeException()
     };
+    
+    public static float GetRadiansFromOrientation(BuildingOrientation orientation) => Mathf.DegToRad(GetDegreesFromOrientation(orientation));
 }
