@@ -174,12 +174,13 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		BaseNode.AddChild(ClipRect);
 		BaseNode.RemoveChild(Sprite);
 		ClipRect.AddChild(Sprite);
-		Sprite.Position = Sprite.Texture.GetSize() / 2;
-		
-		var clipTarget = ClipRect.Position.Y - Utils.Max(Sprite.Texture.GetSize());
+		Sprite.GlobalPosition = GlobalPosition + GetSpriteOffset();
+
+		var size = Utils.Max(Utils.GetSpriteSize(Sprite));
+		var clipTarget = ClipRect.Position.Y - size;
 		
 		var spriteTarget = Sprite.Position;
-		spriteTarget -= Vector2.Up * Utils.Max(Sprite.Texture.GetSize()) * 2;
+		spriteTarget -= Vector2.Up * size * 2;
 		spriteTarget -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
 		
 		Animate(spriteTarget, clipTarget, () =>

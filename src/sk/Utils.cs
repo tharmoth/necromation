@@ -57,4 +57,10 @@ public class Utils
 
     public static bool IsEqualApprox(Vector2 a, Vector2 b, float tolerance = .001f) => Mathf.Abs(a.X - b.X) < tolerance && Mathf.Abs(a.Y - b.Y) < tolerance;
     public static bool IsEqualApprox(float a, float b, float tolerance = .001f) => Mathf.Abs(a - b) < tolerance;
+
+    public static Vector2 GetSpriteSize(Sprite2D sprite)
+	{
+		var apparentSize = new Vector2(sprite.Texture.GetWidth() / (float)sprite.Hframes, sprite.Texture.GetHeight() / (float)sprite.Vframes);
+	    return apparentSize * sprite.Scale;
+	}
 }
