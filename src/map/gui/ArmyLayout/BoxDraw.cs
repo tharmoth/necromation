@@ -57,6 +57,8 @@ public partial class BoxDraw : Control
 		var y = diff.Y / size.Y;
 		var gridX = Mathf.RoundToInt(_gridSize.X * x);
 		var gridY = Mathf.RoundToInt(_gridSize.Y * y);
+		
+		GD.Print("Grid: ", gridX, " ", gridY);
 
 		if (!(x < 1.0f) || !(x >= 0) || !(y < 1.0f) || !(y >= 0)) return;
 			

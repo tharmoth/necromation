@@ -33,4 +33,6 @@ public class Globals
     public static MapScene MapScene => SceneManager.MapScene;
     public static BattleScene BattleScene => SceneManager.BattleScene;
     public static SceneTree Tree => SceneManager.SceneTree;
+    
+    public static Color PlayerColor = new("2e1345");
 }

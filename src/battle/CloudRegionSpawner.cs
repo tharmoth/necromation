@@ -11,13 +11,15 @@ public partial class CloudRegionSpawner : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-
+		var count = Mathf.RoundToInt(0.012 * BattleTileMap.X * BattleTileMap.Y);
 		
-		for (int i = 0; i < 750; i++)
+		for (int i = 0; i < count; i++)
 		{
 			var offset = (float) GD.RandRange(0.0f, ySize + xSize);
 			Spawn(offset);
 		}
+		
+		CustomMinimumSize = new Vector2(xSize, ySize);
 	}
 
 	public void Spawn(float offset)

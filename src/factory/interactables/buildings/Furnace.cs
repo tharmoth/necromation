@@ -69,7 +69,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
     	{
     		_time = 0;
-		    _recipe = Database.Instance.Recipes
+		    _recipe = Database.Instance.UnlockedRecipes
 			    .Where(recipe => recipe.Category == GetCategory())
 			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
 		    if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
@@ -135,7 +135,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     // Caches the maximum amount of items that can be inserted into the furnace by reading unlocked recipes.
     private void UpdateAllowedIngredients()
     {
-	    var ingredients = Database.Instance.Recipes
+	    var ingredients = Database.Instance.UnlockedRecipes
 		    .Where(recipe => recipe.Category == GetCategory())
 		    .SelectMany(recipe => recipe.Ingredients)
 		    .ToList();

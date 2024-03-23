@@ -40,7 +40,7 @@ public partial class MapGui : CanvasLayer
 		if (_battleQueue.Count > 0)
 		{
 			var province = _battleQueue.Dequeue();
-			Globals.MapScene.SelectedProvince = province;
+			Globals.MapScene.SelectProvince(province);
 			SceneManager.ChangeToScene(SceneManager.SceneEnum.Battle);
 		}
 		

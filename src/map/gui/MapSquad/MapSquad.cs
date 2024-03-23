@@ -29,7 +29,7 @@ public partial class MapSquad : PanelContainer
 	/**************************************************************************
 	 * Constants          													  *
 	 **************************************************************************/
-	private readonly Color selectedColor = new Color(0.5625f, 0.5625f, 0.5625f);
+	private readonly Color _selectedColor = new Color(0.5625f, 0.5625f, 0.5625f);
 	
 	// Static Accessor
 	public static void UpdateCommanderList(List<Commander> commanders, Container list)
@@ -70,7 +70,7 @@ public partial class MapSquad : PanelContainer
 		base._Process(delta);
 		// Polling is bad. I'm sorry. I'm just trying to get this done.
 		if (!Globals.MapScene.SelectedCommanders.Contains(_commander) && Background.Color != Colors.Black) Background.Color = Colors.Black;
-		else if (Globals.MapScene.SelectedCommanders.Contains(_commander) && Background.Color != selectedColor) Background.Color = selectedColor;
+		else if (Globals.MapScene.SelectedCommanders.Contains(_commander) && Background.Color != _selectedColor) Background.Color = _selectedColor;
 	}
 
 	public override void _GuiInput(InputEvent @event)

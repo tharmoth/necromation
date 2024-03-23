@@ -152,6 +152,9 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		if (AttackAdjacent()) return;
 		if (MoveToTarget()) return;
 		if (AttackDesiredTarget()) return;
+		
+		// wait
+		Cooldown += BattleScene.TimeStep;
 	}
 	
 	/**************************************************************************
@@ -271,7 +274,15 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	/// </returns>
 	private bool AttackAdjacent()
 	{
-		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, Enemies, 1)))
+		var up = Globals.BattleScene.TileMap.GetEntity(MapPosition + Vector2I.Up, BattleTileMap.Unit) as Unit;
+		var down = Globals.BattleScene.TileMap.GetEntity(MapPosition + Vector2I.Down, BattleTileMap.Unit) as Unit;
+		var left = Globals.BattleScene.TileMap.GetEntity(MapPosition + Vector2I.Left, BattleTileMap.Unit) as Unit;
+		var right = Globals.BattleScene.TileMap.GetEntity(MapPosition + Vector2I.Right, BattleTileMap.Unit) as Unit;
+		
+		var adjacent = new List<Unit> { up, down, left, right };
+		var adjacentEnemies = adjacent.Where(unit => unit != null && unit.Team != Team).ToList();
+		
+		foreach (var weapon in Weapons.Where(weapon => weapon.CanAttack(this, adjacentEnemies, 1)))
 		{
 			weapon.Attack(this);
 			return true;

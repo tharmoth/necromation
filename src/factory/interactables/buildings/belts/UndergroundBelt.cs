@@ -66,7 +66,7 @@ public partial class UndergroundBelt : Belt
         // Globals.Player.RotateSelection();
 
         if (_isEntrance) return;
-        Sprite.GlobalRotation += Mathf.Pi;
+        Sprite.GlobalRotation += 2 * Mathf.Pi;
         // We want to flip the lanes for the exit.
         LeftLine.Init(GlobalPosition + new Vector2(8, 0).Rotated(Sprite.GlobalRotation));
         RightLine.Init(GlobalPosition + new Vector2(-8, 0).Rotated(Sprite.GlobalRotation));

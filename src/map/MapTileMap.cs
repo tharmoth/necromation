@@ -1,7 +1,6 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-using Godot.Collections;
 using Necromation;
 using Necromation.map;
 using Necromation.map.character;
@@ -12,17 +11,18 @@ public partial class MapTileMap : SKTileMap
 	 * Utility Property                                                       *
 	 **************************************************************************/
 	public List<Province> Provinces => _provences.Values.ToList();
+	private ProvinceBorders ProvinceBorders => GetNode<ProvinceBorders>("%ProvinceBorders");
 	
 	/**************************************************************************
 	 * State Variables                                                        *
 	 **************************************************************************/
-	private readonly System.Collections.Generic.Dictionary<Vector2I, Province> _provences = new();
-	private readonly System.Collections.Generic.Dictionary<Vector2I, Node2D> _fogs = new();
+	private readonly Dictionary<Vector2I, Province> _provences = new();
+	private readonly Dictionary<Vector2I, Node2D> _fogs = new();
 	
 	/**************************************************************************
 	 * Data Constants                                                         *
 	 **************************************************************************/
-	public const int TileSize = 32;
+	public const int TileSize = 128;
 	
 	public override void _Ready()
 	{
@@ -30,7 +30,7 @@ public partial class MapTileMap : SKTileMap
 		
 		foreach (var location in GetUsedCells(0))
 		{
-			var provence = new Province();
+			var provence = new Province(location);
 			_provences.Add(location, provence);
 			
 			var team = location == MapScene.FactoryPosition ? "Player" : "Enemy";
@@ -43,9 +43,64 @@ public partial class MapTileMap : SKTileMap
 		foreach (var province in Globals.MapScene.TileMap.Provinces)
 		{
 			AddFog(province.MapPosition);
+			SpawnGrass(province.MapPosition);
 		}
+
+		for (int x = -20; x < 20; x++)
+		{
+			for (int y = -20; y < 20; y++)
+			{
+				var position = new Vector2I(x, y);
+				if (_fogs.ContainsKey(position)) continue;
+				AddFog(new Vector2I(x, y));
+			}
+		}
+
+		UpdateFogOfWar();
+	}
+
+
+	public void UpdateFogOfWar()
+	{
+		_provences.Keys
+			.Where(mapPos => _fogs.ContainsKey(mapPos))
+			.Select(mapPos => _fogs[mapPos])
+			.ToList()
+			.ForEach(fog => fog.Visible = true);
+		_provences.Values
+			.ToList()
+			.ForEach(province => province.Visible = false);
+		_provences.Values
+			.ToList()
+			.SelectMany(province => province.Commanders)
+			.ToList()
+			.ForEach(commander => commander.Visible = false);
 		
-		if (_fogs.TryGetValue(MapScene.FactoryPosition, out var fog)) fog?.QueueFree();
+		_provences.Values.Where(province => province.Owner == "Player")
+			.SelectMany(province =>
+			{
+				var visible = new List<Vector2I>
+				{
+					province.MapPosition,
+					province.MapPosition + Vector2I.Up,
+					province.MapPosition + Vector2I.Down,
+					province.MapPosition + Vector2I.Left,
+					province.MapPosition + Vector2I.Right
+				};
+				return visible;
+			})
+			.Distinct()
+			.Where(mapPos => _provences.ContainsKey(mapPos))
+			.Select(mapPos => _provences[mapPos])
+			.ToList()
+			.ForEach(province =>
+			{
+				if (_fogs.TryGetValue(province.MapPosition, out var fog)) fog.Visible = false;
+				province.Visible = true;
+				province.Commanders.ForEach(commander => commander.Visible = true);
+			});
+		
+		ProvinceBorders.UpdateBorders();
 	}
 
 	/**************************************************************************
@@ -60,6 +115,7 @@ public partial class MapTileMap : SKTileMap
         var meleeCommander3 = new Commander(province, province.Owner);
         var rangedCommander = new Commander(province, province.Owner);
         rangedCommander.SpawnLocation = new Vector2I(30, 25);
+        rangedCommander.TargetType = Commander.Target.Random;
 		
         var provinceLocation = province.MapPosition;
         var dis = Mathf.Abs(provinceLocation.X - MapScene.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - MapScene.FactoryPosition.Y);
@@ -106,12 +162,8 @@ public partial class MapTileMap : SKTileMap
 		return _provences.FirstOrDefault(pair => pair.Value == provence).Key;
 	}
 	
-	
 	private void AddFog(Vector2I location)
 	{
-		// We're missing a fog of war texture for now.
-		// if (true) return;
-		
 		var startpos = (location) * TileSize * (1 + 0);
 		
 		Sprite2D sprite = new();
@@ -121,17 +173,18 @@ public partial class MapTileMap : SKTileMap
 		sprite.GlobalPosition = startpos + scaler * sprite.Texture.GetSize() / 2 - scaler * Vector2.One * 96;
 		sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
 		sprite.Centered = true;
-		sprite.ZIndex = 1000;
+		sprite.ZIndex = -1;
 		CanvasItemMaterial material = new();
 		material.BlendMode = CanvasItemMaterial.BlendModeEnum.PremultAlpha;
 		sprite.Material = material;
 		Globals.MapScene.CallDeferred("add_child", sprite);
 		_fogs.Add(location, sprite);
-		SpawnGrass(startpos);
 	}
 	
-	private void SpawnGrass(Vector2I startpos)
+	private void SpawnGrass(Vector2I location)
 	{
+		var startpos = (location) * TileSize * (1 + 0);
+		
 		Sprite2D soilSprite = new();
 		soilSprite.Texture = Database.Instance.GetTexture("soil2");
 		var scaler = (TileSize * 1) / soilSprite.Texture.GetSize().X;
@@ -142,12 +195,15 @@ public partial class MapTileMap : SKTileMap
 		// We need to fix the edges to enable rotation.
 		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
 		Globals.MapScene.CallDeferred("add_child", soilSprite);
-
-		var grassTexture = Database.Instance.GetTexture("Grass2");
-		var grassTexture2 = Database.Instance.GetTexture("Grass5");
-		PropSpawner spawner = new(PropSpawner.RandomType.Particles, new Array<Texture2D>(){  }, 1 * TileSize / 2, .75f);
-		 spawner.GlobalPosition = startpos + Vector2I.One * 1 * TileSize / 2;
-		// Globals.MapScene.CallDeferred("add_child", spawner);
+		
+		Sprite2D grassSprite = new(); 
+		grassSprite.Texture = Database.Instance.GetTexture("Grass");
+		var scaler2 = (TileSize * 1) / (grassSprite.Texture.GetSize().X - 32);
+		grassSprite.Scale = new Vector2(scaler2, scaler2);
+		grassSprite.GlobalPosition = startpos + scaler2 * grassSprite.Texture.GetSize() / 2 - scaler2 * Vector2.One * 16;
+		grassSprite.Centered = true;
+		grassSprite.ZIndex = -99;
+		Globals.MapScene.CallDeferred("add_child", grassSprite);
 	}
 	
 	#region Save/Load

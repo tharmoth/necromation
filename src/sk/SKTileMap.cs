@@ -4,46 +4,6 @@ using Godot;
 
 public partial class SKTileMap : TileMap
 {
-	public enum Direction
-	{
-		Up,
-		Down,
-		Left,
-		Right,
-	}
-
-	public static Vector2I GetDirection(Direction direction)
-	{
-		return direction switch
-		{
-			Direction.Up => new Vector2I(0, -1),
-			Direction.Down => new Vector2I(0, 1),
-			Direction.Left => new Vector2I(-1, 0),
-			Direction.Right => new Vector2I(1, 0),
-			_ => throw new ArgumentOutOfRangeException()
-		};
-	}
-
-	public static Vector2I GetRight()
-	{
-		return GetDirection(Direction.Right);
-	}
-	
-	public static Vector2I GetLeft()
-	{
-		return GetDirection(Direction.Left);
-	}
-	
-	public static Vector2I GetUp()
-	{
-		return GetDirection(Direction.Up);
-	}
-	
-	public static Vector2I GetDown()
-	{
-		return GetDirection(Direction.Down);
-	}
-	
 	public Vector2I GlobalToMap(Vector2 point)
 	{
 		return LocalToMap(ToLocal(point));
@@ -51,7 +11,9 @@ public partial class SKTileMap : TileMap
 	
 	public Vector2 MapToGlobal(Vector2I point)
 	{
-		return ToGlobal(MapToLocal(point));
+		var local = MapToLocal(point);
+		var global = ToGlobal(local);
+		return global;
 	}
 
 	public Vector2 ToMap(Vector2 point)

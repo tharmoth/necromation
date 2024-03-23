@@ -12,10 +12,10 @@ public partial class BattleTileMap : LayerTileMap
 	public static int TileSize = 32;
 	
 	private readonly AStar2D _grid = new();
-	private System.Collections.Generic.Dictionary<Vector2I, int> cells = new();
+	private System.Collections.Generic.Dictionary<Vector2I, int> _cells = new();
 	
-	public const int X = 250;
-	public const int Y = 250;
+	public const int X = 200;
+	public const int Y = 100;
 	
 	public override void _EnterTree()
 	{
@@ -47,9 +47,9 @@ public partial class BattleTileMap : LayerTileMap
 				}
 				
 
-				SetCell(0, coords, 1, randomvec);
+				// SetCell(0, coords, 1, randomvec);
 				_grid.AddPoint(index, coords);
-				cells.Add(coords, index);
+				_cells.Add(coords, index);
 				index++;
 			}
 		}
@@ -94,38 +94,38 @@ public partial class BattleTileMap : LayerTileMap
 
 	private void Connect(Vector2I a, Vector2I b)
 	{
-		if (!cells.ContainsKey(a) || !cells.ContainsKey(b)) return;
-		_grid.ConnectPoints(cells[a], cells[b]);
+		if (!_cells.ContainsKey(a) || !_cells.ContainsKey(b)) return;
+		_grid.ConnectPoints(_cells[a], _cells[b]);
 	}
 
 	public override bool AddEntity(Vector2I position, IEntity entity, string layerName)
 	{
 		if (!base.AddEntity(position, entity, layerName)) return false;
-		_grid.SetPointDisabled(cells[position], true);
+		_grid.SetPointDisabled(_cells[position], true);
 		return true;
 	}
 	
 	public override bool RemoveEntity(Vector2I position, string layerName)
 	{
 		if(!base.RemoveEntity(position, layerName)) return false;
-		_grid.SetPointDisabled(cells[position], false);
+		_grid.SetPointDisabled(_cells[position], false);
 		return true;
 	}
 
 	public Vector2I GetNextPath(Vector2I mapFrom, Vector2I mapTo)
 	{
-		var disabled = _grid.IsPointDisabled(cells[mapTo]);
-		_grid.SetPointDisabled(cells[mapFrom], false);
-		_grid.SetPointDisabled(cells[mapTo], false);
-		var path = _grid.GetPointPath(cells[mapFrom], cells[mapTo]);
-		_grid.SetPointDisabled(cells[mapFrom], true);
-		_grid.SetPointDisabled(cells[mapTo], disabled);
+		var disabled = _grid.IsPointDisabled(_cells[mapTo]);
+		_grid.SetPointDisabled(_cells[mapFrom], false);
+		_grid.SetPointDisabled(_cells[mapTo], false);
+		var path = _grid.GetPointPath(_cells[mapFrom], _cells[mapTo]);
+		_grid.SetPointDisabled(_cells[mapFrom], true);
+		_grid.SetPointDisabled(_cells[mapTo], disabled);
 		return path.Length < 2 ?  mapFrom : (Vector2I) path[1];
 	}
 
 	public Vector2I GetNearestEmpty(Vector2I to)
 	{
-		if (cells.ContainsKey(to) && !_grid.IsPointDisabled(cells[to])) return to;
+		if (_cells.ContainsKey(to) && !_grid.IsPointDisabled(_cells[to])) return to;
 		// Do this by scanning in a spiral pattern over the grid
 		var radius = 1;
 		while (radius < 50)
@@ -137,8 +137,8 @@ public partial class BattleTileMap : LayerTileMap
 					if (Math.Abs(x) + Math.Abs(y) != radius) continue;
 					var testPoint = to + new Vector2I(x, y);
 					
-					if (!cells.ContainsKey(testPoint)) continue;
-					if (_grid.IsPointDisabled(cells[testPoint])) continue;
+					if (!_cells.ContainsKey(testPoint)) continue;
+					if (_grid.IsPointDisabled(_cells[testPoint])) continue;
 					// Too performance intensive we'll have to rethink this.
 					// if (_grid.GetPointPath(cells[from], cells[testPoint]).IsEmpty()) continue;
 					return testPoint;
@@ -162,5 +162,10 @@ public partial class BattleTileMap : LayerTileMap
 	public bool IsSurrounded(Vector2I mapPos)
 	{
 		return Globals.BattleScene.TileMap.GetUnitsInRange(mapPos, 1).Count == 5;
+	}
+	
+	public override bool IsOnMap(Vector2I mapPos)
+	{
+		return _cells.ContainsKey(mapPos);
 	}
  }

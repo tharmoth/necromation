@@ -24,7 +24,7 @@ public class RangedWeapon : Weapon
         var tilesToLead = new Vector2I(Mathf.CeilToInt(Mathf.Abs(differenceFloat.X)) * Mathf.Sign(differenceFloat.X), Mathf.CeilToInt(Mathf.Abs(differenceFloat.Y)) * Mathf.Sign(differenceFloat.Y));
 
         // If the target is moving, lead the target by guessing they will be closer to the wielder in the future
-        if (target.IsMoving && difference.Length() > 5) targetLoc += tilesToLead;
+        // if (target.IsMoving && difference.Length() > 5) targetLoc += tilesToLead;
         
         var type = Name switch
         {

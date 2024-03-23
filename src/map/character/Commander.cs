@@ -21,7 +21,7 @@ public partial class Commander : Node2D, ITransferTarget
     public readonly Inventory Units;
     private Province _province;
     private Vector2I _targetLocation;
-    public Vector2I SpawnLocation = new(25, 25);
+    public Vector2I SpawnLocation = new(50, 50);
     /// <summary> Associates this commander with a barracks in the factory. Used for save/load. </summary>
     public string BarracksId = null;
     
@@ -41,7 +41,6 @@ public partial class Commander : Node2D, ITransferTarget
      * Visuals Variables 													  *
      **************************************************************************/
     private readonly Line2D _line = new();
-    private readonly Sprite2D _sprite = new();
     
     /**************************************************************************
      * RPG Constants     													  *
@@ -51,13 +50,9 @@ public partial class Commander : Node2D, ITransferTarget
     public Commander(Province province, string team, string name = null)
     {
         _province = province;
-        _sprite.Texture = Database.Instance.GetTexture("Player");
-        _sprite.Scale = new Vector2(0.25f, 0.25f);
         Units = new CommanderInventory(this);
         Team = team;
         CommanderName = name ?? MapUtils.GetRandomCommanderName();
-        
-        AddChild(_sprite);
         
         province.AddCommander(this);
     }
@@ -65,7 +60,7 @@ public partial class Commander : Node2D, ITransferTarget
     // Deconstructor
     public void Kill()
     {
-        _province.Commanders.Remove(this);
+        _province.RemoveCommander(this);
         QueueFree();
     }
     
@@ -78,7 +73,7 @@ public partial class Commander : Node2D, ITransferTarget
         _targetLocation = Globals.MapScene.TileMap.GetLocation(_province);
         Globals.MapScene.TurnListeners.Add(MoveCommander);
         
-        if (Team != "Player") _sprite.Visible = false;
+        // if (Team != "Player") _spriteHolder.Visible = false;
     }
 
     public override void _Input(InputEvent @event)
@@ -114,10 +109,10 @@ public partial class Commander : Node2D, ITransferTarget
         _line.Points = new Vector2[] {};
         if (_targetLocation == Globals.MapScene.TileMap.GetLocation(_province)) return;
         GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(_targetLocation);
-        _province?.Commanders.Remove(this);
+        _province?.RemoveCommander(this);
         _province = Globals.MapScene.TileMap.GetProvence(_targetLocation);
         if (_province == null) return;
-        _province.Commanders.Add(this);
+        _province.AddCommander(this);
         GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(_province));
     }
     #region ITransferTarget Implementation

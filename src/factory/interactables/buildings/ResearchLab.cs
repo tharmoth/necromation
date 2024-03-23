@@ -7,11 +7,21 @@ namespace Necromation;
 
 public partial class ResearchLab : Building, ITransferTarget, IInteractable
 {
-    private ResearchLabInventory _inventory = new();
-    
+    /**************************************************************************
+     * Building Implementation                                                *
+     **************************************************************************/
     public override Vector2I BuildingSize => Vector2I.One * 3;
     public override string ItemType => "Research Lab";
-
+    
+    /**************************************************************************
+     * Hardcoded Scene Imports 											      *
+     **************************************************************************/
+    public static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/soul_storm.tscn");
+    
+    /**************************************************************************
+     * Logic Variables                                                        *
+     **************************************************************************/
+    private ResearchLabInventory _inventory = new();
     private bool _isResearching;
     private double _researchedAmount = 0;
     
@@ -19,9 +29,19 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
      * Visuals Variables 													  *
      **************************************************************************/
     private Tween _animationTween;
+    private readonly GpuParticles2D _particles;
+    
+    public ResearchLab()
+    {
+        _particles = Scene.Instantiate<GpuParticles2D>();
+        Sprite.AddChild(_particles);
+    }
 
     public override void _Process(double delta)
     {
+        if (_isResearching && !_particles.Emitting) _particles.Emitting = true;
+        else if (!_isResearching && _particles.Emitting) _particles.Emitting = false;
+        
         if (Globals.CurrentTechnology == null)
         {
             _isResearching = false;
@@ -39,8 +59,12 @@ public partial class ResearchLab : Building, ITransferTarget, IInteractable
             return;
         }
 
-        if (!GetItems().Contains(Globals.CurrentTechnology.Ingredients[0])) return;
-        Remove(Globals.CurrentTechnology.Ingredients[0]);
+        // if (!GetItems().Contains(Globals.CurrentTechnology.Ingredients[0])) return;
+        // Remove(Globals.CurrentTechnology.Ingredients[0]);
+
+        if (Globals.Souls <= 0) return;
+        Globals.Souls--;
+        
         _isResearching = true;
     }
     

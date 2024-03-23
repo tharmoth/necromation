@@ -73,5 +73,4 @@ public partial class ArmySetup : PanelContainer
 		squad.Init(_province.Units, false);
 		parent.AddChild(squad);
 	}
-	
 }

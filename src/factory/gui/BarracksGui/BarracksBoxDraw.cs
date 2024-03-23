@@ -23,7 +23,7 @@ public partial class BarracksBoxDraw : Control
 	/**************************************************************************
 	 * Constants         													  *
 	 **************************************************************************/
-	private readonly Vector2I _gridSize = new(50, 50);
+	private readonly Vector2I _gridSize = new(100, 100);
 	
 	public static void Display(Commander commander)
 	{
@@ -71,6 +71,8 @@ public partial class BarracksBoxDraw : Control
 		var gridX = Mathf.RoundToInt(_gridSize.X * x);
 		var gridY = Mathf.RoundToInt(_gridSize.Y * y);
 
+		GD.Print("Grid: ", gridX, " ", gridY);
+		
 		if (!(x < 1.0f) || !(x >= 0) || !(y < 1.0f) || !(y >= 0)) return;
 			
 		BoxSprite.GlobalPosition = Background.GetGlobalMousePosition();

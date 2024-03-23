@@ -4,7 +4,7 @@
       "name": "Automation",
       "count": 20,
       "ingredients": [
-          "Experiment"
+          "Soul"
       ],
       "unlocks" : [
         "Underground Belt"
@@ -18,7 +18,7 @@
       "name": "Advanced Inserters",
       "count": 20,
       "ingredients": [
-        "Experiment"
+        "Soul"
       ],
       "unlocks" : [
         "Long Inserter"
@@ -32,7 +32,7 @@
       "name": "Copperwork",
       "count": 20,
       "ingredients": [
-        "Experiment"
+        "Soul"
       ],
       "unlocks" : [
         "Copper Ringmail",
@@ -48,24 +48,10 @@
       "description" : "Forge copper into weapons and armor."
     },
     {
-      "name": "Advanced Research",
-      "count": 50,
-      "ingredients": [
-        "Experiment"
-      ],
-      "unlocks" : [
-        "Experiment 2"
-      ],
-      "prerequisites" : [
-
-      ],
-      "description" : "Delve deeper into the mysteries of the world."
-    },
-    {
       "name": "Heavy Weaponry",
       "count": 100,
       "ingredients": [
-        "Experiment 2"
+        "Soul"
       ],
       "unlocks" : [
         "Copper Warhammer",
@@ -80,7 +66,7 @@
       "name": "Bronzework",
       "count": 100,
       "ingredients": [
-        "Experiment 2"
+        "Soul"
       ],
       "unlocks" : [
         "Bronze Bar",
@@ -93,9 +79,9 @@
     },
     {
       "name": "Bronze Metalworking",
-      "count": 100,
+      "count": 1000,
       "ingredients": [
-        "Experiment 2"
+        "Soul"
       ],
       "unlocks" : [
         "Bronze Breastplate",
@@ -110,9 +96,9 @@
     },
     {
       "name": "Bronze Mastery",
-      "count": 100,
+      "count": 1000,
       "ingredients": [
-        "Experiment 2"
+        "Soul"
       ],
       "unlocks" : [
         "Undead Legionary",

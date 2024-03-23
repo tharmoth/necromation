@@ -116,35 +116,13 @@ public partial class FactoryTileMap : LayerTileMap
 	private void SpawnResource(Vector2I location)
 	{
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
-		
-		var resources = new List<string> {"Bone Fragments"};
-		if ((location - MapScene.FactoryPosition).Length() != 0) 
-			resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
-		if ((location - MapScene.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
-		
-		var resource = resources[GD.RandRange(0, resources.Count - 1)];
-		if ((location - MapScene.FactoryPosition).Length() > 3) resource = "Tin Ore";
-		switch (_provences.Count)
-		{
-			case 1:
-				resource = "Bone Fragments";
-				break;
-			case 2:
-				resource = "Stone";
-				break;
-			case 3:
-				resource = "Coal Ore";
-				break;
-			case 4:
-				MusicManager.PlayExploration();
-				resource = "Copper Ore";
-				break;
-		}
+
+		var province = Globals.MapScene.TileMap.Provinces
+			.First(province => province.MapPosition == location);
 		
 		var spawnerX = GD.RandRange(4, ProvinceSize - 4) * TileSize;
 		var spawnerY = GD.RandRange(4, ProvinceSize - 4) * TileSize;
-
-		var spawner = new ResourceSpawner(resource, 3);
+		var spawner = new ResourceSpawner(province.Resource, 3);
 		spawner.GlobalPosition = ToGlobal(startpos + new Vector2(spawnerX, spawnerY));
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
 	}

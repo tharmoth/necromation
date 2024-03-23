@@ -182,7 +182,11 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		spriteTarget -= Vector2.Up * Utils.Max(Sprite.Texture.GetSize()) * 2;
 		spriteTarget -= GD.Randf() > .5 ? Vector2.Right * 5 : Vector2.Left * 5;
 		
-		Animate(spriteTarget, clipTarget, BaseNode.QueueFree);
+		Animate(spriteTarget, clipTarget, () =>
+		{
+			BaseNode.Visible = false;
+			BaseNode.QueueFree();
+		});
 	}
 
 	private void Animate(Vector2 spriteTarget, float clipTarget, Action onComplete)

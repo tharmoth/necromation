@@ -28,7 +28,7 @@ public partial class MapScene : Scene
 	public readonly List<Action> TurnListeners = new();
 	public readonly List<Action> UpdateListeners = new();
 	public Sprite2D SelectedSprite;
-	public Province SelectedProvince;
+	public Province SelectedProvince { get; private set; }
 	public readonly List<Commander> SelectedCommanders = new();
 
 	public MapScene()
@@ -65,13 +65,13 @@ public partial class MapScene : Scene
 			var targetLocation = Globals.MapScene.TileMap.GlobalToMap(GetGlobalMousePosition());
 			
 			var provence = Globals.MapScene.TileMap.GetProvence(targetLocation);
-			if (provence == null) return;
+			if (provence == null || provence.Visible == false) return;
 
 			SelectProvince(provence);
 		}
 	}
 
-	private void SelectProvince(Province provence)
+	public void SelectProvince(Province provence)
 	{
 		Globals.MapScene.SelectedProvince = provence;
 		Globals.MapScene.SelectedSprite.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(provence));

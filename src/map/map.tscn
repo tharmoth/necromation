@@ -1,9 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=20 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/MapScene.cs" id="1_q07oc"]
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="2_12t4y"]
 [ext_resource type="Script" path="res://src/map/MapTileMap.cs" id="2_xas5k"]
 [ext_resource type="Script" path="res://src/map/MapGui.cs" id="4_513oc"]
+[ext_resource type="Script" path="res://src/map/ProvinceBorders.cs" id="4_tudl7"]
+[ext_resource type="Script" path="res://src/sk/pan_camera.gd" id="5_2askh"]
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="5_prveb"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="6_ff77h"]
 [ext_resource type="Script" path="res://src/map/gui/RecruitGUI.cs" id="6_w0llc"]
@@ -22,30 +24,35 @@ texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_w7poh"]
-tile_size = Vector2i(32, 32)
+tile_size = Vector2i(128, 128)
 sources/0 = SubResource("TileSetAtlasSource_vg77j")
 
 [node name="Map" type="Node2D"]
-position = Vector2(8, -2)
 script = ExtResource("1_q07oc")
 
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true
 z_index = -100
 tile_set = SubResource("TileSet_w7poh")
-cell_quadrant_size = 32
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 0, 0, 2, 0, 0, 1, 0, 0, 65537, 0, 0, 65536, 0, 0, 65538, 0, 0, 131074, 0, 0, 131073, 0, 0, 131072, 0, 0, 3, 0, 0, 65539, 0, 0, 131075, 0, 0, 196611, 0, 0, 196610, 0, 0, 196609, 0, 0, 196608, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 196616, 0, 0, 131080, 0, 0, 65544, 0, 0, 8, 0, 0, 7, 0, 0, 6, 0, 0, 5, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 196612, 0, 0, 196613, 0, 0, 196614, 0, 0, 196615, 0, 0, 131079, 0, 0, 65543, 0, 0, 65542, 0, 0, 65541, 0, 0, 131077, 0, 0, 131078, 0, 0)
 script = ExtResource("2_xas5k")
+
+[node name="ProvinceBorders" type="Node2D" parent="TileMap"]
+unique_name_in_owner = true
+z_as_relative = false
+script = ExtResource("4_tudl7")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(144, 81)
 zoom = Vector2(4, 4)
+script = ExtResource("5_2askh")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 2
+visible = false
 script = ExtResource("4_513oc")
 
 [node name="PanelContainer" type="MarginContainer" parent="GUI"]
@@ -280,6 +287,7 @@ width = 8.0
 layer = -100
 
 [node name="Castle" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(152, 70)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_8qgol")
@@ -289,4 +297,7 @@ stream = ExtResource("12_brqa8")
 
 [node name="SelectedSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
+z_index = -2
+position = Vector2(48, 48)
+scale = Vector2(4, 4)
 texture = ExtResource("9_w144y")

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Godot;
 using Necromation.map.character;
 
@@ -18,6 +20,9 @@ public partial class Province : Node2D, ITransferTarget
         {
             _owner = value;
             _flagSprite.Texture = MapUtils.GetTexture($"{_owner} Flag");
+            Globals.MapScene.TileMap.UpdateFogOfWar();
+            
+            _ownerShade.Visible = _owner == "Player";
         }
     }
     
@@ -26,20 +31,41 @@ public partial class Province : Node2D, ITransferTarget
      **************************************************************************/
     // Note: If you add more state data here make sure to serialize it in Save/Load
     public string ProvinceName { get; } = MapUtils.GetRandomProvinceName();
-    public readonly List<Commander> Commanders = new();
+    public ImmutableList<Commander> Commanders => _commanders.ToImmutableList();
+    private readonly List<Commander> _commanders = new();
     public readonly Inventory Units = new();
+    public string Resource;
     private string _owner = "Unclaimed";
     
     /**************************************************************************
      * Visuals Variables 													  *
      **************************************************************************/
-    private Sprite2D _flagSprite = new();
+    private readonly Sprite2D _flagSprite = new();
+    private readonly Sprite2D _resourceSprite = new();
+    private readonly Node2D _spriteHolder = new();
+    private readonly Polygon2D _ownerShade = new();
     
-    public Province()
+    public Province(Vector2I mapPos)
     {
+        Resource = GetResource(mapPos);
         _flagSprite.Texture = MapUtils.GetTexture("Unclaimed Flag");
-        _flagSprite.Scale = new Vector2(0.25f, 0.25f);
+        _flagSprite.Scale = (Vector2.One * MapTileMap.TileSize / 4.0f) / _flagSprite.Texture.GetSize().X;
+        var flagBottom = _flagSprite.Texture.GetHeight() * _flagSprite.Scale.Y;
+        // _flagSprite.Position -= Vector2.One * MapTileMap.TileSize / 4.0f;
+        _flagSprite.Position += Vector2.Up * flagBottom / 2;
         AddChild(_flagSprite);
+        
+        _resourceSprite.Texture = MapUtils.GetTexture(Resource);
+        _resourceSprite.Scale = (Vector2.One * MapTileMap.TileSize / 4.0f) / _resourceSprite.Texture.GetSize().X;
+        _resourceSprite.Position += (Vector2.Up + Vector2.Right) * MapTileMap.TileSize / 4.0f;
+        AddChild(_resourceSprite);
+        
+        var color = Globals.PlayerColor;
+        color.A = .25f;
+        _ownerShade.Color = color;
+        _ownerShade.ZIndex = -1;
+        _ownerShade.Polygon = GetCorners(Vector2.Zero).ToArray();
+        AddChild(_ownerShade);
         
         var labelScale = .25f;
         
@@ -50,7 +76,7 @@ public partial class Province : Node2D, ITransferTarget
         panelContainer.Size = Vector2.One * (MapTileMap.TileSize * 1 / labelScale * .8f);
         panelContainer.Position = Vector2.One * (-MapTileMap.TileSize / 2.0f * .8f);
         panelContainer.MouseFilter = Control.MouseFilterEnum.Ignore;
-        AddChild(panelContainer);
+        // AddChild(panelContainer);
 
         var label = new Label();
         label.Text = ProvinceName;
@@ -61,6 +87,29 @@ public partial class Province : Node2D, ITransferTarget
         label.MouseFilter = Control.MouseFilterEnum.Ignore;
         label.AddThemeColorOverride("font_color", new Color(.8f, .8f, .8f, .8f));
         panelContainer.AddChild(label);
+
+        Visible = false;
+        
+        _spriteHolder.YSortEnabled = true;
+        AddChild(_spriteHolder);
+    }
+
+    private string GetResource(Vector2I mapPosition)
+    {
+        var resources = new List<string> {"Bone Fragments"};
+        if ((mapPosition - MapScene.FactoryPosition).Length() != 0) 
+            resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
+        if ((mapPosition - MapScene.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
+        var resource = resources[GD.RandRange(0, resources.Count - 1)];
+
+        if (MapScene.FactoryPosition - mapPosition == Vector2I.Left)
+            resource = "Copper Ore";
+        else if (MapScene.FactoryPosition - mapPosition == Vector2I.Down)
+            resource = "Coal Ore";
+        else if (MapScene.FactoryPosition - mapPosition == Vector2I.Right)
+            resource = "Stone";
+
+        return resource;
     }
 
     public override void _Ready()
@@ -68,8 +117,53 @@ public partial class Province : Node2D, ITransferTarget
         base._Ready();
         //We can only set globalposition in _ready
         GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(MapPosition);
-        _flagSprite.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(Globals.MapScene.TileMap.GetLocation(this));
-        _flagSprite.GlobalPosition -= Vector2.One * MapTileMap.TileSize / 4.0f;
+    }
+    
+    public List<Vector2> GetCorners(Vector2 origin)
+    {
+        var corners = new List<Vector2>
+        {
+            origin + (Vector2.Up + Vector2.Left) * MapTileMap.TileSize / 2,
+            origin + (Vector2.Up + Vector2.Right) * MapTileMap.TileSize / 2,
+            origin + (Vector2.Down + Vector2.Right) * MapTileMap.TileSize / 2,
+            origin + (Vector2.Down + Vector2.Left) * MapTileMap.TileSize / 2,
+        };
+        return corners;
+    }
+    
+    private void UpdateSprite()
+    {
+        _spriteHolder.GetChildren().ToList().ForEach(child => child.QueueFree());
+        float x = 0;
+        float y = 0;
+        float offset = 0;
+        // Find the key with the highest value
+        foreach (var commander in _commanders)
+        {
+            foreach (var (unitType, count) in commander.Units.Items)
+            {
+                _spriteHolder.Visible = true;
+            
+                for (var i = 0; i < count; i += 10)
+                {
+                    var subSprite = new Sprite2D();
+                    subSprite.Texture = Database.Instance.GetTexture(unitType);
+                    subSprite.Scale = Vector2.One * (MapTileMap.TileSize / 6.0f) / subSprite.Texture.GetWidth();
+                    subSprite.Position = new Vector2(x + offset, y * 2) * MapTileMap.TileSize / 30.0f;
+                    subSprite.Position += Vector2.Left * MapTileMap.TileSize / 6.0f;
+                    subSprite.YSortEnabled = true;
+                    subSprite.FlipH = commander.Team != "Player";
+                    _spriteHolder.AddChild(subSprite);
+                
+                    x += 1;
+                    if (!(x >= 10)) continue;
+                    x = 0;
+                    offset = offset > 0 ? 0 : .5f;
+                    y += 1;
+                }
+            }
+        }
+
     }
     
     #region ITransferTarget Implementation
@@ -99,9 +193,9 @@ public partial class Province : Node2D, ITransferTarget
             { "PosY", MapPosition.Y },
             { "Owner", Owner },
         };
-        foreach (var commander in Commanders)
+        foreach (var commander in _commanders)
         {
-            dict["Commander" + Commanders.IndexOf(commander)] = commander.Save();
+            dict["Commander" + _commanders.IndexOf(commander)] = commander.Save();
         }
 
         return dict;
@@ -113,7 +207,11 @@ public partial class Province : Node2D, ITransferTarget
         var province = Globals.MapScene.TileMap.GetProvence(mapPosition);
         province.Name = nodeData["Name"].ToString();
         province.Owner = nodeData["Owner"].ToString();;
-        province.Commanders.Clear();
+        province._commanders.ForEach(commander => commander.QueueFree());
+        for (int i = province._commanders.Count - 1; i >= 0; i--)
+        {
+            province.RemoveCommander(province._commanders[i]);
+        }
 
         int index = 0;
         while (nodeData.ContainsKey("Commander" + index))
@@ -130,11 +228,22 @@ public partial class Province : Node2D, ITransferTarget
         }
     }
     #endregion
+    
+    public void RemoveCommander(Commander commander)
+    {
+        _commanders.Remove(commander);
+        commander.Units.Listeners.Remove(UpdateSprite);
+        UpdateSprite();
+    }
 
     public void AddCommander(Commander commander)
     {
         commander.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(MapPosition);
-        Commanders.Add(commander);
+        _commanders.Add(commander);
+        
+        commander.Units.Listeners.Add(UpdateSprite);
+        UpdateSprite();
+        
         Globals.MapScene.CallDeferred("add_child", commander);
     }
 }

@@ -235,7 +235,8 @@ public class Database
         var dict = new Godot.Collections.Dictionary<string, Variant>
         {
             ["ItemType"] = "Technology",
-            ["CurrentTech"] = Globals.CurrentTechnology != null ? Globals.CurrentTechnology.Name : "None"
+            ["CurrentTech"] = Globals.CurrentTechnology != null ? Globals.CurrentTechnology.Name : "None",
+            ["Souls"] = Globals.Souls
         };
         for (var i = 0; i < Instance.Technologies.Count; i++)
         {
@@ -250,13 +251,14 @@ public class Database
         while (nodeData.ContainsKey("Technology" + index))
         {
             var node = (Godot.Collections.Dictionary<string, Variant>) nodeData["Technology" + index];
-            var technology = Instance.Technologies.First(tech => tech.Name == node["Name"].ToString());
-            technology.Load(node);
+            var technology = Instance.Technologies.FirstOrDefault(tech => tech.Name == node["Name"].ToString());
+            technology?.Load(node);
             index++;
         }
         
         var currentTech = nodeData.TryGetValue("CurrentTech", out var current) ? current.As<string>() : null;
         Globals.CurrentTechnology = Instance.Technologies.FirstOrDefault(tech => tech.Name == currentTech);
+        Globals.Souls = nodeData.TryGetValue("Souls", out var current2) ? current2.As<int>() : 0;
     }
     #endregion
 }
