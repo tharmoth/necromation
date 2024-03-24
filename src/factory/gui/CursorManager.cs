@@ -56,13 +56,13 @@ public partial class CursorManager : Node
 		{
 			CursorBuildingSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
 			_buildingInHand = Building.GetBuilding(Globals.Player.Selected, IRotatable.BuildingOrientation.NorthSouth);
-			if (_buildingInHand is not IRotatable) Globals.Player.SelectionRotationDegrees = 0;
 		}
 		else
 		{
 			_buildingInHand = null;
 		}
-
+		
+		if (_buildingInHand is not IRotatable) Globals.Player.SelectionRotationDegrees = 0;
 		UpdateLabel();
 	}
 	

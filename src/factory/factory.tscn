@@ -194,7 +194,11 @@ mouse_filter = 2
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CraftingQueue" type="HBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Left"]
+[node name="ScrollContainer" type="ScrollContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Left"]
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="CraftingQueue" type="HBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Left/ScrollContainer"]
 layout_mode = 2
 mouse_filter = 2
 script = ExtResource("5_6ke2a")

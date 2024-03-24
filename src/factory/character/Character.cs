@@ -171,8 +171,10 @@ public partial class Character : Node2D
 	private void QPick()
 	{
 		var cache = Selected;
-		Selected = Globals.FactoryScene.TileMap.GetBuildingAtMouse() is Building building && building.ItemType != Selected && _inventory.Items.ContainsKey(building.ItemType)
-			? building.ItemType
+		var buildingAtMouse = Globals.FactoryScene.TileMap.GetBuildingAtMouse();
+		if (buildingAtMouse is IRotatable rotatable) SelectionRotationDegrees = IRotatable.GetDegreesFromOrientation(rotatable.Orientation);
+		Selected = buildingAtMouse != null && buildingAtMouse.ItemType != Selected && _inventory.Items.ContainsKey(buildingAtMouse.ItemType)
+			? buildingAtMouse.ItemType
 			: null;
 		if (cache != Selected) ClickAudio.Play();
 	}
