@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6bqgdvwlagdg"
-path="res://.godot/imported/Awoken Skeleton.png-979481765ab54e8a2986252e7f057fba.ctex"
+path="res://.godot/imported/Frail Skeleton.png-8895c11b520bb352d781529411d98287.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/unit/Awoken Skeleton.png"
-dest_files=["res://.godot/imported/Awoken Skeleton.png-979481765ab54e8a2986252e7f057fba.ctex"]
+source_file="res://res/sprites/unit/Frail Skeleton.png"
+dest_files=["res://.godot/imported/Frail Skeleton.png-8895c11b520bb352d781529411d98287.ctex"]
 
 [params]
 

@@ -28,8 +28,6 @@ public partial class HotBarItemBox : ItemBox
 		
 		// Play sound
 		Audio.Play();
-		
-		ItemPopup.Register(itemType, Button);
 	}
 
 	public override void _Ready()

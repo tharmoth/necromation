@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgqeriqmoor2v"
-path="res://.godot/imported/Bronze Breastplate.png-081269b9f794c8a2197e7a726121679f.ctex"
+uid="uid://dnbcpayi7w6cw"
+path="res://.godot/imported/Hilt.png-e21a5b4feebb4482e24148ffe1e7669b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Bronze Breastplate.png"
-dest_files=["res://.godot/imported/Bronze Breastplate.png-081269b9f794c8a2197e7a726121679f.ctex"]
+source_file="res://res/sprites/items/Hilt.png"
+dest_files=["res://.godot/imported/Hilt.png-e21a5b4feebb4482e24148ffe1e7669b.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

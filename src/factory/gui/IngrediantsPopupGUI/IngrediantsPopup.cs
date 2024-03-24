@@ -29,6 +29,7 @@ public partial class IngrediantsPopup : PanelContainer
 	
 	public static void Register(Recipe recipe, Control control)
 	{
+		ItemPopup.Unregister(control);
 		var popup = DisplayPopup(recipe);
 		control.MouseEntered += () =>
 		{

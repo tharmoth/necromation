@@ -15,16 +15,16 @@ public class MeleeWeapon : Weapon
     {
         if (!(GD.Randf() > 0.5)) return;
         
-        var timer = new Timer();
-        timer.WaitTime = Cooldown / 2;
-        timer.Timeout += () =>
-        {
-            timer.QueueFree();
-            wielder.PlayAttackAnimation();
-            if (Globals.UnitManager.IsUnitAlive(wielder) && Globals.UnitManager.IsUnitAlive(target)) ApplyDamage(wielder, target);
-        };
-        wielder.SpriteHolder.AddChild(timer);
-        timer.Start();
+        // var timer = new Timer();
+        // timer.WaitTime = Cooldown / 2;
+        // timer.Timeout += () =>
+        // {
+        //     timer.QueueFree();
+        wielder.PlayAttackAnimation();
+        if (Globals.UnitManager.IsUnitAlive(wielder) && Globals.UnitManager.IsUnitAlive(target)) ApplyDamage(wielder, target);
+        // };
+        // wielder.SpriteHolder.AddChild(timer);
+        // timer.Start();
     }
     
     private void ApplyDamage(Unit wielder, Unit target)

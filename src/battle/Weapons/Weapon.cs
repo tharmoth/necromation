@@ -16,7 +16,7 @@ public abstract  class Weapon
     
     private Unit _target;
 
-    protected Weapon(string name, int range, int damage, int hands, int cooldown, int ammo)
+    protected Weapon(string name, int range, int damage, int hands, float cooldown, int ammo)
     {
         Name = name;
         Range = range;

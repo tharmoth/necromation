@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7d8pkta2c0jw"
-path="res://.godot/imported/Bow.png-5a9efc2d02a2a262a4ab4076924b538f.ctex"
+uid="uid://ti2aa2bvwhet"
+path="res://.godot/imported/Skeleton Auxiliary.png-58a7afacec6d0349170baf05b7c15323.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Bow.png"
-dest_files=["res://.godot/imported/Bow.png-5a9efc2d02a2a262a4ab4076924b538f.ctex"]
+source_file="res://res/sprites/unit/Skeleton Auxiliary.png"
+dest_files=["res://.godot/imported/Skeleton Auxiliary.png-58a7afacec6d0349170baf05b7c15323.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

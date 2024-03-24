@@ -6,8 +6,9 @@ namespace Necromation.map.battle;
 public partial class Arrow : Sprite2D
 {
     public Vector2I MapPosition => Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
-    
-    private const float Speed = 400;
+
+    public const int TilesPerSecond = 15;
+    private const float Speed = TilesPerSecond * BattleTileMap.TileSize;
     private readonly float ArcHeight;
     
     private readonly Vector2 _startPosition;
@@ -33,8 +34,9 @@ public partial class Arrow : Sprite2D
             32 / (float)Texture.GetHeight());
 
         _startPosition = Globals.BattleScene.TileMap.MapToGlobal(startTile);
-        _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile) + new Vector2(GD.RandRange(-BattleTileMap.TileSize, BattleTileMap.TileSize),
+        var rand = new Vector2(GD.RandRange(-BattleTileMap.TileSize / 2, BattleTileMap.TileSize / 2),
             GD.RandRange(-BattleTileMap.TileSize, BattleTileMap.TileSize));
+        _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile);
         var distance = _startPosition.DistanceTo(Globals.BattleScene.TileMap.MapToGlobal(targetTile));
         _stepScale = Speed / distance;
         
@@ -59,9 +61,9 @@ public partial class Arrow : Sprite2D
         if (_type == "Pilum") Rotation += Mathf.Pi / 4;
         
         // If the arrow has reached the target, remove it
-        if (!(nextPosition.DistanceTo(_targetPosition) < 10)) return;
+        if (!(nextPosition.DistanceTo(_targetPosition) < 1)) return;
 
-        var hit = Globals.BattleScene.TileMap.GetEntity(MapPosition, BattleTileMap.Unit);
+        var hit = Globals.BattleScene.TileMap.GetEntity(Globals.BattleScene.TileMap.GlobalToMap(_targetPosition), BattleTileMap.Unit);
         if (hit is Unit unit) _damage(unit);
         Modulate = new Color(.5f, .5f, .5f);
         _hit = true;

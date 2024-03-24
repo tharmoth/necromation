@@ -64,15 +64,14 @@ public class Barracks : Assembler
      **************************************************************************/        
     public override void Interact(Inventory playerInventory)
     {
-        if (GetRecipe() == null)
-        {
-            RecipeSelectionGui.Display(playerInventory, this);
-        }
-        else
-        {
+        // if (GetRecipe() == null)
+        // {
+        //     RecipeSelectionGui.Display(playerInventory, this);
+        // }
+        // else
+        // {
             BarracksGui.Display(playerInventory, this);
-        }
-        
+        // }
     }
     #endregion
 }

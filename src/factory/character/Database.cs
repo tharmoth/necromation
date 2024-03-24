@@ -201,7 +201,7 @@ public class Database
         if (!FileAccess.FileExists(path))
         {
             GD.PrintErr("Failed to load texture: " + name);
-            return type == "unit" ? GetTexture("Awoken Skeleton") : new Texture2D();
+            return type == "unit" ? GetTexture("Awoken Skeleton") : GetTexture("missing");
         }
         
         texture = GD.Load<Texture2D>(path.Replace(".import", ""));

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://o1ajxx2lckj2"
-path="res://.godot/imported/Bronze Gladius.png-e75c0acdf584c3c2768abd4b2381cc67.ctex"
+uid="uid://cr8y1vhyvjgpm"
+path="res://.godot/imported/Leather.png-c34e2ea0991410744a802a92135c5d5f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Bronze Gladius.png"
-dest_files=["res://.godot/imported/Bronze Gladius.png-e75c0acdf584c3c2768abd4b2381cc67.ctex"]
+source_file="res://res/sprites/items/Leather.png"
+dest_files=["res://.godot/imported/Leather.png-c34e2ea0991410744a802a92135c5d5f.ctex"]
 
 [params]
 

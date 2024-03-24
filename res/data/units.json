@@ -3,18 +3,8 @@
     {
       "name": "Rabble",
       "weapons": [
-        "Stick"
       ],
       "armor": [
-      ]
-    },
-    {
-      "name": "Light Infantry",
-      "weapons": [
-        "Copper Spear"
-      ],
-      "armor": [
-        "Copper Ringmail"
       ]
     },
     {
@@ -23,27 +13,8 @@
         "Copper Spear"
       ],
       "armor": [
-        "Leather Cuirass",
+        "Copper Ringmail",
         "Shield"
-      ]
-    },
-    {
-      "name": "Heavy Infantry",
-      "weapons": [
-        "Bronze Spear"
-      ],
-      "armor": [
-        "Bronze Breastplate",
-        "Shield"
-      ]
-    },
-    {
-      "name": "Elite Infantry",
-      "weapons": [
-        "Bronze Warhammer"
-      ],
-      "armor": [
-        "Bronze Breastplate"
       ]
     },
     {
@@ -56,6 +27,24 @@
       ]
     },
     {
+      "name": "Heavy Infantry",
+      "weapons": [
+        "Bronze Spear"
+      ],
+      "armor": [
+        "Bronze Breastplate"
+      ]
+    },
+    {
+      "name": "Elite Infantry",
+      "weapons": [
+        "Bronze Warhammer"
+      ],
+      "armor": [
+        "Bronze Breastplate"
+      ]
+    },
+    {
       "name": "Archer",
       "weapons": [
         "Long Bow"
@@ -64,38 +53,19 @@
       ]
     },
     {
-      "name": "Heavy Archer",
-      "weapons": [
-        "Short Bow",
-        "Copper Spear"
-      ],
-      "armor": [
-        "Leather Cuirass"
-      ]
-    },
-    {
-      "name": "Awoken Skeleton",
+      "name": "Frail Skeleton",
       "weapons": [
       ],
       "armor": [
       ]
     },
     {
-      "name": "Skeleton Warrior",
+      "name": "Skeleton Auxiliary",
       "weapons": [
         "Copper Spear"
       ],
       "armor": [
-        "Leather Cuirass",
-        "Shield"
-      ]
-    },
-    {
-      "name": "Skeleton Marksman",
-      "weapons": [
-        "Long Bow"
-      ],
-      "armor": [
+        "Copper Ringmail"
       ]
     },
     {
@@ -113,8 +83,7 @@
         "Bronze Spear"
       ],
       "armor": [
-        "Bronze Breastplate",
-        "Shield"
+        "Bronze Breastplate"
       ]
     },
     {
@@ -124,8 +93,7 @@
         "Bronze Spear"
       ],
       "armor": [
-        "Leather Cuirass",
-        "Shield"
+        "Copper Ringmail"
       ],
       "mount": "Horse"
     },
@@ -136,8 +104,15 @@
         "Bronze Gladius"
       ],
       "armor": [
-        "Leather Cuirass",
-        "Tower Shield"
+        "Bronze Breastplate"
+      ]
+    },
+    {
+      "name": "Skeleton Marksman",
+      "weapons": [
+        "Long Bow"
+      ],
+      "armor": [
       ]
     }
   ],
@@ -158,7 +133,7 @@
     },
     {
       "name": "Bronze Spear",
-      "damage": 4,
+      "damage": 5,
       "range": 1,
       "hands": 1,
       "type": "melee"
@@ -186,7 +161,7 @@
     },
     {
       "name": "Lance",
-      "damage": 12,
+      "damage": 50,
       "range": 1,
       "hands": 2,
       "type": "melee",

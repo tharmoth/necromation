@@ -9,7 +9,7 @@ using Necromation.sk;
 public partial class BattleTileMap : LayerTileMap
 {
 	public const string Unit = "unit";
-	public static int TileSize = 32;
+	public const int TileSize = 32;
 	
 	private readonly AStar2D _grid = new();
 	private System.Collections.Generic.Dictionary<Vector2I, int> _cells = new();

@@ -8,7 +8,7 @@ namespace Necromation.map.battle.Weapons;
 
 public class RangedWeapon : Weapon
 {
-    public RangedWeapon(string name, int range, int damage, int hands, int cooldown, int ammo) : base(name, range, damage, hands, cooldown, ammo)
+    public RangedWeapon(string name, int range, int damage, int hands, float cooldown, int ammo) : base(name, range, damage, hands, cooldown, ammo)
     {
 
     }
@@ -16,14 +16,26 @@ public class RangedWeapon : Weapon
     protected override void Attack(Unit wielder, Unit target)
     {
         wielder.PlayAttackAnimation();
-        var targetLocs = Globals.BattleScene.TileMap.GetTilesInRadius(target.MapPosition, 2).ToList();
-        var targetLoc = targetLocs[GD.RandRange(0, targetLocs.Count - 1)];
+        // var targetLocs = Globals.BattleScene.TileMap.GetTilesInRadius(target.MapPosition, 0).ToList();
+        // var targetLoc = targetLocs[GD.RandRange(0, targetLocs.Count - 1)];
+        var startGlobal = Globals.BattleScene.TileMap.MapToGlobal(wielder.MapPosition);
+        
+        var targetLoc = target.MapPosition;
 
-        var difference = wielder.MapPosition - target.MapPosition;
+        // Rudimentary leading of target
+        var difference = startGlobal - target.GlobalPosition;
         var differenceFloat = ((Vector2)difference).Normalized();
-        var tilesToLead = new Vector2I(Mathf.CeilToInt(Mathf.Abs(differenceFloat.X)) * Mathf.Sign(differenceFloat.X), Mathf.CeilToInt(Mathf.Abs(differenceFloat.Y)) * Mathf.Sign(differenceFloat.Y));
-
-        // If the target is moving, lead the target by guessing they will be closer to the wielder in the future
+        var distance = difference.Length();
+        var arrowTilesPerSecond = Arrow.TilesPerSecond * BattleTileMap.TileSize;
+        var unitTilesPerSecond = 2 * BattleTileMap.TileSize;
+        var speed = arrowTilesPerSecond + unitTilesPerSecond;
+        var timeToHit = distance / speed;
+        var projectedPos = new Vector2((float)(unitTilesPerSecond * timeToHit * differenceFloat.X), (float)(unitTilesPerSecond * timeToHit * differenceFloat.Y));
+        var projectedPosTile = Globals.BattleScene.TileMap.GlobalToMap(projectedPos);
+        
+        if (target.IsMoving) targetLoc += new Vector2I(projectedPosTile.X, 0);
+        
+        // // If the target is moving, lead the target by guessing they will be closer to the wielder in the future
         // if (target.IsMoving && difference.Length() > 5) targetLoc += tilesToLead;
         
         var type = Name switch
@@ -35,7 +47,7 @@ public class RangedWeapon : Weapon
         Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, targetLoc, hit => ApplyDamage(wielder, hit), type));
         PlayFiredSound(wielder);
     }
-    
+
     private void ApplyDamage(Unit wielder, Unit target)
     {
         var damage = Damage + Mathf.FloorToInt(wielder.Strength / 3.0f);

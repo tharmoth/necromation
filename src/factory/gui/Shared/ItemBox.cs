@@ -35,11 +35,13 @@ public partial class ItemBox : PanelContainer
 		if (_itemType == null)
 		{
 			Icon.Visible = false;
+			ItemPopup.Unregister(Button);
 		}
 		else
 		{
 			Icon.Visible = true;
 			Icon.Texture = Database.Instance.GetTexture(_itemType);
+			ItemPopup.Register(ItemType, Button);
 		}
 	}
 	
@@ -52,7 +54,7 @@ public partial class ItemBox : PanelContainer
 			.OrderBy(item => item.Key)
 			.ToList().ForEach(item => AddItem(item, list));
 	}
-	
+
 	// Static Accessor
 	private static void AddItem(KeyValuePair<string, int> item, Container list)
 	{

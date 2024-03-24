@@ -82,7 +82,7 @@ public partial class InventoryRecipeBox : ItemBox
 		
 		TargetInventory.Listeners.Add(UpdateInventoryRecipeBox);
 		UpdateInventoryRecipeBox();
-		
+
 		IngrediantsPopup.Register(_recipe, Button);
 	}
 

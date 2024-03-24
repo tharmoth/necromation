@@ -40,7 +40,7 @@ public partial class UnitManager : Node
     {
         base._Process(delta);
        
-        foreach (var csharpNode in _units)
+        foreach (var csharpNode in _units.ToArray())
         {
             try 
             {

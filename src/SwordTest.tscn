@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://c7ejm005488xk"]
 
 [ext_resource type="Script" path="res://src/SwordTest.cs" id="1_ib2ub"]
-[ext_resource type="Texture2D" uid="uid://o1ajxx2lckj2" path="res://res/sprites/items/Bronze Gladius.png" id="2_1vl6n"]
+[ext_resource type="Texture2D" uid="uid://o1ajxx2lckj2" path="res://res/sprites/items/Sword.png" id="2_1vl6n"]
 [ext_resource type="Texture2D" uid="uid://bmja2ah065cxd" path="res://res/sprites/items/swing.svg" id="2_w5dou"]
 [ext_resource type="AudioStream" uid="uid://ddgnrjjy3m4yx" path="res://res/sfx/swing/swing2.wav" id="3_v24bk"]
 [ext_resource type="AudioStream" uid="uid://dew4y852s3jgy" path="res://res/sfx/swing/swing3.wav" id="4_l0w46"]

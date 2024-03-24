@@ -22,8 +22,8 @@ public partial class CraftingQueueItemBox : ItemBox
 	// Static Accessor
 	public static void Update(ImmutableList<CraftingQueue.CraftingQueueItem> queue, Container list)
 	{
-		list.GetChildren().ToList().ForEach(child => child.QueueFree());
-		queue.ForEach(item => AddItem(item, list));
+		AddMissing(queue, list);
+		RemoveExtra(queue, list);
 	}
 	
 	// Static Accessor
@@ -32,6 +32,24 @@ public partial class CraftingQueueItemBox : ItemBox
 		var itemBox = ItemScene.Instantiate<CraftingQueueItemBox>();
 		itemBox.Init(item);
 		list.AddChild(itemBox);
+	}
+	
+	private static void AddMissing(ImmutableList<CraftingQueue.CraftingQueueItem> queue, Container list)
+	{
+		foreach (var item in queue)
+		{
+			var itemBox = list.GetChildren().OfType<CraftingQueueItemBox>().FirstOrDefault(itemBox => itemBox._item == item);
+			if (itemBox != null) continue;
+			AddItem(item, list);
+		}
+	}
+
+	private static void RemoveExtra(ImmutableList<CraftingQueue.CraftingQueueItem> queue, Container list)
+	{
+		list.GetChildren().OfType<CraftingQueueItemBox>()
+			.Where(inventoryItem => !queue.Contains(inventoryItem._item))
+			.ToList()
+			.ForEach(item => item.QueueFree());
 	}
 
 	private void Init(CraftingQueue.CraftingQueueItem item)
@@ -63,9 +81,10 @@ public partial class CraftingQueueItemBox : ItemBox
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		if (Globals.FactoryScene.CraftingQueue.Queue.IndexOf(_item) == 0)
-		{
-			ProgressBar.Value = (float) (Globals.FactoryScene.CraftingQueue.Time / CraftingQueue.TimePerCraft) * 100;
-		}
+		// Polling is bad scott.
+		if (Globals.FactoryScene.CraftingQueue.Queue.IndexOf(_item) != 0) return;
+		
+		ProgressBar.Value = (float) (Globals.FactoryScene.CraftingQueue.Time / CraftingQueue.TimePerCraft) * 100;
+		CountLabel.Text = _item.Count.ToString();
 	}
 }

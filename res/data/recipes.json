@@ -13,10 +13,9 @@
     },
     {
       "name": "Inserter",
-      "time" : 1,
+      "time" : 0.5,
       "ingredients": {
-        "Bone": 1,
-        "Automation Core": 1,
+        "Metalweave": 1,
         "Skeleton": 1
       },
       "products": {
@@ -73,9 +72,9 @@
       "name": "Assembler",
       "time" : 1,
       "ingredients": {
-        "Automation Core": 3,
-        "Bone": 9,
-        "Skeleton": 5
+        "Metalweave": 3,
+        "Skeleton": 5,
+        "Bone": 9
       },
       "products": {
         "Assembler": 1
@@ -92,18 +91,6 @@
       }
     },
     {
-      "name": "Research Lab",
-      "time" : 1,
-      "ingredients": {
-        "Automation Core": 5,
-        "Bone": 10,
-        "Skeleton": 5
-      },
-      "products": {
-        "Research Lab": 1
-      }
-    },
-    {
       "name": "Skeleton",
       "time" : 1,
       "ingredients": {
@@ -111,49 +98,6 @@
       },
       "products": {
         "Skeleton": 1
-      }
-    },
-    {
-      "name": "Automation Core",
-      "time" : 1,
-      "ingredients": {
-        "Copper Strand": 3,
-        "Bone": 1
-      },
-      "products": {
-        "Automation Core": 1
-      }
-    },
-    {
-      "name": "Copper Strand",
-      "time" : 1,
-      "ingredients": {
-        "Copper Bar": 1
-      },
-      "products": {
-        "Copper Strand": 2
-      }
-    },
-    {
-      "name": "Experiment",
-      "time" : 5,
-      "ingredients": {
-        "Copper Bar": 1,
-        "Skeleton": 1
-      },
-      "products": {
-        "Experiment": 1
-      }
-    },
-    {
-      "name": "Experiment 2",
-      "time" : 6,
-      "ingredients": {
-        "Skeleton Warrior": 1,
-        "Inserter": 1
-      },
-      "products": {
-        "Experiment 2": 1
       }
     },
     {
@@ -218,7 +162,7 @@
     },
     {
       "name": "Barracks",
-      "time" : 10.0,
+      "time" : 1.0,
       "ingredients": {
         "Bone": 10
       },
@@ -227,177 +171,157 @@
       }
     },
     {
-      "name" : "Copper Spear",
-      "time" : 10.0,
+      "name": "Leather",
+      "time" : 0.5,
       "ingredients": {
-        "Bone": 1,
-        "Copper Bar": 1
+        "Bone": 1
       },
       "products": {
-        "Copper Spear": 1
+        "Leather": 5
       }
     },
     {
-      "name" : "Bronze Spear",
-      "time" : 10.0,
+      "name": "Strap",
+      "time" : 0.5,
       "ingredients": {
-        "Bone": 1,
-        "Bronze Bar": 5
+        "Leather": 1
       },
       "products": {
-        "Bronze Spear": 1
+        "Strap": 2
       }
     },
     {
-      "name" : "Copper Warhammer",
-      "time" : 10.0,
+      "name": "Hilt",
+      "time" : 0.5,
       "ingredients": {
-        "Copper Spear": 1,
-        "Copper Bar": 5
+        "Bone": 1
       },
       "products": {
-        "Copper Warhammer": 1
+        "Hilt": 1
       }
     },
     {
-      "name" : "Bronze Warhammer",
-      "time" : 10.0,
+      "name": "Grip",
+      "time" : 0.5,
       "ingredients": {
-        "Bronze Spear": 1,
-        "Bronze Bar": 5
+        "Strap": 2,
+        "Hilt": 1
       },
       "products": {
-        "Bronze Warhammer": 1
+          "Grip": 2
       }
     },
     {
-      "name" : "Short Bow",
-      "time" : 10.0,
-      "ingredients": {
-        "Bone": 3,
-        "Copper Strand": 1
-      },
-      "products": {
-        "Short Bow": 1
-      }
-    },
-    {
-      "name" : "Arrow",
-      "time" : 1.0,
-      "ingredients": {
-        "Bone": 1,
-        "Copper Bar": 1,
-        "Copper Strand": 1
-      },
-      "products": {
-        "Arrow": 2
-      }
-    },
-    {
-      "name" : "Copper Ringmail",
-        "time" : 10.0,
+      "name": "Copper Strand",
+        "time" : 0.5,
         "ingredients": {
-          "Copper Strand": 10
+          "Copper Bar": 1
         },
         "products": {
-          "Copper Ringmail": 1
+          "Copper Strand": 2
         }
     },
     {
-      "name" : "Bronze Breastplate",
-      "time" : 10.0,
-      "ingredients": {
-        "Copper Strand": 5,
-        "Bronze Bar": 10
-      },
-      "products": {
-        "Bronze Breastplate": 1
-      }
-    },
-    {
-      "name" : "Awoken Skeleton",
-      "time" : 1.0,
-      "category": "recruitment",
-      "ingredients": {
-        "Skeleton" : 1
-      },
-      "products": {
-        "Awoken Skeleton": 1
-      }
-    },
-    {
-      "name" : "Skeleton Marksman",
-        "time" : 10.0,
-        "category": "recruitment",
+      "name": "Metalweave",
+        "time" : 0.5,
         "ingredients": {
-          "Short Bow": 1,
-          "Arrow": 6,
-          "Skeleton" : 1
+          "Bone": 1,
+          "Copper Strand": 3
         },
         "products": {
-          "Skeleton Marksman": 1
+          "Metalweave": 1
         }
     },
     {
-      "name" : "Skeleton Warrior",
-      "category": "recruitment",
-      "time" : 10.0,
+      "name": "Alloyweave",
+      "time" : 0.5,
       "ingredients": {
-        "Copper Spear": 1,
-        "Copper Ringmail": 1,
-        "Skeleton" : 1
+        "Metalweave": 1,
+        "Bronze Bar": 5
       },
       "products": {
-        "Skeleton Warrior": 1
+        "Alloyweave": 1
       }
     },
     {
-      "name" : "Dreadplate Phalanx",
-      "category": "recruitment",
-      "time" : 10.0,
-      "ingredients": {
-        "Skeleton Warrior": 1,
-        "Bronze Breastplate": 1,
-        "Bronze Spear": 1
-      },
-      "products": {
-        "Dreadplate Phalanx": 1
-      }
+      "name": "Spear",
+      "time" : 0.5,
+        "ingredients": {
+            "Hilt": 1,
+            "Copper Bar": 1
+        },
+        "products": {
+          "Spear": 1
+        }
     },
     {
-      "name": "Gravebreaker",
-      "category": "recruitment",
-      "time": 10.0,
+      "name": "Sword",
+        "time" : 12.0,
+        "ingredients": {
+          "Grip": 1,
+          "Hilt": 1,
+          "Bronze Bar": 1
+        },
+        "products": {
+          "Sword": 1
+        }
+    },
+    {
+      "name": "Bow and Arrow",
+        "time" : 12.0,
+        "ingredients": {
+          "Strap": 2,
+          "Hilt": 1,
+          "Copper Bar": 1
+        },
+        "products": {
+          "Bow and Arrow": 1
+        }
+    },
+    {
+      "name": "Frail Skeleton",
+      "time" : 3.0,
       "ingredients": {
-        "Copper Warhammer": 1,
         "Skeleton": 1
       },
       "products": {
-        "Gravebreaker": 1
+        "Frail Skeleton": 1
       }
     },
     {
-      "name" : "Undead Legionary",
-      "category": "recruitment",
-      "time" : 10.0,
+      "name": "Skeleton Auxiliary",
+      "time" : 5.0,
       "ingredients": {
-        "Bronze Gladius": 1,
-        "Dreadplate Phalanx" : 1
+        "Skeleton": 1,
+        "Metalweave": 1,
+        "Spear": 1
+      },
+      "products": {
+        "Skeleton Auxiliary": 1
+      }
+    },
+    {
+      "name": "Undead Legionary",
+      "time" : 6.0,
+      "ingredients": {
+        "Skeleton": 1,
+        "Alloyweave": 1,
+        "Sword": 1
       },
       "products": {
         "Undead Legionary": 1
       }
     },
     {
-      "name" : "Gravebound Charger",
-      "category": "recruitment",
-      "time" : 10.0,
+      "name": "Skeleton Marksman",
+      "time" : 6.0,
       "ingredients": {
-        "Skeleton Warrior": 1,
-        "Skeleton" : 5
+        "Skeleton": 1,
+        "Metalweave": 1,
+        "Bow and Arrow": 1
       },
       "products": {
-        "Gravebound Charger": 1
+        "Skeleton Marksman": 1
       }
     }
   ]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bh0gbpocpddke"
-path="res://.godot/imported/Copper Ringmail.png-af0a5cb419767543efbeb90bcca3757a.ctex"
+uid="uid://c7d8pkta2c0jw"
+path="res://.godot/imported/Bow and Arrow.png-5a62ede97f63b9e7ac15bba2e0d27ca9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Copper Ringmail.png"
-dest_files=["res://.godot/imported/Copper Ringmail.png-af0a5cb419767543efbeb90bcca3757a.ctex"]
+source_file="res://res/sprites/items/Bow and Arrow.png"
+dest_files=["res://.godot/imported/Bow and Arrow.png-5a62ede97f63b9e7ac15bba2e0d27ca9.ctex"]
 
 [params]
 

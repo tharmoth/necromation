@@ -33,7 +33,6 @@ public partial class RecipeSelectionItemBox : ItemBox
 
 	private void Init(Inventory dumpInventory, Recipe recipe, ICrafter crafter)
 	{
-		IngrediantsPopup.Register(recipe, Button);
 		ItemType = recipe.Products.First().Key;
 		CountLabel.Visible = false;
 		Button.Pressed += () =>
@@ -41,5 +40,7 @@ public partial class RecipeSelectionItemBox : ItemBox
 			crafter.SetRecipe(dumpInventory, recipe);
 			Globals.FactoryScene.Gui.CloseGui();
 		};
+		
+		IngrediantsPopup.Register(recipe, Button);
 	}
 }

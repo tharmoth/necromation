@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ti2aa2bvwhet"
-path="res://.godot/imported/Skeleton Warrior.png-e880a627aa2bbee26a61271943080d50.ctex"
+uid="uid://dgqeriqmoor2v"
+path="res://.godot/imported/Alloyweave.png-2d43421b5c855a4931f4763624ca8cf6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/unit/Skeleton Warrior.png"
-dest_files=["res://.godot/imported/Skeleton Warrior.png-e880a627aa2bbee26a61271943080d50.ctex"]
+source_file="res://res/sprites/items/Alloyweave.png"
+dest_files=["res://.godot/imported/Alloyweave.png-2d43421b5c855a4931f4763624ca8cf6.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

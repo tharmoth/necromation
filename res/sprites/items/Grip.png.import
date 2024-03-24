@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c657aoygnn6m0"
-path="res://.godot/imported/Automation Core.png-b38e4143a5c8eb4c87deb462b54031fa.ctex"
+uid="uid://cjyqs4i64vgvx"
+path="res://.godot/imported/Grip.png-099592659530d474ca7c47ccee60be7e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Automation Core.png"
-dest_files=["res://.godot/imported/Automation Core.png-b38e4143a5c8eb4c87deb462b54031fa.ctex"]
+source_file="res://res/sprites/items/Grip.png"
+dest_files=["res://.godot/imported/Grip.png-099592659530d474ca7c47ccee60be7e.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
