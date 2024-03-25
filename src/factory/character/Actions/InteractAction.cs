@@ -13,12 +13,13 @@ public class InteractAction
         _inventory = inventory;
     }
     
-    public bool ShouldInteract(LayerTileMap.IEntity building)
+    public bool ShouldInteract(Building building)
     {
         return Input.IsActionJustPressed("left_click") 
                && !Building.IsBuilding(Globals.Player.Selected)
-               && !Input.IsKeyPressed(Key.Ctrl) 
-               && building is IInteractable interactable;
+               && !Input.IsKeyPressed(Key.Ctrl)
+               && building is IInteractable interactable
+               && building.BuildComplete;
     }
     
     public void Interact(LayerTileMap.IEntity building)

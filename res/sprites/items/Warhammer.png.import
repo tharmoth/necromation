@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c5r5ep05tvccv"
-path="res://.godot/imported/Copper Warhammer.png-f15722c8b68015966661d5d94ebed66a.ctex"
+path="res://.godot/imported/Warhammer.png-b7f7f8a5a501d9f02e128f13dd83770c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/items/Copper Warhammer.png"
-dest_files=["res://.godot/imported/Copper Warhammer.png-f15722c8b68015966661d5d94ebed66a.ctex"]
+source_file="res://res/sprites/items/Warhammer.png"
+dest_files=["res://.godot/imported/Warhammer.png-b7f7f8a5a501d9f02e128f13dd83770c.ctex"]
 
 [params]
 

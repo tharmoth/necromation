@@ -56,10 +56,27 @@ public partial class TechPanel : PanelContainer
 		});
 
 		PrerequisitesLabel.Text = Tech.Prerequisites.Count > 0
-			? string.Join(", ", Tech.Prerequisites)
+			? "[color=red]" + string.Join("[/color], [color=red]", Tech.Prerequisites) + "[/color]"
 			: "No prerequisites";
 
-		SelectButton.Pressed += () => Globals.CurrentTechnology = Tech;
+		SelectButton.Pressed += () =>
+		{
+			if (Globals.Souls < Tech.Count) return;
+			Globals.Souls -= Tech.Count;
+			Globals.CurrentTechnology = Tech;
+			Tech.Progress = Tech.Count;
+			QueueFree();
+		};
+
+		Globals.SoulListeners.Add(Update);
+		Update();
+	}
+
+	private void Update()
+	{
+		SelectButton.Disabled = false;
+		
+		if (Tech.Count > Globals.Souls) SelectButton.Disabled = true;
 
 		foreach (var prerequisite in Tech.Prerequisites)
 		{
@@ -72,8 +89,13 @@ public partial class TechPanel : PanelContainer
 				SelectButton.Disabled = true;
 				continue;
 			}
-			PrerequisitesLabel.Text = PrerequisitesLabel.Text.Replace(prerequisite, $"[color=green]{prerequisite}[/color]");
+			PrerequisitesLabel.Text = PrerequisitesLabel.Text.Replace($"[color=red]{prerequisite}[/color]", $"[color=green]{prerequisite}[/color]");
 		}
-		
+	}
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		Globals.SoulListeners.Remove(Update);
 	}
 }

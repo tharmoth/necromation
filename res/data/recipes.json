@@ -256,7 +256,7 @@
     },
     {
       "name": "Sword",
-        "time" : 12.0,
+        "time" : 0.5,
         "ingredients": {
           "Grip": 1,
           "Hilt": 1,
@@ -268,7 +268,7 @@
     },
     {
       "name": "Bow and Arrow",
-        "time" : 12.0,
+        "time" : 0.5,
         "ingredients": {
           "Strap": 2,
           "Hilt": 1,
@@ -277,6 +277,18 @@
         "products": {
           "Bow and Arrow": 1
         }
+    },
+    {
+      "name": "Warhammer",
+      "time" : 12.0,
+      "ingredients": {
+        "Grip": 1,
+        "Hilt": 1,
+        "Copper Bar": 5
+      },
+      "products": {
+        "Warhammer": 1
+      }
     },
     {
       "name": "Frail Skeleton",
@@ -301,6 +313,18 @@
       }
     },
     {
+      "name": "Gravebreaker",
+      "time" : 5.0,
+      "ingredients": {
+        "Skeleton": 1,
+        "Metalweave": 1,
+        "Warhammer": 1
+      },
+      "products": {
+        "Gravebreaker": 1
+      }
+    },
+    {
       "name": "Undead Legionary",
       "time" : 6.0,
       "ingredients": {
@@ -322,6 +346,18 @@
       },
       "products": {
         "Skeleton Marksman": 1
+      }
+    },
+    {
+      "name": "Gravebound Charger",
+      "time": 12.0,
+      "ingredients": {
+        "Skeleton": 5,
+        "Metalweave": 1,
+        "Spear": 1
+      },
+      "products": {
+        "Gravebound Charger": 1
       }
     }
   ]

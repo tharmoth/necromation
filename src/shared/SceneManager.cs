@@ -58,6 +58,7 @@ public class SceneManager
 		}
 
 		_currentScene ??= scene;
+		_currentScene.OnOpen();
 	}
 
 	public static void ChangeToScene(SceneEnum scene)

@@ -54,11 +54,15 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 	private readonly GpuParticles2D _particles;
 	private readonly VisibleOnScreenNotifier2D _notifier = new();
 	
+	// We need to cache these to cancel them if the building is removed before the animation is complete.
+	private Tween _xTween;
+	private Tween _yTween;
+	private Tween _clipTween;
 	
 	/// <summary>
 	/// Is true when the build animation is complete. Can be used to delay the building's functionality until the animation is complete.
 	/// </summary>
-	protected bool BuildComplete = false;
+	public bool BuildComplete { get; private set; }
 
 	protected Building()
 	{
@@ -201,36 +205,40 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		_audio.CallDeferred("play", (float)GD.RandRange(0.0f, 20.0f));
 		_audio.VolumeDb = -20;
 		_audio.PitchScale = .25f;
+		
+		_xTween?.Kill();
+		_yTween?.Kill();
+		_clipTween?.Kill();
 
 		var tweenTime = .5 * BuildingSize.Y;
+		_yTween = Globals.Tree.CreateTween();
+		_xTween = Globals.Tree.CreateTween();
+		_clipTween = Globals.Tree.CreateTween();
 		
-		var yTween = Globals.Tree.CreateTween();
-		yTween.TweenProperty(Sprite, "position:y", spriteTarget.Y, tweenTime);
-		var xTween = Globals.Tree.CreateTween();
-		xTween.SetEase(Tween.EaseType.InOut);
+		_yTween.TweenProperty(Sprite, "position:y", spriteTarget.Y, tweenTime);
+		_clipTween.TweenProperty(ClipRect, "position:y", clipTarget, tweenTime);
+		
+		_xTween.SetEase(Tween.EaseType.InOut);
 		
 		var jiggleCount = 5;
 		for (var i = 0; i < jiggleCount - 1; i++)
 		{
-			xTween.TweenProperty(Sprite, "position:x", 
+			_xTween.TweenProperty(Sprite, "position:x", 
 				spriteTarget.X + GD.RandRange(-3, 3), tweenTime / jiggleCount);
 		}
-		xTween.TweenProperty(Sprite, "position:x", spriteTarget.X, tweenTime / jiggleCount);
+		_xTween.TweenProperty(Sprite, "position:x", spriteTarget.X, tweenTime / jiggleCount);
 
-		xTween.TweenProperty(Sprite, "position", 
+		_xTween.TweenProperty(Sprite, "position", 
 			new Vector2(spriteTarget.X + GD.RandRange(-3, 3),spriteTarget.Y + GD.RandRange(-3, 3) ), tweenTime / jiggleCount);
 		
-		xTween.TweenProperty(Sprite, "position", 
+		_xTween.TweenProperty(Sprite, "position", 
 			new Vector2(spriteTarget.X + GD.RandRange(-3, 3),spriteTarget.Y + GD.RandRange(-3, 3) ), tweenTime / jiggleCount);
 		
-		xTween.TweenProperty(Sprite, "position", 
+		_xTween.TweenProperty(Sprite, "position", 
 			spriteTarget, tweenTime / jiggleCount);
 		
-		xTween.TweenCallback(Callable.From(() => _audio.Stop()));
-		xTween.TweenCallback(Callable.From(onComplete));
-
-		var tweenTest = Globals.Tree.CreateTween();
-		tweenTest.TweenProperty(ClipRect, "position:y", clipTarget, tweenTime);
+		_xTween.TweenCallback(Callable.From(() => _audio.Stop()));
+		_xTween.TweenCallback(Callable.From(onComplete));
 	}
 	
 

@@ -2,6 +2,22 @@
   "technology": [
     {
       "name": "Automation",
+        "count": 10,
+        "ingredients": [
+          "Soul"
+        ],
+        "unlocks" : [
+          "Assembler",
+          "Inserter",
+          "Metalweave"
+        ],
+      "prerequisites" : [
+
+      ],
+        "description" : "Automate the crafting of items."
+    },
+    {
+      "name": "Advanced Belts",
       "count": 20,
       "ingredients": [
           "Soul"
@@ -12,7 +28,7 @@
       "prerequisites" : [
 
       ],
-      "description" : "Allows the crafting of more advanced belts."
+      "description" : "Underground belts allow belts to pass under obstacles."
     },
     {
       "name": "Advanced Inserters",
@@ -29,42 +45,84 @@
       "description" : "Allows the crafting of more advanced inserters."
     },
     {
-      "name": "Copperwork",
+      "name": "Storage",
       "count": 20,
       "ingredients": [
         "Soul"
       ],
       "unlocks" : [
-        "Copper Ringmail",
-        "Copper Spear",
-        "Skeleton Warrior",
-        "Skeleton Marksman",
-        "Short Bow",
-        "Arrow"
+        "Stone Chest"
       ],
       "prerequisites" : [
-        "Advanced Inserters", "Automation"
+        "Automation"
+      ],
+      "description" : "Provides a place to buffer items."
+    },
+    {
+      "name": "Warcraft",
+      "count": 20,
+      "ingredients": [
+        "Soul"
+      ],
+      "unlocks" : [
+        "Hilt",
+        "Spear",
+        "Skeleton Auxiliary"
+      ],
+      "prerequisites" : [
+        "Advanced Inserters", "Advanced Belts"
       ],
       "description" : "Forge copper into weapons and armor."
     },
     {
-      "name": "Heavy Weaponry",
+      "name": "Leather Transmutation",
       "count": 100,
       "ingredients": [
         "Soul"
       ],
       "unlocks" : [
-        "Copper Warhammer",
-        "Gravebreaker"
+        "Leather",
+        "Strap",
+        "Grip"
       ],
       "prerequisites" : [
-        "Copperwork"
+        "Advanced Inserters", "Advanced Belts"
       ],
-      "description" : "Build weapons to break through heavy armor"
+      "description" : "Preform a dark ritual to turn bones to leather."
+    },
+    {
+      "name": "Archery",
+        "count": 100,
+        "ingredients": [
+          "Soul"
+        ],
+        "unlocks" : [
+          "Bow and Arrow",
+          "Skeleton Marksman"
+        ],
+        "prerequisites" : [
+          "Warcraft", "Leather Transmutation"
+        ],
+      "description" : "Craft bows and arrows for your warriors."
+    },
+    {
+      "name": "Warcraft II",
+      "count": 300,
+      "ingredients": [
+        "Soul"
+      ],
+      "unlocks" : [
+        "Gravebreaker",
+        "Warhammer"
+      ],
+      "prerequisites" : [
+        "Warcraft", "Leather Transmutation"
+      ],
+      "description" : "Craft bows and arrows for your warriors."
     },
     {
       "name": "Bronzework",
-      "count": 100,
+      "count": 1000,
       "ingredients": [
         "Soul"
       ],
@@ -73,42 +131,39 @@
         "Tin Bar"
       ],
       "prerequisites" : [
-        "Copperwork"
+        "Automation"
       ],
       "description" : "Alloying copper and tin to make bronze yields a stronger metal."
     },
     {
-      "name": "Bronze Metalworking",
-      "count": 1000,
-      "ingredients": [
-        "Soul"
-      ],
-      "unlocks" : [
-        "Bronze Breastplate",
-        "Bronze Spear",
-        "Bronze Warhammer",
-        "Dreadplate Phalanx"
-      ],
-      "prerequisites" : [
-        "Bronzework"
-      ],
-      "description" : "Forge bronze into weapons and armor."
-    },
-    {
-      "name": "Bronze Mastery",
+      "name": "Warcraft III",
       "count": 1000,
       "ingredients": [
         "Soul"
       ],
       "unlocks" : [
         "Undead Legionary",
+        "Sword",
+        "Alloyweave"
+      ],
+      "prerequisites" : [
+        "Bronzework", "Warcraft"
+      ],
+      "description" : "Forge bronze into fine weapons and armor."
+    },
+    {
+      "name": "World of Warcraft",
+      "count": 1000,
+      "ingredients": [
+        "Soul"
+      ],
+      "unlocks" : [
         "Gravebound Charger"
       ],
       "prerequisites" : [
-        "Bronze Metalworking"
+        "Warcraft III"
       ],
-      "description" : "Forge bronze into fine weapons and armor."
+      "description" : "Prepare to infringe on copyright, But only if you're level 40 or higher."
     }
-    
   ]
 }

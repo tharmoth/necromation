@@ -15,7 +15,6 @@ public partial class Character : Node2D
 	private static readonly Texture2D SouthTexture = GD.Load<Texture2D>("res://res/sprites/Player-south.png");
 	private static readonly Texture2D EastTexture = GD.Load<Texture2D>("res://res/sprites/Player-east.png");
 	private static readonly Texture2D NorthTexture = GD.Load<Texture2D>("res://res/sprites/Player-north.png");
-
 	
 	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 	
@@ -43,10 +42,10 @@ public partial class Character : Node2D
 	 * Actions                                                                *
 	 *************************************************************************/
 	private readonly BuildBuildingAction _buildBuildingAction;
+	private readonly RemoveBuildingAction _removeBuildingAction;
 	private readonly InsertItemAction _insertItemAction;
 	private readonly InteractAction _interactAction;
 	private readonly MineAction _mineAction;
-	private readonly RemoveBuildingAction _removeBuildingAction;
 	private readonly RemoveItemAction _removeItemAction;
 	private readonly DeconstructAction _deconstructAction = new();
 	
@@ -153,7 +152,6 @@ public partial class Character : Node2D
 		if (_removeBuildingAction.ShouldRemove()) _removeBuildingAction.RemoveBuilding(building);
 		else _removeBuildingAction.CancelRemoval();
 	}
-	
 
 	/******************************************************************
 	 * Public Methods                                                 *

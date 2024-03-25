@@ -45,7 +45,7 @@ script = ExtResource("4_tudl7")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(144, 81)
+position = Vector2(576, 320)
 zoom = Vector2(4, 4)
 script = ExtResource("5_2askh")
 

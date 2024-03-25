@@ -23,6 +23,16 @@ public partial class MapTileMap : SKTileMap
 	 * Data Constants                                                         *
 	 **************************************************************************/
 	public const int TileSize = 128;
+
+	public MapTileMap()
+	{
+		// The factory needs this initalized to add fogs.
+		foreach (var location in GetUsedCells(0))
+		{
+			var provence = new Province(location);
+			_provences.Add(location, provence);
+		}
+	}
 	
 	public override void _Ready()
 	{
@@ -30,8 +40,7 @@ public partial class MapTileMap : SKTileMap
 		
 		foreach (var location in GetUsedCells(0))
 		{
-			var provence = new Province(location);
-			_provences.Add(location, provence);
+			var provence = _provences[location];
 			
 			var team = location == MapScene.FactoryPosition ? "Player" : "Enemy";
 			provence.Owner = team;
@@ -114,7 +123,7 @@ public partial class MapTileMap : SKTileMap
         var meleeCommander2 = new Commander(province, province.Owner);
         var meleeCommander3 = new Commander(province, province.Owner);
         var rangedCommander = new Commander(province, province.Owner);
-        rangedCommander.SpawnLocation = new Vector2I(30, 25);
+        rangedCommander.SpawnLocation = new Vector2I(60, 50);
         rangedCommander.TargetType = Commander.Target.Random;
 		
         var provinceLocation = province.MapPosition;
