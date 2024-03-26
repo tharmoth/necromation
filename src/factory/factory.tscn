@@ -484,6 +484,7 @@ color = Color(0, 0, 0, 1)
 [node name="TechnologyCompleteAudio" type="AudioStreamPlayer" parent="GUI"]
 unique_name_in_owner = true
 stream = ExtResource("11_p2cxa")
+volume_db = -20.0
 
 [node name="BuildingRemovedAudio" type="AudioStreamPlayer" parent="GUI"]
 unique_name_in_owner = true

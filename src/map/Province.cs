@@ -34,7 +34,18 @@ public partial class Province : Node2D, ITransferTarget
     public ImmutableList<Commander> Commanders => _commanders.ToImmutableList();
     private readonly List<Commander> _commanders = new();
     public readonly Inventory Units = new();
-    public string Resource;
+
+    private string _resource;
+    public string Resource
+    {
+        get => _resource;
+        private set
+        {
+            _resource = value;
+            _resourceSprite.Texture = MapUtils.GetTexture(Resource);
+            _resourceSprite.Scale = (Vector2.One * MapTileMap.TileSize / 4.0f) / _resourceSprite.Texture.GetSize().X;
+        }
+    }
     private string _owner = "Unclaimed";
     
     /**************************************************************************
@@ -48,17 +59,15 @@ public partial class Province : Node2D, ITransferTarget
     public Province(Vector2I mapPos)
     {
         Resource = GetResource(mapPos);
+        
+        _resourceSprite.Position += (Vector2.Up + Vector2.Right) * MapTileMap.TileSize / 4.0f;
+        AddChild(_resourceSprite);
+        
         _flagSprite.Texture = MapUtils.GetTexture("Unclaimed Flag");
         _flagSprite.Scale = (Vector2.One * MapTileMap.TileSize / 4.0f) / _flagSprite.Texture.GetSize().X;
         var flagBottom = _flagSprite.Texture.GetHeight() * _flagSprite.Scale.Y;
-        // _flagSprite.Position -= Vector2.One * MapTileMap.TileSize / 4.0f;
         _flagSprite.Position += Vector2.Up * flagBottom / 2;
         AddChild(_flagSprite);
-        
-        _resourceSprite.Texture = MapUtils.GetTexture(Resource);
-        _resourceSprite.Scale = (Vector2.One * MapTileMap.TileSize / 4.0f) / _resourceSprite.Texture.GetSize().X;
-        _resourceSprite.Position += (Vector2.Up + Vector2.Right) * MapTileMap.TileSize / 4.0f;
-        AddChild(_resourceSprite);
         
         var color = Globals.PlayerColor;
         color.A = .25f;
@@ -192,6 +201,7 @@ public partial class Province : Node2D, ITransferTarget
             { "PosX", MapPosition.X }, // Vector2 is not supported by JSON
             { "PosY", MapPosition.Y },
             { "Owner", Owner },
+            { "Resource", Resource }
         };
         foreach (var commander in _commanders)
         {
@@ -205,8 +215,10 @@ public partial class Province : Node2D, ITransferTarget
     {
         var mapPosition = new Vector2I((int)nodeData["PosX"], (int)nodeData["PosY"]);
         var province = Globals.MapScene.TileMap.GetProvence(mapPosition);
-        province.Name = nodeData["Name"].ToString();
-        province.Owner = nodeData["Owner"].ToString();;
+        province.Name = nodeData.TryGetValue("Name", out var name) ? name.As<string>() : province.Name;
+        province.Owner = nodeData.TryGetValue("Owner", out var owner) ? owner.As<string>() : province.Owner;
+        province.Resource = nodeData.TryGetValue("Resource", out var resource) ? resource.As<string>() : province.Resource;
+        
         province._commanders.ForEach(commander => commander.QueueFree());
         for (int i = province._commanders.Count - 1; i >= 0; i--)
         {
