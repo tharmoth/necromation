@@ -39,7 +39,7 @@ public class RemoveItemAction
             }
         }
 
-        MusicManager.PlayCraft();
+        MusicManager.Play("craft");
     }
     
     private static List<Inventory> GetRemoveInventories(ITransferTarget transfer)

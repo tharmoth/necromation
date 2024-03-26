@@ -117,5 +117,7 @@ public class SKSaveLoad
         var mapData = Globals.MapScene.TileMap.Save();
         var mapJson = Json.Stringify(mapData);
         saveGame.StoreLine(mapJson);
+        
+        MusicManager.Play("save");
     }
 }

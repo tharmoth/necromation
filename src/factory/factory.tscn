@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=37 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -18,12 +18,8 @@
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="8_jqtrb"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="9_oba7v"]
 [ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/HotBarGUI/HotBarItemBox.tscn" id="9_od7oa"]
-[ext_resource type="AudioStream" uid="uid://bchkfk8pny2se" path="res://res/sfx/jingles-pizzicato_14.ogg" id="11_p2cxa"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
-[ext_resource type="AudioStream" uid="uid://d2sv6kue0g7hw" path="res://res/sfx/zapsplat_foley_metal_med_heavy_pole_crowbar_pick_up_from_concrete_003_58640.mp3" id="12_ep3l7"]
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
-[ext_resource type="AudioStream" uid="uid://dd4rjhq1xghkv" path="res://res/sfx/kenny-audio/handleSmallLeather.ogg" id="16_tyoi4"]
-[ext_resource type="AudioStream" uid="uid://dcul4e82epaxt" path="res://res/sfx/kenny-audio/handleSmallLeather2.ogg" id="17_iyvmp"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
 [ext_resource type="Script" path="res://src/factory/BuildingManager.cs" id="23_g3xjq"]
@@ -35,16 +31,6 @@
 [ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="27_0iq17"]
 [ext_resource type="Script" path="res://src/factory/gui/CursorManager.cs" id="30_ilgnm"]
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="31_o81rd"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a63mw"]
-streams_count = 1
-stream_0/stream = ExtResource("16_tyoi4")
-stream_0/weight = 1.0
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xxu1t"]
-streams_count = 1
-stream_0/stream = ExtResource("17_iyvmp")
-stream_0/weight = 1.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
 texture = ExtResource("11_q1hir")
@@ -480,26 +466,6 @@ custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
-
-[node name="TechnologyCompleteAudio" type="AudioStreamPlayer" parent="GUI"]
-unique_name_in_owner = true
-stream = ExtResource("11_p2cxa")
-volume_db = -20.0
-
-[node name="BuildingRemovedAudio" type="AudioStreamPlayer" parent="GUI"]
-unique_name_in_owner = true
-stream = ExtResource("12_ep3l7")
-volume_db = -15.0
-
-[node name="GuiOpenedAudio" type="AudioStreamPlayer" parent="GUI"]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_a63mw")
-pitch_scale = 1.2
-
-[node name="GuiClosedAudio" type="AudioStreamPlayer" parent="GUI"]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_xxu1t")
-pitch_scale = 0.8
 
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true

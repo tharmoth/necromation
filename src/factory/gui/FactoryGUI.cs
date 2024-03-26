@@ -17,10 +17,6 @@ public partial class FactoryGUI : CanvasLayer
 	private Label AttackLabel => GetNode<Label>("%AttackLabel");
 	private ColorRect TopBar => GetNode<ColorRect>("%TopBar");
 	private ColorRect BottomBar => GetNode<ColorRect>("%BottomBar");
-	private AudioStreamPlayer TechnologyCompleteAudio => GetNode<AudioStreamPlayer>("%TechnologyCompleteAudio");
-	private AudioStreamPlayer BuildingRemovedAudio => GetNode<AudioStreamPlayer>("%BuildingRemovedAudio");
-	private AudioStreamPlayer GuiOpenedAudio => GetNode<AudioStreamPlayer>("%GuiOpenedAudio");
-	private AudioStreamPlayer GuiClosedAudio => GetNode<AudioStreamPlayer>("%GuiClosedAudio");
 	public GridContainer HotBar => GetNode<GridContainer>("%HotBar");
 
 	/**************************************************************************
@@ -78,7 +74,7 @@ public partial class FactoryGUI : CanvasLayer
 	public void Push(Control gui)
 	{
 		_guiStack.Push(gui);
-		GuiOpenedAudio.Play();
+		MusicManager.Play("ui_open");
 		AddChild(gui);
 	}
 	
@@ -93,7 +89,7 @@ public partial class FactoryGUI : CanvasLayer
 			CloseGui();
 		}
 		_guiStack.Push(gui);
-		GuiOpenedAudio.Play();
+		MusicManager.Play("ui_open");
 		AddChild(gui);
 	}
 	
@@ -103,7 +99,7 @@ public partial class FactoryGUI : CanvasLayer
 		var topGui = _guiStack.Pop();
 		if (!IsInstanceValid(topGui)) return;
 		topGui.QueueFree();
-		GuiClosedAudio.Play();
+		MusicManager.Play("ui_close");
 	}
 		
 	public void ToggleCinematicMode()
@@ -125,17 +121,7 @@ public partial class FactoryGUI : CanvasLayer
 		ProgressBar.Value = value * 100;
 		ProgressPanel.Visible = value is < 1 and > 0;
 	}
-	
-	public void TechnologyComplete()
-	{
-		// Audio Should be moved to MusicManager
-		TechnologyCompleteAudio.Play();
-	}
-	public void PlayBuildingRemovedAudio()
-	{
-		BuildingRemovedAudio.Play();
-	}
-	
+
 	public void ToggleFps()
 	{
 		FpsLabel.Visible = !FpsLabel.Visible;

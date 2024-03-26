@@ -57,7 +57,7 @@ public class Technology
         
         if (Globals.CurrentTechnology != this) return;
         Globals.CurrentTechnology = null;
-        Globals.FactoryScene.Gui.TechnologyComplete();
+        MusicManager.Play("research_complete");
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public class Technology
         }
         Globals.ResearchListeners.ForEach(listener => listener());
         Globals.CurrentTechnology = null;
-        Globals.FactoryScene.Gui.TechnologyComplete();
+        MusicManager.Play("research_complete");
     }
 
     public virtual Godot.Collections.Dictionary<string, Variant> Save()

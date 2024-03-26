@@ -36,7 +36,7 @@ public class InsertItemAction
 		
         if (remaining == 0) Globals.Player.Selected = "";
 	
-        MusicManager.PlayCraft();
+        MusicManager.Play("craft");
 
     }
 }

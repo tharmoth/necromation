@@ -129,7 +129,7 @@ public partial class CraftingQueue : Node
             CancelItem(childItem, childItem.Count);
         }
         
-        MusicManager.PlayCraft();
+        MusicManager.Play("craft");
         Listeners.ForEach(listener => listener());
     }
 
@@ -152,7 +152,7 @@ public partial class CraftingQueue : Node
         if (craftingQueueItem.Count <= 0)
         {
             _queue.RemoveAt(0);
-            MusicManager.PlayCraft();
+            MusicManager.Play("craft");
             Inventory.TransferAllTo(craftingQueueItem.Inventory, Globals.PlayerInventory);
         }
         
