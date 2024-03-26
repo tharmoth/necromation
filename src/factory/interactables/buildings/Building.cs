@@ -9,7 +9,7 @@ using Necromation.interactables.belts;
 using Necromation.interactables.interfaces;
 using Necromation.sk;
 
-public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker.IProgress
+public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgress
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
@@ -328,7 +328,7 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 			"Armory" => new Assembler("Armory", "recruitment"),
 			"House" => new Assembler("House", "population"),
 			"Research Lab" => new ResearchLab(),
-			"Barracks" => new Barracks("recruitment"),
+			"Barracks" => new Barracks(),
 			"Stone Chest" => new StoneChest(),
 			"Void Chest" => new VoidChest(),
 			"Infinite Chest" => new InfiniteChest(),
@@ -411,6 +411,8 @@ public abstract partial class Building : FactoryTileMap.IEntity, ProgressTracker
 		{
 			for (var i = 0; i < transferTarget.GetInventories().Count; i++)
 			{
+				if (transferTarget.GetInventories().Count <= i) break;
+				if (!nodeData.ContainsKey("Inventory" + i)) continue;
 				transferTarget.GetInventories()[i].Load((Godot.Collections.Dictionary)nodeData["Inventory" + i]);
 			}
 		}

@@ -45,10 +45,8 @@ public partial class BarracksGui : DeferredUpdate
 		_to = to;
 		_barracks = barracks;
 
-		AddUpdateListeners(new List<Inventory> { _to, _barracks.GetInputInventory(), _barracks.GetOutputInventory() });
+		AddUpdateListeners(new List<Inventory> { _to, _barracks.Inventory});
 
-		ItemSelectionItemBox.Init(to, _barracks);
-		
 		ProgressBar.Init(barracks);
 		
 		Title.Text = barracks.ItemType + " - " + barracks.Commander.CommanderName;
@@ -59,10 +57,10 @@ public partial class BarracksGui : DeferredUpdate
 
 	protected override void Update()
 	{
-		InventoryItem.UpdateInventory(_to, new List<Inventory> { _barracks.GetInputInventory(), _barracks.GetOutputInventory() }, InventoryItemList);
-		InventoryItem.UpdateInventory(_barracks.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
-		InventoryItem.UpdateInventory(_barracks.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList);
-		UnitCountLabel.Text = _barracks.GetOutputInventory().CountItems().ToString() + " / " + _barracks.Commander.CommandCap;
+		InventoryItem.UpdateInventory(_to, new List<Inventory> { _barracks.Inventory }, InventoryItemList);
+		// InventoryItem.UpdateInventory(_barracks.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
+		InventoryItem.UpdateInventory(_barracks.Inventory, new List<Inventory> { _to }, OutputInventoryItemList);
+		UnitCountLabel.Text = _barracks.Inventory.CountItems().ToString() + " / " + _barracks.Commander.CommandCap;
 		Dirty = false;
 	}
 }

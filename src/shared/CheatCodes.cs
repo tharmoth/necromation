@@ -12,6 +12,7 @@ public partial class CheatCodes : Node
 	public override void _Ready()
 	{
 		base._Ready();
+		if (true) return;
 		if (OS.IsDebugBuild()) Add100AllItems();
 	}
 

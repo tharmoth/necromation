@@ -105,7 +105,7 @@ public partial class Inserter : Building, IRotatable
         
         _audio.Stream = GD.Load<AudioStream>("res://res/sfx/PM_MPRINTER_DPA4060_6_Printer_Printing_Individual_Cycle_Servo_Motor_Toner_Close_Perspectiv_328.mp3");
         _audio.Attenuation = 25.0f;
-        _audio.VolumeDb = -10.0f;
+        _audio.VolumeDb = -20.0f;
         Sprite.AddChild(_audio);
         UpdateInputOutput();
     }

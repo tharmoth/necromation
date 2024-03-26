@@ -6,8 +6,14 @@ using Necromation.map.character;
 
 namespace Necromation;
 
-public class Barracks : Assembler
+public class Barracks : Building, ITransferTarget, IInteractable
 {
+    /**************************************************************************
+     * Building Implementation                                                *
+     **************************************************************************/
+    public override string ItemType { get; }
+    public override Vector2I BuildingSize => Vector2I.One * 3;
+    
     /**************************************************************************
      * Hardcoded Scene Imports 											      *
      **************************************************************************/
@@ -18,16 +24,20 @@ public class Barracks : Assembler
      **************************************************************************/
     public Commander Commander { get; private set; }
     
+    // Initialize inventory for loading. it will be discarded.
+    private Inventory _inventory = new();
+    public Inventory Inventory => _inventory;
+    
     /**************************************************************************
      * Visuals Variables 													  *
      **************************************************************************/
     private readonly GpuParticles2D _particles;
 
-    public Barracks(string category) : base("Barracks", category)
+    public Barracks() : base()
     {
         _particles = Scene.Instantiate<GpuParticles2D>();
         Sprite.AddChild(_particles);
-        MaxInputItems = 200;
+        ItemType = "Barracks";
     }
 
     public override void _Process(double delta)
@@ -40,16 +50,10 @@ public class Barracks : Assembler
     
     private void SpawnCommander()
     {
-        var test = Globals.MapScene.Commanders.Where(commy => commy.Team == "Player").ToList();
         Commander = Globals.MapScene.Commanders.FirstOrDefault(commander => commander.BarracksId == Id) 
                      ?? new Commander(Globals.MapScene.FactoryProvince, "Player");
         Commander.BarracksId = Id;
-        _outputInventory = Commander.Units;
-    }
-    
-    protected override bool MaxAutocraftReached()
-    {
-        return _outputInventory.CountItems() >= Commander.CommandCap;
+        _inventory = Commander.Units;
     }
     
     public override void Remove(Inventory to, bool quietly = false)
@@ -62,7 +66,7 @@ public class Barracks : Assembler
     /**************************************************************************
      * IInteractable Methods                                                  *
      **************************************************************************/        
-    public override void Interact(Inventory playerInventory)
+    public void Interact(Inventory playerInventory)
     {
         // if (GetRecipe() == null)
         // {
@@ -73,5 +77,19 @@ public class Barracks : Assembler
             BarracksGui.Display(playerInventory, this);
         // }
     }
+    #endregion
+    
+    #region ITransferTarget Implementation
+    /**************************************************************************
+     * ITransferTarget Methods                                                *
+     **************************************************************************/
+    public virtual bool CanAcceptItems(string item,  int count = 1) => _inventory.CanAcceptItems(item, count);
+    public virtual bool CanAcceptItemsInserter(string item,  int count = 1) => _inventory.CanAcceptItemsInserter(item, count);
+    public virtual void Insert(string item, int count = 1) => _inventory.Insert(item, count);
+    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
+    public string GetFirstItem() => _inventory.GetFirstItem();
+    public List<string> GetItems() => _inventory.GetItems();
+    public List<Inventory> GetInventories() => new() { _inventory };
+    public int GetMaxTransferAmount(string itemType) => _inventory.GetMaxTransferAmount(itemType);
     #endregion
 }

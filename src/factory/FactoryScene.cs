@@ -13,7 +13,14 @@ public partial class FactoryScene : Scene
 	 * Child Accessors 													      *
 	 **************************************************************************/
 	public CraftingQueue CraftingQueue => GetNode<CraftingQueue>("%CraftingQueue");
-	public FactoryTileMap TileMap;
+
+	private FactoryTileMap _map;
+	public FactoryTileMap TileMap
+	{
+		get => _map ??= GetNode<FactoryTileMap>("%TileMap");
+		private set => _map = value;
+	}
+
 	public Node2D GroundItemHolder;
 	public DayNight DayNight => GetNode<DayNight>("%DayNight");
 	
@@ -27,6 +34,7 @@ public partial class FactoryScene : Scene
 	private bool attacked = false;
 	public Province AttackProvince;
 	
+
 	public override void _EnterTree()
 	{
 		base._EnterTree();
@@ -39,7 +47,6 @@ public partial class FactoryScene : Scene
 		base._Ready();
 		// Cache this here for performance reasons so we don't have to access the tree.
 		GroundItemHolder = GetNode<Node2D>("GroundItemHolder");
-		TileMap = GetNode<FactoryTileMap>("%TileMap");
 		// GetNode<GpuParticles2D>("%Party").SpeedScale = 0;
 	}
 

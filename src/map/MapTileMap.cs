@@ -120,10 +120,13 @@ public partial class MapTileMap : SKTileMap
         if (province.Owner == "Player" && Globals.FactoryScene != null) return;
 		
         var meleeCommander = new Commander(province, province.Owner);
+        meleeCommander.SpawnLocation = new Vector2I(90, 50);
         var meleeCommander2 = new Commander(province, province.Owner);
+        meleeCommander2.SpawnLocation = new Vector2I(90, 25);
         var meleeCommander3 = new Commander(province, province.Owner);
+        meleeCommander3.SpawnLocation = new Vector2I(90, 75);
         var rangedCommander = new Commander(province, province.Owner);
-        rangedCommander.SpawnLocation = new Vector2I(60, 50);
+        rangedCommander.SpawnLocation = new Vector2I(70, 50);
         rangedCommander.TargetType = Commander.Target.Random;
 		
         var provinceLocation = province.MapPosition;
