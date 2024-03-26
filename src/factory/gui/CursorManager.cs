@@ -16,7 +16,7 @@ public partial class CursorManager : Node
 	/**************************************************************************
 	 * State Data          													  *
 	 **************************************************************************/
-	private bool _cursorOverGui = false;
+	private bool _motionEventHandled = false;
 	private Tween _cursorColorTween;
 	private Building _buildingInHand;
 	private string _cachedSelected = "";
@@ -38,6 +38,8 @@ public partial class CursorManager : Node
 	{
 		base._Process(delta);
 
+		UpdateCursorPosition();
+		
 		if (Globals.Player.Selected == _cachedSelected) return;
 		_cachedSelected = Globals.Player.Selected;
 		UpdateSelected();
@@ -65,40 +67,57 @@ public partial class CursorManager : Node
 		if (_buildingInHand is not IRotatable) Globals.Player.SelectionRotationDegrees = 0;
 		UpdateLabel();
 	}
-	
+
 	public override void _Input(InputEvent @event)
 	{
-		UpdatePosition();
+		UpdateCursorSprites();
+
+		if (@event is not InputEventMouseMotion) return;
+		_motionEventHandled = true;
+	}
+	
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		base._UnhandledInput(@event);
+		if (@event is not InputEventMouseMotion) return;
+		_motionEventHandled = false;
 	}
 
-	private void UpdatePosition()
+	private void UpdateCursorPosition()
 	{
+		// Movement can come from either the cursor moving or the player moving so we just update every frame.
 		CursorItemCount.Position = Globals.Player.GetGlobalMousePosition() + new Vector2(16, 16);
+		CursorItemSprite.Position = Globals.Player.GetGlobalMousePosition();
+		
+		if (_buildingInHand == null) return;
+		CursorBuildingSprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(Globals.Player.GetGlobalMousePosition());
+		if (_buildingInHand.BuildingSize.X % 2 == 0) CursorBuildingSprite.Position += new Vector2(16, 0);
+		if (_buildingInHand.BuildingSize.Y % 2 == 0) CursorBuildingSprite.Position += new Vector2(0, 16);
+	}
+
+	private void UpdateCursorSprites()
+	{
 		// Process mouseover
-		if (Globals.Player.Selected != null && Building.IsBuilding(Globals.Player.Selected) && !_cursorOverGui) SelectedBuildingPreview();
+		if (Globals.Player.Selected != null && Building.IsBuilding(Globals.Player.Selected) && !_motionEventHandled) SelectedBuildingPreview();
 		else if (Globals.Player.Selected != null) SelectedItemPreview();
 		else
 		{
 			CursorItemSprite.Visible = false;
 			CursorBuildingSprite.Visible = false;
 		}
-		
-		if (!_cursorOverGui && Globals.FactoryScene.TileMap.GetBuildingAtMouse() != null || Globals.FactoryScene.TileMap.GetResourceAtMouse() != null) MouseoverEntity();
+
+		if (!_motionEventHandled
+		    && (Globals.FactoryScene.TileMap.GetBuildingAtMouse() != null ||
+		        Globals.FactoryScene.TileMap.GetResourceAtMouse() != null))
+		{
+			MouseoverEntity();
+		}
 		else
 		{
 			CursorEntitySprite.Visible = false;
 			_cursorColorTween?.Kill();
 			_cursorColorTween = null;
 		}
-
-		// Mark that the cursor is over a gui. Will be unmarked if it is not over a gui in UnhandledInput.
-		_cursorOverGui = true;
-	}
-
-	public override void _UnhandledInput(InputEvent @event)
-	{
-		base._UnhandledInput(@event);
-		_cursorOverGui = false;
 	}
 	
 	private void SelectedItemPreview()
@@ -109,7 +128,6 @@ public partial class CursorManager : Node
 		CursorItemSprite.Visible = true;
 		CursorItemSprite.RotationDegrees = Globals.Player.SelectionRotationDegrees;
 		CursorItemSprite.Modulate = Colors.White;
-		CursorItemSprite.Position = Globals.Player.GetGlobalMousePosition();
 	}
 
 	private void SelectedBuildingPreview()
@@ -121,13 +139,9 @@ public partial class CursorManager : Node
 		CursorBuildingSprite.Visible = true;
 		CursorBuildingSprite.RotationDegrees = Globals.Player.SelectionRotationDegrees;
 		CursorBuildingSprite.Modulate = Colors.White;
-		CursorBuildingSprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(Globals.Player.GetGlobalMousePosition());
 		
 		if (_buildingInHand is IRotatable rotatable)
 			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(Globals.Player.SelectionRotationDegrees);
-		
-		if (_buildingInHand.BuildingSize.X % 2 == 0) CursorBuildingSprite.Position += new Vector2(16, 0);
-		if (_buildingInHand.BuildingSize.Y % 2 == 0) CursorBuildingSprite.Position += new Vector2(0, 16);
 		
 		CursorBuildingSprite.Modulate = _buildingInHand.CanPlaceAt(Globals.Player.GetGlobalMousePosition())
 			? new Color(0, 1, 0, 0.5f)

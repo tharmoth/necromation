@@ -68,11 +68,13 @@ public partial class CraftingQueueItemBox : ItemBox
 				{
 					Globals.FactoryScene.CraftingQueue.CancelItem(item, 1);
 					Globals.FactoryScene.CraftingQueue.Listeners.ForEach(listener => listener());
+					CountLabel.Text = _item.Count.ToString();
 					break;
 				}
 				case InputEventMouseButton { ButtonIndex: MouseButton.Right, Pressed: true }:
 					Globals.FactoryScene.CraftingQueue.CancelItem(item, item.Count);
 					Globals.FactoryScene.CraftingQueue.Listeners.ForEach(listener => listener());
+					CountLabel.Text = _item.Count.ToString();
 					break;
 			}
 		};

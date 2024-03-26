@@ -250,11 +250,11 @@ layout_mode = 2
 [node name="DropShadowBorder" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("6_kka5s")]
 layout_mode = 2
 size_flags_horizontal = 4
-mouse_filter = 2
+mouse_filter = 1
 
 [node name="MarginContainer2" type="MarginContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer/DropShadowBorder"]
 layout_mode = 2
-mouse_filter = 2
+mouse_filter = 0
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 32

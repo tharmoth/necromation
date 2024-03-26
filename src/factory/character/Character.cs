@@ -129,17 +129,10 @@ public partial class Character : Node2D
 		ProcessInput();
 	}
 
-	public override void _UnhandledInput(InputEvent @event)
-	{
-		base._UnhandledInput(@event);
-		// Gui input actions
-		if (Input.IsActionJustPressed("rotate")) RotateSelection();
-		if (Input.IsActionJustPressed("clear_selection")) QPick();
-		ProcessInput();
-	}
-
 	private void ProcessInput()
 	{
+		if (_motionEventHandled) return;
+		
 		var building = Globals.FactoryScene.TileMap.GetBuildingAtMouse();
 		
 		// Cursor Input Actions
@@ -151,6 +144,27 @@ public partial class Character : Node2D
 		// Always Cancel removal if not removing
 		if (_removeBuildingAction.ShouldRemove()) _removeBuildingAction.RemoveBuilding(building);
 		else _removeBuildingAction.CancelRemoval();
+	}
+	
+	private bool _motionEventHandled = false;
+	
+	public override void _Input(InputEvent @event)
+	{
+		ProcessInput();
+
+		if (@event is not InputEventMouseMotion) return;
+		_motionEventHandled = true;
+	}
+	
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		base._UnhandledInput(@event);
+		
+		if (Input.IsActionJustPressed("rotate")) RotateSelection();
+		if (Input.IsActionJustPressed("clear_selection")) QPick();
+		
+		if (@event is not InputEventMouseMotion) return;
+		_motionEventHandled = false;
 	}
 
 	/******************************************************************

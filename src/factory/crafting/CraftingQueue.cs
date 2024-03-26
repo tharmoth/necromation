@@ -11,7 +11,7 @@ public partial class CraftingQueue : Node
     public readonly List<Action> Listeners = new();
     public ImmutableList<CraftingQueueItem> Queue => _queue.ToImmutableList();
     public double Time => _time;
-    public const double TimePerCraft = .5;
+    public const double TimePerCraft = 10;
     
     private readonly List<CraftingQueueItem> _queue = new();
     private double _time;
