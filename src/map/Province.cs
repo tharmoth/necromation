@@ -103,6 +103,13 @@ public partial class Province : Node2D, ITransferTarget
         AddChild(_spriteHolder);
     }
 
+    public void OnOpen()
+    {
+        // This is fairly intensive so only do it when we open the map.
+        // Note: this will need to be changed if we make the factory run while the map is open.
+        UpdateSprite();
+    }
+
     private string GetResource(Vector2I mapPosition)
     {
         var resources = new List<string> {"Bone Fragments"};
@@ -244,7 +251,6 @@ public partial class Province : Node2D, ITransferTarget
     public void RemoveCommander(Commander commander)
     {
         _commanders.Remove(commander);
-        commander.Units.Listeners.Remove(UpdateSprite);
         UpdateSprite();
     }
 
@@ -252,8 +258,6 @@ public partial class Province : Node2D, ITransferTarget
     {
         commander.GlobalPosition = Globals.MapScene.TileMap.MapToGlobal(MapPosition);
         _commanders.Add(commander);
-        
-        commander.Units.Listeners.Add(UpdateSprite);
         UpdateSprite();
         
         Globals.MapScene.CallDeferred("add_child", commander);

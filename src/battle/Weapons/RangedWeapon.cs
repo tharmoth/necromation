@@ -26,7 +26,7 @@ public class RangedWeapon : Weapon
         var difference = startGlobal - target.GlobalPosition;
         var differenceFloat = ((Vector2)difference).Normalized();
         var distance = difference.Length();
-        var arrowTilesPerSecond = Arrow.TilesPerSecond * BattleTileMap.TileSize;
+        var arrowTilesPerSecond = Projectile.TilesPerSecond * BattleTileMap.TileSize;
         var unitTilesPerSecond = 2 * BattleTileMap.TileSize;
         var speed = arrowTilesPerSecond + unitTilesPerSecond;
         var timeToHit = distance / speed;
@@ -44,12 +44,15 @@ public class RangedWeapon : Weapon
             _ => "Arrow"
         };
         
-        Globals.BattleScene.AddChild(new Arrow(wielder.MapPosition, targetLoc, hit => ApplyDamage(wielder, hit), type));
+        Globals.BattleScene.AddChild(new Projectile(wielder.MapPosition, targetLoc, mapPosition => ApplyDamage(wielder, mapPosition), type));
         PlayFiredSound(wielder);
     }
 
-    private void ApplyDamage(Unit wielder, Unit target)
+    private void ApplyDamage(Unit wielder, Vector2I mapPosition)
     {
+        var target = Globals.BattleScene.TileMap.GetEntity(mapPosition, BattleTileMap.Unit) as Unit;
+        if (target == null) return;
+        
         var damage = Damage + Mathf.FloorToInt(wielder.Strength / 3.0f);
         
         var armor = target.Armor.Sum(armor => armor.Protection);

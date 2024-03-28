@@ -33,6 +33,11 @@ public partial class MapTileMap : SKTileMap
 			_provences.Add(location, provence);
 		}
 	}
+
+	public void OnOpen()
+	{
+		_provences.Values.ToList().ForEach(province => province.OnOpen());
+	}
 	
 	public override void _Ready()
 	{

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Necromation;
+using Necromation.battle.Weapons;
 using Necromation.gui;
 using Necromation.map.battle.Weapons;
 using FileAccess = Godot.FileAccess;
@@ -127,12 +128,12 @@ public class Database
         var weight =  dict.TryGetValue("weight", out var weightVariant) ? weightVariant.As<int>() : 1;
         var hands = dict.TryGetValue("hands", out var handsVariant) ? handsVariant.As<int>() : 1;
         var ammo = dict.TryGetValue("ammo", out var ammoVariant) ? ammoVariant.As<int>() : -1;
-        
 
         return type switch
         {
             "melee" => new MeleeWeapon(name, range, damage, hands, 1, ammo),
             "ranged" => new RangedWeapon(name, range, damage, hands, 6, ammo),
+            "magic" => new MagicWeapon(name, range, damage, hands, 6, ammo),
             "armor" => new Armor(name, protection, weight),
             _ => null
         };

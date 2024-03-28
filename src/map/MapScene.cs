@@ -38,7 +38,7 @@ public partial class MapScene : Scene
 
 	public override void OnOpen()
 	{
-
+		TileMap.OnOpen();
 	}
 
 	public override void OnClose() {}

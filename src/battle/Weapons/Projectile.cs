@@ -3,7 +3,7 @@ using Godot;
 
 namespace Necromation.map.battle;
 
-public partial class Arrow : Sprite2D
+public partial class Projectile : Sprite2D
 {
     public Vector2I MapPosition => Globals.BattleScene.TileMap.GlobalToMap(GlobalPosition);
 
@@ -18,13 +18,13 @@ public partial class Arrow : Sprite2D
     
     private float _progress;
     
-    private readonly Action<Unit> _damage;
+    private readonly Action<Vector2I> _damage;
     
     private bool _hit = false;
 
     private string _type;
 
-    public Arrow(Vector2I startTile, Vector2I targetTile, Action<Unit> damage, string type)
+    public Projectile(Vector2I startTile, Vector2I targetTile, Action<Vector2I> damage, string type)
     {
         _type = type;
         _damage = damage;
@@ -63,8 +63,7 @@ public partial class Arrow : Sprite2D
         // If the arrow has reached the target, remove it
         if (!(nextPosition.DistanceTo(_targetPosition) < 1)) return;
 
-        var hit = Globals.BattleScene.TileMap.GetEntity(Globals.BattleScene.TileMap.GlobalToMap(_targetPosition), BattleTileMap.Unit);
-        if (hit is Unit unit) _damage(unit);
+        _damage(MapPosition);
         Modulate = new Color(.5f, .5f, .5f);
         _hit = true;
         ZIndex = -1;

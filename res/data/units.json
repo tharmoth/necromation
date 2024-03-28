@@ -114,6 +114,14 @@
       ],
       "armor": [
       ]
+    },
+    {
+      "name": "Deathbound Mage",
+        "weapons": [
+            "Fireball"
+        ],
+        "armor": [
+        ]
     }
   ],
   "equipment": [
@@ -200,6 +208,14 @@
       "traits": [
         "armor piercing"
       ]
+    },
+    {
+      "name": "Fireball",
+      "damage": 100,
+      "range": 40,
+      "hands": 2,
+      "ammo": 100,
+      "type": "magic"
     },
     {
       "name": "Leather Cuirass",
