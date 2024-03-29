@@ -350,6 +350,7 @@ mouse_filter = 0
 
 [node name="DropShadowDividerRight" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("8_jqtrb")]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Right" type="VBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main"]
 layout_mode = 2

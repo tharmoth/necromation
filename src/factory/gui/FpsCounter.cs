@@ -10,6 +10,7 @@ public partial class FpsCounter : Label
 		var portOfCall = Globals.Player.GetViewport();
 		var processTime = Performance.GetMonitor(Performance.Monitor.TimeProcess) * 1000;
 		var physicsProcessTime = Performance.GetMonitor(Performance.Monitor.TimePhysicsProcess) * 1000;
+		RenderingServer.ViewportSetMeasureRenderTime(portOfCall.GetViewportRid(), true);
 		var renderTimeCpu = RenderingServer.ViewportGetMeasuredRenderTimeCpu(portOfCall.GetViewportRid());
 		var renderTimeGpu = RenderingServer.ViewportGetMeasuredRenderTimeGpu(portOfCall.GetViewportRid());
 

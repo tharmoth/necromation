@@ -129,10 +129,12 @@ public partial class Character : Node2D
 		ProcessInput();
 	}
 
+	private static int counter = 0;
+	
 	private void ProcessInput()
 	{
 		if (_motionEventHandled) return;
-		
+
 		var building = Globals.FactoryScene.TileMap.GetBuildingAtMouse();
 		
 		// Cursor Input Actions

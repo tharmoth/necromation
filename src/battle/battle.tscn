@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://biyscljj05i1"]
+[gd_scene load_steps=14 format=3 uid="uid://biyscljj05i1"]
 
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="1_2hsjy"]
 [ext_resource type="Script" path="res://src/battle/BattleScene.cs" id="1_jh312"]
@@ -9,7 +9,6 @@
 [ext_resource type="Script" path="res://src/battle/gui/BattleGUI.cs" id="6_ldfr3"]
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="7_0goob"]
 [ext_resource type="Script" path="res://src/battle/UnitManager.cs" id="7_lcofj"]
-[ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="11_81kll"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7p67d"]
 texture = ExtResource("1_2hsjy")
@@ -151,8 +150,6 @@ script = ExtResource("7_lcofj")
 
 [node name="GrassHolder" type="Node2D" parent="."]
 y_sort_enabled = true
-
-[node name="DayNight" parent="." instance=ExtResource("11_81kll")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hties")

@@ -516,6 +516,12 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		
 		// This should clean up all of the other units on death other than their body.
 		SpriteHolder.QueueFree();
+		
+		// These will throw warnings if started before queuefree.
+		_jiggleTween?.Kill();
+		_damageTween?.Kill();
+		_bobTween?.Kill();
+		_moveTween?.Kill();
 	}
 	
 	private void PlayDeathSound()

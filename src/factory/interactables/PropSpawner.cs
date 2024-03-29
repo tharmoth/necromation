@@ -19,6 +19,9 @@ public partial class PropSpawner : Node2D
 	[Export] private int _radius = 1000;
 	[Export] private float _scale = 0.25f;
 	[Export] private int _count = 100;
+	private Vector2 _globalPosition;
+	private int _noiseSeed;
+	private bool _clumping;
 
 	private double _time;
 
@@ -27,13 +30,16 @@ public partial class PropSpawner : Node2D
 		
 	}
 	
-	public PropSpawner(RandomType type, Array<Texture2D> textures, int radius,float scale, int count = 100)
+	public PropSpawner(RandomType type, Array<Texture2D> textures, int radius,float scale, int count = 100, Vector2 globalPosition = default, int noiseSeed = 0, bool clumping = false)
 	{
 		_type = type;
 		_spriteTextures = textures;
 		_radius = radius;
 		_scale = scale;
 		_count = count;
+		_globalPosition = globalPosition;
+		_noiseSeed = noiseSeed;
+		_clumping = clumping;
 	}
 
 	public override void _Ready()
@@ -90,12 +96,18 @@ public partial class PropSpawner : Node2D
 	
 	private void PlacePropsCuboid()
 	{
+		var _noise = new FastNoiseLite();
+		_noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
+		_noise.Seed = _noiseSeed;
+		_noise.Frequency = 0.005f;
+		_noise.Offset = new Vector3(_globalPosition.X, _globalPosition.Y, 0);
+		
 		var count = 0;
 		for (var x = -_radius; x < _radius; x += 32)
 		{
 			for (var y = -_radius; y < _radius; y += 32)
 			{
-				if (GD.Randf() > .5)
+				if (_noise.GetNoise2D(x, y) > 0.5f)
 				{
 					count += FillCell(new Vector2(x, y));
 				}
@@ -104,9 +116,10 @@ public partial class PropSpawner : Node2D
 		GD.Print("Placed " + count + " props");
 	}
 
-	private int FillCell(Vector2 globalPosition)
+	private int FillCell(Vector2 position)
 	{
 		var count = 0;
+		
 		for (var x = 5; x < 32; x += 10)
 		{
 			for (var y = 5; y < 32; y += 10)
@@ -114,7 +127,7 @@ public partial class PropSpawner : Node2D
 				var scale = _scale * (float)GD.RandRange(.5f, 1f);
 				if (GD.Randf() > .75)
 				{
-					PlaceProp(globalPosition + new Vector2(x + GD.RandRange(-3, 3), y + GD.RandRange(-3, 3)), scale);
+					PlaceProp(position + new Vector2(x + GD.RandRange(-3, 3), y + GD.RandRange(-3, 3)), scale);
 					count++;
 				}
 			}
@@ -125,10 +138,11 @@ public partial class PropSpawner : Node2D
 	
 	private void PlaceProp(Vector2 position, float scale)
 	{
+		// if(true) return;
 		var spawn = new Sprite2D();
 		spawn.Texture = _spriteTextures[new Random().Next(0, _spriteTextures.Count - 1)];
 		spawn.Position = position;
-		spawn.ZIndex = -98;
+		// spawn.ZIndex = -98;
 		spawn.RotationDegrees = new Random().Next(-10, 10);
 		spawn.Scale = new Vector2(scale, scale);
 		// ShaderMaterial matty = new();
@@ -139,6 +153,20 @@ public partial class PropSpawner : Node2D
 		// matty.SetShaderParameter("detail", 5.0f);
 		// spawn.Material = matty;
 		// AddChild(spawn);
+		
+		var texture = _spriteTextures[new Random().Next(0, _spriteTextures.Count - 1)];
+		
+		var width = texture.GetWidth() * scale;
+		var height = texture.GetHeight() * scale;
+		var size = new Vector2(width, height);
+		
+		Rid _renderingServerId = RenderingServer.CanvasItemCreate();
+		RenderingServer.CanvasItemSetParent(_renderingServerId, GetCanvasItem());
+		RenderingServer.CanvasItemAddTextureRect(_renderingServerId, new Rect2(position - size / 2, size), texture.GetRid());
+		var transform = Transform2D.Identity.Translated(position);
+		RenderingServer.CanvasItemSetTransform(_renderingServerId, transform);
+		// RenderingServer.CanvasItemSetZIndex(_renderingServerId, -98);
+		
 	}
 
 	private GpuParticles2D party;
@@ -147,7 +175,6 @@ public partial class PropSpawner : Node2D
 	{
 		party = GD.Load<PackedScene>("res://src/factory/shaders/grass_particles.tscn").Instantiate<GpuParticles2D>();
 		AddChild(party);
-		party.ZIndex = -98;
 		party.Scale = new Vector2(_radius / 320.0f, _radius / 320.0f);
 		var tweeny = Globals.Tree.CreateTween();
 		tweeny.TweenInterval(1);

@@ -14,6 +14,7 @@ public class SKFloatingLabel
         label.GlobalPosition = position;
         label.BbcodeEnabled = true;
         label.ZIndex = 100;
+        label.MouseFilter = Control.MouseFilterEnum.Ignore;
         
         Globals.FactoryScene.AddChild(label);
 

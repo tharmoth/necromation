@@ -61,8 +61,9 @@ public partial class MapGui : CanvasLayer
 
 	private void EndTurn()
 	{
-		DayNight.SetHour(DayNight.GetHour() + 8);
-		
+		var tween = Globals.Tree.CreateTween();
+		tween.TweenMethod(Callable.From<float>(DayNight.SetHour), DayNight.GetHour(), DayNight.GetHour() + 8, 1);
+
 		// Create a copy of the list as it may be modified during the loop
 		var listeners = Globals.MapScene.TurnListeners.ToList();
 		listeners.ForEach(listener => listener());

@@ -106,11 +106,29 @@ public partial class FactoryTileMap : LayerTileMap
 		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
 		Globals.FactoryScene.CallDeferred("add_child", soilSprite);
 
+		var propPos = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
+		
 		var grassTexture = Database.Instance.GetTexture("Grass2");
 		var grassTexture2 = Database.Instance.GetTexture("Grass5");
 		PropSpawner spawner = new(PropSpawner.RandomType.Particles, new Array<Texture2D>(){ grassTexture, grassTexture2 }, ProvinceSize * TileSize / 2, .75f);
-		spawner.GlobalPosition = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
+		spawner.GlobalPosition = propPos;
+		spawner.ZIndex = -97;
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
+		
+		var rockTexture = Database.Instance.GetTexture("Rocks1");
+		var rockTexture2 = Database.Instance.GetTexture("Rocks2");
+		var rockTexture3 = Database.Instance.GetTexture("Rocks3");
+		PropSpawner rockSpawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ rockTexture, rockTexture2, rockTexture3}, ProvinceSize * TileSize / 4, .05f, 0, propPos);
+		rockSpawner.GlobalPosition = propPos;
+		rockSpawner.ZIndex = -98;
+		Globals.FactoryScene.CallDeferred("add_child", rockSpawner);
+		
+		// var flowerTexture = Database.Instance.GetTexture("Flower1");
+		// PropSpawner flowerSpawner = new(PropSpawner.RandomType.Cuboid, new Array<Texture2D>(){ flowerTexture}, ProvinceSize * TileSize / 2, .05f, 30, propPos, 1, true);
+		// flowerSpawner.GlobalPosition = propPos;
+		// flowerSpawner.ZIndex = -96;
+		// flowerSpawner.Modulate = new Color(1, 1, 1, .5f);
+		// Globals.FactoryScene.CallDeferred("add_child", flowerSpawner);
 	}
 	
 	private void SpawnResource(Vector2I location)

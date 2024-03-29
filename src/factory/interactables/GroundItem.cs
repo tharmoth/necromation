@@ -39,7 +39,8 @@ public class GroundItem
         GlobalPosition = Vector2.Zero;
         
         // Add the texture to the rendering server directly for performance reasons.
-        RenderingServer.CanvasItemSetParent(_renderingServerId, Globals.FactoryScene.GroundItemHolder.GetCanvasItem());
+        // RenderingServer.CanvasItemSetParent(_renderingServerId, Globals.FactoryScene.GroundItemHolder.GetCanvasItem());
+        RenderingServer.CanvasItemSetParent(_renderingServerId, Globals.FactoryScene.GetCanvasItem());
         var texture = Database.Instance.GetTexture(ItemType);
         RenderingServer.CanvasItemAddTextureRect(_renderingServerId, new Rect2(GlobalPosition - Vector2.One * Size / 2, Vector2.One * Size), texture.GetRid());
         var transform = Transform2D.Identity.Translated(GlobalPosition);

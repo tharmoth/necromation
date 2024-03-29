@@ -13,6 +13,7 @@ public partial class Projectile : Sprite2D
     
     private readonly Vector2 _startPosition;
     private Vector2 _targetPosition;
+    private readonly Vector2 _offset;
     
     private readonly float _stepScale;
     
@@ -36,9 +37,9 @@ public partial class Projectile : Sprite2D
             32 / (float)Texture.GetHeight());
 
         _startPosition = Globals.BattleScene.TileMap.MapToGlobal(startTile);
-        var rand = new Vector2(GD.RandRange(-BattleTileMap.TileSize / 2, BattleTileMap.TileSize / 2),
+        _offset = new Vector2(GD.RandRange(-BattleTileMap.TileSize / 2, BattleTileMap.TileSize / 2),
             GD.RandRange(-BattleTileMap.TileSize, BattleTileMap.TileSize));
-        _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile);
+        _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(targetTile) + _offset;
         var distance = _startPosition.DistanceTo(Globals.BattleScene.TileMap.MapToGlobal(targetTile));
         _stepScale = Speed / distance;
         
@@ -59,7 +60,7 @@ public partial class Projectile : Sprite2D
     public override void _Process(double delta)
     {
         if (_hit) return;
-        if (_targetUnit != null) _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(_targetUnit.MapPosition);
+        if (_targetUnit != null) _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(_targetUnit.MapPosition) + _offset;
         _progress += _stepScale * (float)delta;
         _progress = Mathf.Clamp(_progress, 0, 1);
 
@@ -79,6 +80,7 @@ public partial class Projectile : Sprite2D
         Modulate = new Color(.5f, .5f, .5f);
         _hit = true;
         ZIndex = -1;
+        SelfModulate = new Color(1, 1, 1, .5f);
         if (_type == "fireball")
         {
             QueueFree();

@@ -165,6 +165,7 @@ process_material = SubResource("ParticleProcessMaterial_acosi")
 texture = ExtResource("1_vo4sp")
 lifetime = 2.0
 explosiveness = 1.0
+visibility_rect = Rect2(-1e+10, -1e+10, 1e+10, 1e+10)
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 modulate = Color(1.5, 1.5, 1.5, 1)
@@ -173,6 +174,7 @@ process_material = SubResource("ParticleProcessMaterial_5f0jc")
 texture = ExtResource("2_aolys")
 lifetime = 0.75
 explosiveness = 0.9
+visibility_rect = Rect2(-1e+10, -1e+10, 1e+10, 1e+10)
 trail_enabled = true
 
 [node name="GPUParticles2D2" type="GPUParticles2D" parent="."]
@@ -182,6 +184,7 @@ process_material = SubResource("ParticleProcessMaterial_xpxha")
 texture = ExtResource("2_muirr")
 lifetime = 5.0
 explosiveness = 1.0
+visibility_rect = Rect2(-1e+10, -1e+10, 1e+10, 1e+10)
 
 [node name="GPUParticles2D3" type="GPUParticles2D" parent="."]
 z_index = -1
@@ -190,9 +193,11 @@ amount = 1
 process_material = SubResource("ParticleProcessMaterial_ixku3")
 texture = ExtResource("4_gxjav")
 lifetime = 0.5
+visibility_rect = Rect2(-1e+10, -1e+10, 1e+10, 1e+10)
 
 [node name="GPUParticles2D4" type="GPUParticles2D" parent="."]
 amount = 1
 process_material = SubResource("ParticleProcessMaterial_lnwae")
 texture = ExtResource("5_d6tom")
 lifetime = 0.2
+visibility_rect = Rect2(-1e+10, -1e+10, 1e+10, 1e+10)
