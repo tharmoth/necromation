@@ -61,6 +61,8 @@ public partial class MapGui : CanvasLayer
 
 	private void EndTurn()
 	{
+		DayNight.SetHour(DayNight.GetHour() + 8);
+		
 		// Create a copy of the list as it may be modified during the loop
 		var listeners = Globals.MapScene.TurnListeners.ToList();
 		listeners.ForEach(listener => listener());

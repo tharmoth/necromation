@@ -95,7 +95,7 @@ public class SceneManager
 		scene.Visible = false;
 		scene.ProcessMode = Node.ProcessModeEnum.Disabled;
 		scene.Camera.Enabled = false;
-		scene.Gui.Visible = false;
+		if (scene.Gui != null) scene.Gui.Visible = false;
 		
 		SceneTree.Root.CallDeferred("add_child", scene);
 		return scene;
@@ -113,7 +113,7 @@ public class SceneManager
 		to.Visible = true;
 		to.ProcessMode = Node.ProcessModeEnum.Inherit;
 		to.Camera.Enabled = true;
-		to.Gui.Visible = true;
+		if (to.Gui != null) to.Gui.Visible = true;
 
 		_currentScene = to;
 		_currentScene.OnOpen();

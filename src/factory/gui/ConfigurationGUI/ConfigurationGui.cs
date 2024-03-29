@@ -56,14 +56,14 @@ public partial class ConfigurationGui : PanelContainer
 		};
 		Options.AddChild(checkBox5);
 		
-		HSlider.Value = Globals.FactoryScene.DayNight.GetHour();
+		HSlider.Value = DayNight.GetHour();
 	}
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
 		var dayNight = Globals.FactoryScene.DayNight;
-		dayNight.SetHour((float)HSlider.Value); 
-		TimeLabel.Text = $"{dayNight.GetHour()}:00";
+		DayNight.SetHour((float)HSlider.Value); 
+		TimeLabel.Text = $"{DayNight.GetHour()}:00";
 	}
 }

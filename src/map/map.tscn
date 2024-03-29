@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=21 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/MapScene.cs" id="1_q07oc"]
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="2_12t4y"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="9_w144y"]
 [ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="11_8qgol"]
 [ext_resource type="AudioStream" uid="uid://dvunqv10vqhju" path="res://res/sfx/zapsplat_foley_dry_dead_leaf_crush_001_70766.mp3" id="12_brqa8"]
+[ext_resource type="PackedScene" uid="uid://l0kvtk6y5ncx" path="res://src/shared/day_night.tscn" id="18_388q3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vg77j"]
 texture = ExtResource("2_12t4y")
@@ -301,3 +302,5 @@ z_index = -2
 position = Vector2(48, 48)
 scale = Vector2(4, 4)
 texture = ExtResource("9_w144y")
+
+[node name="DayNight" parent="." instance=ExtResource("18_388q3")]

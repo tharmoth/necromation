@@ -202,9 +202,9 @@
     },
     {
       "name": "Grip",
-      "time" : 0.5,
+      "time" : 1.0,
       "ingredients": {
-        "Strap": 2,
+        "Strap": 1,
         "Hilt": 1
       },
       "products": {

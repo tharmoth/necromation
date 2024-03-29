@@ -29,7 +29,7 @@ public class Globals
 
     public static int Souls;
     public static List<Action> SoulListeners = new();
-    
+
     public static FactoryScene FactoryScene => SceneManager.FactoryScene;
     public static MapScene MapScene => SceneManager.MapScene;
     public static BattleScene BattleScene => SceneManager.BattleScene;

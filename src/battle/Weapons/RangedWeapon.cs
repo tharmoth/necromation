@@ -44,7 +44,7 @@ public class RangedWeapon : Weapon
             _ => "Arrow"
         };
         
-        Globals.BattleScene.AddChild(new Projectile(wielder.MapPosition, targetLoc, mapPosition => ApplyDamage(wielder, mapPosition), type));
+        Globals.BattleScene.AddChild(new Projectile(wielder.MapPosition, targetLoc, mapPosition => ApplyDamage(wielder, mapPosition), type, target));
         PlayFiredSound(wielder);
     }
 

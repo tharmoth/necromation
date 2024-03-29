@@ -16,7 +16,7 @@ public partial class CloudRegionSpawner : Control
 		for (int i = 0; i < count; i++)
 		{
 			var offset = (float) GD.RandRange(0.0f, ySize + xSize);
-			Spawn(offset);
+			// Spawn(offset);
 		}
 		
 		CustomMinimumSize = new Vector2(xSize, ySize);

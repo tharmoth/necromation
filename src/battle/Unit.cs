@@ -12,6 +12,9 @@ using Necromation.sk;
 
 public class Unit : CsharpNode, LayerTileMap.IEntity
 {
+	private static readonly PackedScene DeathAudioScene = GD.Load<PackedScene>("res://src/battle/DeathPlayer.tscn");
+	private static readonly PackedScene HitAudioScene = GD.Load<PackedScene>("res://src/battle/HitPlayer.tscn");
+	
 	/**************************************************************************
 	 * Position Variables 			     									  *
 	 **************************************************************************/
@@ -46,6 +49,8 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	private Tween _bobTween;
 	private Tween _moveTween;
 	private Tween _damageTween;
+	private readonly AudioStreamPlayer2D _deathAudio = DeathAudioScene.Instantiate<AudioStreamPlayer2D>();
+	private readonly AudioStreamPlayer2D _hitAudio = HitAudioScene.Instantiate<AudioStreamPlayer2D>();
 	
 	/**************************************************************************
 	 * RPG Data Variables 													  *
@@ -101,11 +106,14 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 
 		}
 
-	SpriteHolder.AddChild(BodySprite); 
+		SpriteHolder.AddChild(BodySprite); 
 		SpriteHolder.AddChild(Audio);
 		Globals.UnitManager.AddToGroup(this, Team);
 		
 		Globals.BattleScene.TileMap.AddEntity(GlobalPosition, this, BattleTileMap.Unit);
+
+		BodySprite.AddChild(_deathAudio);
+		BodySprite.AddChild(_hitAudio);
 	}
 
 	public override void _Ready()
@@ -512,14 +520,12 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	
 	private void PlayDeathSound()
 	{
-		var randomizer = new AudioStreamRandomizer();
-		randomizer.AddStream(0, Database.LoadAudioFileFromFolder("death"));
+		_deathAudio.Play();
+	}
 
-		var audio = new AudioStreamPlayer2D();
-		audio.Stream = randomizer;
-		audio.VolumeDb = -40;
-		BodySprite.AddChild(audio);
-		audio.Play();
+	public void PlayHitSound()
+	{
+		_hitAudio.Play();
 	}
 	
 	private void ShowText(int damage)

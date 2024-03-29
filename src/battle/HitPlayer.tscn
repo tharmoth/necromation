@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://cq7rokayiuap3"]
+
+[ext_resource type="AudioStream" uid="uid://b3bgd7by7weqk" path="res://res/sfx/stab/zapsplat_warfare_sword_blade_tip_stab_dig_into_earth_soil_mud_009_93653.mp3" id="1_ba2wk"]
+[ext_resource type="AudioStream" uid="uid://qcebp044kvem" path="res://res/sfx/stab/zapsplat_warfare_sword_stab_into_body_flesh_light_squelch_93748.mp3" id="2_aopna"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1s6t0"]
+streams_count = 2
+stream_0/stream = ExtResource("1_ba2wk")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_aopna")
+stream_1/weight = 1.0
+
+[node name="HitSound" type="AudioStreamPlayer2D"]
+stream = SubResource("AudioStreamRandomizer_1s6t0")
+volume_db = -20.0

@@ -210,6 +210,17 @@ public class Database
         return texture;
     }
     
+    public Node2D GetParticles(string name)
+    {
+        var path = "res://res/particles/" + name + ".tscn";
+        if (!FileAccess.FileExists(path))
+        {
+            GD.PrintErr("Failed to load particles: " + name);
+            return new Node2D();
+        }
+        return GD.Load<PackedScene>(path).Instantiate<Node2D>();
+    }
+    
     private static Godot.Collections.Dictionary<string, Variant> LoadJson(string path)
     {
         using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);

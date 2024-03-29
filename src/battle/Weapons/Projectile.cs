@@ -12,7 +12,7 @@ public partial class Projectile : Sprite2D
     private readonly float ArcHeight;
     
     private readonly Vector2 _startPosition;
-    private readonly Vector2 _targetPosition;
+    private Vector2 _targetPosition;
     
     private readonly float _stepScale;
     
@@ -23,12 +23,14 @@ public partial class Projectile : Sprite2D
     private bool _hit = false;
 
     private string _type;
+    private Unit _targetUnit;
 
-    public Projectile(Vector2I startTile, Vector2I targetTile, Action<Vector2I> damage, string type)
+    public Projectile(Vector2I startTile, Vector2I targetTile, Action<Vector2I> damage, string type, Unit target = null)
     {
         _type = type;
         _damage = damage;
         Texture = Database.Instance.GetTexture(type);
+        _targetUnit = target;
         
         Scale = new Vector2(32 / (float)Texture.GetWidth(),
             32 / (float)Texture.GetHeight());
@@ -43,11 +45,21 @@ public partial class Projectile : Sprite2D
         ArcHeight = distance / 4;
         
         GlobalPosition = _startPosition;
+        
+        if (type == "fireball")
+        {
+            Texture = new Texture2D();
+            var particles = Database.Instance.GetParticles("fireball");
+            particles.Position = new Vector2(0, 0);
+            particles.ZIndex = 100;
+            AddChild(particles);
+        }
     }
 
     public override void _Process(double delta)
     {
         if (_hit) return;
+        if (_targetUnit != null) _targetPosition = Globals.BattleScene.TileMap.MapToGlobal(_targetUnit.MapPosition);
         _progress += _stepScale * (float)delta;
         _progress = Mathf.Clamp(_progress, 0, 1);
 
@@ -67,13 +79,9 @@ public partial class Projectile : Sprite2D
         Modulate = new Color(.5f, .5f, .5f);
         _hit = true;
         ZIndex = -1;
-        // QueueFree();
+        if (_type == "fireball")
+        {
+            QueueFree();
+        }
     }
-
-    // public override void _Draw()
-    // {
-    //     base._Draw();
-    //     DrawCircle(new Vector2(0, 0), 11, Colors.Black);
-    //     DrawCircle(new Vector2(0, 0), 10, Colors.Red);
-    // }
 }

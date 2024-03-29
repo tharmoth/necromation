@@ -10,13 +10,13 @@ public partial class CommandsGui : PanelContainer
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
 	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/CommandsGui/CommandsGui.tscn");
-
+	private static readonly PackedScene OutlineScene = GD.Load<PackedScene>("res://src/shared/gui/outline.tscn");
 	/**************************************************************************
 	 * Child Accessors 													      *
 	 **************************************************************************/
 	private Label CurrentOrderLabel => GetNode<Label>("%CurrentOrderLabel");
-	private Container OrderList => GetNode<Container>("%Orders");
-	private Container TargetList => GetNode<Container>("%Targets");
+	private Container OrderList => GetNode<Container>("%OrderList");
+	private Container TargetList => GetNode<Container>("%TargetList");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -52,7 +52,7 @@ public partial class CommandsGui : PanelContainer
 			};
 			panel.AddChild(button);
 
-			var outline = GD.Load<Control>("res://src/shared/gui/outline.tscn");
+			var outline = OutlineScene.Instantiate<Control>();
 			panel.AddChild(outline);
 			
 			TargetList.AddChild(panel);
@@ -74,10 +74,10 @@ public partial class CommandsGui : PanelContainer
 			};
 			panel.AddChild(button);
 
-			var outline = GD.Load<Control>("res://src/shared/gui/outline.tscn");
+			var outline = OutlineScene.Instantiate<Control>();
 			panel.AddChild(outline);
 			
-			TargetList.AddChild(panel);
+			OrderList.AddChild(panel);
 		}
 
 		UpdateLabel();
