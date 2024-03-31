@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://x8duy5cvkr2t"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_ekseg"]
-[ext_resource type="Script" path="res://src/factory/gui/ContainerGUI/ContainerGui.cs" id="2_iqmpl"]
+[ext_resource type="Script" path="res://src/factory/gui/ContainerGui/ContainerGui.cs" id="2_7xwd4"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_lqtec"]
-[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="3_pmuew"]
-[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="4_olscs"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_left.tscn" id="3_pmuew"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_right.tscn" id="4_olscs"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="5_0um71"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="6_rfy8i"]
 [ext_resource type="Texture2D" uid="uid://df0vkwm5lx4c5" path="res://res/sprites/Arrow-right.png" id="7_g1vfo"]
@@ -23,7 +23,7 @@ offset_bottom = 178.5
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_ekseg")
-script = ExtResource("2_iqmpl")
+script = ExtResource("2_7xwd4")
 
 [node name="DropShadowBorder" parent="." instance=ExtResource("2_lqtec")]
 layout_mode = 2

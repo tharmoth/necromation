@@ -37,10 +37,10 @@ public partial class FactoryGUI : CanvasLayer
 
 		if (Input.IsActionJustPressed("open_technology"))
 		{
-			if (_guiStack.Count > 0 && _guiStack.Peek() is TechGUI)
+			if (_guiStack.Count > 0 && _guiStack.Peek() is TechGui)
 				CloseGui();
 			else
-				TechGUI.Display();
+				TechGui.Display();
 		}
 
 		if (Input.IsActionJustPressed("open_inventory"))

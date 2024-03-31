@@ -5,12 +5,12 @@ using System.Linq;
 using Necromation;
 using Necromation.gui;
 
-public partial class CrafterItemBox : ItemBox
+public partial class AssemblerItemBox : ItemBox
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene ItemScene = GD.Load<PackedScene>("res://src/factory/gui/AssemblerGui/CrafterItemBox.tscn");
+	private static readonly PackedScene ItemScene = GD.Load<PackedScene>("res://src/factory/gui/AssemblerGui/AssemblerItemBox.tscn");
 	private static readonly ShaderMaterial GreyScale = GD.Load<ShaderMaterial>("res://src/factory/shaders/greyscale.tres");
 
 	/**************************************************************************
@@ -30,9 +30,9 @@ public partial class CrafterItemBox : ItemBox
 	}
 	
 	// Static Accessor
-	private static void AddInventoryItem(string item, int count, Inventory from, List<Inventory> to, Container list, bool isInput)
+	public static void AddInventoryItem(string item, int count, Inventory from, List<Inventory> to, Container list, bool isInput)
 	{
-		var inventoryItem = ItemScene.Instantiate<CrafterItemBox>();
+		var inventoryItem = ItemScene.Instantiate<AssemblerItemBox>();
 		inventoryItem.Init(from, to, item, count, isInput);
 		list.AddChild(inventoryItem);
 	}
@@ -42,7 +42,7 @@ public partial class CrafterItemBox : ItemBox
 		if (recipe == null) return;
 		foreach (var (item, count) in isInput ? recipe.Ingredients : recipe.Products)
 		{
-			var itemBox = list.GetChildren().OfType<CrafterItemBox>().FirstOrDefault(box => box.ItemType == item);
+			var itemBox = list.GetChildren().OfType<AssemblerItemBox>().FirstOrDefault(box => box.ItemType == item);
 			if (itemBox != null) continue;
 			AddInventoryItem(item, count, from, to, list, isInput);
 		}
@@ -53,7 +53,7 @@ public partial class CrafterItemBox : ItemBox
 		if (recipe == null) return;
 		var items = isInput ? recipe.Ingredients : recipe.Products;
 		
-		list.GetChildren().OfType<CrafterItemBox>()
+		list.GetChildren().OfType<AssemblerItemBox>()
 			.Where(inventoryItem => inventoryItem.ItemType == null || !items.ContainsKey(inventoryItem.ItemType))
 			.ToList()
 			.ForEach(item => item.QueueFree());
@@ -84,38 +84,9 @@ public partial class CrafterItemBox : ItemBox
 	/// </summary>
 	private void ButtonPress()
 	{
-		if (Globals.Player.Selected == ItemType)
-		{
-			var playerCount = Globals.PlayerInventory.CountItem(ItemType);
-			var targetCapacity = _sourceInventory.GetMaxTransferAmount(ItemType);
-			var amountToTransfer = Mathf.Min(playerCount, targetCapacity);
-			if (amountToTransfer > 0) Inventory.TransferItem(Globals.PlayerInventory, _sourceInventory, ItemType, amountToTransfer);
-			Globals.Player.Selected = null;
-			return;
-		}
-		
-		var wasRightClick = Input.IsActionJustReleased("right_click");
-		
-		var sourceCount = wasRightClick 
-			? Mathf.CeilToInt(_sourceInventory.CountItem(ItemType) / 2.0f)
-			: Math.Min(1, _sourceInventory.CountItem(ItemType));
-		if (Input.IsActionPressed("shift"))
-		{
-			sourceCount = _sourceInventory.CountItem(ItemType);
-		} 
-		else if (Input.IsActionPressed("control"))
-		{
-			sourceCount = Math.Min(5, _sourceInventory.CountItem(ItemType));
-		}
-
-		foreach (var inventory in _to)
-		{
-			var targetCapacity = inventory.GetMaxTransferAmount(ItemType);
-			var amountToTransfer = Mathf.Min(sourceCount, targetCapacity);
-			if (amountToTransfer <= 0) continue;
-			Inventory.TransferItem(_sourceInventory, inventory, ItemType, amountToTransfer);
-			break;
-		}
+		var selected = Globals.Player.Selected;
+		if (ItemType == selected) TransferToPlayer(_sourceInventory, selected);
+		else TransferToSource(_sourceInventory, _to, ItemType);
 	}
 	
 	private void UpdateCount()

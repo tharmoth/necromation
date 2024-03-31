@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Godot;
 using Necromation;
@@ -22,6 +24,8 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     private readonly Inventory _inputInventory;
     private readonly Inventory _outputInventory = new();
     private readonly Dictionary<string, int> _maxItems = new();
+    public ImmutableDictionary<string, int> MaxItems => _maxItems.ToImmutableDictionary();
+    public List<Action> RecipeListeners { get; } = new();
 
     /**************************************************************************
      * Visuals Variables 													  *
@@ -69,11 +73,13 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    
 	    base._Process(delta);
     	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
-    	{
+	    {
+		    var old = _recipe;
     		_time = 0;
-		    _recipe = Database.Instance.UnlockedRecipes
-			    .Where(recipe => recipe.Category == GetCategory())
-			    .FirstOrDefault(recipe => recipe.CanCraft(_inputInventory));
+		    var recipes = ValidRecipes();
+		    _recipe = recipes.Count == 1 ? recipes.First() : null;
+		    UpdateAllowedIngredients();
+		    if (old != _recipe) RecipeListeners.ForEach(listener => listener());
 		    if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
 		    {
 			    StopWorkingAnimation();
@@ -87,7 +93,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     	if (GetProgressPercent() < 1.0f) return;
     	_time = 0;
 	    _recipe.Craft(_inputInventory, _outputInventory);
-	    _recipe = null;
+	    // _recipe = null;
     }
         
     public override float GetProgressPercent()
@@ -129,6 +135,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 
     private void StopWorkingAnimation()
     {
+	    Sprite.Scale = Vector2.One;
 	    _animationTween?.Kill();
 	    _particles.Emitting = false;
 	    _light.Visible = false;
@@ -137,8 +144,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     // Caches the maximum amount of items that can be inserted into the furnace by reading unlocked recipes.
     private void UpdateAllowedIngredients()
     {
-	    var ingredients = Database.Instance.UnlockedRecipes
-		    .Where(recipe => recipe.Category == GetCategory())
+	    var ingredients = ValidRecipes()
 		    .SelectMany(recipe => recipe.Ingredients)
 		    .ToList();
 	    
@@ -152,6 +158,34 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 		    }
 	    }
     }
+
+    /// <summary>
+    /// Calculates the valid recipes that can be crafted given the current items in the inventory.
+    /// </summary>
+    private List<Recipe> ValidRecipes()
+    {
+	    return Database.Instance.UnlockedRecipes
+		    .Where(recipe => recipe.Category == GetCategory())
+		    .Where(recipe =>
+		    {
+			    var recipeIngredients = recipe.Ingredients
+				    .Select(ingredient => ingredient.Key)
+				    .ToList();
+			    
+			    var inputContainsOnlyValid = _inputInventory.Items.Keys
+				    .All(inventoryIngredient => recipeIngredients.Contains(inventoryIngredient));
+
+			    var recipeProducts = recipe.Products
+				    .Select(ingredient => ingredient.Key)
+				    .ToList();
+			    
+			    var outputContainsOnlyValid = _outputInventory.Items.Keys
+				    .All(inventoryIngredient => recipeProducts.Contains(inventoryIngredient));
+			    
+			    return inputContainsOnlyValid && outputContainsOnlyValid;
+		    })
+		    .ToList();
+    }
     
     #region IInteractable Implementation
     /**************************************************************************
@@ -159,7 +193,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-	    AssemblerGui.Display(playerInventory, this);
+	    FurnaceGui.Display(playerInventory, this);
     }
     #endregion
     

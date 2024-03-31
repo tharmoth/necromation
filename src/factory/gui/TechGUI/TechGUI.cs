@@ -3,13 +3,13 @@ using System;
 using System.Linq;
 using Necromation;
 
-public partial class TechGUI : PanelContainer
+public partial class TechGui : PanelContainer
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/TechGUI/tech_gui.tscn");
-	private static readonly PackedScene TechPanelScene = GD.Load<PackedScene>("res://src/factory/gui/TechGUI/tech_panel.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/TechGui/TechGui.tscn");
+	private static readonly PackedScene TechPanelScene = GD.Load<PackedScene>("res://src/factory/gui/TechGui/TechPanel.tscn");
 	
 	/* ***********************************************************************
 	 * Child Accessors 													     *
@@ -24,7 +24,7 @@ public partial class TechGUI : PanelContainer
 	// Static Accessor
 	public static void Display()
 	{
-		var gui = Scene.Instantiate<TechGUI>();
+		var gui = Scene.Instantiate<TechGui>();
 		gui.Init();
 		Globals.FactoryScene.Gui.Open(gui);
 	}

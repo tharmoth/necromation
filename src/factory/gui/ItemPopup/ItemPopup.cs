@@ -20,15 +20,15 @@ public partial class ItemPopup : PanelContainer
 	/**************************************************************************
 	 * State Data   													      *
 	 **************************************************************************/
-	private string _itemType;
+	private string _popupText;
 	private static Dictionary<Control, ItemPopup> _popups = new();
 	private Tween _tween;
 	
-	public static void Register(string itemType, Control control)
+	public static void Register(string popupText, Control control)
 	{
 		if (_popups.ContainsKey(control)) Unregister(control);
 		
-		var popup = GeneratePopup(itemType);
+		var popup = GeneratePopup(popupText);
 		control.MouseEntered += () =>
 		{
 			popup.Display();
@@ -82,22 +82,22 @@ public partial class ItemPopup : PanelContainer
 		}));
 	}
 	
-	private static ItemPopup GeneratePopup(string itemType)
+	private static ItemPopup GeneratePopup(string popupText)
 	{
 		var popup = Scene.Instantiate<ItemPopup>();
-		popup.Init(itemType);
+		popup.Init(popupText);
 		return popup;
 	}
 
-	private void Init(string itemType)
+	private void Init(string popupText)
 	{
-		_itemType = itemType;
+		_popupText = popupText;
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
-		Label.Text = _itemType;
+		Label.Text = _popupText;
 		FactoryGUI.SnapToScreen(this);
 	}
 
