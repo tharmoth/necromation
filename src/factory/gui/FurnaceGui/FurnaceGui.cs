@@ -72,7 +72,8 @@ public partial class FurnaceGui : DeferredUpdate
 		if (furnace.GetRecipe() != null)
 		{
 			list.GetChildren().Where(node => node is not AssemblerItemBox).ToList().ForEach(node => node.QueueFree());
-			AssemblerItemBox.UpdateInventory(furnace.GetInputInventory(), to, list, furnace.GetRecipe(), isInput);
+			if (isInput) AssemblerItemBox.UpdateInventory(furnace.GetInputInventory(), to, list, furnace.GetRecipe(), true);
+			else AssemblerItemBox.UpdateInventory(furnace.GetOutputInventory(), to, list, furnace.GetRecipe(), false);
 		}
 		else if (isInput)
 		{

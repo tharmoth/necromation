@@ -5,3 +5,6 @@
 
 [node name="FilterItemBox" instance=ExtResource("1_fjmv6")]
 script = ExtResource("2_ghtyo")
+
+[node name="Button" parent="MarginContainer" index="0"]
+button_mask = 7
