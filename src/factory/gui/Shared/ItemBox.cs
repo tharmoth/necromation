@@ -8,7 +8,7 @@ public partial class ItemBox : PanelContainer
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/Shared/item_box.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/Shared/ItemBox.tscn");
 	
 	/* ***********************************************************************
 	 * Child Accessors 													     *

@@ -1,13 +1,13 @@
 [gd_scene load_steps=12 format=3 uid="uid://cavx5whagemc5"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_1kgmi"]
-[ext_resource type="Script" path="res://src/factory/gui/InventoryGUI/InventoryGUI.cs" id="1_uyue2"]
+[ext_resource type="Script" path="res://src/factory/gui/InventoryGui/InventoryGui.cs" id="1_uyue2"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="2_g5pfu"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_hb15s"]
-[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="3_5xf7p"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_left.tscn" id="3_5xf7p"]
 [ext_resource type="FontFile" uid="uid://ddl1wcwc0uwko" path="res://res/fonts/AoboshiOne-Regular.ttf" id="3_gtwpl"]
-[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="5_r0ml1"]
-[ext_resource type="PackedScene" uid="uid://dsah4acn4orid" path="res://src/factory/gui/InventoryGUI/inventory_recipe_box.tscn" id="8_2hvte"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_right.tscn" id="5_r0ml1"]
+[ext_resource type="PackedScene" uid="uid://dsah4acn4orid" path="res://src/factory/gui/InventoryGui/InventoryRecipeBox.tscn" id="8_2hvte"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="9_wvleb"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vdmax"]

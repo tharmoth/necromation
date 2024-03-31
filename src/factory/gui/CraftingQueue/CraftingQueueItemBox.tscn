@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c3xi1pgk0jqei"]
 
-[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="1_kow4j"]
+[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/ItemBox.tscn" id="1_kow4j"]
 [ext_resource type="Script" path="res://src/factory/gui/CraftingQueue/CraftingQueueItemBox.cs" id="2_siddy"]
 
 [node name="ItemBox" instance=ExtResource("1_kow4j")]

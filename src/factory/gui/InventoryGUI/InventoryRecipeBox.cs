@@ -10,7 +10,7 @@ public partial class InventoryRecipeBox : ItemBox
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_recipe_box.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGui/InventoryRecipeBox.tscn");
 	
 	/**************************************************************************
 	 * State Data          													  *

@@ -5,12 +5,12 @@ using Necromation;
 using Necromation.factory.gui;
 using Necromation.gui;
 
-public partial class CrafterGUI : DeferredUpdate
+public partial class AssemblerGui : DeferredUpdate
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/CrafterGUI.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/AssemblerGUI/AssemblerGui.tscn");
 
 	/**************************************************************************
 	 * Child Accessors 													      *
@@ -32,7 +32,7 @@ public partial class CrafterGUI : DeferredUpdate
 	// Static Accessor
 	public static void Display(Inventory to, ICrafter crafter)
 	{
-		var gui = Scene.Instantiate<CrafterGUI>();
+		var gui = Scene.Instantiate<AssemblerGui>();
 		gui.Init(to, crafter);
 		Globals.FactoryScene.Gui.Open(gui);
 	}
@@ -61,7 +61,7 @@ public partial class CrafterGUI : DeferredUpdate
 
 	protected override void Update()
 	{
-		InventoryItem.UpdateInventory(_to, new List<Inventory> { _crafter.GetInputInventory()  }, InventoryItemList);
+		InventoryItemBox.UpdateInventory(_to, new List<Inventory> { _crafter.GetInputInventory()  }, InventoryItemList);
 		CrafterItemBox.UpdateInventory(_crafter.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList, _crafter.GetRecipe(), true);
 		CrafterItemBox.UpdateInventory(_crafter.GetOutputInventory(), new List<Inventory> { _to }, OutputInventoryItemList, _crafter.GetRecipe(), false);
 		Dirty = false;

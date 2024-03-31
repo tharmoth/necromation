@@ -6,12 +6,12 @@ using Necromation;
 using Necromation.factory.gui;
 using Necromation.gui;
 
-public partial class InventoryGUI : DeferredUpdate
+public partial class InventoryGui : DeferredUpdate
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_gui.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGui/InventoryGui.tscn");
 	
 	/* ***********************************************************************
 	 * Child Accessors 													     *
@@ -27,7 +27,7 @@ public partial class InventoryGUI : DeferredUpdate
 	// Static Accessor
 	public static void Display(Inventory inventory)
 	{
-		var gui = Scene.Instantiate<InventoryGUI>();
+		var gui = Scene.Instantiate<InventoryGui>();
 		gui.Init(inventory);
 		Globals.FactoryScene.Gui.Open(gui);
 	}
@@ -43,7 +43,7 @@ public partial class InventoryGUI : DeferredUpdate
 
 	protected override void Update()
 	{
-		InventoryItem.UpdateInventory(_inventory, null, InventoryItemList);
+		InventoryItemBox.UpdateInventory(_inventory, null, InventoryItemList);
 		InventoryRecipeBox.UpdateRecipes(_inventory, RecipeButtonList);	
 		Dirty = false;
 	}

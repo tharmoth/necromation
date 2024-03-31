@@ -50,8 +50,8 @@ public partial class MineGui : DeferredUpdate
 	
 	protected override void Update()
 	{
-		InventoryItem.UpdateInventory(_to, null, InventoryList);
-		InventoryItem.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
+		InventoryItemBox.UpdateInventory(_to, null, InventoryList);
+		InventoryItemBox.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
 		Dirty = false;
 	}
 }

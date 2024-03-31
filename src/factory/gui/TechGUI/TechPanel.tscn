@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dym3bw8at8qt1"]
 
-[ext_resource type="Script" path="res://src/factory/gui/TechGUI/TechPanel.cs" id="1_24d1f"]
+[ext_resource type="Script" path="res://src/factory/gui/TechGui/TechPanel.cs" id="1_24d1f"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="2_tvbos"]
 [ext_resource type="Texture2D" uid="uid://egikjt8vcqsa" path="res://res/sprites/items/Experiment.png" id="2_whw0a"]
 [ext_resource type="Texture2D" uid="uid://c7l3yeoensqo4" path="res://res/sprites/buildings/Underground Belt.png" id="3_gpsgv"]

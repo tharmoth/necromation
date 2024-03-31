@@ -45,10 +45,10 @@ public partial class FactoryGUI : CanvasLayer
 
 		if (Input.IsActionJustPressed("open_inventory"))
 		{
-			if (_guiStack.Count > 0 && _guiStack.Peek() is InventoryGUI)
+			if (_guiStack.Count > 0 && _guiStack.Peek() is InventoryGui)
 				CloseGui();
 			else
-				InventoryGUI.Display(Globals.PlayerInventory);
+				InventoryGui.Display(Globals.PlayerInventory);
 		}
 
 		if (Input.IsActionPressed("open_config"))

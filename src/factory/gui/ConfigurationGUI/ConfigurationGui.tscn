@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://uwavrwbbaciu"]
 
-[ext_resource type="Script" path="res://src/factory/gui/ConfigurationGUI/ConfigurationGui.cs" id="1_plsc2"]
+[ext_resource type="Script" path="res://src/factory/gui/ConfigurationGui/ConfigurationGui.cs" id="1_plsc2"]
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_sdsi5"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_vjw1v"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_ma621"]

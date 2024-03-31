@@ -8,7 +8,7 @@ public partial class ActionButton : Button
 	public ActionButton()
 	{
 		AudioStreamPlayer buttonClick = 
-			GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/mouseover_audio.tscn")
+			GD.Load<PackedScene>("res://src/factory/gui/InventoryGui/MouseoverAudio.tscn")
 			.Instantiate<AudioStreamPlayer>();
 		AddChild(buttonClick);
 	}

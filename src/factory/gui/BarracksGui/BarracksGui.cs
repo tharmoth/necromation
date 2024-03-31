@@ -57,9 +57,9 @@ public partial class BarracksGui : DeferredUpdate
 
 	protected override void Update()
 	{
-		InventoryItem.UpdateInventory(_to, new List<Inventory> { _barracks.Inventory }, InventoryItemList);
+		InventoryItemBox.UpdateInventory(_to, new List<Inventory> { _barracks.Inventory }, InventoryItemList);
 		// InventoryItem.UpdateInventory(_barracks.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
-		InventoryItem.UpdateInventory(_barracks.Inventory, new List<Inventory> { _to }, OutputInventoryItemList);
+		InventoryItemBox.UpdateInventory(_barracks.Inventory, new List<Inventory> { _to }, OutputInventoryItemList);
 		UnitCountLabel.Text = _barracks.Inventory.CountItems().ToString() + " / " + _barracks.Commander.CommandCap;
 		Dirty = false;
 	}

@@ -12,7 +12,7 @@ public partial class ConfigurationGui : PanelContainer
 	
 	public static void Display()
 	{
-		var gui = GD.Load<PackedScene>("res://src/factory/gui/ConfigurationGUI/configuration_gui.tscn").Instantiate<ConfigurationGui>();
+		var gui = GD.Load<PackedScene>("res://src/factory/gui/ConfigurationGui/ConfigurationGui.tscn").Instantiate<ConfigurationGui>();
 		Globals.FactoryScene.Gui.Open(gui);
 	}
 

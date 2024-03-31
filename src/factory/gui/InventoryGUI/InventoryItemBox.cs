@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Necromation;
 
-public partial class InventoryItem : ItemBox
+public partial class InventoryItemBox : ItemBox
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene ItemScene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGUI/inventory_item_box.tscn");
+	private static readonly PackedScene ItemScene = GD.Load<PackedScene>("res://src/factory/gui/InventoryGui/InventoryItemBox.tscn");
 
 	/**************************************************************************
 	 * State Data          													  *
@@ -28,7 +28,7 @@ public partial class InventoryItem : ItemBox
 	// Static Accessor
 	private static void AddInventoryItem(string item, Inventory from, List<Inventory> to, Container list)
 	{
-		var inventoryItem = ItemScene.Instantiate<InventoryItem>();
+		var inventoryItem = ItemScene.Instantiate<InventoryItemBox>();
 		inventoryItem.Init(from, to, item);
 		list.AddChild(inventoryItem);
 	}
@@ -37,7 +37,7 @@ public partial class InventoryItem : ItemBox
 	{
 		foreach (var (item, count) in from.Items)
 		{
-			var itemBox = list.GetChildren().OfType<InventoryItem>().FirstOrDefault(box => box.ItemType == item);
+			var itemBox = list.GetChildren().OfType<InventoryItemBox>().FirstOrDefault(box => box.ItemType == item);
 			if (itemBox != null) continue;
 			AddInventoryItem(item, from, to, list);
 		}
@@ -45,7 +45,7 @@ public partial class InventoryItem : ItemBox
 
 	private static void RemoveExtra(Inventory from, Container list)
 	{
-		list.GetChildren().OfType<InventoryItem>()
+		list.GetChildren().OfType<InventoryItemBox>()
 			.Where(inventoryItem => from.CountItem(inventoryItem.ItemType) == 0)
 			.ToList()
 			.ForEach(item => item.QueueFree());

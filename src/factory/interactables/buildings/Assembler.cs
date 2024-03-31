@@ -130,7 +130,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	    }
 	    else
 	    {
-		    CrafterGUI.Display(playerInventory, this);
+		    AssemblerGui.Display(playerInventory, this);
 	    }
     }
     #endregion

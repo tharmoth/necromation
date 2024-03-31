@@ -1,7 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwwkrq1485btp"]
-
-[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="1_87yuq"]
-[ext_resource type="Script" path="res://src/factory/gui/FilterGUI/FilterItem.cs" id="2_ojpv1"]
-
-[node name="ItemBox" instance=ExtResource("1_87yuq")]
-script = ExtResource("2_ojpv1")

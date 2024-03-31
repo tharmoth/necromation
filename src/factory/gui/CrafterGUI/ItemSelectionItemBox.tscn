@@ -1,7 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvn2ithtvvp85"]
-
-[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/item_box.tscn" id="1_rfi1q"]
-[ext_resource type="Script" path="res://src/factory/gui/CrafterGUI/ItemSelectionItemBox.cs" id="2_axoij"]
-
-[node name="ItemBox" instance=ExtResource("1_rfi1q")]
-script = ExtResource("2_axoij")

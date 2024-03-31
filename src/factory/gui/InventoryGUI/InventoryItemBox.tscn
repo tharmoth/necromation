@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdhqc1olw21g4"]
+
+[ext_resource type="PackedScene" uid="uid://sr7vg0mmakj7" path="res://src/factory/gui/Shared/ItemBox.tscn" id="1_ahy8c"]
+[ext_resource type="Script" path="res://src/factory/gui/InventoryGui/InventoryItemBox.cs" id="2_s7x7a"]
+
+[node name="ItemBox" instance=ExtResource("1_ahy8c")]
+script = ExtResource("2_s7x7a")

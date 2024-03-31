@@ -159,7 +159,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 **************************************************************************/
     public void Interact(Inventory playerInventory)
     {
-	    CrafterGUI.Display(playerInventory, this);
+	    AssemblerGui.Display(playerInventory, this);
     }
     #endregion
     

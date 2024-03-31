@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=3 uid="uid://cgevopavei0g0"]
 
-[ext_resource type="Script" path="res://src/factory/gui/TechGUI/TechGUI.cs" id="1_1wudm"]
-[ext_resource type="PackedScene" uid="uid://dym3bw8at8qt1" path="res://src/factory/gui/TechGUI/tech_panel.tscn" id="1_3eie5"]
+[ext_resource type="Script" path="res://src/factory/gui/TechGui/TechGui.cs" id="1_1wudm"]
+[ext_resource type="PackedScene" uid="uid://dym3bw8at8qt1" path="res://src/factory/gui/TechGui/TechPanel.tscn" id="1_3eie5"]
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_tfhd4"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="3_55u88"]
 [ext_resource type="Texture2D" uid="uid://d3tkyt42kfr3" path="res://res/sprites/Check Mark.png" id="3_hw6jm"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="3_mytom"]
-[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="4_281uf"]
-[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="5_86yqx"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_left.tscn" id="4_281uf"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_right.tscn" id="5_86yqx"]
 [ext_resource type="Texture2D" uid="uid://egikjt8vcqsa" path="res://res/sprites/items/Experiment.png" id="5_b6c1u"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="7_u14t4"]
 

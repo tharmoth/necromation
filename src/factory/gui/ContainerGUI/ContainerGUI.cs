@@ -11,7 +11,7 @@ public partial class ContainerGui : DeferredUpdate
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/ContainerGUI/ContainerGui.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/ContainerGui/ContainerGui.tscn");
 
 	/* ***********************************************************************
 	 * Child Accessors 													     *
@@ -47,7 +47,7 @@ public partial class ContainerGui : DeferredUpdate
 
 	protected override void Update()
 	{
-		InventoryItem.UpdateInventory(_to, new List<Inventory> { _from }, InventoryList);
-		InventoryItem.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
+		InventoryItemBox.UpdateInventory(_to, new List<Inventory> { _from }, InventoryList);
+		InventoryItemBox.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
 	}
 }

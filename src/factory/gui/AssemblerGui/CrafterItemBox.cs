@@ -10,7 +10,7 @@ public partial class CrafterItemBox : ItemBox
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene ItemScene = GD.Load<PackedScene>("res://src/factory/gui/CrafterGUI/CrafterItemBox.tscn");
+	private static readonly PackedScene ItemScene = GD.Load<PackedScene>("res://src/factory/gui/AssemblerGui/CrafterItemBox.tscn");
 	private static readonly ShaderMaterial GreyScale = GD.Load<ShaderMaterial>("res://src/factory/shaders/greyscale.tres");
 
 	/**************************************************************************

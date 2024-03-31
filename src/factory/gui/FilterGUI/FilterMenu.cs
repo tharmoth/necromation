@@ -11,7 +11,7 @@ public partial class FilterMenu : PanelContainer
 	
 	public static void Display(HotBarItemBox itemBox)
 	{
-		var gui = GD.Load<PackedScene>("res://src/factory/gui/FilterGUI/filter_menu.tscn").Instantiate<FilterMenu>();
+		var gui = GD.Load<PackedScene>("res://src/factory/gui/FilterGui/FilterMenu.tscn").Instantiate<FilterMenu>();
 		gui.Init(itemBox);
 		Globals.FactoryScene.Gui.Open(gui);
 	}

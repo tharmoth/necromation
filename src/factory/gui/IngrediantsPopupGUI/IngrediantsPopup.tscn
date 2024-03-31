@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://dvji4s2e7iexm"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_kdn1d"]
-[ext_resource type="Script" path="res://src/factory/gui/IngrediantsPopupGUI/IngrediantsPopup.cs" id="1_va5g5"]
+[ext_resource type="Script" path="res://src/factory/gui/IngrediantsPopupGui/IngrediantsPopup.cs" id="1_va5g5"]
 [ext_resource type="Texture2D" uid="uid://otk10dlw6m1x" path="res://res/sprites/old/Circuit.png" id="2_20lq4"]
 [ext_resource type="Texture2D" uid="uid://b8001dyawor4s" path="res://res/gui/Inventory/panel-031.png" id="3_08lqm"]
 [ext_resource type="Texture2D" uid="uid://bm3v4xaf4n7dg" path="res://res/sprites/items/Gear.png" id="3_lk15i"]

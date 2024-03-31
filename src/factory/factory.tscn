@@ -7,17 +7,17 @@
 [ext_resource type="Script" path="res://src/factory/character/Character.cs" id="2_vcqpu"]
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="3_5rf83"]
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="3_fy5x1"]
-[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="5_06d3l"]
-[ext_resource type="Script" path="res://src/factory/gui/CraftingQueue/CraftingQueueGUI.cs" id="5_6ke2a"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_left.tscn" id="5_06d3l"]
+[ext_resource type="Script" path="res://src/factory/gui/CraftingQueue/CraftingQueueGui.cs" id="5_6ke2a"]
 [ext_resource type="Script" path="res://src/factory/gui/SoulsLabel.cs" id="6_3hhbs"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="6_kka5s"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchLabel.cs" id="6_lnhcn"]
 [ext_resource type="Texture2D" uid="uid://uqnu54p11nmf" path="res://res/sprites/Soul.png" id="6_qwhgx"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="7_04mnd"]
 [ext_resource type="Script" path="res://src/factory/gui/ResearchProgressBar.cs" id="7_ohqwt"]
-[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="8_jqtrb"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_right.tscn" id="8_jqtrb"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="9_oba7v"]
-[ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/HotBarGUI/HotBarItemBox.tscn" id="9_od7oa"]
+[ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/HotBarGui/HotBarItemBox.tscn" id="9_od7oa"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
@@ -429,6 +429,7 @@ z_index = -1
 layout_mode = 2
 text = "Technology (T)"
 script = ExtResource("7_04mnd")
+_action = null
 
 [node name="Outline5" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Right" instance=ExtResource("9_oba7v")]
 layout_mode = 2
