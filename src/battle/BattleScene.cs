@@ -120,7 +120,7 @@ public partial class BattleScene : Scene
 			var commanderOffset = commander.SpawnLocation - Vector2I.One * 50;
 			var commanderOffsetScaled = new Vector2I(
 				Mathf.RoundToInt(BattleTileMap.X * commanderOffset.X / 100.0f * 4 / 10.0f),
-				Mathf.RoundToInt(BattleTileMap.Y * commanderOffset.Y / 100.0f * 8 / 10.0f)
+				Mathf.RoundToInt(BattleTileMap.Y * commanderOffset.Y / 100.0f * 6 / 10.0f)
 			);
 			
 			GD.Print(commanderOffsetScaled);

@@ -117,8 +117,8 @@ sources/1 = SubResource("TileSetAtlasSource_8qpuw")
 sources/0 = SubResource("TileSetAtlasSource_adiq0")
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_h7m82"]
-streams_count = 1
 random_pitch = 1.05
+streams_count = 1
 stream_0/stream = ExtResource("23_1sfga")
 stream_0/weight = 1.0
 
@@ -558,6 +558,7 @@ script = ExtResource("30_ilgnm")
 
 [node name="CursorEntitySprite" type="Sprite2D" parent="CursorManager"]
 unique_name_in_owner = true
+visible = false
 z_index = 4095
 texture = ExtResource("31_o81rd")
 
@@ -582,6 +583,7 @@ text = "5"
 unique_name_in_owner = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 material = ExtResource("32_6ccxq")
 position = Vector2(2772, 1658)
 scale = Vector2(0.25, 0.25)

@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://fgwj03oednm7"]
+[gd_scene load_steps=5 format=3 uid="uid://fgwj03oednm7"]
 
-[ext_resource type="Texture2D" uid="uid://dpvphvys2w4cd" path="res://res/sprites/Dust.png" id="1_efolp"]
 [ext_resource type="Texture2D" uid="uid://c7bf4e28prj33" path="res://res/sprites/particles/smoke_04.png" id="2_8fcyj"]
 
 [sub_resource type="Gradient" id="Gradient_pavfw"]
@@ -11,24 +10,19 @@ colors = PackedColorArray(0.992157, 0.964706, 0.0588235, 1, 1, 0.466667, 0.09803
 gradient = SubResource("Gradient_pavfw")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_12i65"]
+particle_flag_disable_z = true
 emission_shape = 1
 emission_sphere_radius = 1.0
-particle_flag_disable_z = true
-gravity = Vector3(0, 0, 0)
+angle_min = -180.0
+angle_max = 180.0
 initial_velocity_min = -10.0
 initial_velocity_max = -10.0
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.0
+gravity = Vector3(0, 0, 0)
 scale_min = 0.06
 scale_max = 0.1
 color_ramp = SubResource("GradientTexture1D_rcssb")
 
-[node name="GPUParticles2D" type="Sprite2D"]
-self_modulate = Color(0.992157, 0.964706, 0.0588235, 1)
-scale = Vector2(3, 3)
-texture = ExtResource("1_efolp")
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D"]
 z_index = -1
 amount = 250
 process_material = SubResource("ParticleProcessMaterial_12i65")

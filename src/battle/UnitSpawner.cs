@@ -13,11 +13,6 @@ public partial class UnitSpawner : Node2D
 	private readonly Commander _commander;
 	private readonly string _team = "Player";
 
-	public UnitSpawner()
-	{
-
-	}
-	
 	public UnitSpawner(Commander commander, string team)
 	{
 		_commander = commander;

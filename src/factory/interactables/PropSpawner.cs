@@ -93,30 +93,31 @@ public partial class PropSpawner : Node2D
 	
 	private void CalculatePositions()
 	{
-		var noise = new FastNoiseLite();
-		noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
-		noise.Seed = NoiseSeed;
-		noise.Frequency = 0.005f;
-		noise.Offset = new Vector3(GlobalPosition.X, GlobalPosition.Y, 0);
+		var smallNoise = new FastNoiseLite();
+		smallNoise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
+		smallNoise.Seed = NoiseSeed;
+		smallNoise.Frequency = 0.005f;
+		smallNoise.Offset = new Vector3(GlobalPosition.X, GlobalPosition.Y, 0);
 		
-		var noise2 = new FastNoiseLite();
-		noise2.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
-		noise2.Seed = NoiseSeed;
-		noise2.Frequency = 0.0005f;
-		noise2.Offset = new Vector3(GlobalPosition.X, GlobalPosition.Y, 0);
+		var bigNoise = new FastNoiseLite();
+		bigNoise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
+		bigNoise.Seed = NoiseSeed;
+		bigNoise.Frequency = 0.0005f;
+		bigNoise.Offset = new Vector3(GlobalPosition.X, GlobalPosition.Y, 0);
 
 		for (var x = -Radius; x < Radius; x += 32)
 		{
 			for (var y = -Radius; y < Radius; y += 32)
 			{
 				var position = new Vector2(x, y);
-				if ((Utils.NoiseNorm(noise, position) + Utils.NoiseNorm(noise2, position)) / 2.0 < Threshold) continue;
-				FillCell(new Vector2(x, y));
+				var noise = (Utils.NoiseNorm(smallNoise, position) + Utils.NoiseNorm(bigNoise, position)) / 2.0;
+				if (noise < Threshold) continue;
+				FillCell(new Vector2(x, y), noise);
 			}
 		}
 	}
 	
-	private void FillCell(Vector2 position)
+	private void FillCell(Vector2 position, double noise)
 	{
 		if (Single)
 		{
@@ -132,7 +133,7 @@ public partial class PropSpawner : Node2D
 		{
 			for (var y = 5; y < 32; y += 10)
 			{
-				if (!(GD.Randf() > Density)) continue;
+				if (!(GD.Randf() < Density)) continue;
 				var pos = position + new Vector2(x + GD.RandRange(-3, 3), y + GD.RandRange(-3, 3));
 				CellInfo cellInfo = new()
 				{

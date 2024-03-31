@@ -68,4 +68,15 @@ public class Utils
     {
 	    return (noise.GetNoise2Dv(position) + 1) / 2.0;
     }
+
+    public static Vector2 ScaleForSize(Sprite2D sprite, float width, float height)
+    {
+	    return ScaleForSize(sprite, new Vector2(width, height));
+    }
+    
+    public static Vector2 ScaleForSize(Sprite2D sprite, Vector2 size)
+    {
+	    return new Vector2(size.X / (float) sprite.Texture.GetWidth(),
+		    size.Y / (float) sprite.Texture.GetHeight());
+    }
 }

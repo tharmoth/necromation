@@ -12,5 +12,3 @@ shader_parameter/interval = 3.5
 shader_parameter/detail = 5.0
 shader_parameter/distortion = 0.0
 shader_parameter/heightOffset = 0.9
-shader_parameter/character_position = Vector2(-1000, -1000)
-shader_parameter/falloff_distace = 300.0

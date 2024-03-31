@@ -122,7 +122,7 @@ public partial class FactoryTileMap : LayerTileMap
 		PropSpawner rockSpawner = new();
 		rockSpawner.Textures.Add(Database.Instance.GetTexture("Rocks1"));
 		rockSpawner.Textures.Add(Database.Instance.GetTexture("Rocks3"));
-		rockSpawner.Density = 0.75f;
+		rockSpawner.Density = 0.25f;
 		rockSpawner.Radius = ProvinceSize * TileSize / 2;
 		rockSpawner.SizePixels = 32;
 		rockSpawner.Threshold = .75f;

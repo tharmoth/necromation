@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Godot;
 
 namespace Necromation.map.battle;
@@ -77,13 +78,13 @@ public partial class Projectile : Sprite2D
         if (!(nextPosition.DistanceTo(_targetPosition) < 1)) return;
 
         _damage(MapPosition);
-        Modulate = new Color(.5f, .5f, .5f);
+        Modulate = new Color(.5f, .5f, .5f, .9f);
         _hit = true;
         ZIndex = -1;
-        SelfModulate = new Color(1, 1, 1, .5f);
         if (_type == "fireball")
         {
-            QueueFree();
+            GetChildren().OfType<GpuParticles2D>().ToList().ForEach(particles => particles.Emitting = false);
+            // QueueFree();
         }
     }
 }

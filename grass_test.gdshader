@@ -20,12 +20,12 @@ uint hash(uint x) {
   x = (x >> uint(16)) ^ x;
   return x;
 }
- 
+
 void start() {
 	uint alt_seed1 = hash(NUMBER + uint(1) + RANDOM_SEED);
 	uint alt_seed2 = hash(NUMBER + uint(27) + RANDOM_SEED);
 	uint alt_seed3 = hash(NUMBER + uint(43) + RANDOM_SEED);
-	uint alt_seed4 = hash(NUMBER + uint(111) + RANDOM_SEED); 
+	uint alt_seed4 = hash(NUMBER + uint(111) + RANDOM_SEED);
 
 	vec2 position = vec2(rand_from_seed(alt_seed2) * 1920.0,
 	                     rand_from_seed(alt_seed3) * 1080.0);

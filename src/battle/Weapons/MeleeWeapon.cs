@@ -7,6 +7,8 @@ namespace Necromation.map.battle.Weapons;
 
 public class MeleeWeapon : Weapon
 {
+    private static readonly PackedScene SlashParticles = GD.Load<PackedScene>("res://src/battle/SlashParticles.tscn");
+    
     public MeleeWeapon(string name, int range, int damage, int hands, int cooldown, int ammo) : base(name, range, damage, hands, cooldown, ammo)
     {
     }
@@ -40,5 +42,19 @@ public class MeleeWeapon : Weapon
         
         target.Damage(wielder, adjustedDamage);
         target.PlayHitSound();
+        
+        var rotation = Mathf.RadToDeg(wielder.GlobalPosition.AngleToPoint(target.GlobalPosition));
+        
+        PlayFX(target.GlobalPosition, rotation);
+    }
+
+    private void PlayFX(Vector2 position, float rotation)
+    {
+        var particles = SlashParticles.Instantiate<GpuParticles2D>();
+        particles.Position = position;
+        particles.OneShot = true;
+        particles.Emitting = true;
+        particles.RotationDegrees = rotation - 90;
+        Globals.BattleScene.AddChild(particles);
     }
 }

@@ -15,7 +15,7 @@ public partial class BattleTileMap : LayerTileMap
 	private System.Collections.Generic.Dictionary<Vector2I, int> _cells = new();
 	
 	public const int X = 200;
-	public const int Y = 100;
+	public const int Y = 150;
 	
 	public override void _EnterTree()
 	{
@@ -28,26 +28,6 @@ public partial class BattleTileMap : LayerTileMap
 			for (int y = 0; y < Y; y++)
 			{
 				var coords = new Vector2I(x, y);
-				
-				// GD.Print(GetCellAlternativeTile(0));
-				
-				// get a random vector between 0, 0 and 7, 3
-
-				Vector2I randomvec;
-				var random = GD.Randf();
-				if (random < 0.5)
-				{
-					randomvec = Vector2I.Zero;
-				} else if (random < 0.9)
-				{
-					randomvec = new Vector2I(GD.RandRange(0, 3), GD.RandRange(0, 3));
-				} else
-				{
-					randomvec = new Vector2I(GD.RandRange(4, 7), GD.RandRange(0, 3));
-				}
-				
-
-				// SetCell(0, coords, 1, randomvec);
 				_grid.AddPoint(index, coords);
 				_cells.Add(coords, index);
 				index++;
@@ -84,10 +64,17 @@ public partial class BattleTileMap : LayerTileMap
 				sprite.Centered = true;
 				sprite.ZIndex = -99;
 				Globals.BattleScene.CallDeferred("add_child", sprite);
-				
-				// PropSpawner spawner = new(new Array<Texture2D>(){  }, FactoryTileMap.ProvinceSize * TileSize / 2, 32, 0);
-				// spawner.GlobalPosition = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
-				// Globals.BattleScene.GetNode<Node2D>("GrassHolder").CallDeferred("add_child", spawner);
+
+				PropSpawner spawner = new();
+				spawner.Textures.Add(Database.Instance.GetTexture("Grass2"));
+				spawner.Textures.Add(Database.Instance.GetTexture("Grass5"));
+				spawner.Density = 0.8f;
+				spawner.Radius = FactoryTileMap.ProvinceSize * TileSize / 2;
+				spawner.SizePixels = 24;
+				spawner.Threshold = 0.4f;
+				spawner.GlobalPosition = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
+				spawner.ZIndex = -98;
+				Globals.BattleScene.GetNode<Node2D>("GrassHolder").CallDeferred("add_child", spawner);
 			}
 		}
 	}
