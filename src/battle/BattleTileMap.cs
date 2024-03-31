@@ -85,9 +85,9 @@ public partial class BattleTileMap : LayerTileMap
 				sprite.ZIndex = -99;
 				Globals.BattleScene.CallDeferred("add_child", sprite);
 				
-				PropSpawner spawner = new(PropSpawner.RandomType.Particles, new Array<Texture2D>(){  }, FactoryTileMap.ProvinceSize * TileSize / 2, .75f);
-				spawner.GlobalPosition = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
-				Globals.BattleScene.GetNode<Node2D>("GrassHolder").CallDeferred("add_child", spawner);
+				// PropSpawner spawner = new(new Array<Texture2D>(){  }, FactoryTileMap.ProvinceSize * TileSize / 2, 32, 0);
+				// spawner.GlobalPosition = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
+				// Globals.BattleScene.GetNode<Node2D>("GrassHolder").CallDeferred("add_child", spawner);
 			}
 		}
 	}

@@ -1,192 +1,146 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Godot.Collections;
 using Necromation;
+using Necromation.sk;
 using Array = Godot.Collections.Array;
 
 public partial class PropSpawner : Node2D
 {
-	public enum RandomType
-	{
-		Random,
-		Simplex,
-		Cuboid,
-		Particles,
-	}
+	/**************************************************************************
+	 * Input Data           											      *
+	 **************************************************************************/
+	public readonly Array<Texture2D> Textures = new();
+	public int Radius = 1000;
+	public int NoiseSeed;
+	public int SizePixels = 32;
+	public float Threshold = 0.5f;
+	public float Density = 0.5f;
+	public bool UseWind = true;
+	public bool Single = false;
 
-	[Export] private RandomType _type = RandomType.Simplex;
-	[Export] private Array<Texture2D> _spriteTextures = new();
-	[Export] private int _radius = 1000;
-	[Export] private float _scale = 0.25f;
-	[Export] private int _count = 100;
-	private Vector2 _globalPosition;
-	private int _noiseSeed;
-	private bool _clumping;
-
-	private double _time;
-
-	public PropSpawner()
-	{
-		
-	}
-	
-	public PropSpawner(RandomType type, Array<Texture2D> textures, int radius,float scale, int count = 100, Vector2 globalPosition = default, int noiseSeed = 0, bool clumping = false)
-	{
-		_type = type;
-		_spriteTextures = textures;
-		_radius = radius;
-		_scale = scale;
-		_count = count;
-		_globalPosition = globalPosition;
-		_noiseSeed = noiseSeed;
-		_clumping = clumping;
-	}
+	/**************************************************************************
+	 * Instance data        											      *
+	 **************************************************************************/
+	private readonly List<MultiMesh> _meshes = new();
+	private readonly List<CellInfo> _positions = new();
 
 	public override void _Ready()
 	{
 		base._Ready();
-		// GetNode<Sprite2D>("Sprite2D").Visible = false;
-
-		CallDeferred("_spawn");
+		CallDeferred("Spawn");
 	}
-
-	private void _spawn()
+	
+	private void Spawn()
 	{
-		switch (_type)
+		foreach (var texture in Textures)
 		{
-			case RandomType.Random:
-				PlacePropsRandom();
-				break;
-			case RandomType.Simplex:
-				PlacePropsSimplex();
-				break;
-			case RandomType.Cuboid:
-				PlacePropsCuboid();
-				break;
-			case RandomType.Particles:
-				PlacePropsParticles();
-				break;
-			default:
-				throw new ArgumentOutOfRangeException();
+			GenerateMultiMesh(texture);
 		}
-	}
 
-	private void PlacePropsSimplex()
-	{
-		var _noise = new FastNoiseLite();
-		_noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
+		CalculatePositions();
 
-		for (var i = 0; i < _count; i++)
+		foreach (var multiMesh in _meshes)
 		{
-			var x = _noise.GetNoise2D(i, 0) * _radius;
-			var y = _noise.GetNoise2D(0, i) * _radius;
-			PlaceProp(new Vector2(x, y), _scale);
+			var positions = _positions
+				.Where(pos => pos.TextureIndex == _meshes.IndexOf(multiMesh))
+				.ToList();
+			
+			multiMesh.InstanceCount = positions.Count;
+			foreach (var (index, position) in positions.Select(pos => pos.Position).Select((value, index) => (Index: index, Value: value)))
+			{
+				var transform = Transform2D.Identity
+					.Translated(position)
+					.RotatedLocal(Mathf.Pi + Mathf.DegToRad(new Random().Next(-10, 10)))
+					.ScaledLocal(Vector2.One * SizePixels * (float)GD.RandRange(.5f, 1.5f));
+				multiMesh.SetInstanceTransform2D(index, transform);
+			}
 		}
+
+		GD.Print("Placed " + _positions.Count + " props");
 	}
 
-	private void PlacePropsRandom()
+	private void GenerateMultiMesh(Texture2D texture)
 	{
-		for (var i = 0; i < _count; i++)
+		MultiMesh multiMesh = new(); 
+		multiMesh.TransformFormat = MultiMesh.TransformFormatEnum.Transform2D;
+		multiMesh.Mesh = new QuadMesh();
+		multiMesh.InstanceCount = 0;
+		_meshes.Add(multiMesh);
+		
+		MultiMeshInstance2D multiMeshInstance = new(); 
+		multiMeshInstance.Multimesh = multiMesh;
+		multiMeshInstance.Texture = texture;
+		if (UseWind)
 		{
-			var x = new Random().Next(-_radius, _radius);
-			var y = new Random().Next(-_radius, _radius);
-			PlaceProp(new Vector2(x, y), _scale);
+			ShaderMaterial matty = new();
+			matty.Shader = GD.Load<Shader>("res://src/factory/shaders/wind_sway.gdshader");
+			matty.SetShaderParameter("minStrength", 0.00175f);
+			matty.SetShaderParameter("maxStrength", 0.0025f);
+			matty.SetShaderParameter("detail", 5.0f);
+			multiMeshInstance.Material = matty;
+		}
+		AddChild(multiMeshInstance);
+	}
+	
+	private class CellInfo
+	{
+		public Vector2 Position;
+		public int TextureIndex;
+	}
+	
+	private void CalculatePositions()
+	{
+		var noise = new FastNoiseLite();
+		noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
+		noise.Seed = NoiseSeed;
+		noise.Frequency = 0.005f;
+		noise.Offset = new Vector3(GlobalPosition.X, GlobalPosition.Y, 0);
+		
+		var noise2 = new FastNoiseLite();
+		noise2.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
+		noise2.Seed = NoiseSeed;
+		noise2.Frequency = 0.0005f;
+		noise2.Offset = new Vector3(GlobalPosition.X, GlobalPosition.Y, 0);
+
+		for (var x = -Radius; x < Radius; x += 32)
+		{
+			for (var y = -Radius; y < Radius; y += 32)
+			{
+				var position = new Vector2(x, y);
+				if ((Utils.NoiseNorm(noise, position) + Utils.NoiseNorm(noise2, position)) / 2.0 < Threshold) continue;
+				FillCell(new Vector2(x, y));
+			}
 		}
 	}
 	
-	private void PlacePropsCuboid()
+	private void FillCell(Vector2 position)
 	{
-		var _noise = new FastNoiseLite();
-		_noise.NoiseType = FastNoiseLite.NoiseTypeEnum.Simplex;
-		_noise.Seed = _noiseSeed;
-		_noise.Frequency = 0.005f;
-		_noise.Offset = new Vector3(_globalPosition.X, _globalPosition.Y, 0);
-		
-		var count = 0;
-		for (var x = -_radius; x < _radius; x += 32)
+		if (Single)
 		{
-			for (var y = -_radius; y < _radius; y += 32)
+			CellInfo cellInfo = new()
 			{
-				if (_noise.GetNoise2D(x, y) > 0.5f)
-				{
-					count += FillCell(new Vector2(x, y));
-				}
-			}
+				Position = position + new Vector2(GD.RandRange(-16, 16), GD.RandRange(-16, 16)),
+				TextureIndex = new Random().Next(0, Textures.Count)
+			};
+			_positions.Add(cellInfo);
+			return;
 		}
-		GD.Print("Placed " + count + " props");
-	}
-
-	private int FillCell(Vector2 position)
-	{
-		var count = 0;
-		
 		for (var x = 5; x < 32; x += 10)
 		{
 			for (var y = 5; y < 32; y += 10)
 			{
-				var scale = _scale * (float)GD.RandRange(.5f, 1f);
-				if (GD.Randf() > .75)
+				if (!(GD.Randf() > Density)) continue;
+				var pos = position + new Vector2(x + GD.RandRange(-3, 3), y + GD.RandRange(-3, 3));
+				CellInfo cellInfo = new()
 				{
-					PlaceProp(position + new Vector2(x + GD.RandRange(-3, 3), y + GD.RandRange(-3, 3)), scale);
-					count++;
-				}
+					Position = pos,
+					TextureIndex = new Random().Next(0, Textures.Count)
+				};
+				_positions.Add(cellInfo);
 			}
 		}
-
-		return count;
 	}
-	
-	private void PlaceProp(Vector2 position, float scale)
-	{
-		// if(true) return;
-		var spawn = new Sprite2D();
-		spawn.Texture = _spriteTextures[new Random().Next(0, _spriteTextures.Count - 1)];
-		spawn.Position = position;
-		// spawn.ZIndex = -98;
-		spawn.RotationDegrees = new Random().Next(-10, 10);
-		spawn.Scale = new Vector2(scale, scale);
-		// ShaderMaterial matty = new();
-		// matty.Shader = GD.Load<Shader>("res://src/factory/shaders/wind_sway.gdshader");
-		// matty.SetShaderParameter("offset", GlobalPosition.X + position.X + GlobalPosition.Y + position.Y);
-		// matty.SetShaderParameter("minStrength", 0.025f);
-		// matty.SetShaderParameter("maxStrength", 0.1f);
-		// matty.SetShaderParameter("detail", 5.0f);
-		// spawn.Material = matty;
-		// AddChild(spawn);
-		
-		var texture = _spriteTextures[new Random().Next(0, _spriteTextures.Count - 1)];
-		
-		var width = texture.GetWidth() * scale;
-		var height = texture.GetHeight() * scale;
-		var size = new Vector2(width, height);
-		
-		Rid _renderingServerId = RenderingServer.CanvasItemCreate();
-		RenderingServer.CanvasItemSetParent(_renderingServerId, GetCanvasItem());
-		RenderingServer.CanvasItemAddTextureRect(_renderingServerId, new Rect2(position - size / 2, size), texture.GetRid());
-		var transform = Transform2D.Identity.Translated(position);
-		RenderingServer.CanvasItemSetTransform(_renderingServerId, transform);
-		// RenderingServer.CanvasItemSetZIndex(_renderingServerId, -98);
-		
-	}
-
-	private GpuParticles2D party;
-	
-	public void PlacePropsParticles()
-	{
-		party = GD.Load<PackedScene>("res://src/factory/shaders/grass_particles.tscn").Instantiate<GpuParticles2D>();
-		AddChild(party);
-		party.Scale = new Vector2(_radius / 320.0f, _radius / 320.0f);
-		var tweeny = Globals.Tree.CreateTween();
-		tweeny.TweenInterval(1);
-		tweeny.TweenCallback(Callable.From(() => party.SpeedScale = 0));
-	}
-
-	// public override void _Process(double delta)
-	// {
-	// 	base._Process(delta);
-	// 	if (party == null) return;
-	//
-	// 	var matty = party.Material as ShaderMaterial;
-	// 	matty.SetShaderParameter("character_position", Globals.Player.GlobalPosition);
-	// }
 }

@@ -63,4 +63,9 @@ public class Utils
 		var apparentSize = new Vector2(sprite.Texture.GetWidth() / (float)sprite.Hframes, sprite.Texture.GetHeight() / (float)sprite.Vframes);
 	    return apparentSize * sprite.Scale;
 	}
+    
+    public static double NoiseNorm(Noise noise, Vector2 position)
+    {
+	    return (noise.GetNoise2Dv(position) + 1) / 2.0;
+    }
 }

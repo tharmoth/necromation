@@ -7,7 +7,7 @@ public partial class FpsCounter : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		var portOfCall = Globals.Player.GetViewport();
+		var portOfCall = GetViewport();
 		var processTime = Performance.GetMonitor(Performance.Monitor.TimeProcess) * 1000;
 		var physicsProcessTime = Performance.GetMonitor(Performance.Monitor.TimePhysicsProcess) * 1000;
 		RenderingServer.ViewportSetMeasureRenderTime(portOfCall.GetViewportRid(), true);
@@ -16,6 +16,8 @@ public partial class FpsCounter : Label
 
 		processTime = Math.Round(processTime, 2);
 		physicsProcessTime = Math.Round(physicsProcessTime, 2);
+		renderTimeCpu = Math.Round(renderTimeCpu, 2);
+		renderTimeGpu = Math.Round(renderTimeGpu, 2);
 		
 		Text = Engine.GetFramesPerSecond() + " FPS" + 
 			$"\nProcess: {processTime}ms" + 

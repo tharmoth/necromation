@@ -52,7 +52,7 @@ public partial class Character : Node2D
 	/**************************************************************************
 	 * Data Constants                                                         *
 	 **************************************************************************/
-	private const float Speed = 300;
+	private const float Speed = 1200;
 	
 	public Character()
 	{

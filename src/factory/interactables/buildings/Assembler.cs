@@ -49,9 +49,12 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	{
 		ItemType = itemType;
 	    _category = category;
+	    _inputInventory = new AssemblerInventory(this);
+	    
+	    _outlineSprite.Position = new Vector2(0, -10);
+	    _recipeSprite.Position = new Vector2(0, -10);
 	    Sprite.AddChild(_recipeSprite);
 	    Sprite.AddChild(_outlineSprite);
-	    _inputInventory = new AssemblerInventory(this);
 	}
 
 	public override void _Process(double delta)
@@ -95,9 +98,15 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	    return _time / _recipe.Time;
     }
 
-	/**************************************************************************
-	 * Protected Methods                                                      *
-	 **************************************************************************/
+    public override void Remove(Inventory to, bool quietly = false)
+    {
+	    base.Remove(to, quietly);
+	    SetRecipe(null, null);
+    }
+
+    /**************************************************************************
+     * Protected Methods                                                      *
+     **************************************************************************/
     protected void Animate()
     {
 	    if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
@@ -136,12 +145,20 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     {
 	    if (dumpInventory != null) TransferInventories(dumpInventory, false);
 
-	    _outlineSprite.Visible = true;
-	    _outlineSprite.Scale = new Vector2(48 / _outlineSprite.Texture.GetSize().X, 48 / _outlineSprite.Texture.GetSize().Y);
-	    _outlineSprite.Position = new Vector2(0, -10);
-	    _recipeSprite.Texture = Database.Instance.GetTexture(recipe.Products.First().Key);
-	    _recipeSprite.Scale = new Vector2(32 / _recipeSprite.Texture.GetSize().X, 32 / _recipeSprite.Texture.GetSize().Y);
-	    _recipeSprite.Position = new Vector2(0, -10);
+	    if (recipe != null)
+	    {
+		    _outlineSprite.Visible = true;
+		    _outlineSprite.Scale = new Vector2(48 / _outlineSprite.Texture.GetSize().X, 48 / _outlineSprite.Texture.GetSize().Y);
+		    _recipeSprite.Texture = Database.Instance.GetTexture(recipe.Products.First().Key);
+		    _recipeSprite.Scale = new Vector2(32 / _recipeSprite.Texture.GetSize().X, 32 / _recipeSprite.Texture.GetSize().Y);
+	    }
+	    else
+	    {
+		    _outlineSprite.Visible = false;
+		    _recipeSprite.Texture = null;
+		    _recipe = null;
+	    }
+	    
 	    _recipe = recipe;
     }
 
