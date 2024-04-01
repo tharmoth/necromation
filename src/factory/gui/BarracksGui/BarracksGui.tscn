@@ -1,16 +1,19 @@
-[gd_scene load_steps=12 format=3 uid="uid://c7aejushuligv"]
+[gd_scene load_steps=15 format=3 uid="uid://c7aejushuligv"]
 
 [ext_resource type="Script" path="res://src/factory/gui/BarracksGui/BarracksGui.cs" id="1_aaqnu"]
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_dmp2e"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_3hsy0"]
-[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_left.tscn" id="3_lyjcv"]
-[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGUI/drop_shadow_divider_right.tscn" id="4_jb5ym"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_left.tscn" id="3_lyjcv"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_right.tscn" id="4_jb5ym"]
 [ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="5_10o4b"]
-[ext_resource type="PackedScene" uid="uid://cvn2ithtvvp85" path="res://src/factory/gui/CrafterGUI/ItemSelectionItemBox.tscn" id="5_r2ir6"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="6_2ojxy"]
 [ext_resource type="Texture2D" uid="uid://df0vkwm5lx4c5" path="res://res/sprites/Arrow-right.png" id="7_da7t7"]
-[ext_resource type="Texture2D" uid="uid://dkrc6yyui6nlx" path="res://res/sprites/Arrow-down.png" id="12_067ju"]
-[ext_resource type="Script" path="res://src/factory/gui/ProgressTracker.cs" id="13_qmfwk"]
+[ext_resource type="Script" path="res://src/factory/gui/BarracksGui/BarracksBoxDraw.cs" id="9_8swuw"]
+[ext_resource type="PackedScene" uid="uid://j2tp2okl4jv6" path="res://src/factory/gui/Shared/FilterItemBox.tscn" id="9_nwdgr"]
+[ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/sprites/soil2.png" id="10_n1vl8"]
+[ext_resource type="Texture2D" uid="uid://ti2aa2bvwhet" path="res://res/sprites/unit/Skeleton Auxiliary.png" id="11_1u55i"]
+[ext_resource type="Texture2D" uid="uid://b6hdbjs0tv5pt" path="res://res/sprites/Grass.png" id="12_r38fp"]
+[ext_resource type="Script" path="res://src/factory/gui/CommandsGui/CommandsGui.cs" id="14_dfcuv"]
 
 [node name="BarracksGui" type="PanelContainer"]
 custom_minimum_size = Vector2(1200, 600)
@@ -57,17 +60,6 @@ text = "Barracks"
 
 [node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("4_jb5ym")]
 layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/TitleRow"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ItemSelectionItemBox" parent="MarginContainer/VBoxContainer/TitleRow/PanelContainer" instance=ExtResource("5_r2ir6")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 1
 
 [node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow"]
 custom_minimum_size = Vector2(30, 30)
@@ -139,23 +131,9 @@ texture = ExtResource("7_da7t7")
 stretch_mode = 3
 flip_h = true
 
-[node name="Control2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows/Control"]
 layout_mode = 2
 size_flags_vertical = 3
-alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows/Control2"]
-modulate = Color(0.6, 0.6, 0.6, 1)
-layout_mode = 2
-texture = ExtResource("7_da7t7")
-stretch_mode = 3
-
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/Arrows/Control2"]
-modulate = Color(0.6, 0.6, 0.6, 1)
-layout_mode = 2
-texture = ExtResource("7_da7t7")
-stretch_mode = 3
-flip_h = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
@@ -168,118 +146,285 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 22
-theme_override_constants/margin_right = 22
-theme_override_constants/margin_bottom = 22
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory"]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer"]
 layout_mode = 2
 
-[node name="CommanderInfoRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="CommanderInfoRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
-layout_mode = 2
-
-[node name="OrdersButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer"]
+[node name="UnitsList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Orders"
-
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer" instance=ExtResource("6_2ojxy")]
 layout_mode = 2
 
-[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
+[node name="FilterItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow/UnitsList" instance=ExtResource("9_nwdgr")]
 layout_mode = 2
 
-[node name="PositionButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer2"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Position"
-
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/PanelContainer2" instance=ExtResource("6_2ojxy")]
+[node name="FilterItemBox2" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow/UnitsList" instance=ExtResource("9_nwdgr")]
+auto_translate_mode = 1
 layout_mode = 2
 
-[node name="CommandInfoPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow"]
+[node name="FilterItemBox3" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow/UnitsList" instance=ExtResource("9_nwdgr")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/CommandInfoPanel"]
+[node name="CommandInfoPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow/CommandInfoPanel"]
 layout_mode = 2
 alignment = 1
 
-[node name="UnitLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/CommandInfoPanel/VBoxContainer"]
+[node name="UnitLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow/CommandInfoPanel/VBoxContainer"]
 layout_mode = 2
 text = "Units: "
 
-[node name="UnitCountLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer/PanelContainer/CommanderInfoRow/CommandInfoPanel/VBoxContainer"]
+[node name="UnitCountLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer/MarginContainer/CommanderInfoRow/CommandInfoPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "120/200"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer"]
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/PanelContainer" instance=ExtResource("6_2ojxy")]
 layout_mode = 2
 
-[node name="OutputInventoryItemList" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer"]
+layout_mode = 2
+
+[node name="BarracksBoxDraw" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("1_dmp2e")
+script = ExtResource("9_8swuw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer"]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(360, 360)
+layout_mode = 2
+
+[node name="BackgroundTexture" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer/PanelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+texture = ExtResource("10_n1vl8")
+expand_mode = 1
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory" instance=ExtResource("6_2ojxy")]
-layout_mode = 2
-
-[node name="HBoxContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-layout_mode = 2
-
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="BackgroundTexture2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer/PanelContainer"]
 unique_name_in_owner = true
+auto_translate_mode = 1
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-show_percentage = false
-script = ExtResource("13_qmfwk")
+mouse_filter = 2
+texture = ExtResource("12_r38fp")
+expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
-modulate = Color(0.6, 0.6, 0.6, 1)
+[node name="BoxDraw" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("12_067ju")
-stretch_mode = 2
-flip_v = true
+size_flags_vertical = 4
 
-[node name="OutputInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 22
-theme_override_constants/margin_right = 22
-theme_override_constants/margin_bottom = 22
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="SourceInventoryItemList" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory/MarginContainer/ScrollContainer"]
+[node name="Sprite" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer/PanelContainer/BoxDraw"]
 unique_name_in_owner = true
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("11_1u55i")
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer/PanelContainer" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="CommandsGui" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("14_dfcuv")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="CurrentOrderLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "[Current Order]"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="OrderList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/OutputInventory" instance=ExtResource("6_2ojxy")]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="NoOrdersButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "None"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="HoldAndAttackButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer2"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Hold and Attack"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer2" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer3" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="FireButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer3"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Fire"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer3" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer4" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="HoldAndFireButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer4"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Hold And Fire"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer4" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer5" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="FireAndKeepDistanceButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer5"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Fire and Keep Distance"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/OrderList/PanelContainer5" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="TargetList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer6" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="ClosestButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer6"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Closest"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer6" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer7" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="ArchersButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer7"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Archers"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer7" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer8" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="CavalryButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer8"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+text = "Cavalry"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer8" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="PanelContainer9" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="RearmostButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer9"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Rearmost"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui/MarginContainer/VBoxContainer/HBoxContainer/TargetList/PanelContainer9" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/CommandsGui" instance=ExtResource("6_2ojxy")]
+auto_translate_mode = 1
 layout_mode = 2

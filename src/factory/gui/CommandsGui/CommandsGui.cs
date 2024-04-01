@@ -9,8 +9,8 @@ public partial class CommandsGui : PanelContainer
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/CommandsGui/CommandsGui.tscn");
 	private static readonly PackedScene OutlineScene = GD.Load<PackedScene>("res://src/shared/gui/outline.tscn");
+	
 	/**************************************************************************
 	 * Child Accessors 													      *
 	 **************************************************************************/
@@ -22,17 +22,9 @@ public partial class CommandsGui : PanelContainer
 	 * State Data          													  *
 	 **************************************************************************/
 	private Commander _commander;
-	
-	// Static Accessor
-	public static void Display(Commander commander)
-	{
-		var gui = Scene.Instantiate<CommandsGui>();
-		gui.Init(commander);
-		Globals.FactoryScene.Gui.Open(gui);
-	}
-	
+
 	// Constructor workaround.
-	private void Init(Commander commander)
+	public void Init(Commander commander)
 	{
 		_commander = commander;
 

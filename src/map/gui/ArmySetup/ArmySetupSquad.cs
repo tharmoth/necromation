@@ -55,7 +55,8 @@ public partial class ArmySetupSquad : PanelContainer
 		SquadPlacement.GuiInput += (e) =>
 		{
 			if (e is not InputEventMouseButton mouseButton || !mouseButton.IsPressed()) return;
-			BarracksBoxDraw.Display(_commander);
+			// BarracksBoxDraw.Display(_commander);
+			throw new NotImplementedException("I removed this gui from the game.");
 		};
 	}
 

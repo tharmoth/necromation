@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Necromation;
 using Necromation.factory.gui;
 using Necromation.gui;
@@ -16,14 +17,11 @@ public partial class BarracksGui : DeferredUpdate
 	 * Child Accessors 													     *
 	 * ***********************************************************************/
 	private Container InventoryItemList => GetNode<Container>("%InventoryItemList");
-	private Container SourceInventoryItemList => GetNode<Container>("%SourceInventoryItemList");
-	private Container OutputInventoryItemList => GetNode<Container>("%OutputInventoryItemList");
-	private ItemSelectionItemBox ItemSelectionItemBox => GetNode<ItemSelectionItemBox>("%ItemSelectionItemBox");
-	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
+	private Container UnitsList => GetNode<Container>("%UnitsList");
 	private Label Title => GetNode<Label>("%Title");
-	private Button OrdersButton => GetNode<Button>("%OrdersButton");
-	private Button PositionButton => GetNode<Button>("%PositionButton");
 	private Label UnitCountLabel => GetNode<Label>("%UnitCountLabel");
+	private CommandsGui CommandsGui => GetNode<CommandsGui>("%CommandsGui");
+	private BarracksBoxDraw BarracksBoxDraw => GetNode<BarracksBoxDraw>("%BarracksBoxDraw");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -47,20 +45,41 @@ public partial class BarracksGui : DeferredUpdate
 
 		AddUpdateListeners(new List<Inventory> { _to, _barracks.Inventory});
 
-		ProgressBar.Init(barracks);
-		
 		Title.Text = barracks.ItemType + " - " + barracks.Commander.CommanderName;
-		
-		PositionButton.Pressed += () => BarracksBoxDraw.Display(barracks.Commander);
-		OrdersButton.Pressed += () => CommandsGui.Display(barracks.Commander);
+
+		CommandsGui.Init(barracks.Commander);
+		BarracksBoxDraw.Init(barracks.Commander);
 	}
 
 	protected override void Update()
 	{
 		InventoryItemBox.UpdateInventory(_to, new List<Inventory> { _barracks.Inventory }, InventoryItemList);
 		// InventoryItem.UpdateInventory(_barracks.GetInputInventory(), new List<Inventory> { _to }, SourceInventoryItemList);
-		InventoryItemBox.UpdateInventory(_barracks.Inventory, new List<Inventory> { _to }, OutputInventoryItemList);
+		// InventoryItemBox.UpdateInventory(_barracks.Inventory, new List<Inventory> { _to }, OutputInventoryItemList);
 		UnitCountLabel.Text = _barracks.Inventory.CountItems().ToString() + " / " + _barracks.Commander.CommandCap;
 		Dirty = false;
+
+		UnitsList.GetChildren().ToList().ForEach(node => node.QueueFree());
+
+		int count = 0;
+		foreach (var unit in _barracks.Inventory.Items.Keys)
+		{
+			AssemblerItemBox.AddInventoryItem(unit, 
+				0, 
+				_barracks.Inventory, 
+				new List<Inventory> { _to }, 
+				UnitsList, 
+				true);
+			count++;
+		}
+
+		var valid = Database.Instance.Units.Select(unit => unit.Name).ToList();
+		for (int i = 0; i < 8 - count; i++)
+		{
+			FilterItemBox.AddItemBox(_barracks.Inventory, 
+				new List<Inventory> { _to }, 
+				valid, 
+				UnitsList);
+		}
 	}
 }

@@ -142,6 +142,8 @@ public class Database
 
     #region Units
 
+    public bool IsUnit(string itemType) => Units.Any(unit => unit.Name == itemType);
+    
     private static List<UnitDef> LoadUnitDefs()
     {
         var dict = LoadJson("res://res/data/units.json");

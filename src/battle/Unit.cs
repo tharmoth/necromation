@@ -122,7 +122,7 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		SpriteHolder.GlobalPosition = GlobalPosition;
 		switch (_commander.CurrentCommand)
 		{
-			case Commander.Command.None:
+			case Commander.Command.Attack:
 				break;
 			case Commander.Command.HoldAndAttack:
 				Cooldown += BattleScene.TimeStep * 12;

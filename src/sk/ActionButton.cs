@@ -20,10 +20,5 @@ public partial class ActionButton : Button
 		press.Action = _action;
 		press.Pressed = true;
 		Input.ParseInputEvent(press);
-		// var release = new InputEventAction();
-		// release.Action = _action;
-		// release.Pressed = false;
-		// Input.ParseInputEvent(release);
-		GD.Print("Button Pressed! " + _action);
 	}
 }

@@ -11,6 +11,7 @@ public partial class Commander : Node2D, ITransferTarget
      * Utility Property                                                       *
      **************************************************************************/
     public Vector2I MapPosition => Globals.MapScene.TileMap.GlobalToMap(GlobalPosition);
+    public Province Province => _province;
 
     /**************************************************************************
      * Logic Variables                                                        *
@@ -25,10 +26,10 @@ public partial class Commander : Node2D, ITransferTarget
     /// <summary> Associates this commander with a barracks in the factory. Used for save/load. </summary>
     public string BarracksId = null;
     
-    public Command CurrentCommand = Command.None;
+    public Command CurrentCommand = Command.Attack;
     public enum Command
     {
-        None, HoldAndAttack, Fire, HoldAndFire, FireAndKeepDistance
+        Attack, HoldAndAttack, Fire, HoldAndFire, FireAndKeepDistance
     }
     
     public Target TargetType = Target.Closest;
@@ -137,7 +138,7 @@ public partial class Commander : Node2D, ITransferTarget
 
         public override int GetMaxTransferAmount(string itemType)
         {
-            if (!Database.Instance.Units.Any(unit => unit.Name == itemType)) return 0;
+            if (!Database.Instance.IsUnit(itemType)) return 0;
             return Mathf.Max(0, _commander.CommandCap - CountItems());
         }
     }
