@@ -55,6 +55,7 @@ public partial class BattleTileMap : LayerTileMap
 			for (int y = 0; y < Y * TileSize; y  += FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize)
 			{
 				var startpos = new Vector2(x, y);
+				var propPos = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
 				
 				Sprite2D sprite = new();
 				sprite.Texture = Database.Instance.GetTexture("soil2");
@@ -65,6 +66,19 @@ public partial class BattleTileMap : LayerTileMap
 				sprite.ZIndex = -99;
 				Globals.BattleScene.CallDeferred("add_child", sprite);
 
+				PropSpawner rockSpawner = new();
+				rockSpawner.Textures.Add(Database.Instance.GetTexture("Rocks1"));
+				rockSpawner.Textures.Add(Database.Instance.GetTexture("Rocks3"));
+				rockSpawner.Density = 0.25f;
+				rockSpawner.Radius = FactoryTileMap.ProvinceSize * TileSize / 2;
+				rockSpawner.SizePixels = 32;
+				rockSpawner.Threshold = .75f;
+				rockSpawner.GlobalPosition = propPos;
+				rockSpawner.ZIndex = -97;
+				rockSpawner.UseWind = false;
+				rockSpawner.Single = true;
+				Globals.BattleScene.CallDeferred("add_child", rockSpawner);
+				
 				PropSpawner spawner = new();
 				spawner.Textures.Add(Database.Instance.GetTexture("Grass2"));
 				spawner.Textures.Add(Database.Instance.GetTexture("Grass5"));
@@ -72,7 +86,7 @@ public partial class BattleTileMap : LayerTileMap
 				spawner.Radius = FactoryTileMap.ProvinceSize * TileSize / 2;
 				spawner.SizePixels = 24;
 				spawner.Threshold = 0.4f;
-				spawner.GlobalPosition = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
+				spawner.GlobalPosition = propPos;
 				spawner.ZIndex = -98;
 				Globals.BattleScene.GetNode<Node2D>("GrassHolder").CallDeferred("add_child", spawner);
 			}

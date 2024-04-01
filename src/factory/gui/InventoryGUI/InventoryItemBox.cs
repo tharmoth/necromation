@@ -23,6 +23,10 @@ public partial class InventoryItemBox : ItemBox
 	{
 		AddMissing(from, to, list);
 		RemoveExtra(from, list);
+		var sorted = list.GetChildren().OfType<InventoryItemBox>()
+			.ToList();
+		sorted.Sort((a, b) => a.ItemType.CompareTo(b.ItemType));
+		sorted.ForEach(item => list.MoveChild(item, sorted.IndexOf(item)));
 	}
 	
 	// Static Accessor
@@ -81,7 +85,7 @@ public partial class InventoryItemBox : ItemBox
 			
 		if (_to == null || _sourceInventory == null || sourceCount == 0)
 		{
-			Globals.Player.Selected = ItemType;
+			Globals.Player.Selected = Globals.Player.Selected == ItemType ? null : ItemType;
 			return;
 		}
 

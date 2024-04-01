@@ -7,22 +7,20 @@ using Necromation.map.character;
 
 public partial class MapGui : CanvasLayer
 {
-	public Label SelectedLabel  => GetNode<Label>("%Label");
-	private Button _factoryButton => GetNode<Button>("%FactoryButton");
-	private Button _armyButton => GetNode<Button>("%ArmyButton");
-	private RecruitGUI RecruitGui => GetNode<RecruitGUI>("%RecruitGUI");
-	private Control MainGui => GetNode<Control>("%MainGui");
-
+	public static MapGui Instance { get; private set; }
+	public readonly Stack<Control> GuiStack = new();
 	public bool GuiOpen => RecruitGui.Visible || GuiStack.Count > 0;
 	
-	public readonly Stack<Control> GuiStack = new();
-	public static MapGui Instance { get; private set; }
+	public Label SelectedLabel  => GetNode<Label>("%Label");
+	private Button FactoryButton => GetNode<Button>("%FactoryButton");
+	private Button ArmyButton => GetNode<Button>("%ArmyButton");
+	private RecruitGUI RecruitGui => GetNode<RecruitGUI>("%RecruitGUI");
+	private Control MainGui => GetNode<Control>("%MainGui");
+	private readonly Queue<Province> _battleQueue = new();
 	
-	private Queue<Province> _battleQueue = new();
-
 	public override void _EnterTree(){
 		if(Instance != null){
-			this.QueueFree(); // The Singleton is already loaded, kill this instance
+			QueueFree(); // The Singleton is already loaded, kill this instance
 		}
 		Instance = this;
 	}
@@ -36,27 +34,27 @@ public partial class MapGui : CanvasLayer
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		
-		if (_battleQueue.Count > 0)
-		{
-			var province = _battleQueue.Dequeue();
-			Globals.MapScene.SelectProvince(province);
-			SceneManager.ChangeToScene(SceneManager.SceneEnum.Battle);
-		}
-		
-		if (Input.IsActionJustPressed("close_gui")) CloseGui();
-		if (Input.IsActionJustPressed("open_army_setup") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player") 
+		if (_battleQueue.Count <= 0) return;
+		var province = _battleQueue.Dequeue();
+		Globals.MapScene.SelectProvince(province);
+		SceneManager.ChangeToScene(SceneManager.SceneEnum.Battle);
+	}
+
+	public override void _UnhandledInput(InputEvent inputEvent)
+	{
+		if (inputEvent.IsActionPressed("close_gui")) CloseGui();
+		if (inputEvent.IsActionPressed("open_army_setup") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player") 
 		{
 			GuiStack.Push(ArmySetup.Display(Globals.MapScene.SelectedProvince));
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_recruit") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player")
+		if (inputEvent.IsActionPressed("open_recruit") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player")
 		{
 			RecruitGui.Visible = true;
 			MainGui.Visible = false;
 		}
-		if (Input.IsActionJustPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
-		if (Input.IsActionJustPressed("end_turn")) EndTurn();
+		if (inputEvent.IsActionPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
+		if (inputEvent.IsActionPressed("end_turn")) EndTurn();
 	}
 
 	private void EndTurn()
@@ -117,7 +115,7 @@ public partial class MapGui : CanvasLayer
 		
 		
 		// _factoryButton.Disabled = provence.Owner != "Player";
-		_armyButton.Disabled = provence.Owner != "Player";
+		ArmyButton.Disabled = provence.Owner != "Player";
 
 		// if (OS.IsDebugBuild())
 		// {

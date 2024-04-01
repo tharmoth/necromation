@@ -10,7 +10,7 @@ public partial class AssemblerGui : DeferredUpdate
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/AssemblerGUI/AssemblerGui.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/AssemblerGui/AssemblerGui.tscn");
 
 	/**************************************************************************
 	 * Child Accessors 													      *

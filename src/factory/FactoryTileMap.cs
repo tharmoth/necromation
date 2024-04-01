@@ -47,7 +47,7 @@ public partial class FactoryTileMap : LayerTileMap
 		// Globals.FactoryScene.CallDeferred("add_child", sprite);
 		_fogs.Add(location, sprite);
 		
-		// SpawnGrass(startpos);
+		SpawnGrass(startpos);
 	}
 	
 	public void AddProvence(Vector2I location)
@@ -88,7 +88,7 @@ public partial class FactoryTileMap : LayerTileMap
 				// SetCell(0, coords, 0, randomvec);
 			}
 		}
-		SpawnGrass(startpos);
+		// SpawnGrass(startpos);
 		
 		if (_fogs.TryGetValue(location, out var fog)) fog?.QueueFree();
 	}

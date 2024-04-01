@@ -10,7 +10,7 @@ public partial class IngrediantsPopup : PanelContainer
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
-	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/IngrediantsPopupGUI/IngrediantsPopup.tscn");
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://src/factory/gui/IngrediantsPopupGui/IngrediantsPopup.tscn");
 
 	/**************************************************************************
 	 * Child Accessors 													      *

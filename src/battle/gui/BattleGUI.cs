@@ -26,10 +26,7 @@ public partial class BattleGUI : CanvasLayer
         if (_time > MusteringDelay) Started = true;
         
         if (!_initialized) SetupKillCounts();
-        
-        if (Input.IsActionJustPressed("return_to_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
-        if (Input.IsActionJustPressed("return_to_factory")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
-        
+
         var playerUnitCount = Globals.UnitManager.GetGroup("Player").Count;
         var enemyUnitCount = Globals.UnitManager.GetGroup("Enemy").Count;
 
@@ -40,7 +37,13 @@ public partial class BattleGUI : CanvasLayer
         else if (enemyUnitCount == 0) Summary.Display("Victory!", _playerStats, _enemyStats);
         else _complete = false;
     }
-    
+
+    public override void _UnhandledInput(InputEvent inputEvent)
+    {
+        if (inputEvent.IsActionPressed("return_to_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
+        if (inputEvent.IsActionPressed("return_to_factory")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
+    }
+
     private void SetupKillCounts()
     {
         _initialized = true;

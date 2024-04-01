@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -33,9 +34,8 @@ public partial class FactoryGUI : CanvasLayer
 	{
 		base._UnhandledInput(inputEvent);
 		if (!inputEvent.IsPressed()) return;
-		if (Input.IsActionJustPressed("close_gui")) CloseGui();
 
-		if (Input.IsActionJustPressed("open_technology"))
+		if (inputEvent.IsActionPressed("open_technology"))
 		{
 			if (_guiStack.Count > 0 && _guiStack.Peek() is TechGui)
 				CloseGui();
@@ -43,7 +43,7 @@ public partial class FactoryGUI : CanvasLayer
 				TechGui.Display();
 		}
 
-		if (Input.IsActionJustPressed("open_inventory"))
+		if (inputEvent.IsActionPressed("open_inventory"))
 		{
 			if (_guiStack.Count > 0 && _guiStack.Peek() is InventoryGui)
 				CloseGui();
@@ -51,7 +51,7 @@ public partial class FactoryGUI : CanvasLayer
 				InventoryGui.Display(Globals.PlayerInventory);
 		}
 
-		if (Input.IsActionPressed("open_config"))
+		if (inputEvent.IsActionPressed("open_config"))
 		{
 			if (_guiStack.Count > 0 && _guiStack.Peek() is ConfigurationGui)
 				CloseGui();
@@ -59,9 +59,10 @@ public partial class FactoryGUI : CanvasLayer
 				ConfigurationGui.Display();
 		}
 		
-		if (Input.IsActionJustPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
-		if (Input.IsActionJustPressed("save")) SKSaveLoad.SaveGame(this);
-		if (Input.IsActionJustPressed("load")) SKSaveLoad.LoadGame(this);
+		if (inputEvent.IsActionPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
+		if (inputEvent.IsActionPressed("save")) SKSaveLoad.SaveGame(this);
+		if (inputEvent.IsActionPressed("load")) SKSaveLoad.LoadGame(this);
+		if (inputEvent.IsActionPressed("close_gui")) CloseGui();
 	}
 	
 	/***************************************************************************

@@ -429,7 +429,6 @@ z_index = -1
 layout_mode = 2
 text = "Technology (T)"
 script = ExtResource("7_04mnd")
-_action = null
 
 [node name="Outline5" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Right" instance=ExtResource("9_oba7v")]
 layout_mode = 2

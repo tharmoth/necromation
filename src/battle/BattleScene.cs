@@ -122,10 +122,7 @@ public partial class BattleScene : Scene
 				Mathf.RoundToInt(BattleTileMap.X * commanderOffset.X / 100.0f * 4 / 10.0f),
 				Mathf.RoundToInt(BattleTileMap.Y * commanderOffset.Y / 100.0f * 6 / 10.0f)
 			);
-			
-			GD.Print(commanderOffsetScaled);
-			// -BattleTileMap.Y * 2 / 10 - commanderOffset.Y * 6 / 10
-			
+
 			if (commander.Team == "Player")
 			{
 				spawnLocation = new Vector2I(BattleTileMap.X / 4, BattleTileMap.Y / 2);

@@ -52,9 +52,7 @@ public partial class BarracksBoxDraw : Control
 		
 		var globalX = size.X * x - size.X / 2;
 		var globalY = size.Y * y - size.Y / 2;
-		
-		GD.Print(globalX, " nani ", globalY);
-		
+
 		BoxSprite.GlobalPosition += new Vector2(globalX, globalY);
 	}
 
@@ -71,8 +69,6 @@ public partial class BarracksBoxDraw : Control
 		var gridX = Mathf.RoundToInt(_gridSize.X * x);
 		var gridY = Mathf.RoundToInt(_gridSize.Y * y);
 
-		GD.Print("Grid: ", gridX, " ", gridY);
-		
 		if (!(x < 1.0f) || !(x >= 0) || !(y < 1.0f) || !(y >= 0)) return;
 			
 		BoxSprite.GlobalPosition = Background.GetGlobalMousePosition();

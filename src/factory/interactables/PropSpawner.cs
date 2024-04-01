@@ -58,8 +58,6 @@ public partial class PropSpawner : Node2D
 				multiMesh.SetInstanceTransform2D(index, transform);
 			}
 		}
-
-		GD.Print("Placed " + _positions.Count + " props");
 	}
 
 	private void GenerateMultiMesh(Texture2D texture)
