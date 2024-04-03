@@ -218,13 +218,13 @@ size_flags_horizontal = 3
 mouse_filter = 2
 alignment = 2
 
-[node name="GridContainer" type="GridContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center"]
+[node name="GridContainer" type="VBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center"]
 layout_mode = 2
+size_flags_horizontal = 4
 mouse_filter = 2
-theme_override_constants/h_separation = 50
-columns = 3
 
 [node name="Control2" type="Control" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer"]
+visible = false
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer"]
@@ -244,9 +244,11 @@ layout_mode = 2
 show_percentage = false
 
 [node name="Control" type="Control" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer"]
+visible = false
 layout_mode = 2
 
 [node name="DropShadowDividerLeft" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("5_06d3l")]
+visible = false
 layout_mode = 2
 
 [node name="DropShadowBorder" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("6_kka5s")]
@@ -351,6 +353,7 @@ layout_mode = 2
 mouse_filter = 0
 
 [node name="DropShadowDividerRight" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Center/GridContainer" instance=ExtResource("8_jqtrb")]
+visible = false
 layout_mode = 2
 
 [node name="Right" type="VBoxContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main"]

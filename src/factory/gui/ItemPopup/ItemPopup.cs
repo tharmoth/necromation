@@ -29,10 +29,7 @@ public partial class ItemPopup : PanelContainer
 		if (_popups.ContainsKey(control)) Unregister(control);
 		
 		var popup = GeneratePopup(popupText);
-		control.MouseEntered += () =>
-		{
-			popup.Display();
-		};
+		control.MouseEntered += popup.Display;
 		control.MouseExited += popup.Fade;
 		control.VisibilityChanged += popup.Kill;
 		control.TreeExited += popup.Kill;
@@ -42,8 +39,13 @@ public partial class ItemPopup : PanelContainer
 	public static void Unregister(Control control)
 	{
 		if (!_popups.ContainsKey(control)) return;
+		var popup = _popups[control];
 		_popups[control].Kill();
 		_popups.Remove(control);
+		control.MouseEntered -= popup.Display;
+		control.MouseExited -= popup.Fade;
+		control.VisibilityChanged -= popup.Kill;
+		control.TreeExited -= popup.Kill;
 	}
 	
 	private void Display()
