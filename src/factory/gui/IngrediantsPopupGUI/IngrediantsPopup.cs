@@ -5,7 +5,7 @@ using Godot.Collections;
 using Necromation;
 using Necromation.gui;
 
-public partial class IngrediantsPopup : PanelContainer
+public partial class IngrediantsPopup : Container
 {
 	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
@@ -18,7 +18,7 @@ public partial class IngrediantsPopup : PanelContainer
 	private Label RecipeNameLabel => GetNode<Label>("%RecipeNameLabel");
 	private VBoxContainer Rows => GetNode<VBoxContainer>("%Rows");
 	private Label CraftingTimeLabel => GetNode<Label>("%CraftingTimeLabel");
-	private DropShadowBorder DropShadowBorder => GetNode<DropShadowBorder>("%DropShadowBorder");
+	private RichTextLabel Label => GetNode<RichTextLabel>("%Label");
 	
 	/**************************************************************************
 	 * State Data   													      *
@@ -74,7 +74,6 @@ public partial class IngrediantsPopup : PanelContainer
 	private void Fade()
 	{
 		if (!IsInstanceValid(this)) return;
-		DropShadowBorder.DisableBlur();
 		_tween?.Kill();
 		_tween = Globals.Tree.CreateTween();
 		_tween.TweenProperty(this, "modulate:a", 0, .15f);
@@ -102,8 +101,10 @@ public partial class IngrediantsPopup : PanelContainer
 		
 		Rows.GetChildren().ToList().ForEach(node => node.Free());
 		_recipe.Ingredients.ToList().ForEach(ingredient => AddRow(ingredient.Key, ingredient.Value));
-		
-		DropShadowBorder.DisableBlur();
+
+		Database.Instance.Items.TryGetValue(product, out var item);
+		Label.Text = item is null ? product : $"[color=BBBBBB][font_size=15]{item.Description}[/font_size][/color]";
+
 		Modulate = Colors.Transparent;
 		FactoryGUI.SnapToScreen(this);
 	}

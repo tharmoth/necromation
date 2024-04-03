@@ -161,48 +161,6 @@ public partial class BattleScene : Scene
 			.ToList()
 			.ForEach(commander => commander.Kill());;
 		Globals.BattleScene.QueueFree();
-
-		if (team == "Player" && Globals.MapScene.TileMap.Provinces.Count(province => province.Owner == "Player") == 2)
-		{
-			var provenceUp = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Up);
-			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Infantry", 2);
-			var provenceDown = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Down);
-			if (provenceDown.Owner != "Player") provenceDown.Commanders.First().Insert("Infantry", 2);
-			var provenceLeft = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Left);
-			if (provenceLeft.Owner != "Player") provenceLeft.Commanders.First().Insert("Infantry", 2);
-			var provenceRight = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Right);
-			if (provenceRight.Owner != "Player") provenceRight.Commanders.First().Insert("Infantry", 2);
-		}
-
-		if (team == "Player" && Globals.MapScene.TileMap.Provinces.Count(province => province.Owner == "Player") == 3)
-		{
-			var provenceUp = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Up);
-			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Archer", 5);
-			var provenceDown = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Down);
-			if (provenceDown.Owner != "Player") provenceDown.Commanders.First().Insert("Archer", 5);
-			var provenceLeft = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Left);
-			if (provenceLeft.Owner != "Player") provenceLeft.Commanders.First().Insert("Archer", 5);
-			var provenceRight = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Right);
-			if (provenceRight.Owner != "Player") provenceRight.Commanders.First().Insert("Archer", 5);
-			
-			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Infantry", 5);
-			if (provenceDown.Owner != "Player") provenceDown.Commanders.First().Insert("Infantry", 5);
-			if (provenceLeft.Owner != "Player") provenceLeft.Commanders.First().Insert("Infantry", 5);
-			if (provenceRight.Owner != "Player") provenceRight.Commanders.First().Insert("Infantry", 5);
-		}
-		
-		if (team == "Player" && Globals.MapScene.TileMap.Provinces.Count(province => province.Owner == "Player") == 4)
-		{
-			var provenceUp = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Up);
-			if (provenceUp.Owner != "Player") provenceUp.Commanders.First().Insert("Infantry", 5);
-			var provenceDown = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Down);
-			if (provenceDown.Owner != "Player") provenceDown.Commanders.First().Insert("Infantry", 5);
-			var provenceLeft = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Left);
-			if (provenceLeft.Owner != "Player") provenceLeft.Commanders.First().Insert("Infantry", 5);
-			var provenceRight = Globals.MapScene.TileMap.GetProvence(MapScene.FactoryPosition + Vector2I.Right);
-			if (provenceRight.Owner != "Player") provenceRight.Commanders.First().Insert("Infantry", 5);
-		}
-		
 		Globals.MapScene.UpdateListeners.ForEach(listener => listener());
 	}
 }

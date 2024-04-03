@@ -23,6 +23,11 @@ public partial class InventoryRecipeBox : ItemBox
 	{
 		AddMissing(from, list);
 		RemoveExtra(list);
+		var sorted = list.GetChildren().OfType<InventoryRecipeBox>()
+			.ToList();
+		sorted.Sort((a, b) 
+			=> Database.Instance.CompareItems(a.ItemType, b.ItemType));
+		sorted.ForEach(item => list.MoveChild(item, sorted.IndexOf(item)));
 	}
 	
 	// Static Accessor

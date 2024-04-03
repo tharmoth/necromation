@@ -52,7 +52,7 @@ public partial class Character : Node2D
 	/**************************************************************************
 	 * Data Constants                                                         *
 	 **************************************************************************/
-	private const float Speed = 1200;
+	private const float Speed = 400;
 	
 	public Character()
 	{
@@ -66,6 +66,8 @@ public partial class Character : Node2D
 		AddChild(_buildBuildingAction);
 		AddChild(_removeBuildingAction);
 		AddChild(_deconstructAction);
+		
+		_inventory.Insert("Mine", 2);
 	}
 	
 	public override void _EnterTree()

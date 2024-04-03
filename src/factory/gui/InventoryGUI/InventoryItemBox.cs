@@ -25,7 +25,8 @@ public partial class InventoryItemBox : ItemBox
 		RemoveExtra(from, list);
 		var sorted = list.GetChildren().OfType<InventoryItemBox>()
 			.ToList();
-		sorted.Sort((a, b) => a.ItemType.CompareTo(b.ItemType));
+		sorted.Sort((a, b) 
+			=> Database.Instance.CompareItems(a.ItemType, b.ItemType));
 		sorted.ForEach(item => list.MoveChild(item, sorted.IndexOf(item)));
 	}
 	

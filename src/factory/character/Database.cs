@@ -15,6 +15,7 @@ public class Database
     public readonly IReadOnlyList<Technology> Technologies = LoadTechnologies();
     public readonly IReadOnlyList<object> Equpment = LoadEquipment();
     public readonly IReadOnlyList<UnitDef> Units = LoadUnitDefs();
+    public readonly IReadOnlyDictionary<string, Item> Items = LoadItems();
     
     public readonly List<Recipe> UnlockedRecipes = new();
     
@@ -32,6 +33,53 @@ public class Database
         UnlockedRecipes.AddRange(Recipes.Where(recipe => !lockedRecipes.Contains(recipe.Name)).ToList());
         // UnlockedRecipes.AddRange(Recipes);
     }
+
+    #region Items
+    private static Dictionary<string, Item> LoadItems()
+    {
+        var dict = LoadJson("res://res/data/items.json");
+        if (dict != null)
+        {
+            return dict["items"].As<Godot.Collections.Array>()
+                .Select(x => x.As<Godot.Collections.Dictionary<string, Variant>>())
+                .Select(CreateItemFromDict)
+                .ToDictionary(key => key.Name, value => value);
+        }
+        GD.PrintErr("Failed to load items!");
+        return new Dictionary<string, Item>();
+    }
+    
+    private static Item CreateItemFromDict(Godot.Collections.Dictionary<string, Variant> dict)
+    {
+        var name = dict["name"].As<string>();
+        return new Item
+        {
+            Name = name,
+            Description = dict.TryGetValue("description", out var desc) ? desc.As<string>() : "None",
+            Category = dict.TryGetValue("category", out var cat) ? cat.As<string>() : "None"
+        };
+    }
+    
+    public class Item
+    {
+        public string Name;
+        public string Description;
+        public string Category;
+    }
+
+    public int CompareItems(string itemTypeA, string itemTypeB)
+    {
+        if (itemTypeA != null && itemTypeB != null && Items.TryGetValue(itemTypeA, out var aItem) &&
+            Items.TryGetValue(itemTypeB, out var bItem))
+        {
+            var categoryComparison = aItem.Category.CompareTo(bItem.Category);
+            if (categoryComparison != 0) return categoryComparison;
+        }
+            
+        return String.Compare(itemTypeA, itemTypeB, StringComparison.Ordinal);
+    }
+    #endregion
+    
 
     #region Recipes
     private static List<Recipe> LoadRecipes()

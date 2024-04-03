@@ -15,7 +15,7 @@ public partial class ItemPopup : PanelContainer
 	 * Child Accessors 													      *
 	 **************************************************************************/
 	private DropShadowBorder DropShadowBorder => GetNode<DropShadowBorder>("%DropShadowBorder");
-	private Label Label => GetNode<Label>("%Label");
+	private RichTextLabel Label => GetNode<RichTextLabel>("%Label");
 	
 	/**************************************************************************
 	 * State Data   													      *
@@ -53,7 +53,6 @@ public partial class ItemPopup : PanelContainer
 		Modulate = Colors.White;
 		
 		Globals.FactoryScene.Gui.AddChild(this);
-		FactoryGUI.SnapToScreen(this);
 		
 		_tween?.Kill();
 		_tween = CreateTween();
@@ -98,12 +97,23 @@ public partial class ItemPopup : PanelContainer
 	{
 		base._Ready();
 		Label.Text = _popupText;
-		FactoryGUI.SnapToScreen(this);
+		Size = Vector2.Zero;
+		
+		DropShadowBorder.DisableBlur();
+		
+		// Call deffered to wait for RichTextLabel to update
+		CallDeferred("Update");
 	}
-
+	
 	public override void _Input(InputEvent @event)
 	{
 		base._Input(@event);
+		Update();
+	}
+	
+	private void Update()
+	{
+		if (GetParent() == null) return;
 		FactoryGUI.SnapToScreen(this);
 	}
 }

@@ -42,7 +42,10 @@ public partial class ItemBox : PanelContainer
 		{
 			Icon.Visible = true;
 			Icon.Texture = Database.Instance.GetTexture(_itemType);
-			ItemPopup.Register(ItemType, Button);
+			
+			Database.Instance.Items.TryGetValue(_itemType, out var item);
+
+			ItemPopup.Register(item is null ? ItemType : $"{item.Name}\n[color=BBBBBB][font_size=15]{item.Description}[/font_size][/color]", Button);
 		}
 	}
 	

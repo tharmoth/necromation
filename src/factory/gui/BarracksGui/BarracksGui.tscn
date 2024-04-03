@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c7aejushuligv"]
+[gd_scene load_steps=16 format=3 uid="uid://c7aejushuligv"]
 
 [ext_resource type="Script" path="res://src/factory/gui/BarracksGui/BarracksGui.cs" id="1_aaqnu"]
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_dmp2e"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/sprites/soil2.png" id="10_n1vl8"]
 [ext_resource type="Texture2D" uid="uid://ti2aa2bvwhet" path="res://res/sprites/unit/Skeleton Auxiliary.png" id="11_1u55i"]
 [ext_resource type="Texture2D" uid="uid://b6hdbjs0tv5pt" path="res://res/sprites/Grass.png" id="12_r38fp"]
+[ext_resource type="Texture2D" uid="uid://2qisvnfbjyo6" path="res://res/sprites/unit/Skeleton Marksman.png" id="14_c5yy1"]
 [ext_resource type="Script" path="res://src/factory/gui/CommandsGui/CommandsGui.cs" id="14_dfcuv"]
 
 [node name="BarracksGui" type="PanelContainer"]
@@ -247,6 +248,10 @@ size_flags_vertical = 4
 unique_name_in_owner = true
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_1u55i")
+
+[node name="Sprite2D" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer/PanelContainer/BoxDraw/Sprite"]
+position = Vector2(-280, 280)
+texture = ExtResource("14_c5yy1")
 
 [node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/SourceInventory/VBoxContainer/HBoxContainer/BarracksBoxDraw/VBoxContainer/PanelContainer" instance=ExtResource("6_2ojxy")]
 auto_translate_mode = 1

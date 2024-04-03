@@ -1,27 +1,33 @@
-[gd_scene load_steps=10 format=3 uid="uid://dvji4s2e7iexm"]
+[gd_scene load_steps=12 format=3 uid="uid://dvji4s2e7iexm"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_kdn1d"]
 [ext_resource type="Script" path="res://src/factory/gui/IngrediantsPopupGui/IngrediantsPopup.cs" id="1_va5g5"]
 [ext_resource type="Texture2D" uid="uid://otk10dlw6m1x" path="res://res/sprites/old/Circuit.png" id="2_20lq4"]
 [ext_resource type="Texture2D" uid="uid://b8001dyawor4s" path="res://res/gui/Inventory/panel-031.png" id="3_08lqm"]
 [ext_resource type="Texture2D" uid="uid://bm3v4xaf4n7dg" path="res://res/sprites/items/Gear.png" id="3_lk15i"]
-[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="3_wt6rv"]
 [ext_resource type="Texture2D" uid="uid://cb0js2gwv4flk" path="res://res/sprites/particles/vignette.png" id="4_lco46"]
 [ext_resource type="Texture2D" uid="uid://bkp0ssod7ugep" path="res://res/sprites/items/Iron Bar.png" id="4_msm2r"]
+[ext_resource type="Texture2D" uid="uid://cyd0ww7m6mlfw" path="res://res/gui/Inventory/panel-transparent-center-031.png" id="6_34g5l"]
+[ext_resource type="Texture2D" uid="uid://beplnqvpdb7ml" path="res://res/gui/Inventory/panel-border-031.png" id="7_cdc5h"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7ntfq"]
 
-[node name="IngrediantsPopup" type="PanelContainer"]
-offset_left = 5.0
-offset_top = 5.0
-offset_right = 142.0
-offset_bottom = 5.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0r8tc"]
+
+[node name="VBoxContainer" type="VBoxContainer"]
+offset_right = 220.0
+offset_bottom = 254.0
+theme_override_constants/separation = 10
+script = ExtResource("1_va5g5")
+
+[node name="IngrediantsPopup" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("1_kdn1d")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7ntfq")
-script = ExtResource("1_va5g5")
 
-[node name="Background" type="NinePatchRect" parent="."]
+[node name="Background" type="NinePatchRect" parent="IngrediantsPopup"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 texture = ExtResource("3_08lqm")
@@ -30,83 +36,200 @@ patch_margin_top = 28
 patch_margin_right = 28
 patch_margin_bottom = 28
 
-[node name="Vignette" type="TextureRect" parent="."]
+[node name="Vignette" type="TextureRect" parent="IngrediantsPopup"]
 modulate = Color(1, 1, 1, 0.34902)
 layout_mode = 2
 texture = ExtResource("4_lco46")
 expand_mode = 1
 
-[node name="DropShadowBorder" parent="." instance=ExtResource("3_wt6rv")]
-unique_name_in_owner = true
+[node name="DropShadowBorder" type="PanelContainer" parent="IngrediantsPopup"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0r8tc")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="Background" type="NinePatchRect" parent="IngrediantsPopup/DropShadowBorder"]
+modulate = Color(0, 0, 0, 0.866667)
+layout_mode = 2
+texture = ExtResource("6_34g5l")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="MarginContainer" type="MarginContainer" parent="IngrediantsPopup/DropShadowBorder"]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Borders" type="NinePatchRect" parent="IngrediantsPopup/DropShadowBorder/MarginContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+texture = ExtResource("7_cdc5h")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="Borders" type="NinePatchRect" parent="IngrediantsPopup/DropShadowBorder"]
+modulate = Color(0.6, 0.6, 0.6, 1)
+layout_mode = 2
+texture = ExtResource("7_cdc5h")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="MarginContainer" type="MarginContainer" parent="IngrediantsPopup"]
 layout_mode = 2
 theme_override_constants/margin_left = 25
 theme_override_constants/margin_top = 25
 theme_override_constants/margin_right = 25
 theme_override_constants/margin_bottom = 25
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="IngrediantsPopup/MarginContainer"]
 layout_mode = 2
 
-[node name="RecipeNameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="RecipeNameLabel" type="Label" parent="IngrediantsPopup/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "[Recipe Name]"
 horizontal_alignment = 1
 
-[node name="IngredientsLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="IngredientsLabel" type="Label" parent="IngrediantsPopup/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Ingredients:"
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="IngrediantsPopup/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Rows" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Rows" type="VBoxContainer" parent="IngrediantsPopup/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Row" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Rows"]
+[node name="Row" type="HBoxContainer" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row"]
+[node name="TextureRect" type="TextureRect" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows/Row"]
 layout_mode = 2
 texture = ExtResource("2_20lq4")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row"]
+[node name="Label" type="Label" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows/Row"]
 layout_mode = 2
 text = "3 x Circuit
 "
 
-[node name="Row2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Rows"]
+[node name="Row2" type="HBoxContainer" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row2"]
+[node name="TextureRect" type="TextureRect" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows/Row2"]
 layout_mode = 2
 texture = ExtResource("3_lk15i")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row2"]
+[node name="Label" type="Label" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows/Row2"]
 layout_mode = 2
 text = "5 x Iron Gear
 "
 
-[node name="Row3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Rows"]
+[node name="Row3" type="HBoxContainer" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Rows/Row3"]
+[node name="TextureRect" type="TextureRect" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows/Row3"]
 layout_mode = 2
 texture = ExtResource("4_msm2r")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Rows/Row3"]
+[node name="Label" type="Label" parent="IngrediantsPopup/MarginContainer/VBoxContainer/Rows/Row3"]
 layout_mode = 2
 text = "5 x Iron Bar
 "
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="IngrediantsPopup/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="CraftingTimeLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="CraftingTimeLabel" type="Label" parent="IngrediantsPopup/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0.5s Crafting time"
+
+[node name="ItemPopup" type="PanelContainer" parent="."]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("1_kdn1d")
+
+[node name="Background" type="NinePatchRect" parent="ItemPopup"]
+auto_translate_mode = 1
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+texture = ExtResource("3_08lqm")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="Vignette" type="TextureRect" parent="ItemPopup"]
+auto_translate_mode = 1
+modulate = Color(1, 1, 1, 0.34902)
+layout_mode = 2
+texture = ExtResource("4_lco46")
+expand_mode = 1
+
+[node name="DropShadowBorder" type="PanelContainer" parent="ItemPopup"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0r8tc")
+
+[node name="Background" type="NinePatchRect" parent="ItemPopup/DropShadowBorder"]
+auto_translate_mode = 1
+modulate = Color(0, 0, 0, 0.866667)
+layout_mode = 2
+texture = ExtResource("6_34g5l")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="MarginContainer" type="MarginContainer" parent="ItemPopup/DropShadowBorder"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Borders" type="NinePatchRect" parent="ItemPopup/DropShadowBorder/MarginContainer"]
+auto_translate_mode = 1
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+texture = ExtResource("7_cdc5h")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="Borders" type="NinePatchRect" parent="ItemPopup/DropShadowBorder"]
+auto_translate_mode = 1
+modulate = Color(0.6, 0.6, 0.6, 1)
+layout_mode = 2
+texture = ExtResource("7_cdc5h")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="MarginContainer" type="MarginContainer" parent="ItemPopup"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="Label" type="RichTextLabel" parent="ItemPopup/MarginContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+bbcode_enabled = true
+text = "[Item Type]"
+fit_content = true

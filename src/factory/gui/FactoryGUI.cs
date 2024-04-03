@@ -136,6 +136,10 @@ public partial class FactoryGUI : CanvasLayer
 	{
 		node.ResetSize();
 		
+		// Viewport can sometimes be null when 
+		// var viewport = node.GetViewport();
+		// if (viewport == null) return;
+		
 		node.GlobalPosition = node.GetViewport().GetMousePosition() + new Vector2(40, 0);
 		
 		// Ensure the PopupMenu is not partially off-screen

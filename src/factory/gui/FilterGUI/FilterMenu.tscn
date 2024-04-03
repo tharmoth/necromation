@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://tojwiuw0q0ip"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_cp7xx"]
+[ext_resource type="Script" path="res://src/factory/gui/FilterGui/FilterMenu.cs" id="2_a84e1"]
 [ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="2_jiopq"]
-[ext_resource type="Script" path="res://src/factory/gui/FilterGUI/FilterMenu.cs" id="2_kufoy"]
 [ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_left.tscn" id="3_yl0nk"]
 [ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_right.tscn" id="4_5etj7"]
 [ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="5_ycrom"]
@@ -29,7 +29,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_cp7xx")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_uc7a8")
-script = ExtResource("2_kufoy")
+script = ExtResource("2_a84e1")
 
 [node name="DropShadowBorder" parent="." instance=ExtResource("2_jiopq")]
 layout_mode = 2

@@ -137,6 +137,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="GUI/Control"]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0

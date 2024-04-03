@@ -1,0 +1,184 @@
+﻿{
+  "items": [
+    {
+      "name": "Alloyweave",
+      "category": "Intermediate",
+      "description": "A strong, flexible material."
+    },
+    {
+      "name": "Assembler",
+      "category": "Building",
+      "description": "Automates item production."
+    },
+    {
+      "name": "Barracks",
+        "category": "Building",
+      "description": "Deploy minions to conquer new territories."
+    },
+    {
+      "name": "Belt",
+        "category": "Building",
+      "description": "Transports items between locations."
+    },
+    {
+      "name": "Bone",
+      "category": "Intermediate",
+        "description": "Basic building block of the undead."
+    },
+    {
+      "name": "Bone Fragments",
+        "category": "Raw Material",
+      "description": "Shattered remains, can be reforged into bones."
+    },
+    {
+      "name": "Bow and Arrow",
+        "category": "Equipment",
+      "description": "A ranged weapon."
+    },
+    {
+      "name": "Bronze Bar",
+        "category": "Intermediate",
+      "description": "A bar of bronze."
+    },
+    {
+      "name": "Coal Ore",
+        "category": "Raw Material",
+      "description": "A fuel source for furnaces."
+    },
+    {
+      "name": "Copper Bar",
+        "category": "Intermediate",
+        "description": "A bar of copper."
+    },
+    {
+      "name": "Copper Ore",
+        "category": "Raw Material",
+      "description": "A rock that can be smelted into copper."
+    },
+    {
+      "name": "Copper Strand",
+        "category": "Intermediate",
+      "description": "Copper drawn into a thin wire, can be woven into metalweave."
+    },
+    {
+      "name": "Frail Skeleton",
+        "category": "Unit",
+      "description": "Weak undead minion."
+    },
+    {
+      "name": "Gravebound Charger",
+        "category": "Unit",
+      "description": "Mounted skeleton auxiliary."
+    },
+    {
+      "name": "Gravebreaker",
+        "category": "Unit",
+      "description": "Skeleton with a large hammer to break through thick armor."
+    },
+    {
+      "name": "Grip",
+        "category": "Intermediate",
+      "description": "Handle for advanced weaponry."
+    },
+    {
+      "name": "Hilt",
+        "category": "Intermediate",
+      "description": "Handle for weaponry."
+    },
+    {
+      "name": "Inserter",
+        "category": "Building",
+      "description": "Transfers items to and from buildings"
+    },
+    {
+      "name": "Leather",
+      "category": "Intermediate",
+      "description": "A flexible material."
+    },
+    {
+      "name": "Long Inserter",
+      "category": "Building",
+      "description": "Transfers items to and from buildings over a 1 tile distance."
+    },
+    {
+      "name": "Metalweave",
+        "category": "Intermediate",
+      "description": "A strong, flexible material."
+    },
+    {
+      "name": "Mine",
+        "category": "Building",
+      "description": "Extracts ore and bones from the ground."
+    },
+    {
+      "name": "Skeleton",
+        "category": "Intermediate",
+      "description": "An inanimate pile of bones."
+    },
+    {
+      "name": "Skeleton Auxiliary",
+        "category": "Unit",
+      "description": "A minion armed with spear and shield."
+    },
+    {
+      "name": "Skeleton Marksman",
+        "category": "Unit",
+        "description": "A minion armed with a bow."
+    },
+    {
+      "name": "Spear",
+        "category": "Equipment",
+      "description": "A primative weapon for stabbing."
+    },
+    {
+      "name": "Stone",
+        "category": "Raw Material",
+      "description": "A basic building material."
+    },
+    {
+      "name": "Stone Chest",
+        "category": "Building",
+      "description": "Storage container."
+    },
+    {
+      "name": "Stone Furnace",
+        "category": "Building",
+      "description": "A furnace for smelting ore and bones."
+    },
+    {
+      "name": "Strap",
+        "category": "Intermediate",
+      "description": "A flexible material for binding."
+    }, 
+    {
+      "name": "Sword",
+        "category": "Equipment",
+      "description": "A weapon for slashing."
+    },
+    {
+      "name": "Tin Bar",
+        "category": "Intermediate",
+      "description": "A bar of tin."
+    },
+    {
+      "name": "Tin Ore",
+        "category": "Raw Material",
+      "description": "A rock that can be smelted into tin."
+    },
+    {
+      "name": "Undead Legionary",
+        "category": "Unit",
+      "description": "Powerful skeleton armed with a sword and shield."
+    },
+    {
+      "name": "Underground Belt",
+        "category": "Building",
+      "description": "Transports items underneath other buildings and belts."
+    },
+    {
+      "name": "Warhammer",
+        "category": "Equipment",
+      "description": "Heavy armor-breaking weapon"
+    }
+    ]
+}

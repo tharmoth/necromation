@@ -4,6 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="res\data\items.json" />
     <Content Include="res\data\Names.txt" />
     <Content Include="res\data\Names2.txt" />
     <Content Include="res\data\ProvinceNames.txt" />
