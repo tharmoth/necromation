@@ -14,21 +14,21 @@ public partial class ItemPopup : PanelContainer
 	/**************************************************************************
 	 * Child Accessors 													      *
 	 **************************************************************************/
-	private DropShadowBorder DropShadowBorder => GetNode<DropShadowBorder>("%DropShadowBorder");
 	private RichTextLabel Label => GetNode<RichTextLabel>("%Label");
+	private Container Rows => GetNode<Container>("%Rows");
 	
 	/**************************************************************************
 	 * State Data   													      *
 	 **************************************************************************/
-	private string _popupText;
 	private static Dictionary<Control, ItemPopup> _popups = new();
 	private Tween _tween;
 	
-	public static void Register(string popupText, Control control)
+	public static void Register(Control control, string popupText, List<string> items = null)
 	{
 		if (_popups.ContainsKey(control)) Unregister(control);
 		
-		var popup = GeneratePopup(popupText);
+		var popup = Scene.Instantiate<ItemPopup>();
+		popup.Init(popupText, items);
 		control.MouseEntered += popup.Display;
 		control.MouseExited += popup.Fade;
 		control.VisibilityChanged += popup.Kill;
@@ -48,6 +48,20 @@ public partial class ItemPopup : PanelContainer
 		control.TreeExited -= popup.Kill;
 	}
 	
+	/// <summary>
+	/// Constructor for the ItemListPopup.
+	/// </summary>
+	/// <param name="popupText"> Text to display </param>
+	private void Init(string popupText, List<string> items)
+	{
+		Label.Text = popupText;
+		items?.ToList().ForEach(AddRow);
+		ZIndex = 1000;
+	}
+	
+	/// <summary>
+	/// Sets the popup to visible and adds it to the GUI.
+	/// </summary>
 	private void Display()
 	{
 		Globals.FactoryScene.Gui.GetChildren().OfType<ItemPopup>().ToList().ForEach(popup => popup.Kill());
@@ -61,6 +75,9 @@ public partial class ItemPopup : PanelContainer
 		_tween.TweenProperty(this, "modulate:a", 1, .15f);
 	}
 
+	/// <summary>
+	/// Sets the popup to invisible and removes it from the GUI.
+	/// </summary>
 	private void Kill()
 	{
 		if (!IsInstanceValid(this)) return;
@@ -70,10 +87,12 @@ public partial class ItemPopup : PanelContainer
 		if (GetParent() != null) GetParent().RemoveChild(this);
 	}
 
+	/// <summary>
+	/// Fades the popup to invisible over time and then removes it from the GUI.
+	/// </summary>
 	private void Fade()
 	{
 		if (!IsInstanceValid(this)) return;
-		DropShadowBorder.DisableBlur();
 		_tween?.Kill();
 		_tween = Globals.Tree.CreateTween();
 		_tween.TweenProperty(this, "modulate:a", 0, .15f);
@@ -83,26 +102,34 @@ public partial class ItemPopup : PanelContainer
 		}));
 	}
 	
-	private static ItemPopup GeneratePopup(string popupText)
+	private void AddRow(string name)
 	{
-		var popup = Scene.Instantiate<ItemPopup>();
-		popup.Init(popupText);
-		return popup;
-	}
+		RichTextLabel label = new();
 
-	private void Init(string popupText)
-	{
-		_popupText = popupText;
+		label.Text += name;
+		label.AutowrapMode = TextServer.AutowrapMode.Off;
+		label.BbcodeEnabled = true;
+		label.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		label.SizeFlagsVertical = SizeFlags.Fill;
+		label.FitContent = true;
+		
+		var texture = new TextureRect();
+		texture.Texture = Database.Instance.GetTexture(name);
+		texture.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+		texture.CustomMinimumSize = new Vector2(32, 32);
+		
+		var row = new HBoxContainer();
+		row.AddChild(texture);
+		row.AddChild(label);
+		Rows.AddChild(row);
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
-		Label.Text = _popupText;
+		
 		Size = Vector2.Zero;
-		
-		DropShadowBorder.DisableBlur();
-		
+
 		// Call deffered to wait for RichTextLabel to update
 		CallDeferred("Update");
 	}

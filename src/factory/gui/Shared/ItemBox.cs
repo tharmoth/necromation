@@ -45,7 +45,7 @@ public partial class ItemBox : PanelContainer
 			
 			Database.Instance.Items.TryGetValue(_itemType, out var item);
 
-			ItemPopup.Register(item is null ? ItemType : $"{item.Name}\n[color=BBBBBB][font_size=15]{item.Description}[/font_size][/color]", Button);
+			ItemPopup.Register(Button, item is null ? ItemType : $"{item.Name}\n[color=BBBBBB][font_size=15]{item.Description}[/font_size][/color]");
 		}
 	}
 	

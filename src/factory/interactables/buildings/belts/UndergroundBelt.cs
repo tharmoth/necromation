@@ -121,6 +121,12 @@ public partial class UndergroundBelt : Belt
         
         var leftLine = belt?.LeftLine;
         var rightLine = belt?.RightLine;
+        
+        // If the belt behind this one is not oriented the same as thie one we don't care about it.
+        if (beltBehind != null && beltBehind.Orientation != Orientation)
+        {
+            beltBehind = null;
+        }
 
         if (beltBehind != null)
         {

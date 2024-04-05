@@ -30,7 +30,8 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	public readonly  List<Weapon> Weapons = new();
 	public readonly List<Armor> Armor = new();
 	public readonly Mount Mount = new();
-	private double moveCooldown = BattleScene.TimeStep;
+	private double MoveCooldown => _moveCooldownMultiplier * BattleScene.TimeStep;
+	private double _moveCooldownMultiplier = 1;
 	private readonly Commander _commander;
 	public readonly string Team;
 	public readonly string UnitType;
@@ -98,7 +99,7 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		{
 			Mount = new Mount();
 			// BodySprite.Modulate = new Color(1, 0, 0);
-			moveCooldown = BattleScene.TimeStep / 3;
+			_moveCooldownMultiplier = 1 / 3.0;
 			if (first)
 			{
 				BodySprite.Texture = Database.Instance.GetTexture("Bannerhorse", "unit");
@@ -233,7 +234,7 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		
 		PlayMovementAnimation(nextPositionGlobal);
 		GlobalPosition = Globals.BattleScene.TileMap.MapToGlobal(nextPosition);
-		Cooldown = moveCooldown;
+		Cooldown = MoveCooldown;
 		return true;
 	}
 	
@@ -455,12 +456,12 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		
 		_moveTween?.Kill();
 		_moveTween = SpriteHolder.CreateTween();
-		_moveTween.TweenProperty(SpriteHolder, "global_position", nextPositionGlobal, moveCooldown);
+		_moveTween.TweenProperty(SpriteHolder, "global_position", nextPositionGlobal, MoveCooldown);
 
 		_bobTween?.Kill();
 		_bobTween = SpriteHolder.CreateTween();
-		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, -5), moveCooldown / 2);
-		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, 0), moveCooldown / 2);
+		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, -5), MoveCooldown / 2);
+		_bobTween.TweenProperty(BodySprite, "position", new Vector2(0, 0), MoveCooldown / 2);
 	}
 	
 	private void PlayDamageAnimation()

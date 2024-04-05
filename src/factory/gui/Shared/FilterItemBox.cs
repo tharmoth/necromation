@@ -34,9 +34,9 @@ public partial class FilterItemBox : ItemBox
 		CountLabel.Text = "";
 		ItemType = null;
 
-		if (items.Count > 1)
+		if (items.Count > 0)
 		{
-			ItemPopup.Register("Possible Inputs: \n" + string.Join("\n", items), Button);
+			ItemPopup.Register(Button, "Possible Inputs:", items);
 		}
 
 		Button.Pressed += ButtonPress;

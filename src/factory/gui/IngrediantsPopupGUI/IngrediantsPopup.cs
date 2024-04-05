@@ -16,7 +16,7 @@ public partial class IngrediantsPopup : Container
 	 * Child Accessors 													      *
 	 **************************************************************************/
 	private Label RecipeNameLabel => GetNode<Label>("%RecipeNameLabel");
-	private VBoxContainer Rows => GetNode<VBoxContainer>("%Rows");
+	private Container Rows => GetNode<VBoxContainer>("%Rows");
 	private Label CraftingTimeLabel => GetNode<Label>("%CraftingTimeLabel");
 	private RichTextLabel Label => GetNode<RichTextLabel>("%Label");
 	
@@ -142,6 +142,6 @@ public partial class IngrediantsPopup : Container
 		var row = new HBoxContainer();
 		row.AddChild(texture);
 		row.AddChild(label);
-		GetNode<VBoxContainer>("%Rows").AddChild(row);
+		Rows.AddChild(row);
 	}
 }

@@ -42,8 +42,11 @@ public partial class Province : Node2D, ITransferTarget
         private set
         {
             _resource = value;
+            _resourceSprite.Visible = false;
+            if (string.IsNullOrEmpty(_resource)) return;
             _resourceSprite.Texture = MapUtils.GetTexture(Resource);
             _resourceSprite.Scale = (Vector2.One * MapTileMap.TileSize / 4.0f) / _resourceSprite.Texture.GetSize().X;
+            _resourceSprite.Visible = true;
         }
     }
     private string _owner = "Unclaimed";
@@ -56,10 +59,10 @@ public partial class Province : Node2D, ITransferTarget
     private readonly Node2D _spriteHolder = new();
     private readonly Polygon2D _ownerShade = new();
     
-    public Province(Vector2I mapPos)
+    public Province(string resource)
     {
-        Resource = GetResource(mapPos);
-        
+        Resource = resource;
+
         _resourceSprite.Position += (Vector2.Up + Vector2.Right) * MapTileMap.TileSize / 4.0f;
         AddChild(_resourceSprite);
         
@@ -108,24 +111,6 @@ public partial class Province : Node2D, ITransferTarget
         // This is fairly intensive so only do it when we open the map.
         // Note: this will need to be changed if we make the factory run while the map is open.
         UpdateSprite();
-    }
-
-    private string GetResource(Vector2I mapPosition)
-    {
-        var resources = new List<string> {"Bone Fragments"};
-        if ((mapPosition - MapScene.FactoryPosition).Length() != 0) 
-            resources.AddRange(new List<string> {"Copper Ore", "Coal Ore", "Stone"});
-        if ((mapPosition - MapScene.FactoryPosition).Length() > 3) resources.Add("Tin Ore");
-        var resource = resources[GD.RandRange(0, resources.Count - 1)];
-
-        if (MapScene.FactoryPosition - mapPosition == Vector2I.Left)
-            resource = "Copper Ore";
-        else if (MapScene.FactoryPosition - mapPosition == Vector2I.Down)
-            resource = "Coal Ore";
-        else if (MapScene.FactoryPosition - mapPosition == Vector2I.Right)
-            resource = "Stone";
-
-        return resource;
     }
 
     public override void _Ready()

@@ -26,10 +26,9 @@ public partial class MapTileMap : SKTileMap
 
 	public MapTileMap()
 	{
-		// The factory needs this initalized to add fogs.
 		foreach (var location in GetUsedCells(0))
 		{
-			var provence = new Province(location);
+			var provence = new Province(GetResource(location));
 			_provences.Add(location, provence);
 		}
 	}
@@ -42,6 +41,8 @@ public partial class MapTileMap : SKTileMap
 	public override void _Ready()
 	{
 		base._Ready();
+		
+
 		
 		foreach (var location in GetUsedCells(0))
 		{
@@ -167,6 +168,33 @@ public partial class MapTileMap : SKTileMap
                 meleeCommander3.Units.Insert("Barbarian", 200);
                 break;
         }
+	}
+
+	public string GetResource(Vector2I mapPos)
+	{
+		var coords = GetCellAtlasCoords(0, mapPos);
+		if (coords.Equals(new Vector2I(0, 0)))
+		{
+			return "Coal Ore";
+		}
+		if (coords.Equals(new Vector2I(1, 1)))
+		{
+			return "Stone";
+		}
+		if (coords.Equals(new Vector2I(1, 2)))
+		{
+			return "Copper Ore";
+		}
+		if (coords.Equals(new Vector2I(3, 1)))
+		{
+			return "Tin Ore";
+		}
+		if (coords.Equals(new Vector2I(3, 3)))
+		{
+			return "Bone Fragments";
+		} 
+		
+		return "";
 	}
 	
 	public Province GetProvence(Vector2I position)

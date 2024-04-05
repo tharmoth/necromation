@@ -1,9 +1,16 @@
+using System;
 using Godot;
 using System.Collections.Generic;
 using Necromation;
 
 public partial class BattleGUI : CanvasLayer
 {
+    
+    private Button NormalButton => GetNode<Button>("%NormalButton");
+    private Button FastButton => GetNode<Button>("%FastButton");
+    private Button SonicButton => GetNode<Button>("%SonicButton");
+    private ProgressBar ProgressBar => GetNode<ProgressBar>("%ProgressBar");
+    
     /**************************************************************************
      * State Data          													  *
      **************************************************************************/
@@ -13,11 +20,27 @@ public partial class BattleGUI : CanvasLayer
     private bool _initialized = false;
     private bool _complete = false;
 
-    private const double MusteringDelay = 3;
+    private const double MusteringDelay = .5;
     private double _time = 0;
     private bool _startCountdown = false;
     public bool Started = false;
-    
+
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+        ButtonGroup group = new();
+        NormalButton.ButtonGroup = group;
+        FastButton.ButtonGroup = group;
+        SonicButton.ButtonGroup = group;
+        NormalButton.Pressed += () => BattleScene.TimeStep = BattleScene.NormalTimeStep;
+        FastButton.Pressed += () => BattleScene.TimeStep = BattleScene.FastTimeStep;
+        SonicButton.Pressed += () => BattleScene.TimeStep = BattleScene.SonicTimeStep;
+        
+        if (Math.Abs(BattleScene.TimeStep - BattleScene.NormalTimeStep) < .01) NormalButton.SetPressedNoSignal(true);
+        else if (Math.Abs(BattleScene.TimeStep - BattleScene.FastTimeStep) < .01) FastButton.SetPressedNoSignal(true);
+        else if (Math.Abs(BattleScene.TimeStep - BattleScene.SonicTimeStep) < .01) SonicButton.SetPressedNoSignal(true);
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -29,6 +52,8 @@ public partial class BattleGUI : CanvasLayer
 
         var playerUnitCount = Globals.UnitManager.GetGroup("Player").Count;
         var enemyUnitCount = Globals.UnitManager.GetGroup("Enemy").Count;
+        
+        ProgressBar.Value = playerUnitCount / (float)(playerUnitCount + enemyUnitCount) * 100;
 
         if ((playerUnitCount != 0 && enemyUnitCount != 0) || _complete) return;
         _complete = true;

@@ -73,8 +73,12 @@ public partial class BarracksGui : DeferredUpdate
 			count++;
 		}
 
-		var valid = Database.Instance.Units.Select(unit => unit.Name).ToList();
-		for (int i = 0; i < 8 - count; i++)
+		var valid = Database.Instance.Units.Select(unit => unit.Name).Where(unit =>
+		{
+			return Database.Instance.UnlockedRecipes
+				.Any(recipe => recipe.Products.Any(product => product.Key == unit));
+		}).ToList();
+		for (var i = 0; i < 8 - count; i++)
 		{
 			FilterItemBox.AddItemBox(_barracks.Inventory, 
 				new List<Inventory> { _to }, 

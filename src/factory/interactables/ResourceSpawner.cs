@@ -25,6 +25,7 @@ public partial class ResourceSpawner : Node2D
 
 	private void _spawn()
 	{
+		if (string.IsNullOrEmpty(_resourceType)) return;
 		var mapPos = Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 		for (var x = -_radius; x <= _radius; x++)
 		{

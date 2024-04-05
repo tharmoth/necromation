@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://biyscljj05i1"]
+[gd_scene load_steps=21 format=3 uid="uid://biyscljj05i1"]
 
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="1_2hsjy"]
 [ext_resource type="Script" path="res://src/battle/BattleScene.cs" id="1_jh312"]
@@ -9,6 +9,11 @@
 [ext_resource type="Script" path="res://src/battle/gui/BattleGUI.cs" id="6_ldfr3"]
 [ext_resource type="Script" path="res://src/factory/gui/FpsCounter.cs" id="7_0goob"]
 [ext_resource type="Script" path="res://src/battle/UnitManager.cs" id="7_lcofj"]
+[ext_resource type="StyleBox" uid="uid://ddy1y2wno2sqw" path="res://src/battle/gui/pressed.tres" id="9_ten8i"]
+[ext_resource type="Texture2D" uid="uid://cre45yjcw37ss" path="res://res/sprites/right.png" id="9_wwetq"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="10_2bvkq"]
+[ext_resource type="Texture2D" uid="uid://40jbai2lahhi" path="res://res/sprites/fastForward.png" id="10_6bkk0"]
+[ext_resource type="Texture2D" uid="uid://b7pieqgm1qbbv" path="res://res/sprites/fastFastForward.png" id="11_ym24m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7p67d"]
 texture = ExtResource("1_2hsjy")
@@ -88,6 +93,12 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_7p67d")
 sources/1 = SubResource("TileSetAtlasSource_4oy1t")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i3k51"]
+bg_color = Color(0.635294, 0.141176, 0.141176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13r3y"]
+bg_color = Color(0.180392, 0.0745098, 0.270588, 1)
+
 [sub_resource type="Environment" id="Environment_hties"]
 glow_enabled = true
 
@@ -143,6 +154,85 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "FPS: "
 script = ExtResource("7_0goob")
+
+[node name="Control2" type="MarginContainer" parent="GUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Control2"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Control2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/Control2/VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_i3k51")
+theme_override_styles/fill = SubResource("StyleBoxFlat_13r3y")
+value = 50.0
+show_percentage = false
+
+[node name="Outline" parent="GUI/Control2/VBoxContainer/PanelContainer" instance=ExtResource("10_2bvkq")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control2/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/Control2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="NormalButton" type="Button" parent="GUI/Control2/VBoxContainer/HBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/pressed = ExtResource("9_ten8i")
+toggle_mode = true
+icon = ExtResource("9_wwetq")
+
+[node name="Outline" parent="GUI/Control2/VBoxContainer/HBoxContainer/PanelContainer" instance=ExtResource("10_2bvkq")]
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="GUI/Control2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="FastButton" type="Button" parent="GUI/Control2/VBoxContainer/HBoxContainer/PanelContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/pressed = ExtResource("9_ten8i")
+toggle_mode = true
+icon = ExtResource("10_6bkk0")
+
+[node name="Outline" parent="GUI/Control2/VBoxContainer/HBoxContainer/PanelContainer2" instance=ExtResource("10_2bvkq")]
+layout_mode = 2
+
+[node name="PanelContainer3" type="PanelContainer" parent="GUI/Control2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SonicButton" type="Button" parent="GUI/Control2/VBoxContainer/HBoxContainer/PanelContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/pressed = ExtResource("9_ten8i")
+toggle_mode = true
+icon = ExtResource("11_ym24m")
+
+[node name="Outline" parent="GUI/Control2/VBoxContainer/HBoxContainer/PanelContainer3" instance=ExtResource("10_2bvkq")]
+layout_mode = 2
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
