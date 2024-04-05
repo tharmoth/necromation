@@ -32,15 +32,15 @@ public partial class DeconstructAction : Node2D
         var start = tilemap.GlobalToMap(_startGlobal);
         var end = tilemap.GlobalToMap(GetGlobalMousePosition());
         
-        var x = start.X < end.X ? start.X : end.X;
-        var y = start.Y < end.Y ? start.Y : end.Y;
-        var width = start.X > end.X ? start.X - x : end.X - x;
-        var height = start.Y > end.Y ? start.Y - y : end.Y - y;
+        var startX = start.X < end.X ? start.X : end.X;
+        var startY = start.Y < end.Y ? start.Y : end.Y;
+        var endX = start.X > end.X ? start.X : end.X;
+        var endY = start.Y > end.Y ? start.Y : end.Y;
         
         var buildings = new List<Building>();
-        for (var i = x; i < x + width; i++)
+        for (var i = startX; i <= endX; i++)
         {
-            for (var j = y; j < y + height; j++)
+            for (var j = startY; j <= endY; j++)
             {
                 var building = tilemap.GetEntity(new Vector2I(i, j), FactoryTileMap.Building);
                 if (building is Building b && !buildings.Contains(b)) buildings.Add(b);
