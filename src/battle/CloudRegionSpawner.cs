@@ -20,6 +20,15 @@ public partial class CloudRegionSpawner : Control
 		}
 		
 		CustomMinimumSize = new Vector2(xSize, ySize);
+
+		var sprite = GD.Load<PackedScene>("res://src/factory/shaders/cloudsprite.tscn").Instantiate<Sprite2D>();
+		var maxScale = Mathf.Max(xSize, ySize);
+		var minSize = Mathf.Min(sprite.Texture.GetHeight(), sprite.Texture.GetHeight());
+		var scale = maxScale / minSize;
+		sprite.Scale = new Vector2(scale, scale);
+		
+		
+        AddChild(sprite);
 	}
 
 	public void Spawn(float offset)

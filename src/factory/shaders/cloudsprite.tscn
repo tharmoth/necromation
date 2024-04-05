@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5ywnsj3neswu"]
+
+[ext_resource type="Material" uid="uid://clu5wl3g7r55g" path="res://src/factory/shaders/cloudShader.tres" id="1_swuyy"]
+[ext_resource type="Texture2D" uid="uid://b2kioj7lompuk" path="res://res/sprites/Black.png" id="2_3ttum"]
+[ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/sprites/soil2.png" id="2_mcwv5"]
+
+[node name="Sprite2D" type="Sprite2D"]
+material = ExtResource("1_swuyy")
+texture = ExtResource("2_3ttum")
+centered = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+z_index = -1
+texture = ExtResource("2_mcwv5")

@@ -47,7 +47,7 @@ public partial class FactoryTileMap : LayerTileMap
 		// Globals.FactoryScene.CallDeferred("add_child", sprite);
 		_fogs.Add(location, sprite);
 		
-		SpawnGrass(startpos);
+		SpawnGrass(location);
 	}
 	
 	public void AddProvence(Vector2I location)
@@ -93,35 +93,31 @@ public partial class FactoryTileMap : LayerTileMap
 		if (_fogs.TryGetValue(location, out var fog)) fog?.QueueFree();
 	}
 
-	private void SpawnOcean(Vector2I location)
+	private void SpawnBackgroundSprite(Vector2I location, string name)
 	{
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 		
 		Sprite2D soilSprite = new();
-		soilSprite.Texture = Database.Instance.GetTexture("Ocean");
+		soilSprite.Texture = Database.Instance.GetTexture(name);
 		var scaler = (TileSize * ProvinceSize) / soilSprite.Texture.GetSize().X;
 		soilSprite.Scale = new Vector2(scaler, scaler);
 		soilSprite.GlobalPosition = startpos + scaler * soilSprite.Texture.GetSize() / 2;
 		soilSprite.Centered = true;
 		soilSprite.ZIndex = -99;
-		// We need to fix the edges to enable rotation.
-		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
+
+		if (name == "Ocean")
+		{
+			soilSprite.Material = GD.Load<ShaderMaterial>("res://src/factory/shaders/wiggle.tres");
+		}
+		
 		Globals.FactoryScene.CallDeferred("add_child", soilSprite);
 	}
 
-	private void SpawnGrass(Vector2I startpos)
+	private void SpawnGrass(Vector2I location)
 	{
-		Sprite2D soilSprite = new();
-		soilSprite.Texture = Database.Instance.GetTexture("soil2");
-		var scaler = (TileSize * ProvinceSize) / soilSprite.Texture.GetSize().X;
-		soilSprite.Scale = new Vector2(scaler, scaler);
-		soilSprite.GlobalPosition = startpos + scaler * soilSprite.Texture.GetSize() / 2;
-		soilSprite.Centered = true;
-		soilSprite.ZIndex = -99;
-		// We need to fix the edges to enable rotation.
-		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
-		Globals.FactoryScene.CallDeferred("add_child", soilSprite);
+		SpawnBackgroundSprite(location, "soil2");
 		
+		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 		var propPos = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
 
 		PropSpawner spawner = new();
@@ -200,7 +196,12 @@ public partial class FactoryTileMap : LayerTileMap
 		
 		foreach (var province in Globals.MapScene.TileMap.GetOcean())
 		{
-			SpawnOcean(province);
+			SpawnBackgroundSprite(province, "Ocean");
+		}
+		
+		foreach (var province in Globals.MapScene.TileMap.GetMountain())
+		{
+			SpawnBackgroundSprite(province, "Snow");
 		}
 	}
 	

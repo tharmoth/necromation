@@ -11,7 +11,7 @@ public partial class FilterMenu : PanelContainer
 	
 	public static void Display(HotBarItemBox itemBox)
 	{
-		var gui = GD.Load<PackedScene>("res://src/factory/gui/FilterGui/FilterMenu.tscn").Instantiate<FilterMenu>();
+		var gui = GD.Load<PackedScene>("res://src/factory/gui/Shared/FilterGui/FilterMenu.tscn").Instantiate<FilterMenu>();
 		gui.Init(itemBox);
 		Globals.FactoryScene.Gui.Open(gui);
 	}
@@ -39,7 +39,7 @@ public partial class FilterMenu : PanelContainer
 	
 	private void AddInventoryItem(KeyValuePair<string, int> item)
 	{
-		var itemBox = GD.Load<PackedScene>("res://src/factory/gui/FilterGUI/filter_item.tscn").Instantiate<FilterItem>();
+		var itemBox = GD.Load<PackedScene>("res://src/factory/gui/Shared/FilterGui/FilterItemBox.tscn").Instantiate<FilterItem>();
 		itemBox.Init(item.Key, _hotBarItemBox);
 		FilterList.AddChild(itemBox);
 	}

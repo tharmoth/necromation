@@ -271,6 +271,11 @@ public partial class MapTileMap : SKTileMap
 		return GetUsedCells(0).Where(location => GetCellSourceId(0, location) == 1).ToList();
 	}
 	
+	public List<Vector2I> GetMountain()
+	{
+		return GetUsedCells(0).Where(location => GetCellSourceId(0, location) == 2).ToList();
+	}
+	
 	public Province GetProvence(Vector2I position)
 	{
 		return _provences.TryGetValue(position, out var provence) ? provence : null;
