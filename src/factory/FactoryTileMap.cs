@@ -93,6 +93,22 @@ public partial class FactoryTileMap : LayerTileMap
 		if (_fogs.TryGetValue(location, out var fog)) fog?.QueueFree();
 	}
 
+	private void SpawnOcean(Vector2I location)
+	{
+		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
+		
+		Sprite2D soilSprite = new();
+		soilSprite.Texture = Database.Instance.GetTexture("Ocean");
+		var scaler = (TileSize * ProvinceSize) / soilSprite.Texture.GetSize().X;
+		soilSprite.Scale = new Vector2(scaler, scaler);
+		soilSprite.GlobalPosition = startpos + scaler * soilSprite.Texture.GetSize() / 2;
+		soilSprite.Centered = true;
+		soilSprite.ZIndex = -99;
+		// We need to fix the edges to enable rotation.
+		// sprite.RotationDegrees = new List<float> { 0, 90, 180, 270 }[GD.RandRange(0, 3)];
+		Globals.FactoryScene.CallDeferred("add_child", soilSprite);
+	}
+
 	private void SpawnGrass(Vector2I startpos)
 	{
 		Sprite2D soilSprite = new();
@@ -149,12 +165,15 @@ public partial class FactoryTileMap : LayerTileMap
 	{
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 
+		var dist = location.DistanceTo(MapScene.FactoryPosition);
+		var amount = dist > 2 ? 7 : 3;
+
 		var province = Globals.MapScene.TileMap.Provinces
 			.First(province => province.MapPosition == location);
 		
 		var spawnerX = GD.RandRange(4, ProvinceSize - 4) * TileSize;
 		var spawnerY = GD.RandRange(4, ProvinceSize - 4) * TileSize;
-		var spawner = new ResourceSpawner(province.Resource, 3);
+		var spawner = new ResourceSpawner(province.Resource, amount);
 		spawner.GlobalPosition = ToGlobal(startpos + new Vector2(spawnerX, spawnerY));
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
 	}
@@ -177,6 +196,11 @@ public partial class FactoryTileMap : LayerTileMap
 		foreach (var province in Globals.MapScene.TileMap.Provinces)
 		{
 			AddFog(province.MapPosition);
+		}
+		
+		foreach (var province in Globals.MapScene.TileMap.GetOcean())
+		{
+			SpawnOcean(province);
 		}
 	}
 	

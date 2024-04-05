@@ -37,10 +37,10 @@ public class MeleeWeapon : Weapon
 
         var damage = Damage + Mathf.FloorToInt(wielder.Strength * (Hands == 2 ? 1.25 : 1));
         var adjustedDamage = damage - armor + damageRoll - armorRoll;
-
-        if (adjustedDamage <= 0) return;
+        adjustedDamage = Mathf.Max(adjustedDamage, 0);
         
         target.Damage(wielder, adjustedDamage);
+        if (adjustedDamage <= 0) return;
         target.PlayHitSound();
         
         var rotation = Mathf.RadToDeg(wielder.GlobalPosition.AngleToPoint(target.GlobalPosition));

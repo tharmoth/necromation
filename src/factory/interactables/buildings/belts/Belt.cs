@@ -13,7 +13,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     public override string ItemType => "Belt";
     public TransportLine LeftLine { get; private set; }
     public TransportLine RightLine { get; private set; }
-
     public float Rotation => Mathf.DegToRad(RotationDegrees);
     public float RotationDegrees => IRotatable.GetDegreesFromOrientation(Orientation);
     
@@ -54,7 +53,6 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     protected Vector2I Input => MapPosition - TargetDirectionGlobal;
     private static Vector2I TargetDirectionLocal => new (0, -1);
     private AudioStreamPlayer2D _audio = new();
-
     
     public Belt(IRotatable.BuildingOrientation orientation)
     {

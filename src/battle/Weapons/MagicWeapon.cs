@@ -32,6 +32,7 @@ public class MagicWeapon : Weapon
             var target =
                 Globals.BattleScene.TileMap.GetEntity(position,
                     BattleTileMap.Unit) as Unit;
+            if (target == wielder) continue;
             target?.Damage(wielder, 100);
         }
 

@@ -23,12 +23,12 @@
     {
       "name": "Bone",
       "category": "Intermediate",
-        "description": "Basic building block of the undead."
+        "description": "Building block of the undead, forged anew in a furnace."
     },
     {
       "name": "Bone Fragments",
         "category": "Raw Material",
-      "description": "Shattered remains, can be reforged into bones."
+      "description": "Shattered remains, can be reforged into bones in a furnace."
     },
     {
       "name": "Bow and Arrow",

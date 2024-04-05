@@ -28,6 +28,8 @@ public partial class MapTileMap : SKTileMap
 	{
 		foreach (var location in GetUsedCells(0))
 		{
+			GD.Print(GetCellSourceId(0, location));
+			if (GetCellSourceId(0, location) != 0) continue;
 			var provence = new Province(GetResource(location));
 			_provences.Add(location, provence);
 		}
@@ -41,35 +43,41 @@ public partial class MapTileMap : SKTileMap
 	public override void _Ready()
 	{
 		base._Ready();
-		
 
-		
 		foreach (var location in GetUsedCells(0))
 		{
+			if (GetCellSourceId(0, location) != 0) continue;
 			var provence = _provences[location];
 			
-			var team = location == MapScene.FactoryPosition ? "Player" : "Enemy";
+			var coords = GetCellAtlasCoords(0, location);
+			var team = coords.Equals(new Vector2I(2, 1)) ? "Player" : "Enemy";
+
 			provence.Owner = team;
 
 			InitCommanders(provence);
 			Globals.MapScene.CallDeferred("add_child", provence);
 		}
 		
+		foreach (var location in GetUsedCells(0))
+		{
+			if (GetCellSourceId(0, location) == 1) continue;
+			SpawnGrass(location);
+		}
+		
 		foreach (var province in Globals.MapScene.TileMap.Provinces)
 		{
 			AddFog(province.MapPosition);
-			SpawnGrass(province.MapPosition);
 		}
 
-		for (int x = -20; x < 20; x++)
-		{
-			for (int y = -20; y < 20; y++)
-			{
-				var position = new Vector2I(x, y);
-				if (_fogs.ContainsKey(position)) continue;
-				AddFog(new Vector2I(x, y));
-			}
-		}
+		// for (int x = -20; x < 20; x++)
+		// {
+		// 	for (int y = -20; y < 20; y++)
+		// 	{
+		// 		var position = new Vector2I(x, y);
+		// 		if (_fogs.ContainsKey(position)) continue;
+		// 		AddFog(new Vector2I(x, y));
+		// 	}
+		// }
 
 		UpdateFogOfWar();
 	}
@@ -121,7 +129,7 @@ public partial class MapTileMap : SKTileMap
 	/**************************************************************************
 	 * Initialization                                                         *
 	 **************************************************************************/
-	private static void InitCommanders(Province province)
+	private void InitCommanders(Province province)
 	{
         if (province.Owner == "Player" && Globals.FactoryScene != null) return;
 		
@@ -134,45 +142,106 @@ public partial class MapTileMap : SKTileMap
         var rangedCommander = new Commander(province, province.Owner);
         rangedCommander.SpawnLocation = new Vector2I(70, 50);
         rangedCommander.TargetType = Commander.Target.Random;
+        var dragon = new Commander(province, province.Owner);
+        dragon.SpawnLocation = new Vector2I(80, 50);
+        dragon.TargetType = Commander.Target.Random;
 		
-        var provinceLocation = province.MapPosition;
-        var dis = Mathf.Abs(provinceLocation.X - MapScene.FactoryPosition.X) + Mathf.Abs(provinceLocation.Y - MapScene.FactoryPosition.Y);
-		
-        switch (dis)
+        var coords = GetCellAtlasCoords(0, province.MapPosition);
+        if (coords.Equals(new Vector2I(0, 0)))
+		{
+	        meleeCommander.Units.Insert("Rabble", GD.RandRange(25, 40));
+		}
+        if (coords.Equals(new Vector2I(1, 0)))
         {
-            case 0:
-                break;
-            case 1:
-                meleeCommander.Units.Insert("Rabble", 10);
-                break;
-            case 2:
-                meleeCommander.Units.Insert("Infantry", 10);
-                rangedCommander.Units.Insert("Archer", 10);
-                break;
-            case 3:
-                meleeCommander.Units.Insert("Infantry", 50);
-                rangedCommander.Units.Insert("Archer", 25);
-                break;
-            case 4:
-                meleeCommander.Units.Insert("Infantry", 100);
-                rangedCommander.Units.Insert("Archer", 50);
-                break;
-            case 5:
-                meleeCommander.Units.Insert("Barbarian", 200);
-                meleeCommander2.Units.Insert("Heavy Infantry", 50);
-                rangedCommander.Units.Insert("Archer", 100);
-                break;
-            case 6:
-                meleeCommander.Units.Insert("Elite Infantry", 200);
-                meleeCommander2.Units.Insert("Barbarian", 200);
-                meleeCommander3.Units.Insert("Barbarian", 200);
-                break;
+	        meleeCommander.Units.Insert("Rabble", GD.RandRange(50, 150));
+	        if (meleeCommander.Units.CountItems() < 100)
+	        {
+		        rangedCommander.Units.Insert("Archer", GD.RandRange(10, 20));
+	        }
         }
+        if (coords.Equals(new Vector2I(2, 0)))
+        {
+	        var rand = GD.Randf();
+	        if (rand > .5)
+	        {
+		        meleeCommander.Units.Insert("Infantry", GD.RandRange(25, 50));
+		        meleeCommander2.Units.Insert("Rabble", GD.RandRange(50, 100));
+		        meleeCommander3.Units.Insert("Rabble", GD.RandRange(50, 10));
+		        rangedCommander.Units.Insert("Archer", GD.RandRange(25, 50));
+	        }
+	        else
+	        {
+		        meleeCommander.Units.Insert("Infantry", GD.RandRange(25, 35));
+		        meleeCommander2.Units.Insert("Infantry", GD.RandRange(25, 35));
+		        meleeCommander3.Units.Insert("Infantry", GD.RandRange(25, 35));
+		        rangedCommander.Units.Insert("Archer", GD.RandRange(75, 150));
+	        }
+        }
+        if (coords.Equals(new Vector2I(3, 0)))
+        {
+	        var rand = GD.Randf();
+	        if (rand > .5)
+	        {
+		        meleeCommander.Units.Insert("Heavy Infantry", GD.RandRange(50, 100));
+		        meleeCommander2.Units.Insert("Infantry", GD.RandRange(25, 50));
+		        meleeCommander3.Units.Insert("Infantry", GD.RandRange(25, 50));
+		        rangedCommander.Units.Insert("Archer", GD.RandRange(25, 50));
+	        } 
+	        else if (rand > .25)
+	        {
+		        meleeCommander.Units.Insert("Infantry", GD.RandRange(50, 100));
+		        meleeCommander2.Units.Insert("Infantry", GD.RandRange(25, 50));
+		        meleeCommander3.Units.Insert("Infantry", GD.RandRange(25, 50));
+		        rangedCommander.Units.Insert("Archer", GD.RandRange(50, 100));
+	        }
+	        else
+	        {
+		        meleeCommander.Units.Insert("Heavy Infantry", GD.RandRange(25, 35));
+		        meleeCommander2.Units.Insert("Heavy Infantry", GD.RandRange(25, 35));
+		        meleeCommander3.Units.Insert("Heavy Infantry", GD.RandRange(25, 35));
+		        rangedCommander.Units.Insert("Archer", GD.RandRange(100, 200));
+	        }
+        }
+        if (coords.Equals(new Vector2I(0, 1)))
+		{
+			var rand = GD.Randf();
+			if (rand > .5)
+			{
+				meleeCommander.Units.Insert("Elite Infantry", GD.RandRange(50, 100));
+				meleeCommander2.Units.Insert("Infantry", GD.RandRange(25, 50));
+				meleeCommander3.Units.Insert("Infantry", GD.RandRange(25, 50));
+				rangedCommander.Units.Insert("Archer", GD.RandRange(25, 50));
+			} 
+			else if (rand > .25)
+			{
+				meleeCommander.Units.Insert("Infantry", GD.RandRange(50, 100));
+				meleeCommander2.Units.Insert("Infantry", GD.RandRange(25, 50));
+				meleeCommander3.Units.Insert("Infantry", GD.RandRange(25, 50));
+				rangedCommander.Units.Insert("Archer", GD.RandRange(50, 100));
+			}
+			else
+			{
+				meleeCommander.Units.Insert("Heavy Infantry", GD.RandRange(25, 35));
+				meleeCommander2.Units.Insert("Elite Infantry", GD.RandRange(50, 100));
+				meleeCommander3.Units.Insert("Heavy Infantry", GD.RandRange(25, 35));
+				rangedCommander.Units.Insert("Archer", GD.RandRange(100, 200));
+			}
+		}
+
+        if (coords.Equals(new Vector2I(0, 3)))
+        {
+	        meleeCommander.Units.Insert("Infantry", 200);
+	        meleeCommander2.Units.Insert("Elite Infantry", 200);
+	        meleeCommander3.Units.Insert("Infantry", 200);
+	        rangedCommander.Units.Insert("Archer", GD.RandRange(100, 200));
+	        dragon.Units.Insert("Dragon", 1);
+        }
+        
 	}
 
 	public string GetResource(Vector2I mapPos)
 	{
-		var coords = GetCellAtlasCoords(0, mapPos);
+		var coords = GetCellAtlasCoords(1, mapPos);
 		if (coords.Equals(new Vector2I(0, 0)))
 		{
 			return "Coal Ore";
@@ -195,6 +264,11 @@ public partial class MapTileMap : SKTileMap
 		} 
 		
 		return "";
+	}
+
+	public List<Vector2I> GetOcean()
+	{
+		return GetUsedCells(0).Where(location => GetCellSourceId(0, location) == 1).ToList();
 	}
 	
 	public Province GetProvence(Vector2I position)

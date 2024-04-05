@@ -214,7 +214,8 @@ public class Database
             Name = name,
             Weapons = dict.TryGetValue("weapons", out var weapons) ? weapons.As<Godot.Collections.Array<string>>().ToList() : new List<string>(),
             Armor = dict.TryGetValue("armor", out var armor) ? armor.As<Godot.Collections.Array<string>>().ToList() : new List<string>(),
-            Mount = dict.TryGetValue("mount", out var mount) ? mount.AsString() : "None"
+            Mount = dict.TryGetValue("mount", out var mount) ? mount.AsString() : "None",
+            Health = dict.TryGetValue("health", out var health) ? health.As<int>() : 10
         };
     }
     
@@ -224,6 +225,7 @@ public class Database
         public List<string> Weapons;
         public List<string> Armor;
         public string Mount = "None";
+        public int Health = 10;
     }
     #endregion
 

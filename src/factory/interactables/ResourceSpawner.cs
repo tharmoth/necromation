@@ -38,6 +38,7 @@ public partial class ResourceSpawner : Node2D
 				
 				var spawn = new Resource(_resourceType);
 				spawn.GlobalPosition = Globals.FactoryScene.TileMap.MapToGlobal(mapPos + new Vector2I(x, y));
+				if (!Globals.FactoryScene.TileMap.IsOnMap(mapPos + new Vector2I(x, y))) continue;
 				Globals.FactoryScene.AddChild(spawn);
 			}
 		}

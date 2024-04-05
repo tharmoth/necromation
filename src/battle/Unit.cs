@@ -75,6 +75,7 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 		Team = commander.Team;
 
 		var def = Database.Instance.Units.First(unit => unit.Name == unitType);
+		_hp = def.Health;
 		foreach (var weapon in def.Weapons)
 		{
 			var weaponData = Database.Instance.Equpment.OfType<Weapon>().First(weaponData => weaponData.Name == weapon);
@@ -306,9 +307,11 @@ public class Unit : CsharpNode, LayerTileMap.IEntity
 	public void Damage(Unit source, int damage)
 	{
 		if (_hp < 0) return;
-		
-		PlayDamageAnimation();
 		ShowText(damage);
+		
+		if (damage < 0) return;
+		PlayDamageAnimation();
+		
 		
 		_hp -= damage;
 		if (_hp > 0) return; 

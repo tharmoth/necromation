@@ -122,6 +122,16 @@
         ],
         "armor": [
         ]
+    },
+    {
+      "name": "Dragon",
+      "weapons": [
+        "Fireball"
+      ],
+      "armor": [
+        "Copper Ringmail"
+      ],
+      "health": 1000
     }
   ],
   "equipment": [

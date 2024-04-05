@@ -68,6 +68,7 @@ public partial class Character : Node2D
 		AddChild(_deconstructAction);
 		
 		_inventory.Insert("Mine", 2);
+		_inventory.Insert("Stone Furnace", 2);
 	}
 	
 	public override void _EnterTree()

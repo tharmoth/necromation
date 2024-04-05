@@ -47,7 +47,7 @@ public partial class CursorManager : Node
 	
 	private void UpdateSelected()
 	{
-		if (Globals.Player.Selected != null)
+		if (!string.IsNullOrEmpty(Globals.Player.Selected))
 		{
 			CursorItemSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
 			CursorItemSprite.Scale = new Vector2(32 / (float)CursorItemSprite.Texture.GetWidth(),

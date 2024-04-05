@@ -60,10 +60,12 @@ public class RangedWeapon : Weapon
         var damageRoll = Utils.RollDice("2d6");
 
         var adjustedDamage = damage - armor + damageRoll - armorRoll;
-        
-        if (adjustedDamage <= 0) return;
+        adjustedDamage = Mathf.Max(adjustedDamage, 0);
         
         target.Damage(wielder, adjustedDamage);
+        if (adjustedDamage <= 0) return;
+        
+        
         PlayHitSound(target);
         
     }

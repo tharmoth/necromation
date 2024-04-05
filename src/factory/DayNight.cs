@@ -12,7 +12,7 @@ public partial class DayNight : CanvasModulate
 	private const double MINUTES_PER_SECOND = 1.2;
 	private const float STARTING_HOUR = 1.0f;
 	
-	private GradientTexture1D _gradient;
+	[Export] private GradientTexture1D _gradient;
 	
 	public static void SetHour(float hour)
 	{

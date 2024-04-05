@@ -113,17 +113,6 @@
       }
     },
     {
-      "name": "Bone By Hands",
-      "time" : 6.4,
-      "category": "hands",
-      "ingredients": {
-        "Bone Fragments": 4
-      },
-      "products": {
-        "Bone": 1
-      }
-    },
-    {
       "name": "Copper Bar",
       "time" : 6.4,
       "category": "smelting",
