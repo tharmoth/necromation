@@ -1,0 +1,128 @@
+[gd_scene load_steps=7 format=3 uid="uid://bgfvyobxeycel"]
+
+[ext_resource type="PackedScene" uid="uid://c1jocdq57jmar" path="res://src/shared/gui/drop_shadow_border.tscn" id="1_ffcfv"]
+[ext_resource type="Script" path="res://src/factory/gui/HelpGui/HelpGui.cs" id="1_wsym2"]
+[ext_resource type="PackedScene" uid="uid://cxnqu77rfsbpm" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_left.tscn" id="2_dx1wd"]
+[ext_resource type="PackedScene" uid="uid://b00k7m42wjflb" path="res://src/factory/gui/InventoryGui/drop_shadow_divider_right.tscn" id="3_3mgmf"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="4_8wfne"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="5_8ckap"]
+
+[node name="HelpGui" type="PanelContainer"]
+custom_minimum_size = Vector2(900, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_wsym2")
+
+[node name="DropShadowBorder" parent="." instance=ExtResource("1_ffcfv")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="TitleRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/TitleRow"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+
+[node name="DropShadowDividerLeft" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("2_dx1wd")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/TitleRow"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+theme_type_variation = &"HeaderSmall"
+text = "Help"
+
+[node name="DropShadowDividerRight" parent="MarginContainer/VBoxContainer/TitleRow" instance=ExtResource("3_3mgmf")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/TitleRow"]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+text = "X"
+script = ExtResource("4_8wfne")
+_action = "close_gui"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/TitleRow/CloseButton" instance=ExtResource("5_8ckap")]
+auto_translate_mode = 1
+layout_mode = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="PlayerInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/PlayerInventory"]
+auto_translate_mode = 1
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 22
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/PlayerInventory/MarginContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer3/PlayerInventory/MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[center]Congratulations!
+
+You have slain the dragon of the Flamecrest Peninsula!
+
+You have conquered the land and the crypt is yours!
+
+Post a Screenshot in the Necromation Discord to claim your title as conquerer of Flamecrest.
+
+[center]Thank you for playing Necromation![/center]"
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/PlayerInventory" instance=ExtResource("5_8ckap")]
+auto_translate_mode = 1
+layout_mode = 2

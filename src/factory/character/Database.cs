@@ -72,11 +72,11 @@ public class Database
         if (itemTypeA != null && itemTypeB != null && Items.TryGetValue(itemTypeA, out var aItem) &&
             Items.TryGetValue(itemTypeB, out var bItem))
         {
-            var categoryComparison = aItem.Category.CompareTo(bItem.Category);
+            var categoryComparison = string.Compare(aItem.Category, bItem.Category, StringComparison.Ordinal);
             if (categoryComparison != 0) return categoryComparison;
         }
             
-        return String.Compare(itemTypeA, itemTypeB, StringComparison.Ordinal);
+        return string.Compare(itemTypeA, itemTypeB, StringComparison.Ordinal);
     }
     #endregion
     

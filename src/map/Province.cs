@@ -30,7 +30,7 @@ public partial class Province : Node2D, ITransferTarget
      * Logic Variables                                                        *
      **************************************************************************/
     // Note: If you add more state data here make sure to serialize it in Save/Load
-    public string ProvinceName { get; } = MapUtils.GetRandomProvinceName();
+    public string ProvinceName { get; set; } = MapUtils.GetRandomProvinceName();
     public ImmutableList<Commander> Commanders => _commanders.ToImmutableList();
     private readonly List<Commander> _commanders = new();
     public readonly Inventory Units = new();

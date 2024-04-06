@@ -53,7 +53,7 @@ public partial class InventoryItemBox : ItemBox
 		list.GetChildren().OfType<InventoryItemBox>()
 			.Where(inventoryItem => from.CountItem(inventoryItem.ItemType) == 0)
 			.ToList()
-			.ForEach(item => item.QueueFree());
+			.ForEach(item => item.Free());
 	}
 	
 	private void Init(Inventory source, List<Inventory> to, string item)

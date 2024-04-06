@@ -49,5 +49,6 @@ public partial class ContainerGui : DeferredUpdate
 	{
 		InventoryItemBox.UpdateInventory(_to, new List<Inventory> { _from }, InventoryList);
 		InventoryItemBox.UpdateInventory(_from, new List<Inventory> { _to }, ContainerInventoryList);
+		Dirty = false;
 	}
 }

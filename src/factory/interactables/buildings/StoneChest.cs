@@ -8,7 +8,7 @@ public partial class StoneChest : Building, ITransferTarget, IInteractable
 {
     public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Stone Chest";
-    protected Inventory _inventory = new ChestInventory();
+    protected Inventory _inventory = new();
 
     #region IInteractable Implementation
     /**************************************************************************

@@ -30,7 +30,8 @@ public partial class MapScene : Scene
 	public Sprite2D SelectedSprite;
 	public Province SelectedProvince { get; private set; }
 	public readonly List<Commander> SelectedCommanders = new();
-
+	public bool victory = false;
+	
 	public MapScene()
 	{
 		TurnListeners.Add(() => SelectedCommanders.Clear());
@@ -39,6 +40,12 @@ public partial class MapScene : Scene
 	public override void OnOpen()
 	{
 		TileMap.OnOpen();
+
+		if (!victory && TileMap.GetProvence(MapTileMap.DragonMapPosition).Owner == "Player")
+		{
+			victory = true;
+			HelpGui.Display(false, true);
+		}
 	}
 
 	public override void OnClose() {}

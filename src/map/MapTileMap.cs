@@ -28,7 +28,6 @@ public partial class MapTileMap : SKTileMap
 	{
 		foreach (var location in GetUsedCells(0))
 		{
-			GD.Print(GetCellSourceId(0, location));
 			if (GetCellSourceId(0, location) != 0) continue;
 			var provence = new Province(GetResource(location));
 			_provences.Add(location, provence);
@@ -48,7 +47,7 @@ public partial class MapTileMap : SKTileMap
 		{
 			if (GetCellSourceId(0, location) != 0) continue;
 			var provence = _provences[location];
-			
+
 			var coords = GetCellAtlasCoords(0, location);
 			var team = coords.Equals(new Vector2I(2, 1)) ? "Player" : "Enemy";
 
@@ -66,18 +65,13 @@ public partial class MapTileMap : SKTileMap
 		
 		foreach (var province in Globals.MapScene.TileMap.Provinces)
 		{
+
 			AddFog(province.MapPosition);
 		}
 
-		// for (int x = -20; x < 20; x++)
-		// {
-		// 	for (int y = -20; y < 20; y++)
-		// 	{
-		// 		var position = new Vector2I(x, y);
-		// 		if (_fogs.ContainsKey(position)) continue;
-		// 		AddFog(new Vector2I(x, y));
-		// 	}
-		// }
+		_provences[DragonMapPosition].ProvinceName = "Flamecrest Peninsula";
+		_fogs[DragonMapPosition].QueueFree();
+		_fogs.Remove(DragonMapPosition);
 
 		UpdateFogOfWar();
 	}
@@ -122,10 +116,17 @@ public partial class MapTileMap : SKTileMap
 				province.Visible = true;
 				province.Commanders.ForEach(commander => commander.Visible = true);
 			});
+
+		
+		
+		_provences[DragonMapPosition].Visible = true;
 		
 		ProvinceBorders.UpdateBorders();
 	}
 
+	private readonly Vector2I DragonAtlasPosition = new(0, 3);
+	public static Vector2I DragonMapPosition = new(-1, 9);
+	
 	/**************************************************************************
 	 * Initialization                                                         *
 	 **************************************************************************/
@@ -133,6 +134,8 @@ public partial class MapTileMap : SKTileMap
 	{
         if (province.Owner == "Player" && Globals.FactoryScene != null) return;
 		
+        
+        
         var meleeCommander = new Commander(province, province.Owner);
         meleeCommander.SpawnLocation = new Vector2I(90, 50);
         var meleeCommander2 = new Commander(province, province.Owner);
@@ -145,6 +148,8 @@ public partial class MapTileMap : SKTileMap
         var dragon = new Commander(province, province.Owner);
         dragon.SpawnLocation = new Vector2I(80, 50);
         dragon.TargetType = Commander.Target.Random;
+        
+        if(true) return;
 		
         var coords = GetCellAtlasCoords(0, province.MapPosition);
         if (coords.Equals(new Vector2I(0, 0)))
@@ -228,7 +233,7 @@ public partial class MapTileMap : SKTileMap
 			}
 		}
 
-        if (coords.Equals(new Vector2I(0, 3)))
+        if (coords.Equals(DragonAtlasPosition))
         {
 	        meleeCommander.Units.Insert("Infantry", 200);
 	        meleeCommander2.Units.Insert("Elite Infantry", 200);
@@ -236,7 +241,6 @@ public partial class MapTileMap : SKTileMap
 	        rangedCommander.Units.Insert("Archer", GD.RandRange(100, 200));
 	        dragon.Units.Insert("Dragon", 1);
         }
-        
 	}
 
 	public string GetResource(Vector2I mapPos)

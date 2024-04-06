@@ -43,18 +43,37 @@ public partial class MapGui : CanvasLayer
 	public override void _UnhandledInput(InputEvent inputEvent)
 	{
 		if (inputEvent.IsActionPressed("close_gui")) CloseGui();
-		if (inputEvent.IsActionPressed("open_army_setup") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player") 
-		{
-			GuiStack.Push(ArmySetup.Display(Globals.MapScene.SelectedProvince));
-			MainGui.Visible = false;
-		}
-		if (inputEvent.IsActionPressed("open_recruit") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player")
-		{
-			RecruitGui.Visible = true;
-			MainGui.Visible = false;
-		}
+		// if (inputEvent.IsActionPressed("open_army_setup") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player") 
+		// {
+		// 	GuiStack.Push(ArmySetup.Display(Globals.MapScene.SelectedProvince));
+		// 	MainGui.Visible = false;
+		// }
+		// if (inputEvent.IsActionPressed("open_recruit") && GuiStack.Count == 0 && Globals.MapScene.SelectedProvince.Owner == "Player")
+		// {
+		// 	RecruitGui.Visible = true;
+		// 	MainGui.Visible = false;
+		// }
 		if (inputEvent.IsActionPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Factory);
 		if (inputEvent.IsActionPressed("end_turn")) EndTurn();
+		
+		if (inputEvent.IsActionPressed("open_help"))
+		{
+			if (GuiStack.Count > 0 && GuiStack.Peek() is HelpGui)
+				CloseGui();
+			else
+				HelpGui.Display(false);
+		}
+	}
+	
+	public void Open(Control gui)
+	{
+		while (GuiStack.Count > 0)
+		{
+			CloseGui();
+		}
+		GuiStack.Push(gui);
+		MusicManager.Play("ui_open");
+		AddChild(gui);
 	}
 
 	private void EndTurn()

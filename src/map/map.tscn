@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://yhp2pgk86ofe"]
+[gd_scene load_steps=26 format=3 uid="uid://yhp2pgk86ofe"]
 
 [ext_resource type="Script" path="res://src/map/MapScene.cs" id="1_q07oc"]
 [ext_resource type="Texture2D" uid="uid://b7kl5nfokahxq" path="res://res/sprites/World-map-tile.png" id="2_12t4y"]
@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="9_w144y"]
 [ext_resource type="Texture2D" uid="uid://b0k2u8brnr85i" path="res://res/sprites/buildings/Stone Furnace.png" id="11_8qgol"]
 [ext_resource type="AudioStream" uid="uid://dvunqv10vqhju" path="res://res/sfx/zapsplat_foley_dry_dead_leaf_crush_001_70766.mp3" id="12_brqa8"]
+[ext_resource type="Script" path="res://src/factory/gui/HelpGui/BlinkActionButton.cs" id="17_f46de"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vg77j"]
 resource_name = "Home"
@@ -140,7 +141,6 @@ script = ExtResource("5_2askh")
 [node name="GUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 2
-visible = false
 script = ExtResource("4_513oc")
 
 [node name="PanelContainer" type="MarginContainer" parent="GUI"]
@@ -292,6 +292,18 @@ script = ExtResource("6_ff77h")
 _action = "end_turn"
 
 [node name="Outline" parent="GUI/PanelContainer/MainGui/Buttons/PanelContainer2" instance=ExtResource("8_7brh5")]
+layout_mode = 2
+
+[node name="PanelContainer3" type="PanelContainer" parent="GUI/PanelContainer/MainGui/Buttons"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="GUI/PanelContainer/MainGui/Buttons/PanelContainer3"]
+layout_mode = 2
+text = "Help (?)"
+script = ExtResource("17_f46de")
+_action = "open_help"
+
+[node name="Outline" parent="GUI/PanelContainer/MainGui/Buttons/PanelContainer3" instance=ExtResource("8_7brh5")]
 layout_mode = 2
 
 [node name="RecruitGUI" type="Control" parent="GUI"]

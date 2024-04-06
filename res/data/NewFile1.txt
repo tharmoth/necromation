@@ -1,0 +1,45 @@
+﻿[center]Welcome to Necromation![/center]
+
+Build troops and place them in a barracks.
+Command the troops in the map to conquer new lands and expand the crypt!
+Automate the production of your armies.
+Slay the dragon of the Flamecrest Peninsula far to the south!
+
+Keyboard Shortcuts
+[ul]
+W/A/S/D: Move your character.
+[/ul]
+
+Interaction
+[ul]
+Left Click - Open building GUI
+Right Click - Hold to mine ore
+Ctrl + Left Click - Place selected item in building or Remove items from building
+[/ul]
+
+Building Placement
+[ul]
+Left Click - Place Selected Building
+Right Click - Hold to remove hovered building
+Q - Clear Selection
+Q - Select Hovered Building
+R - Rotate Selected building
+Alt + D - Open Mass building deconstruction
+[/ul]
+
+Crafting:
+[ul]
+Left Click: Craft
+Right Click: Craft 5
+Shift + Left Click: Craft All
+[/ul]
+
+Menus and UI:
+[ul]
+E: Open Inventory
+M: Open Map
+Esc: Close Current GUI
+Left Click: Select Item
+Shift + Left Click: Transfer All
+Ctrl + Left Click: Transfer 5
+[/ul]

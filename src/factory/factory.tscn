@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=40 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://bi1nksdh0hjtf" path="res://src/factory/gui/HotBarGui/HotBarItemBox.tscn" id="9_od7oa"]
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
+[ext_resource type="Script" path="res://src/factory/gui/HelpGui/BlinkActionButton.cs" id="17_r47pg"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
 [ext_resource type="Script" path="res://src/factory/BuildingManager.cs" id="23_g3xjq"]
@@ -463,6 +464,18 @@ layout_mode = 2
 text = "Load"
 script = ExtResource("7_04mnd")
 _action = "load"
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Right"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Right/PanelContainer"]
+layout_mode = 2
+text = "Help (?)"
+script = ExtResource("17_r47pg")
+_action = "open_help"
+
+[node name="Outline" parent="GUI/PanelContainer/VBoxContainer/Control/Main/Right/PanelContainer" instance=ExtResource("9_oba7v")]
+layout_mode = 2
 
 [node name="BottomBar" type="ColorRect" parent="GUI/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true

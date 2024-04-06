@@ -7,6 +7,7 @@
     <Content Include="res\data\items.json" />
     <Content Include="res\data\Names.txt" />
     <Content Include="res\data\Names2.txt" />
+    <Content Include="res\data\NewFile1.txt" />
     <Content Include="res\data\ProvinceNames.txt" />
     <Content Include="res\data\recipes.json" />
     <Content Include="res\data\technology.json" />

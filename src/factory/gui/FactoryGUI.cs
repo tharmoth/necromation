@@ -59,6 +59,15 @@ public partial class FactoryGUI : CanvasLayer
 				ConfigurationGui.Display();
 		}
 		
+		if (inputEvent.IsActionPressed("open_help"))
+		{
+			if (_guiStack.Count > 0 && _guiStack.Peek() is HelpGui)
+				CloseGui();
+			else
+				HelpGui.Display(true);
+		}
+		
+		
 		if (inputEvent.IsActionPressed("open_map")) SceneManager.ChangeToScene(SceneManager.SceneEnum.Map);
 		if (inputEvent.IsActionPressed("save")) SKSaveLoad.SaveGame(this);
 		if (inputEvent.IsActionPressed("load")) SKSaveLoad.LoadGame(this);

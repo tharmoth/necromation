@@ -62,7 +62,7 @@ public partial class FactoryScene : Scene
 			position * FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize
 			+ position * FactoryTileMap.TileSize * FactoryTileMap.ProvinceGap
 			+ Vector2I.One * FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize / 2;
-		Globals.FactoryScene.TileMap.AddProvence(position);
+		TileMap.OnOpen();
 	}
 
 	public override void OnOpen()
