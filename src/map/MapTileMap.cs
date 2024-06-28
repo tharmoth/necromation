@@ -133,9 +133,7 @@ public partial class MapTileMap : SKTileMap
 	private void InitCommanders(Province province)
 	{
         if (province.Owner == "Player" && Globals.FactoryScene != null) return;
-		
-        
-        
+
         var meleeCommander = new Commander(province, province.Owner);
         meleeCommander.SpawnLocation = new Vector2I(90, 50);
         var meleeCommander2 = new Commander(province, province.Owner);
@@ -148,9 +146,7 @@ public partial class MapTileMap : SKTileMap
         var dragon = new Commander(province, province.Owner);
         dragon.SpawnLocation = new Vector2I(80, 50);
         dragon.TargetType = Commander.Target.Random;
-        
-        if(true) return;
-		
+
         var coords = GetCellAtlasCoords(0, province.MapPosition);
         if (coords.Equals(new Vector2I(0, 0)))
 		{

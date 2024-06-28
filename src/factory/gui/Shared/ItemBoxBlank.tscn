@@ -1,11 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://sr7vg0mmakj7"]
+[gd_scene load_steps=10 format=3 uid="uid://bm3usphpv4s1v"]
 
-[ext_resource type="Script" path="res://src/factory/gui/Shared/ItemBox.cs" id="1_q0nbf"]
-[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="2_3cet6"]
-[ext_resource type="AudioStream" uid="uid://1j5g242tw4wp" path="res://res/sfx/gui/rollover5.ogg" id="3_k6606"]
-[ext_resource type="AudioStream" uid="uid://b2ke0geqjgl4k" path="res://res/sfx/gui/rollover4.ogg" id="4_bnk3h"]
-[ext_resource type="Script" path="res://src/shared/gui/MouseoverAudio.cs" id="5_unok5"]
-[ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="6_1drya"]
+[ext_resource type="Script" path="res://src/factory/gui/Shared/ItemBox.cs" id="1_ir2yw"]
+[ext_resource type="AudioStream" uid="uid://1j5g242tw4wp" path="res://res/sfx/gui/rollover5.ogg" id="3_gyi08"]
+[ext_resource type="AudioStream" uid="uid://b2ke0geqjgl4k" path="res://res/sfx/gui/rollover4.ogg" id="4_yaoy2"]
+[ext_resource type="Script" path="res://src/shared/gui/MouseoverAudio.cs" id="5_78uyf"]
+[ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="6_y8j5u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l3nwn"]
 bg_color = Color(1, 1, 1, 1)
@@ -13,16 +12,16 @@ bg_color = Color(1, 1, 1, 1)
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_qw2el"]
 playback_mode = 1
 streams_count = 2
-stream_0/stream = ExtResource("3_k6606")
+stream_0/stream = ExtResource("3_gyi08")
 stream_0/weight = 1.0
-stream_1/stream = ExtResource("4_bnk3h")
+stream_1/stream = ExtResource("4_yaoy2")
 stream_1/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_mp6q5"]
 playback_mode = 1
 random_pitch = 1.05
 streams_count = 1
-stream_0/stream = ExtResource("6_1drya")
+stream_0/stream = ExtResource("6_y8j5u")
 stream_0/weight = 1.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_medmk"]
@@ -32,7 +31,7 @@ custom_minimum_size = Vector2(50, 50)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-script = ExtResource("1_q0nbf")
+script = ExtResource("1_ir2yw")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 unique_name_in_owner = true
@@ -44,9 +43,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_l3nwn")
 value = 66.0
 fill_mode = 3
 show_percentage = false
-
-[node name="Outline" parent="." instance=ExtResource("2_3cet6")]
-layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -63,7 +59,7 @@ button_mask = 5
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/Button"]
 stream = SubResource("AudioStreamRandomizer_qw2el")
 volume_db = -5.0
-script = ExtResource("5_unok5")
+script = ExtResource("5_78uyf")
 
 [node name="ClickAudio" type="AudioStreamPlayer" parent="MarginContainer/Button/AudioStreamPlayer"]
 unique_name_in_owner = true

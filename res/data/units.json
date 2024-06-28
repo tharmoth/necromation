@@ -1,256 +1,256 @@
-﻿{
+{
   "units": [
-    {
-      "name": "Rabble",
-      "weapons": [
-      ],
-      "armor": [
-      ]
-    },
-    {
-      "name": "Infantry",
-      "weapons": [
-        "Copper Spear"
-      ],
-      "armor": [
-        "Copper Ringmail",
-        "Shield"
-      ]
-    },
-    {
-      "name": "Barbarian",
-      "weapons": [
-        "Copper Warhammer"
-      ],
-      "armor": [
-        "Copper Ringmail"
-      ]
-    },
-    {
-      "name": "Heavy Infantry",
-      "weapons": [
-        "Bronze Spear"
-      ],
-      "armor": [
-        "Bronze Breastplate"
-      ]
-    },
-    {
-      "name": "Elite Infantry",
-      "weapons": [
-        "Bronze Warhammer"
-      ],
-      "armor": [
-        "Bronze Breastplate"
-      ]
-    },
-    {
-      "name": "Archer",
-      "weapons": [
-        "Long Bow"
-      ],
-      "armor": [
-      ]
-    },
-    {
-      "name": "Frail Skeleton",
-      "weapons": [
-      ],
-      "armor": [
-      ]
-    },
-    {
-      "name": "Skeleton Auxiliary",
-      "weapons": [
-        "Copper Spear"
-      ],
-      "armor": [
-        "Copper Ringmail"
-      ]
-    },
-    {
-      "name": "Gravebreaker",
-      "weapons": [
-        "Copper Warhammer"
-      ],
-      "armor": [
-        "Copper Ringmail"
-      ]
-    },
-    {
-      "name": "Dreadplate Phalanx",
-      "weapons": [
-        "Bronze Spear"
-      ],
-      "armor": [
-        "Bronze Breastplate"
-      ]
-    },
-    {
-      "name": "Gravebound Charger",
-      "weapons": [
-        "Lance",
-        "Bronze Spear"
-      ],
-      "armor": [
-        "Copper Ringmail"
-      ],
-      "mount": "Horse"
-    },
-    {
-      "name": "Undead Legionary",
-      "weapons": [
-        "Pilum",
-        "Bronze Gladius"
-      ],
-      "armor": [
-        "Bronze Breastplate"
-      ]
-    },
-    {
-      "name": "Skeleton Marksman",
-      "weapons": [
-        "Long Bow"
-      ],
-      "armor": [
-      ]
-    },
-    {
-      "name": "Deathbound Mage",
-        "weapons": [
-            "Fireball"
-        ],
-        "armor": [
-        ]
-    },
-    {
-      "name": "Dragon",
-      "weapons": [
-        "Fireball"
-      ],
-      "armor": [
-        "Copper Ringmail"
-      ],
-      "health": 1000
-    }
+	{
+	  "name": "Rabble",
+	  "weapons": [
+	  ],
+	  "armor": [
+	  ]
+	},
+	{
+	  "name": "Infantry",
+	  "weapons": [
+		"Copper Spear"
+	  ],
+	  "armor": [
+		"Copper Ringmail",
+		"Shield"
+	  ]
+	},
+	{
+	  "name": "Barbarian",
+	  "weapons": [
+		"Copper Warhammer"
+	  ],
+	  "armor": [
+		"Copper Ringmail"
+	  ]
+	},
+	{
+	  "name": "Heavy Infantry",
+	  "weapons": [
+		"Bronze Spear"
+	  ],
+	  "armor": [
+		"Bronze Breastplate"
+	  ]
+	},
+	{
+	  "name": "Elite Infantry",
+	  "weapons": [
+		"Bronze Warhammer"
+	  ],
+	  "armor": [
+		"Bronze Breastplate"
+	  ]
+	},
+	{
+	  "name": "Archer",
+	  "weapons": [
+		"Long Bow"
+	  ],
+	  "armor": [
+	  ]
+	},
+	{
+	  "name": "Frail Skeleton",
+	  "weapons": [
+	  ],
+	  "armor": [
+	  ]
+	},
+	{
+	  "name": "Skeleton Auxiliary",
+	  "weapons": [
+		"Copper Spear"
+	  ],
+	  "armor": [
+		"Copper Ringmail"
+	  ]
+	},
+	{
+	  "name": "Gravebreaker",
+	  "weapons": [
+		"Copper Warhammer"
+	  ],
+	  "armor": [
+		"Copper Ringmail"
+	  ]
+	},
+	{
+	  "name": "Dreadplate Phalanx",
+	  "weapons": [
+		"Bronze Spear"
+	  ],
+	  "armor": [
+		"Bronze Breastplate"
+	  ]
+	},
+	{
+	  "name": "Gravebound Charger",
+	  "weapons": [
+		"Lance",
+		"Bronze Spear"
+	  ],
+	  "armor": [
+		"Copper Ringmail"
+	  ],
+	  "mount": "Horse"
+	},
+	{
+	  "name": "Undead Legionary",
+	  "weapons": [
+		"Pilum",
+		"Bronze Gladius"
+	  ],
+	  "armor": [
+		"Bronze Breastplate"
+	  ]
+	},
+	{
+	  "name": "Skeleton Marksman",
+	  "weapons": [
+		"Long Bow"
+	  ],
+	  "armor": [
+	  ]
+	},
+	{
+	  "name": "Deathbound Mage",
+		"weapons": [
+			"Fireball"
+		],
+		"armor": [
+		]
+	},
+	{
+	  "name": "Dragon",
+	  "weapons": [
+		"Fireball"
+	  ],
+	  "armor": [
+		"Copper Ringmail"
+	  ],
+	  "health": 1000
+	}
   ],
   "equipment": [
-    {
-      "name": "Stick",
-      "damage": 2,
-      "range": 1,
-      "hands": 1,
-      "type": "melee"
-    },
-    {
-      "name": "Copper Spear",
-      "damage": 3,
-      "range": 1,
-      "hands": 1,
-      "type": "melee"
-    },
-    {
-      "name": "Bronze Spear",
-      "damage": 5,
-      "range": 1,
-      "hands": 1,
-      "type": "melee"
-    },
-    {
-      "name": "Bronze Gladius",
-      "damage": 6,
-      "range": 1,
-      "hands": 1,
-      "type": "melee"
-    },
-    {
-      "name": "Copper Warhammer",
-      "damage": 9,
-      "range": 1,
-      "hands": 2,
-      "type": "melee"
-    },
-    {
-      "name": "Bronze Warhammer",
-      "damage": 12,
-      "range": 1,
-      "hands": 2,
-      "type": "melee"
-    },
-    {
-      "name": "Lance",
-      "damage": 50,
-      "range": 1,
-      "hands": 2,
-      "type": "melee",
-      "ammo": 1
-    },
-    {
-      "name": "Short Bow",
-      "damage": 6,
-      "range": 35,
-      "hands": 2,
-      "ammo": 15,
-      "type": "ranged"
-    },
-    {
-      "name": "Long Bow",
-      "damage": 9,
-      "range": 35,
-      "hands": 2,
-      "ammo": 12,
-      "type": "ranged"
-    },
-    {
-      "name": "Pilum",
-      "damage": 15,
-      "range": 25,
-      "hands": 2,
-      "ammo": 1,
-      "type": "ranged"
-    },
-    {
-      "name": "Cross Bow",
-      "damage": 8,
-      "range": 35,
-      "hands": 2,
-      "type": "ranged",
-      "traits": [
-        "armor piercing"
-      ]
-    },
-    {
-      "name": "Fireball",
-      "damage": 100,
-      "range": 40,
-      "hands": 2,
-      "ammo": 100,
-      "type": "magic"
-    },
-    {
-      "name": "Leather Cuirass",
-      "protection": 5,
-      "type": "armor"
-    },
-    {
-      "name": "Copper Ringmail",
-      "protection": 10,
-      "type": "armor"
-    },
-    {
-      "name": "Bronze Breastplate",
-      "protection": 15,
-      "type": "armor"
-    },
-    {
-      "name": "Shield",
-      "protection": 4,
-      "type": "armor"
-    },
-    {
-      "name": "Tower Shield",
-      "protection": 6,
-      "type": "armor"
-    }
+	{
+	  "name": "Stick",
+	  "damage": 2,
+	  "range": 1,
+	  "hands": 1,
+	  "type": "melee"
+	},
+	{
+	  "name": "Copper Spear",
+	  "damage": 3,
+	  "range": 1,
+	  "hands": 1,
+	  "type": "melee"
+	},
+	{
+	  "name": "Bronze Spear",
+	  "damage": 5,
+	  "range": 1,
+	  "hands": 1,
+	  "type": "melee"
+	},
+	{
+	  "name": "Bronze Gladius",
+	  "damage": 6,
+	  "range": 1,
+	  "hands": 1,
+	  "type": "melee"
+	},
+	{
+	  "name": "Copper Warhammer",
+	  "damage": 9,
+	  "range": 1,
+	  "hands": 2,
+	  "type": "melee"
+	},
+	{
+	  "name": "Bronze Warhammer",
+	  "damage": 12,
+	  "range": 1,
+	  "hands": 2,
+	  "type": "melee"
+	},
+	{
+	  "name": "Lance",
+	  "damage": 50,
+	  "range": 1,
+	  "hands": 2,
+	  "type": "melee",
+	  "ammo": 1
+	},
+	{
+	  "name": "Short Bow",
+	  "damage": 6,
+	  "range": 35,
+	  "hands": 2,
+	  "ammo": 15,
+	  "type": "ranged"
+	},
+	{
+	  "name": "Long Bow",
+	  "damage": 9,
+	  "range": 35,
+	  "hands": 2,
+	  "ammo": 12,
+	  "type": "ranged"
+	},
+	{
+	  "name": "Pilum",
+	  "damage": 15,
+	  "range": 25,
+	  "hands": 2,
+	  "ammo": 1,
+	  "type": "ranged"
+	},
+	{
+	  "name": "Cross Bow",
+	  "damage": 8,
+	  "range": 35,
+	  "hands": 2,
+	  "type": "ranged",
+	  "traits": [
+		"armor piercing"
+	  ]
+	},
+	{
+	  "name": "Fireball",
+	  "damage": 100,
+	  "range": 40,
+	  "hands": 2,
+	  "ammo": 100,
+	  "type": "magic"
+	},
+	{
+	  "name": "Leather Cuirass",
+	  "protection": 5,
+	  "type": "armor"
+	},
+	{
+	  "name": "Copper Ringmail",
+	  "protection": 10,
+	  "type": "armor"
+	},
+	{
+	  "name": "Bronze Breastplate",
+	  "protection": 15,
+	  "type": "armor"
+	},
+	{
+	  "name": "Shield",
+	  "protection": 4,
+	  "type": "armor"
+	},
+	{
+	  "name": "Tower Shield",
+	  "protection": 6,
+	  "type": "armor"
+	}
   ]
 }

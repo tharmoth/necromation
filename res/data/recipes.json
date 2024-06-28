@@ -1,353 +1,353 @@
-﻿{
+{
   "recipes": [
-    {
-      "name": "Belt",
-      "time" : 1,
-      "ingredients": {
-        "Bone": 1,
-        "Skeleton": 1
-      },
-      "products": {
-        "Belt": 2
-      }
-    },
-    {
-      "name": "Inserter",
-      "time" : 0.5,
-      "ingredients": {
-        "Metalweave": 1,
-        "Skeleton": 1
-      },
-      "products": {
-        "Inserter": 1
-      }
-    },
-    {
-      "name": "Long Inserter",
-      "time" : 1,
-      "ingredients": {
-        "Inserter": 1,
-        "Skeleton": 2,
-        "Bone": 1
-      },
-      "products": {
-        "Long Inserter": 1
-      }
-    },
-    {
-      "name": "Underground Belt",
-      "time" : 1,
-      "ingredients": {
-        "Bone": 10,
-        "Belt": 5
-      },
-      "products": {
-        "Underground Belt": 2
-      }
-    },
-    {
-      "name": "Stone Furnace",
-      "time" : 1,
-      "ingredients": {
-        "Stone": 5,
-        "Coal Ore": 3
-      },
-      "products": {
-        "Stone Furnace": 1
-      }
-    },
-    {
-      "name": "Mine",
-      "time" : 1,
-      "ingredients": {
-        "Stone": 5,
-        "Bone": 3,
-        "Skeleton": 3
-      },
-      "products": {
-        "Mine": 1
-      }
-    },
-    {
-      "name": "Assembler",
-      "time" : 1,
-      "ingredients": {
-        "Metalweave": 3,
-        "Skeleton": 5,
-        "Bone": 9
-      },
-      "products": {
-        "Assembler": 1
-      }
-    },
-    {
-      "name": "Stone Chest",
-      "time" : 1,
-      "ingredients": {
-        "Stone": 5
-      },
-      "products": {
-        "Stone Chest": 1
-      }
-    },
-    {
-      "name": "Skeleton",
-      "time" : 1,
-      "ingredients": {
-        "Bone": 2
-      },
-      "products": {
-        "Skeleton": 1
-      }
-    },
-    {
-      "name": "Bone",
-      "time" : 6.4,
-      "category": "smelting",
-      "ingredients": {
-        "Bone Fragments": 2,
-        "Coal Ore": 1
-      },
-      "products": {
-        "Bone": 2
-      }
-    },
-    {
-      "name": "Copper Bar",
-      "time" : 6.4,
-      "category": "smelting",
-      "ingredients": {
-        "Copper Ore": 2,
-        "Coal Ore": 1
-      },
-      "products": {
-        "Copper Bar": 2
-      }
-    },
-    {
-      "name": "Tin Bar",
-      "time" : 6.4,
-      "category": "smelting",
-      "ingredients": {
-        "Tin Ore": 2,
-        "Coal Ore": 1
-      },
-      "products": {
-        "Tin Bar": 2
-      }
-    },
-    {
-      "name": "Bronze Bar",
-      "time" : 6.4,
-      "category": "smelting",
-      "ingredients": {
-        "Copper Bar": 2,
-        "Tin Bar": 2,
-        "Coal Ore": 1
-      },
-      "products": {
-        "Bronze Bar": 4
-      }
-    },
-    {
-      "name": "Barracks",
-      "time" : 1.0,
-      "ingredients": {
-        "Bone": 10
-      },
-      "products": {
-        "Barracks": 1
-      }
-    },
-    {
-      "name": "Leather",
-      "time" : 0.5,
-      "ingredients": {
-        "Bone": 1
-      },
-      "products": {
-        "Leather": 5
-      }
-    },
-    {
-      "name": "Strap",
-      "time" : 0.5,
-      "ingredients": {
-        "Leather": 1
-      },
-      "products": {
-        "Strap": 2
-      }
-    },
-    {
-      "name": "Hilt",
-      "time" : 0.5,
-      "ingredients": {
-        "Bone": 1
-      },
-      "products": {
-        "Hilt": 1
-      }
-    },
-    {
-      "name": "Grip",
-      "time" : 1.0,
-      "ingredients": {
-        "Strap": 1,
-        "Hilt": 1
-      },
-      "products": {
-          "Grip": 2
-      }
-    },
-    {
-      "name": "Copper Strand",
-        "time" : 0.5,
-        "ingredients": {
-          "Copper Bar": 1
-        },
-        "products": {
-          "Copper Strand": 2
-        }
-    },
-    {
-      "name": "Metalweave",
-        "time" : 0.5,
-        "ingredients": {
-          "Bone": 1,
-          "Copper Strand": 3
-        },
-        "products": {
-          "Metalweave": 1
-        }
-    },
-    {
-      "name": "Alloyweave",
-      "time" : 0.5,
-      "ingredients": {
-        "Metalweave": 1,
-        "Bronze Bar": 5
-      },
-      "products": {
-        "Alloyweave": 1
-      }
-    },
-    {
-      "name": "Spear",
-      "time" : 0.5,
-        "ingredients": {
-            "Hilt": 1,
-            "Copper Bar": 1
-        },
-        "products": {
-          "Spear": 1
-        }
-    },
-    {
-      "name": "Sword",
-        "time" : 0.5,
-        "ingredients": {
-          "Grip": 1,
-          "Hilt": 1,
-          "Bronze Bar": 1
-        },
-        "products": {
-          "Sword": 1
-        }
-    },
-    {
-      "name": "Bow and Arrow",
-        "time" : 0.5,
-        "ingredients": {
-          "Strap": 2,
-          "Hilt": 1,
-          "Copper Bar": 1
-        },
-        "products": {
-          "Bow and Arrow": 1
-        }
-    },
-    {
-      "name": "Warhammer",
-      "time" : 12.0,
-      "ingredients": {
-        "Grip": 1,
-        "Hilt": 1,
-        "Copper Bar": 5
-      },
-      "products": {
-        "Warhammer": 1
-      }
-    },
-    {
-      "name": "Frail Skeleton",
-      "time" : 3.0,
-      "ingredients": {
-        "Skeleton": 1
-      },
-      "products": {
-        "Frail Skeleton": 1
-      }
-    },
-    {
-      "name": "Skeleton Auxiliary",
-      "time" : 5.0,
-      "ingredients": {
-        "Skeleton": 1,
-        "Metalweave": 1,
-        "Spear": 1
-      },
-      "products": {
-        "Skeleton Auxiliary": 1
-      }
-    },
-    {
-      "name": "Gravebreaker",
-      "time" : 5.0,
-      "ingredients": {
-        "Skeleton": 1,
-        "Metalweave": 1,
-        "Warhammer": 1
-      },
-      "products": {
-        "Gravebreaker": 1
-      }
-    },
-    {
-      "name": "Undead Legionary",
-      "time" : 6.0,
-      "ingredients": {
-        "Skeleton": 1,
-        "Alloyweave": 1,
-        "Sword": 1
-      },
-      "products": {
-        "Undead Legionary": 1
-      }
-    },
-    {
-      "name": "Skeleton Marksman",
-      "time" : 6.0,
-      "ingredients": {
-        "Skeleton": 1,
-        "Metalweave": 1,
-        "Bow and Arrow": 1
-      },
-      "products": {
-        "Skeleton Marksman": 1
-      }
-    },
-    {
-      "name": "Gravebound Charger",
-      "time": 12.0,
-      "ingredients": {
-        "Skeleton": 5,
-        "Metalweave": 1,
-        "Spear": 1
-      },
-      "products": {
-        "Gravebound Charger": 1
-      }
-    }
+	{
+	  "name": "Belt",
+	  "time" : 1,
+	  "ingredients": {
+		"Bone": 1,
+		"Skeleton": 1
+	  },
+	  "products": {
+		"Belt": 2
+	  }
+	},
+	{
+	  "name": "Inserter",
+	  "time" : 0.5,
+	  "ingredients": {
+		"Metalweave": 1,
+		"Skeleton": 1
+	  },
+	  "products": {
+		"Inserter": 1
+	  }
+	},
+	{
+	  "name": "Long Inserter",
+	  "time" : 1,
+	  "ingredients": {
+		"Inserter": 1,
+		"Skeleton": 2,
+		"Bone": 1
+	  },
+	  "products": {
+		"Long Inserter": 1
+	  }
+	},
+	{
+	  "name": "Underground Belt",
+	  "time" : 1,
+	  "ingredients": {
+		"Bone": 10,
+		"Belt": 5
+	  },
+	  "products": {
+		"Underground Belt": 2
+	  }
+	},
+	{
+	  "name": "Stone Furnace",
+	  "time" : 1,
+	  "ingredients": {
+		"Stone": 5,
+		"Coal Ore": 3
+	  },
+	  "products": {
+		"Stone Furnace": 1
+	  }
+	},
+	{
+	  "name": "Mine",
+	  "time" : 1,
+	  "ingredients": {
+		"Stone": 5,
+		"Bone": 3,
+		"Skeleton": 3
+	  },
+	  "products": {
+		"Mine": 1
+	  }
+	},
+	{
+	  "name": "Assembler",
+	  "time" : 1,
+	  "ingredients": {
+		"Metalweave": 3,
+		"Skeleton": 5,
+		"Bone": 9
+	  },
+	  "products": {
+		"Assembler": 1
+	  }
+	},
+	{
+	  "name": "Stone Chest",
+	  "time" : 1,
+	  "ingredients": {
+		"Stone": 5
+	  },
+	  "products": {
+		"Stone Chest": 1
+	  }
+	},
+	{
+	  "name": "Skeleton",
+	  "time" : 1,
+	  "ingredients": {
+		"Bone": 2
+	  },
+	  "products": {
+		"Skeleton": 1
+	  }
+	},
+	{
+	  "name": "Bone",
+	  "time" : 6.4,
+	  "category": "smelting",
+	  "ingredients": {
+		"Bone Fragments": 2,
+		"Coal Ore": 1
+	  },
+	  "products": {
+		"Bone": 2
+	  }
+	},
+	{
+	  "name": "Copper Bar",
+	  "time" : 6.4,
+	  "category": "smelting",
+	  "ingredients": {
+		"Copper Ore": 2,
+		"Coal Ore": 1
+	  },
+	  "products": {
+		"Copper Bar": 2
+	  }
+	},
+	{
+	  "name": "Tin Bar",
+	  "time" : 6.4,
+	  "category": "smelting",
+	  "ingredients": {
+		"Tin Ore": 2,
+		"Coal Ore": 1
+	  },
+	  "products": {
+		"Tin Bar": 2
+	  }
+	},
+	{
+	  "name": "Bronze Bar",
+	  "time" : 6.4,
+	  "category": "smelting",
+	  "ingredients": {
+		"Copper Bar": 2,
+		"Tin Bar": 2,
+		"Coal Ore": 1
+	  },
+	  "products": {
+		"Bronze Bar": 4
+	  }
+	},
+	{
+	  "name": "Barracks",
+	  "time" : 1.0,
+	  "ingredients": {
+		"Bone": 10
+	  },
+	  "products": {
+		"Barracks": 1
+	  }
+	},
+	{
+	  "name": "Leather",
+	  "time" : 0.5,
+	  "ingredients": {
+		"Bone": 1
+	  },
+	  "products": {
+		"Leather": 5
+	  }
+	},
+	{
+	  "name": "Strap",
+	  "time" : 0.5,
+	  "ingredients": {
+		"Leather": 1
+	  },
+	  "products": {
+		"Strap": 2
+	  }
+	},
+	{
+	  "name": "Hilt",
+	  "time" : 0.5,
+	  "ingredients": {
+		"Bone": 1
+	  },
+	  "products": {
+		"Hilt": 1
+	  }
+	},
+	{
+	  "name": "Grip",
+	  "time" : 1.0,
+	  "ingredients": {
+		"Strap": 1,
+		"Hilt": 1
+	  },
+	  "products": {
+		  "Grip": 2
+	  }
+	},
+	{
+	  "name": "Copper Strand",
+		"time" : 0.5,
+		"ingredients": {
+		  "Copper Bar": 1
+		},
+		"products": {
+		  "Copper Strand": 2
+		}
+	},
+	{
+	  "name": "Metalweave",
+		"time" : 0.5,
+		"ingredients": {
+		  "Bone": 1,
+		  "Copper Strand": 3
+		},
+		"products": {
+		  "Metalweave": 1
+		}
+	},
+	{
+	  "name": "Alloyweave",
+	  "time" : 0.5,
+	  "ingredients": {
+		"Metalweave": 1,
+		"Bronze Bar": 5
+	  },
+	  "products": {
+		"Alloyweave": 1
+	  }
+	},
+	{
+	  "name": "Spear",
+	  "time" : 0.5,
+		"ingredients": {
+			"Hilt": 1,
+			"Copper Bar": 1
+		},
+		"products": {
+		  "Spear": 1
+		}
+	},
+	{
+	  "name": "Sword",
+		"time" : 0.5,
+		"ingredients": {
+		  "Grip": 1,
+		  "Hilt": 1,
+		  "Bronze Bar": 1
+		},
+		"products": {
+		  "Sword": 1
+		}
+	},
+	{
+	  "name": "Bow and Arrow",
+		"time" : 0.5,
+		"ingredients": {
+		  "Strap": 2,
+		  "Hilt": 1,
+		  "Copper Bar": 1
+		},
+		"products": {
+		  "Bow and Arrow": 1
+		}
+	},
+	{
+	  "name": "Warhammer",
+	  "time" : 12.0,
+	  "ingredients": {
+		"Grip": 1,
+		"Hilt": 1,
+		"Copper Bar": 5
+	  },
+	  "products": {
+		"Warhammer": 1
+	  }
+	},
+	{
+	  "name": "Frail Skeleton",
+	  "time" : 3.0,
+	  "ingredients": {
+		"Skeleton": 1
+	  },
+	  "products": {
+		"Frail Skeleton": 1
+	  }
+	},
+	{
+	  "name": "Skeleton Auxiliary",
+	  "time" : 5.0,
+	  "ingredients": {
+		"Skeleton": 1,
+		"Metalweave": 1,
+		"Spear": 1
+	  },
+	  "products": {
+		"Skeleton Auxiliary": 1
+	  }
+	},
+	{
+	  "name": "Gravebreaker",
+	  "time" : 5.0,
+	  "ingredients": {
+		"Skeleton": 1,
+		"Metalweave": 1,
+		"Warhammer": 1
+	  },
+	  "products": {
+		"Gravebreaker": 1
+	  }
+	},
+	{
+	  "name": "Undead Legionary",
+	  "time" : 6.0,
+	  "ingredients": {
+		"Skeleton": 1,
+		"Alloyweave": 1,
+		"Sword": 1
+	  },
+	  "products": {
+		"Undead Legionary": 1
+	  }
+	},
+	{
+	  "name": "Skeleton Marksman",
+	  "time" : 6.0,
+	  "ingredients": {
+		"Skeleton": 1,
+		"Metalweave": 1,
+		"Bow and Arrow": 1
+	  },
+	  "products": {
+		"Skeleton Marksman": 1
+	  }
+	},
+	{
+	  "name": "Gravebound Charger",
+	  "time": 12.0,
+	  "ingredients": {
+		"Skeleton": 5,
+		"Metalweave": 1,
+		"Spear": 1
+	  },
+	  "products": {
+		"Gravebound Charger": 1
+	  }
+	}
   ]
 }
