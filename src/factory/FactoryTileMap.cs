@@ -229,4 +229,12 @@ public partial class FactoryTileMap : LayerTileMap
 	{
 		return GetEntity(GetGlobalMousePosition(), Resource) as Resource;
 	}
+
+	public List<IEntity> GetEntitiesWithinRadius(Vector2I mapPosition, int radius)
+	{
+		return GetTilesInRadius(mapPosition, radius)
+			.Select(cell => GetEntity(cell, Building))
+			.Where(entity => entity != null)
+			.ToList();
+	}
 }

@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Godot;
 using Necromation;
+using Necromation.components;
 using Necromation.gui;
 using Necromation.interactables.interfaces;
 using Necromation.interfaces;
@@ -20,7 +21,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 * Logic Variables                                                        *
 	 **************************************************************************/
 	private float _time;
-	private float _fuelTime;
+	private FuelComponent _fuelComponent;
     private Recipe _recipe;
     private readonly Inventory _inputInventory;
     private readonly Inventory _outputInventory = new();
@@ -44,6 +45,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public Furnace()
 	{
 	    _inputInventory = new FurnaceInventory(this);
+	    _fuelComponent = new FuelComponent{InputInventory = _inputInventory};
 	    
 	    _particles = ParticleScene.Instantiate<GpuParticles2D>();
 	    _particles.Emitting = false;
@@ -72,7 +74,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     {
 	    if (!BuildComplete) return;
 	    
-	    if (_fuelTime > 0) _fuelTime -= (float)delta;
+	    _fuelComponent._Process(delta);
 	    
 	    base._Process(delta);
     	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
@@ -91,17 +93,10 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     	}
 	    
 	    // Check for fuel
-	    if (_fuelTime <= 0)
+	    if (!_fuelComponent.DrawPower())
 	    {
-		    if (_inputInventory.Remove("Coal Ore"))
-		    {
-			    _fuelTime = 10;
-		    }
-		    else
-		    {
-			    StopWorkingAnimation();
-			    return;
-		    }
+		    StopWorkingAnimation();
+		    return;
 	    }
 	    
     	_time += (float)delta;
@@ -121,7 +116,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 
     public  float GetFuelProgressPercent()
     {
-	    return _fuelTime / 10;
+	    return _fuelComponent.FuelTime / 10;
     }
     
     public override void Remove(Inventory to, bool quietly = false)

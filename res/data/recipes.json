@@ -80,6 +80,18 @@
 		"Assembler": 1
 	  }
 	},
+  	{
+	  "name": "Pylon",
+	  "time" : 1,
+	  "ingredients": {
+		  "Metalweave": 3,
+		  "Skeleton": 5,
+		  "Bone": 9
+	  },
+	  "products": {
+		  "Pylon": 1
+	  }
+  	},
 	{
 	  "name": "Stone Chest",
 	  "time" : 1,

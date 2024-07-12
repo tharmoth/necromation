@@ -21,6 +21,11 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	private static readonly AudioStream GrindSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_transport_bicycle_ride_gravel_onboard_pov_10530.mp3");
 	
 	/**************************************************************************
+	 * Events                                                                 *
+	 **************************************************************************/
+	public event Action OnRemove;
+	
+	/**************************************************************************
 	 * Utility Property                                                       *
 	 **************************************************************************/
 	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
@@ -279,6 +284,8 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		}
 
 		PlayRemoveAnimation();
+		
+		OnRemove?.Invoke();
 	}
 
 	protected void TransferInventories(Inventory to, bool quietly)
@@ -333,6 +340,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 			"Void Chest" => new VoidChest(),
 			"Infinite Chest" => new InfiniteChest(),
 			"Loader" => new Loader(orientation),
+			"Pylon" => new Pylon(),
 			_ => null
 		};
 	}
@@ -359,6 +367,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 			"Void Chest" => true,
 			"Infinite Chest" => true,
 			"Loader" => true,
+			"Pylon" => true,
 			_ => false
 		};
 	}

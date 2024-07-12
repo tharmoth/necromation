@@ -24,6 +24,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	private readonly string _category;
     protected Inventory _inputInventory;
     protected Inventory _outputInventory = new();
+    private Pylon _powerSource;
     
     /**************************************************************************
      * Visuals Variables 													  *
@@ -65,7 +66,10 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     		_time = 0;
     		return;
     	}
-    	
+	    
+	    // DrawPower
+	    if (!DrawPower()) return;
+	    
     	_time += (float)delta;
 	    Animate();
 
@@ -73,6 +77,24 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     	_time = 0;
     	_recipe.Craft(_inputInventory, _outputInventory);
     }
+
+	private bool DrawPower()
+	{
+		if (_powerSource == null)
+		{
+			_powerSource = Globals.FactoryScene.TileMap.GetEntitiesWithinRadius(MapPosition, 10)
+				.OfType<Pylon>()
+				.FirstOrDefault();
+			if (_powerSource == null) return false;
+			// Note: this probably causes a memory leak.
+			_powerSource.OnRemove += () =>
+			{
+				_powerSource = null;
+			};
+		}
+
+		return _powerSource.DrawPower(10);
+	}
 
 	private bool CanHoldOutputItems()
 	{

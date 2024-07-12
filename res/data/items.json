@@ -11,6 +11,11 @@
       "description": "Automates item production."
     },
     {
+      "name": "Pylon",
+      "category": "Building",
+      "description": "Transfers energy between buildings."
+    },
+    {
       "name": "Barracks",
         "category": "Building",
       "description": "Deploy minions to conquer new territories."
