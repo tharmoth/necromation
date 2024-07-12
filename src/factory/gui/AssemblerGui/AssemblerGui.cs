@@ -51,7 +51,7 @@ public partial class AssemblerGui : DeferredUpdate
 		
 		if (_crafter is ProgressTracker.IProgress progress)
 		{
-			ProgressBar.Init(progress);
+			ProgressBar.Init(progress.GetProgressPercent);
 		}
 		
 		Title.Text = _crafter.ItemType;

@@ -23,6 +23,7 @@ public partial class FurnaceGui : DeferredUpdate
 	private ProgressTracker ProgressBar => GetNode<ProgressTracker>("%ProgressBar");
 	private Label Title => GetNode<Label>("%Title");
 	private TextureRect BuildingTexture => GetNode<TextureRect>("%BuildingTexture");
+	private ProgressTracker FuelProgressBar => GetNode<ProgressTracker>("%FuelProgressBar");
 	
 	/**************************************************************************
 	 * State Data          													  *
@@ -47,10 +48,8 @@ public partial class FurnaceGui : DeferredUpdate
 		AddUpdateListeners(new List<Inventory> { _to, _crafter.GetInputInventory(), _crafter.GetOutputInventory() });
 		crafter.RecipeListeners.Add(FlagDirty);
 		
-		if (_crafter is ProgressTracker.IProgress progress)
-		{
-			ProgressBar.Init(progress);
-		}
+		ProgressBar.Init(_crafter.GetProgressPercent);
+		FuelProgressBar.Init(_crafter.GetFuelProgressPercent);
 		
 		Title.Text = _crafter.ItemType;
 		
@@ -72,18 +71,22 @@ public partial class FurnaceGui : DeferredUpdate
 		if (furnace.GetRecipe() != null)
 		{
 			list.GetChildren().Where(node => node is not AssemblerItemBox).ToList().ForEach(node => node.QueueFree());
-			if (isInput) AssemblerItemBox.UpdateInventory(furnace.GetInputInventory(), to, list, furnace.GetRecipe(), true);
+			if (isInput)
+			{
+				AssemblerItemBox.UpdateInventory(furnace.GetInputInventory(), to, list, furnace.GetRecipe(), true);
+				AssemblerItemBox.AddInventoryItem("Coal Ore", furnace.GetInputInventory().CountItem("Coal Ore"), from, to, list, true);
+			}
 			else AssemblerItemBox.UpdateInventory(furnace.GetOutputInventory(), to, list, furnace.GetRecipe(), false);
 		}
 		else if (isInput)
 		{
 			list.GetChildren().ToList().ForEach(node => node.QueueFree());
-	
-			AssemblerItemBox.AddInventoryItem("Coal Ore", 2, from, to, list, true);
-			
+
 			var validItems = furnace.MaxItems.Keys.ToList();
 			validItems.Remove("Coal Ore");
 			FilterItemBox.AddItemBox(from, to, validItems, list);
+			
+			AssemblerItemBox.AddInventoryItem("Coal Ore", 2, from, to, list, true);
 		}
 		else
 		{

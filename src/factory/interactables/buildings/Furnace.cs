@@ -20,6 +20,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	 * Logic Variables                                                        *
 	 **************************************************************************/
 	private float _time;
+	private float _fuelTime;
     private Recipe _recipe;
     private readonly Inventory _inputInventory;
     private readonly Inventory _outputInventory = new();
@@ -71,6 +72,8 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     {
 	    if (!BuildComplete) return;
 	    
+	    if (_fuelTime > 0) _fuelTime -= (float)delta;
+	    
 	    base._Process(delta);
     	if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
 	    {
@@ -86,7 +89,21 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 		    }
     		return;
     	}
-
+	    
+	    // Check for fuel
+	    if (_fuelTime <= 0)
+	    {
+		    if (_inputInventory.Remove("Coal Ore"))
+		    {
+			    _fuelTime = 10;
+		    }
+		    else
+		    {
+			    StopWorkingAnimation();
+			    return;
+		    }
+	    }
+	    
     	_time += (float)delta;
 	    PlayWorkingAnimation();
 
@@ -100,6 +117,11 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     {
 	    if (_recipe == null) return 0;
 	    return _time / _recipe.Time;
+    }
+
+    public  float GetFuelProgressPercent()
+    {
+	    return _fuelTime / 10;
     }
     
     public override void Remove(Inventory to, bool quietly = false)
@@ -157,6 +179,8 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 			    _maxItems[item] = count * 2;
 		    }
 	    }
+	    
+	    _maxItems["Coal Ore"] = 4;
     }
 
     /// <summary>
@@ -173,7 +197,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 				    .ToList();
 			    
 			    var inputContainsOnlyValid = _inputInventory.Items.Keys
-				    .All(inventoryIngredient => recipeIngredients.Contains(inventoryIngredient));
+				    .All(inventoryIngredient => recipeIngredients.Contains(inventoryIngredient) || IsFuel(inventoryIngredient));
 
 			    var recipeProducts = recipe.Products
 				    .Select(ingredient => ingredient.Key)
@@ -238,6 +262,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    }
     }
     
+    private bool IsFuel(string item) => item == "Coal Ore";
     public bool CanAcceptItems(string item, int count = 1) => _inputInventory.CanAcceptItems(item, count);
     public bool CanAcceptItemsInserter(string item, int count = 1) => _inputInventory.CanAcceptItemsInserter(item, count);
     public void Insert(string item, int count = 1) => _inputInventory.Insert(item, count);

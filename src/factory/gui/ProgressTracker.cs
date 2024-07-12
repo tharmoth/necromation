@@ -1,22 +1,24 @@
+using System;
 using Godot;
 
 public partial class ProgressTracker : ProgressBar
 {
-	private IProgress _nodeToTrack;
+	private Func<float> _getProgress;
 
-	public void Init(IProgress nodeToTrack)
+	public void Init(Func<float> getProgress)
 	{
-		_nodeToTrack = nodeToTrack;
+		_getProgress = getProgress;
 		ShowPercentage = false;
 	}
 
 	public override void _Process(double delta)
 	{
-		if (_nodeToTrack == null) return;
-		if (_nodeToTrack.GetProgressPercent() > 0.0f)
+		if (_getProgress == null) return;
+		var value = _getProgress.Invoke();
+		if (value > 0.0f)
 		{
 			Visible = true;
-			Value = _nodeToTrack.GetProgressPercent() * 100;
+			Value = value * 100;
 		}
 		else
 		{

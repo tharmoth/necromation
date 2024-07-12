@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b55hydahwuts2"]
+[gd_scene load_steps=14 format=3 uid="uid://b55hydahwuts2"]
 
 [ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_y27e0"]
 [ext_resource type="Script" path="res://src/factory/gui/FurnaceGui/FurnaceGui.cs" id="2_8etlc"]
@@ -11,6 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://df0vkwm5lx4c5" path="res://res/sprites/Arrow-right.png" id="9_51gha"]
 [ext_resource type="PackedScene" uid="uid://cikqsuksjidww" path="res://src/factory/gui/AssemblerGui/AssemblerItemBox.tscn" id="11_q72qe"]
 [ext_resource type="Script" path="res://src/factory/gui/ProgressTracker.cs" id="12_oyjbq"]
+[ext_resource type="Texture2D" uid="uid://b5f0mpkraex7g" path="res://res/sprites/fire1.png" id="12_ten2r"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xjc5p"]
+bg_color = Color(0.522975, 0.161741, 0.123459, 1)
 
 [node name="FurnaceGui" type="PanelContainer"]
 auto_translate_mode = 1
@@ -184,29 +188,32 @@ theme_override_constants/margin_top = 22
 theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 22
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SourceInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2"]
+[node name="SourceInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="SourceInventoryItemList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/SourceInventory"]
+[node name="SourceInventoryItemList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/SourceInventory"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CrafterItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/SourceInventory/SourceInventoryItemList" instance=ExtResource("11_q72qe")]
+[node name="CrafterItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/SourceInventory/SourceInventoryItemList" instance=ExtResource("11_q72qe")]
 auto_translate_mode = 1
 layout_mode = 2
 
-[node name="HBoxContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -216,7 +223,7 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 theme_override_constants/margin_left = 3
@@ -224,7 +231,7 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer/MarginContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
@@ -233,7 +240,7 @@ size_flags_vertical = 1
 show_percentage = false
 script = ExtResource("12_oyjbq")
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/MarginContainer"]
 auto_translate_mode = 1
 modulate = Color(0.6, 0.6, 0.6, 1)
 layout_mode = 2
@@ -241,24 +248,67 @@ size_flags_horizontal = 4
 texture = ExtResource("9_51gha")
 stretch_mode = 5
 
-[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("8_qy6pw")]
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("8_qy6pw")]
 auto_translate_mode = 1
 layout_mode = 2
 
-[node name="OutputInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2"]
+[node name="OutputInventory" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="OutputInventoryItemList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/OutputInventory"]
+[node name="OutputInventoryItemList" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/OutputInventory"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CrafterItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/HBoxContainer2/OutputInventory/OutputInventoryItemList" instance=ExtResource("11_q72qe")]
+[node name="CrafterItemBox" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/OutputInventory/OutputInventoryItemList" instance=ExtResource("11_q72qe")]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="HBoxContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="FuelProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/fill = SubResource("StyleBoxFlat_xjc5p")
+value = 50.0
+show_percentage = false
+script = ExtResource("12_oyjbq")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+auto_translate_mode = 1
+modulate = Color(0.6, 0.6, 0.6, 1)
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("12_ten2r")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Outline" parent="MarginContainer/VBoxContainer/HBoxContainer3/CrafterInventory/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_qy6pw")]
 auto_translate_mode = 1
 layout_mode = 2
 

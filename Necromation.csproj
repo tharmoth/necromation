@@ -16,6 +16,7 @@
     <Content Include="res\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\components\" />
     <Folder Include="src\factory\gui\CrafterGUI\" />
     <Folder Include="src\gui\buttons\" />
   </ItemGroup>

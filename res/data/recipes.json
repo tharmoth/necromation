@@ -106,7 +106,6 @@
 	  "category": "smelting",
 	  "ingredients": {
 		"Bone Fragments": 2,
-		"Coal Ore": 1
 	  },
 	  "products": {
 		"Bone": 2
@@ -118,7 +117,6 @@
 	  "category": "smelting",
 	  "ingredients": {
 		"Copper Ore": 2,
-		"Coal Ore": 1
 	  },
 	  "products": {
 		"Copper Bar": 2
@@ -130,7 +128,6 @@
 	  "category": "smelting",
 	  "ingredients": {
 		"Tin Ore": 2,
-		"Coal Ore": 1
 	  },
 	  "products": {
 		"Tin Bar": 2
@@ -143,7 +140,6 @@
 	  "ingredients": {
 		"Copper Bar": 2,
 		"Tin Bar": 2,
-		"Coal Ore": 1
 	  },
 	  "products": {
 		"Bronze Bar": 4

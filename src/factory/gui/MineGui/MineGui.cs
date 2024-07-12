@@ -43,7 +43,7 @@ public partial class MineGui : DeferredUpdate
 		AddUpdateListeners(new List<Inventory> { _to, _from });
 
 		Title.Text = title;
-		ProgressBar.Init(progress);
+		ProgressBar.Init(progress.GetProgressPercent);
 		
 		Update();
 	}
