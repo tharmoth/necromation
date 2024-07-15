@@ -1,65 +1,88 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Necromation;
-using Necromation.components;
-using Necromation.interfaces;
+using Necromation.sk;
 
-public class Pylon : Building , ITransferTarget, IInteractable
+public class Pylon : Building
 {
+    /**************************************************************************
+     * Constants                                                              *
+     **************************************************************************/
+    private const int LineWidth = 2;
+    
     /**************************************************************************
      * Building Implementation                                                *
      **************************************************************************/
     public override Vector2I BuildingSize => Vector2I.One;
     public override string ItemType => "Pylon";
     
-    private readonly Inventory _inventory = new();
-    private readonly FuelComponent _fuelComponent;
-
-    public Pylon() : base()
-    {
-        _fuelComponent = new FuelComponent() {InputInventory = _inventory};
-    }
-
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        _fuelComponent._Process(delta);
-    }
-
-    public bool DrawPower(int i)
-    {
-        return _fuelComponent.DrawPower();;
-    }
-
-    #region IInteractable Implementation
     /**************************************************************************
-     * IInteractable Methods                                                  *
-     **************************************************************************/        
-    public void Interact(Inventory playerInventory)
-    {
-        ContainerGui.Display(playerInventory, _inventory, ItemType);
-    }
-    #endregion
-    
-    #region ITransferTarget Implementation
-    /**************************************************************************
-     * ITransferTarget Methods                                                *
+     * Public Variables                                                       *
      **************************************************************************/
-    public virtual bool CanAcceptItems(string item,  int count = 1) => _inventory.CanAcceptItems(item, count);
-    public virtual bool CanAcceptItemsInserter(string item,  int count = 1) => _inventory.CanAcceptItemsInserter(item, count);
-    public virtual void Insert(string item, int count = 1) => _inventory.Insert(item, count);
-    public bool Remove(string item, int count = 1) => _inventory.Remove(item, count);
-    public string GetFirstItem() => _inventory.GetFirstItem();
-    public List<string> GetItems() => _inventory.GetItems();
-    public List<Inventory> GetInventories() => new() { _inventory };
-    public int GetMaxTransferAmount(string itemType) => _inventory.GetMaxTransferAmount(itemType);
-    private class ChestInventory : Inventory
+    public readonly HashSet<Pylon> Links = new();
+    public readonly HashSet<IPowerSource> Sources = new();
+    public readonly HashSet<IPowerConsumer> Consumers = new();
+
+    /**************************************************************************
+     * Private Variables                                                       *
+     **************************************************************************/
+    private readonly Node2D _colorNode = new () {ZIndex = 100};
+
+    /**************************************************************************
+     * Godot Methods                                                          *
+     **************************************************************************/
+    public override void _Ready()
     {
-        public override int GetMaxTransferAmount(string itemType)
+        base._Ready();
+        BaseNode.CallDeferred("add_child", _colorNode);
+        _colorNode.Draw += DoDraw;
+    }
+
+    /**************************************************************************
+     * Public Methods                                                         *
+     **************************************************************************/
+    public void Update()
+    {
+        Links.Clear();
+        Sources.Clear();
+        Consumers.Clear();
+        
+        Globals.FactoryScene.TileMap.GetEntitiesWithinRadius(MapPosition, 10)
+            .ToList()
+            .ForEach(building =>
+            {
+                switch (building)
+                {
+                    case Pylon pylon:
+                        Links.Add(pylon);
+                        break;
+                    case Manaforge manaforge:
+                        Sources.Add(manaforge);
+                        break;
+                    case Assembler assembler:
+                        Consumers.Add(assembler);
+                        break;
+                }
+            });
+       
+        _colorNode.QueueRedraw();
+    }
+
+    /**************************************************************************
+     * Private Methods                                                        *
+     **************************************************************************/
+    private void DoDraw()
+    {
+        var buildings = Links;
+            // .Union(Sources.OfType<Building>())
+            // .Union(Consumers.OfType<Building>());
+        
+        foreach (var link in buildings)
         {
-            return 200 - CountItems();
+            var start = Vector2.Zero;
+            var end = _colorNode.ToLocal(link.GlobalPosition);
+            _colorNode.DrawLine(start, end, Utils.ManaColor, LineWidth);
         }
     }
-    #endregion
 }

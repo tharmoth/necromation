@@ -10,12 +10,17 @@ public class FuelComponent
         if (FuelTime > 0) FuelTime -= (float)delta;
     }
 
-    public bool DrawPower()
+    public int DrawPower()
     {
         if (FuelTime <= 0 && InputInventory.Remove("Coal Ore"))
         {
             FuelTime = 10;
         }
-        return FuelTime > 0;
+        return FuelTime > 0 ? 100 : 0;
+    }
+    
+    public bool CanDrawPower()
+    {
+        return FuelTime > 0 || InputInventory.CountItem("Coal Ore") > 0;
     }
 }

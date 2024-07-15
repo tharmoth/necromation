@@ -8,27 +8,61 @@ using Necromation.interfaces;
 
 namespace Necromation;
 
-public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
+public class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IPowerConsumer
 {
 	/**************************************************************************
-	 * Building Implementation                                                *
+	 * Data Constants                                                         *
 	 **************************************************************************/
-	public override string ItemType { get; }
-	public override Vector2I BuildingSize => Vector2I.One * 3;
+	private const int MaxInputItems = 50;
 	
 	/**************************************************************************
-	 * Logic Variables                                                        *
+	 * Public Variables                                                       *
 	 **************************************************************************/
+	#region Building Implementation
+	public override string ItemType { get; }
+	public override Vector2I BuildingSize => Vector2I.One * 3;
+	#endregion
+	
+	#region IPowerConsumer Implementation
+	public float EnergyStored { get; set; }
+	public float PowerMax => 100;
+	public float PowerLimit => 10;
+
+	private Tween _disconnectedTween;
+	public bool Disconnected
+	{
+		set
+		{
+			_disconnectedSprite.Visible = value;
+			
+			if (value)
+			{
+				if (_disconnectedTween != null) return;
+				_disconnectedTween = _disconnectedSprite.CreateTween();
+				_disconnectedTween.TweenProperty(_disconnectedSprite, "modulate", Colors.Transparent, 0.5f);
+				_disconnectedTween.TweenProperty(_disconnectedSprite, "modulate", Colors.White, 0.5f);
+				_disconnectedTween.SetLoops();
+			}
+			else
+			{
+				_disconnectedTween?.Kill();
+				_disconnectedTween = null;
+			}
+		}
+	}
+	#endregion
+	
+	/**************************************************************************
+	 * Private Variables                                                      *
+	 **************************************************************************/
+	// Logic
 	private float _time;
 	private Recipe _recipe;
 	private readonly string _category;
-    protected Inventory _inputInventory;
-    protected Inventory _outputInventory = new();
-    private Pylon _powerSource;
+    private readonly Inventory _inputInventory;
+    private readonly Inventory _outputInventory = new();
     
-    /**************************************************************************
-     * Visuals Variables 													  *
-     **************************************************************************/
+	// Visuals
 	private Tween _animationTween;
 	private Sprite2D _recipeSprite = new()
 	{
@@ -40,12 +74,16 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 		Visible = false,
 		Texture = Database.Instance.GetTexture("Dark760")
 	};
-	
+	private Sprite2D _disconnectedSprite = new()
+	{
+		ZIndex = 3,
+		Texture = Database.Instance.GetTexture("Disconnected"),
+		Visible = false
+	};
+
 	/**************************************************************************
-	 * Data Constants                                                         *
+	 * Constructor                                                            *
 	 **************************************************************************/
-	protected int MaxInputItems = 50;
-	
 	public Assembler(string itemType, string category)
 	{
 		ItemType = itemType;
@@ -53,11 +91,19 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	    _inputInventory = new AssemblerInventory(this);
 	    
 	    _outlineSprite.Position = new Vector2(0, -10);
+	    Sprite.AddChild(_outlineSprite);
+	    
 	    _recipeSprite.Position = new Vector2(0, -10);
 	    Sprite.AddChild(_recipeSprite);
-	    Sprite.AddChild(_outlineSprite);
+	    
+	    _disconnectedSprite.Position = new Vector2(0, -10);
+	    _disconnectedSprite.ScaleToSize(Vector2.One * 32.0f);
+	    Sprite.AddChild(_disconnectedSprite);
 	}
 
+	/**************************************************************************
+	 * Godot Methods                                                          *
+	 **************************************************************************/
 	public override void _Process(double delta)
     {
 	    base._Process(delta);
@@ -68,7 +114,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     	}
 	    
 	    // DrawPower
-	    if (!DrawPower()) return;
+	    if (!DrawPower(delta)) return;
 	    
     	_time += (float)delta;
 	    Animate();
@@ -78,22 +124,29 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
     	_recipe.Craft(_inputInventory, _outputInventory);
     }
 
-	private bool DrawPower()
+	/**************************************************************************
+	 * Public Methods                                                         *
+	 **************************************************************************/
+	public override float GetProgressPercent()
 	{
-		if (_powerSource == null)
-		{
-			_powerSource = Globals.FactoryScene.TileMap.GetEntitiesWithinRadius(MapPosition, 10)
-				.OfType<Pylon>()
-				.FirstOrDefault();
-			if (_powerSource == null) return false;
-			// Note: this probably causes a memory leak.
-			_powerSource.OnRemove += () =>
-			{
-				_powerSource = null;
-			};
-		}
-
-		return _powerSource.DrawPower(10);
+		if (_recipe == null) return 0;
+		return _time / _recipe.Time;
+	}
+	
+	public override void Remove(Inventory to, bool quietly = false)
+	{
+		base.Remove(to, quietly);
+		SetRecipe(null, null);
+	}
+	
+	/**************************************************************************
+	 * Private Methods                                                        *
+	 **************************************************************************/
+	private bool DrawPower(double delta)
+	{
+		if (EnergyStored < PowerLimit * (float) delta) return false;
+		EnergyStored -= PowerLimit * (float) delta;
+		return true;
 	}
 
 	private bool CanHoldOutputItems()
@@ -105,7 +158,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 		return true;
 	}
 	
-	protected virtual bool MaxAutocraftReached()
+	private bool MaxAutocraftReached()
 	{
 		foreach (var (item, count) in _recipe.Products)
 		{
@@ -114,22 +167,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 		return false;
 	}
 
-    public override float GetProgressPercent()
-    {
-	    if (_recipe == null) return 0;
-	    return _time / _recipe.Time;
-    }
-
-    public override void Remove(Inventory to, bool quietly = false)
-    {
-	    base.Remove(to, quietly);
-	    SetRecipe(null, null);
-    }
-
-    /**************************************************************************
-     * Protected Methods                                                      *
-     **************************************************************************/
-    protected void Animate()
+    private void Animate()
     {
 	    if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
 
@@ -210,7 +248,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 		    if (!ingredients.ContainsKey(itemType)) return 0;
 		    
 		    var currentCount = CountItem(itemType);
-		    return Mathf.Max(0,  _assembler.MaxInputItems - currentCount);
+		    return Mathf.Max(0,  Assembler.MaxInputItems - currentCount);
 	    }
     }
     

@@ -91,7 +91,19 @@
 	  "products": {
 		  "Pylon": 1
 	  }
-  	},
+  	}, 
+	  {
+		  "name": "Manaforge",
+		  "time" : 1,
+		  "ingredients": {
+			  "Metalweave": 3,
+			  "Skeleton": 5,
+			  "Bone": 9
+		  },
+		  "products": {
+			  "Manaforge": 1
+		  }
+	  },  
 	{
 	  "name": "Stone Chest",
 	  "time" : 1,

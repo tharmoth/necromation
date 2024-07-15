@@ -12,6 +12,13 @@ using Necromation.sk;
 public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgress
 {
 	/**************************************************************************
+	 * Events                                                                 *
+	 **************************************************************************/
+	public event Action OnRemove;
+	public event Action RemoveAnimationComplete;
+	public event Action BuildAnimationComplete;
+	
+	/**************************************************************************
 	 * Hardcoded Scene Imports 											      *
 	 **************************************************************************/
 	private static readonly ShaderMaterial GreyScale = GD.Load<ShaderMaterial>("res://src/factory/shaders/greyscale.tres");
@@ -21,13 +28,9 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	private static readonly AudioStream GrindSound = GD.Load<AudioStream>("res://res/sfx/zapsplat_transport_bicycle_ride_gravel_onboard_pov_10530.mp3");
 	
 	/**************************************************************************
-	 * Events                                                                 *
+	 * Public Variables                                                       *
 	 **************************************************************************/
-	public event Action OnRemove;
-	
-	/**************************************************************************
-	 * Utility Property                                                       *
-	 **************************************************************************/
+	// Utility
 	public Vector2I MapPosition => Globals.FactoryScene.TileMap.GlobalToMap(GlobalPosition);
 	public Vector2 GlobalPosition
 	{
@@ -37,6 +40,17 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	public Vector2 GetSpriteOffset() => BuildingSize.X % 2 == 0 ? new Vector2(16, 16) : new Vector2(0, 0);
 	public string Id => _id;
 	
+	// Visuals
+	public readonly Node2D BaseNode = new();
+	public Sprite2D Sprite { get; private init; } = new();
+	public readonly Sprite2D OutlineSprite = new();
+	
+	/// <summary>
+	/// Is true when the build animation is complete. Can be used to delay the building's functionality until the animation is complete.
+	/// </summary>
+	public bool BuildComplete { get; private set; }
+	
+
 	/**************************************************************************
 	 * Logic Variables                                                        *
 	 **************************************************************************/
@@ -46,29 +60,25 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	private string _id = Guid.NewGuid().ToString();
 	
 	/**************************************************************************
-	 * Visuals Variables 													  *
+	 * Protected Variables                                                     *
 	 **************************************************************************/
-	public readonly Node2D BaseNode = new();
-	public readonly Sprite2D Sprite = new();
-	public readonly Sprite2D OutlineSprite = new();
-	
 	protected readonly Sprite2D GhostSprite = new();
 	protected readonly ColorRect ClipRect = new();
-	
+
+	/**************************************************************************
+	 * Private Variables                                                      *
+	 **************************************************************************/
 	private readonly AudioStreamPlayer2D _audio = new();
 	private readonly GpuParticles2D _particles;
 	private readonly VisibleOnScreenNotifier2D _notifier = new();
-	
 	// We need to cache these to cancel them if the building is removed before the animation is complete.
 	private Tween _xTween;
 	private Tween _yTween;
 	private Tween _clipTween;
 	
-	/// <summary>
-	/// Is true when the build animation is complete. Can be used to delay the building's functionality until the animation is complete.
-	/// </summary>
-	public bool BuildComplete { get; private set; }
-
+	/**************************************************************************
+	 * Constructor                                                            *
+	 **************************************************************************/
 	protected Building()
 	{
 		_notifier.ScreenEntered += () => IsOnScreen = true;
@@ -98,23 +108,9 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		BaseNode.AddChild(ClipRect);
 	}
 
-	public virtual void _Process(double delta)
-	{
-		// if (Sprite.Visible)
-		// {
-		// 	if (!IsOnScreen)
-		// 	{
-		// 		Sprite.Visible = false;
-		// 	}
-		// } else if (!Sprite.Visible)
-		// {
-		// 	if (Notifier.IsOnScreen())
-		// 	{
-		// 		Sprite.Visible = true;
-		// 	}
-		// }
-	}
-
+	/**************************************************************************
+	 * Godot Methods                                                          *
+	 **************************************************************************/
 	public virtual void _Ready()
 	{
 		IsOnScreen = _notifier.IsOnScreen();
@@ -151,7 +147,77 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	{
 		Globals.FactoryScene.TileMap.RemoveEntity(this);
 	}
+	
+	public virtual void _Process(double delta) { }
+	public virtual void _PhysicsProcess(double delta) { }
+	
+	/******************************************************************
+	 * Public Methods                                                 *
+	 ******************************************************************/
+	public abstract Vector2I BuildingSize { get; }
+	public abstract string ItemType { get; }
+	public virtual float GetProgressPercent() => 0;
+	public virtual IRotatable.BuildingOrientation Orientation { get; set; }
+	public virtual bool CanPlaceAt(Vector2 position)
+	{
+		var playerPos = Globals.Player.MapPosition;
+		
+		return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable) && 
+		       GetOccupiedPositions(position).All(pos => pos != playerPos);
+	}
+	
+	public virtual void Remove(Inventory to, bool quietly = false)
+	{
+		Globals.FactoryScene.TileMap.RemoveEntity(this);
+		Locator.BuildingSystem.RemoveBuilding(this);
+		
+		if (to != null)
+		{
+			TransferInventories(to, quietly);
+			to.Insert(ItemType);
+			if (!quietly) SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, 0));
+		}
 
+		PlayRemoveAnimation();
+		
+		OnRemove?.Invoke();
+	}
+	
+	public List<Vector2I> GetOccupiedPositions(Vector2 position)
+	{
+		position = Globals.FactoryScene.TileMap.ToMap(position);
+		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
+		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
+		var topLeft = Globals.FactoryScene.TileMap.GlobalToMap(position) - BuildingSize / 2;
+
+		var positions = (from x in Enumerable.Range(0, BuildingSize.X)
+			from y in Enumerable.Range(0, BuildingSize.Y)
+			select topLeft + new Vector2I(x, y)).ToList();
+		return positions;
+	}
+	
+	/******************************************************************
+	 * Protected Methods                                                 *
+	 ******************************************************************/
+	protected void TransferInventories(Inventory to, bool quietly)
+	{
+		int labelOffset = 1;
+		if (this is not ITransferTarget inputTarget) return;
+		foreach (var from in inputTarget.GetInventories())
+		{
+			foreach (var item in from.GetItems())
+			{
+				var count = from.CountItem(item);
+				Inventory.TransferItem(from, to, item, count);
+				var remaining = to.CountItem(item);
+				if (!quietly) SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", Sprite.GlobalPosition + new Vector2(0, labelOffset++ * 20));
+			}
+		}
+	}
+
+	/**************************************************************************
+	 * Private Methods                                                        *
+	 **************************************************************************/
 	private void PlayBuildAnimation()
 	{
 		var clipTarget = ClipRect.Position.Y;
@@ -176,6 +242,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 			
 			_particles.Emitting = false;
 			_particles.Visible = false;
+			BuildAnimationComplete?.Invoke();
 		});
 	}
 
@@ -199,6 +266,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		{
 			BaseNode.Visible = false;
 			BaseNode.QueueFree();
+			RemoveAnimationComplete?.Invoke();
 		});
 	}
 
@@ -246,76 +314,6 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		_xTween.TweenCallback(Callable.From(onComplete));
 	}
 	
-
-	/******************************************************************
-	 * Public Methods                                                 *
-	 ******************************************************************/
-	public virtual bool CanPlaceAt(Vector2 position)
-	{
-		var playerPos = Globals.Player.MapPosition;
-		
-		return GetOccupiedPositions(position).All(Globals.FactoryScene.TileMap.IsBuildable) && 
-		       GetOccupiedPositions(position).All(pos => pos != playerPos);
-	}
-	
-	public List<Vector2I> GetOccupiedPositions(Vector2 position)
-	{
-		position = Globals.FactoryScene.TileMap.ToMap(position);
-		if (BuildingSize.X % 2 == 0) position += new Vector2(16, 0);
-		if (BuildingSize.Y % 2 == 0) position += new Vector2(0, 16);
-		var topLeft = Globals.FactoryScene.TileMap.GlobalToMap(position) - BuildingSize / 2;
-
-		var positions = (from x in Enumerable.Range(0, BuildingSize.X)
-			from y in Enumerable.Range(0, BuildingSize.Y)
-			select topLeft + new Vector2I(x, y)).ToList();
-		return positions;
-	}
-
-	public virtual void Remove(Inventory to, bool quietly = false)
-	{
-		Globals.FactoryScene.TileMap.RemoveEntity(this);
-		Globals.BuildingManager.RemoveBuilding(this);
-		
-		if (to != null)
-		{
-			TransferInventories(to, quietly);
-			to.Insert(ItemType);
-			if (!quietly) SKFloatingLabel.Show("+1 " + ItemType + " (" + to.CountItem(ItemType) + ")", Sprite.GlobalPosition + new Vector2(0, 0));
-		}
-
-		PlayRemoveAnimation();
-		
-		OnRemove?.Invoke();
-	}
-
-	protected void TransferInventories(Inventory to, bool quietly)
-	{
-		int labelOffset = 1;
-		if (this is not ITransferTarget inputTarget) return;
-		foreach (var from in inputTarget.GetInventories())
-		{
-			foreach (var item in from.GetItems())
-			{
-				var count = from.CountItem(item);
-				Inventory.TransferItem(from, to, item, count);
-				var remaining = to.CountItem(item);
-				if (!quietly) SKFloatingLabel.Show("+" + count + " " + item + " (" + remaining + ")", Sprite.GlobalPosition + new Vector2(0, labelOffset++ * 20));
-			}
-		}
-	}
-
-	/******************************************************************
-	 * Abstract methods                                               *
-	 ******************************************************************/	
-	public abstract Vector2I BuildingSize { get; }
-	public abstract string ItemType { get; }
-	public virtual float GetProgressPercent()
-	{
-		return 0;
-	}
-	public virtual IRotatable.BuildingOrientation Orientation { get; set; }
-	public virtual void _PhysicsProcess(double delta) { }
-	
 	#region BuildingFactory
 	/******************************************************************
 	 * Building Factory                                               *
@@ -341,6 +339,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 			"Infinite Chest" => new InfiniteChest(),
 			"Loader" => new Loader(orientation),
 			"Pylon" => new Pylon(),
+			"Manaforge" => new Manaforge(),
 			_ => null
 		};
 	}
@@ -368,6 +367,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 			"Infinite Chest" => true,
 			"Loader" => true,
 			"Pylon" => true,
+			"Manaforge" => true,
 			_ => false
 		};
 	}
@@ -429,7 +429,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		building.GlobalPosition = new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]);
 		building._audio.Stream = null;
 		building._id = nodeData["Id"].ToString();
-		Globals.BuildingManager.AddBuilding(building, building.GlobalPosition);
+		Locator.BuildingSystem.AddBuilding(building, building.GlobalPosition);
 	}
 	#endregion
 }

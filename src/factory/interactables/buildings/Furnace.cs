@@ -9,8 +9,14 @@ using Necromation.gui;
 using Necromation.interactables.interfaces;
 using Necromation.interfaces;
 
-public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractable
+public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractable, FurnaceAnimationComponent.IAnimatable
 {
+	/**************************************************************************
+	 * Events                                                                 *
+	 **************************************************************************/
+	public event Action StartAnimation;
+	public event Action StopAnimation;
+
 	/**************************************************************************
 	 * Building Implementation                                                *
 	 **************************************************************************/
@@ -18,49 +24,42 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	public override Vector2I BuildingSize => Vector2I.One * 2;
 	
 	/**************************************************************************
-	 * Logic Variables                                                        *
-	 **************************************************************************/
-	private float _time;
-	private FuelComponent _fuelComponent;
-    private Recipe _recipe;
-    private readonly Inventory _inputInventory;
-    private readonly Inventory _outputInventory = new();
-    private readonly Dictionary<string, int> _maxItems = new();
-    public ImmutableDictionary<string, int> MaxItems => _maxItems.ToImmutableDictionary();
-    public List<Action> RecipeListeners { get; } = new();
-
-    /**************************************************************************
-     * Visuals Variables 													  *
-     **************************************************************************/
-    private static readonly PackedScene ParticleScene = GD.Load<PackedScene>("res://src/factory/interactables/buildings/smoke.tscn");
-    private readonly GpuParticles2D _particles;
-    private readonly PointLight2D _light = new();
-    private Tween _animationTween;
-    
-    /**************************************************************************
 	 * Data Constants                                                         *
 	 **************************************************************************/
-    private const int MaxInputItems = 50;
-
+	private const int MaxInputItems = 50;
+    
+	/**************************************************************************
+	 * Public Variables                                                       *
+	 **************************************************************************/
+	public ImmutableDictionary<string, int> MaxItems => _maxItems.ToImmutableDictionary();
+	public List<Action> RecipeListeners { get; } = new();
+	
+	/**************************************************************************
+	 * Private Variables                                                       *
+	 **************************************************************************/
+	private readonly Inventory _inputInventory;
+	private readonly Inventory _outputInventory = new();
+	private readonly FuelComponent _fuelComponent;
+	private readonly Dictionary<string, int> _maxItems = new();
+	private float _time;
+    private Recipe _recipe;
+    
+    /**************************************************************************
+     * Constructor      													  *
+     **************************************************************************/
     public Furnace()
 	{
 	    _inputInventory = new FurnaceInventory(this);
 	    _fuelComponent = new FuelComponent{InputInventory = _inputInventory};
-	    
-	    _particles = ParticleScene.Instantiate<GpuParticles2D>();
-	    _particles.Emitting = false;
-	    Sprite.AddChild(_particles);
-	    
-	    _light.Visible = false;
-	    _light.Texture = Database.Instance.GetTexture("SoftLight");
-	    _light.Color = Colors.Yellow;
-	    _light.TextureScale = .3f;
-	    _light.Position = new Vector2(0, 24);
-	    Sprite.AddChild(_light);
-	    
+
 	    UpdateAllowedIngredients();
+	    
+	    new FurnaceAnimationComponent(this);
 	}
     
+	/**************************************************************************
+	 * Godot Methods                                                          *
+	 **************************************************************************/
     public override void _Ready()
     {
 	    base._Ready();
@@ -68,6 +67,12 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    // Add this here because we need to remove it when the Sprite is removed from the tree.
 	    UpdateAllowedIngredients();
 	    Globals.ResearchListeners.Add(UpdateAllowedIngredients);
+    }
+    
+    public override void _ExitTree()
+    {
+	    base._ExitTree();
+	    Globals.ResearchListeners.Remove(UpdateAllowedIngredients);
     }
     
     public override void _Process(double delta)
@@ -87,20 +92,20 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 		    if (old != _recipe) RecipeListeners.ForEach(listener => listener());
 		    if (_recipe == null || !_recipe.CanCraft(_inputInventory) || MaxOutputItemsReached())
 		    {
-			    StopWorkingAnimation();
+			    StopAnimation?.Invoke();
 		    }
     		return;
     	}
 	    
 	    // Check for fuel
-	    if (!_fuelComponent.DrawPower())
+	    if (_fuelComponent.DrawPower() <= 0)
 	    {
-		    StopWorkingAnimation();
+		    StopAnimation?.Invoke();
 		    return;
 	    }
 	    
     	_time += (float)delta;
-	    PlayWorkingAnimation();
+	    StartAnimation?.Invoke();
 
     	if (GetProgressPercent() < 1.0f) return;
     	_time = 0;
@@ -108,13 +113,16 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	    // _recipe = null;
     }
         
+    /**************************************************************************
+     * Public Methods                                                         *
+     **************************************************************************/
     public override float GetProgressPercent()
     {
 	    if (_recipe == null) return 0;
 	    return _time / _recipe.Time;
     }
 
-    public  float GetFuelProgressPercent()
+    public float GetFuelProgressPercent()
     {
 	    return _fuelComponent.FuelTime / 10;
     }
@@ -122,7 +130,7 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public override void Remove(Inventory to, bool quietly = false)
     {
 	    base.Remove(to, quietly);
-	    StopWorkingAnimation();
+	    StopAnimation?.Invoke();
     }
 
 	/**************************************************************************
@@ -136,29 +144,9 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     /**************************************************************************
      * Private Methods                                                        *
      **************************************************************************/
-    private void PlayWorkingAnimation()
-    {
-	    if (GodotObject.IsInstanceValid(_animationTween) && _animationTween.IsRunning()) return;
-
-	    _animationTween?.Kill();
-	    _animationTween = Globals.Tree.CreateTween();
-	    _animationTween.TweenProperty(Sprite, "scale", new Vector2(1.0f, .85f), 1f);
-	    _animationTween.TweenProperty(Sprite, "scale", Vector2.One, 1f);
-	    _animationTween.TweenCallback(Callable.From(() => _animationTween.Kill()));
-	    
-	    _particles.Emitting = true;
-	    _light.Visible = true;
-    }
-
-    private void StopWorkingAnimation()
-    {
-	    Sprite.Scale = Vector2.One;
-	    _animationTween?.Kill();
-	    _particles.Emitting = false;
-	    _light.Visible = false;
-    }
-    
-    // Caches the maximum amount of items that can be inserted into the furnace by reading unlocked recipes.
+    /// /// <summary>
+    /// Caches the maximum amount of items that can be inserted into the furnace by reading unlocked recipes.
+    /// </summary>
     private void UpdateAllowedIngredients()
     {
 	    var ingredients = ValidRecipes()
@@ -267,10 +255,4 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     public List<Inventory> GetInventories() => new() { _inputInventory, _outputInventory };
     public int GetMaxTransferAmount(string itemType) => _inputInventory.GetMaxTransferAmount(itemType);
     #endregion
-
-    public override void _ExitTree()
-    {
-	    base._ExitTree();
-	    Globals.ResearchListeners.Remove(UpdateAllowedIngredients);
-    }
 }

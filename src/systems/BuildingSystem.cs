@@ -1,17 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using Necromation;
 
-namespace Necromation.factory;
-
-public partial class BuildingManager : Node
+public interface IBuildingSystem
 {
-    private List<Building> _buildings = new();
+    void AddBuilding(Building building, Vector2 globalPosition);
+    void RemoveBuilding(Building building);
+    void Clear();
+    Godot.Collections.Dictionary<string, Variant> Save();
+}
+
+public partial class BuildingSystem : Node, IBuildingSystem
+{
+    private readonly List<Building> _buildings = new();
 
     public override void _EnterTree()
     {
         base._EnterTree();
-        Globals.BuildingManager = this;
+        Locator.BuildingSystem = this;
+    }
+    
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        Locator.BuildingSystem = null;
     }
     
     public void RemoveBuilding(Building building)
@@ -69,6 +82,16 @@ public partial class BuildingManager : Node
         }
     }
 
+    public void Clear()
+    {
+        // Copy the list to avoid concurrent modification.
+        var existingBuildings = new List<Building>(_buildings);
+        foreach (var building in existingBuildings)
+        {
+            building.Remove(null);
+        }
+    }
+
     #region Save/Load
     /******************************************************************
      * Save/Load                                                      *
@@ -86,12 +109,7 @@ public partial class BuildingManager : Node
 
     public static void Load(Godot.Collections.Dictionary<string, Variant> nodeData)
     {
-        // Copy the list to avoid concurrent modification.
-        var existingBuildings = new List<Building>(Globals.BuildingManager._buildings);
-        foreach (var building in existingBuildings)
-        {
-            building.Remove(null);
-        }
+        Locator.BuildingSystem.Clear();
         
         int index = 0;
         while (nodeData.ContainsKey("Building" + index))

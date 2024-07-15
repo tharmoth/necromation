@@ -18,7 +18,7 @@ public class Globals
     public static Character Player;
 
     // Avoids having all of the C# buildings in the tree. This lets classes access the manager without the scene tree.
-    public static BuildingManager BuildingManager;
+    public static BuildingSystem BuildingSystem;
     
     // Avoids having all of the C# Units in the tree. This lets classes access the manager without the scene tree.
     public static UnitManager UnitManager;

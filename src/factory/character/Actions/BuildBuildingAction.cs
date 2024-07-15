@@ -53,7 +53,7 @@ public partial class BuildBuildingAction : Node
 		
         _inventory.Remove(building.ItemType);
 
-        Globals.BuildingManager.AddBuilding(building, position);
+        Locator.BuildingSystem.AddBuilding(building, position);
 
         if(!_inventory.Items.ContainsKey(building.ItemType)) Globals.Player.Selected = null;
 

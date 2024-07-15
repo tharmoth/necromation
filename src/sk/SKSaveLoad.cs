@@ -51,7 +51,7 @@ public class SKSaveLoad
                     Character.Load(nodeData);
                     break;
                 case "BuildingManager":
-                    BuildingManager.Load(nodeData);
+                    BuildingSystem.Load(nodeData);
                     break;
                 case "HotBar":
                     HotBarItemBox.Load(nodeData);
@@ -106,7 +106,7 @@ public class SKSaveLoad
         var playerJson = Json.Stringify(playerData);
         saveGame.StoreLine(playerJson);
         
-        var buildingData = Globals.BuildingManager.Save();
+        var buildingData = Locator.BuildingSystem.Save();
         var buildingJson = Json.Stringify(buildingData);
         saveGame.StoreLine(buildingJson);
 

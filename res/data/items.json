@@ -16,6 +16,11 @@
       "description": "Transfers energy between buildings."
     },
     {
+      "name": "Manaforge",
+      "category": "Building",
+      "description": "Converts fuel into mana."
+    },
+    {
       "name": "Barracks",
         "category": "Building",
       "description": "Deploy minions to conquer new territories."

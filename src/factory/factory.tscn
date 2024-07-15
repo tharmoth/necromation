@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=39 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -23,7 +23,6 @@
 [ext_resource type="Script" path="res://src/factory/gui/HelpGui/BlinkActionButton.cs" id="17_r47pg"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
-[ext_resource type="Script" path="res://src/factory/BuildingManager.cs" id="23_g3xjq"]
 [ext_resource type="Texture2D" uid="uid://8ybyljlq1nvu" path="res://res/sprites/Player-south.png" id="23_hi424"]
 [ext_resource type="Texture2D" uid="uid://cfafwwpbyr8yn" path="res://res/sprites/particles/SoftLight.png" id="23_hyyce"]
 [ext_resource type="Texture2D" uid="uid://cs1hp40el17pt" path="res://res/sprites/hands.png" id="24_c65jo"]
@@ -537,9 +536,6 @@ y_sort_enabled = true
 
 [node name="Cheatcodes" type="Node" parent="."]
 script = ExtResource("18_nrhn7")
-
-[node name="BuildingManager" type="Node" parent="."]
-script = ExtResource("23_g3xjq")
 
 [node name="CraftingQueue" type="Node" parent="."]
 unique_name_in_owner = true

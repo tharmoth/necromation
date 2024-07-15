@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace Necromation.sk;
-
-public class Utils
+public static class Utils
 {
+	public static readonly Color ManaColor = new Color("4f8fba");
+	
     public static int RollDice(string damageString)
     {
 	    var dropLowest = damageString.EndsWith("l");
@@ -78,5 +78,10 @@ public class Utils
     {
 	    return new Vector2(size.X / (float) sprite.Texture.GetWidth(),
 		    size.Y / (float) sprite.Texture.GetHeight());
+    }
+
+    public static void ScaleToSize(this Sprite2D sprite, Vector2 size)
+    {
+	    sprite.Scale = Vector2.One * size / Mathf.Max(sprite.Texture.GetSize().X, sprite.Texture.GetSize().Y);
     }
 }
