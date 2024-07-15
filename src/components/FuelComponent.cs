@@ -2,6 +2,7 @@
 
 public class FuelComponent
 {
+    public const float CoalBurnTime = 10.0f;
     public Inventory InputInventory { private get; init; }
     public float FuelTime { get; private set; }
 
@@ -14,7 +15,7 @@ public class FuelComponent
     {
         if (FuelTime <= 0 && InputInventory.Remove("Coal Ore"))
         {
-            FuelTime = 10;
+            FuelTime = CoalBurnTime;
         }
         return FuelTime > 0 ? 100 : 0;
     }

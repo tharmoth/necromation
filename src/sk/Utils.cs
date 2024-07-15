@@ -79,9 +79,4 @@ public static class Utils
 	    return new Vector2(size.X / (float) sprite.Texture.GetWidth(),
 		    size.Y / (float) sprite.Texture.GetHeight());
     }
-
-    public static void ScaleToSize(this Sprite2D sprite, Vector2 size)
-    {
-	    sprite.Scale = Vector2.One * size / Mathf.Max(sprite.Texture.GetSize().X, sprite.Texture.GetSize().Y);
-    }
 }

@@ -19,7 +19,9 @@ public class Database
     
     public readonly List<Recipe> UnlockedRecipes = new();
     
+    private static List<string> cachedFiles;
     private readonly Dictionary<string, Texture2D> _textureCache = new();
+    private readonly Dictionary<string, PackedScene> _sceneCache = new();
     
     public static Database Instance = new Database();
     
@@ -80,7 +82,6 @@ public class Database
     }
     #endregion
     
-
     #region Recipes
     private static List<Recipe> LoadRecipes()
     {
@@ -228,8 +229,7 @@ public class Database
         public int Health = 10;
     }
     #endregion
-
-
+    
     /******************************************************************
      * Shared Functions                                               *
      ******************************************************************/
@@ -287,6 +287,61 @@ public class Database
             .ToArray();
         var file = files[GD.RandRange(0, files.Length - 1)].Replace(".import", "");
         return GD.Load<AudioStream>("res://res/sfx/death/" + file);
+    }
+    
+    public static PackedScene GetScene(string name)
+    {
+        if (Instance._sceneCache.TryGetValue(name, out var scene)) return scene;
+        var newScene = Instance.GetSceneInstance(name);
+        if (newScene == null) return null;
+        
+        Instance._sceneCache[name] = newScene;
+        return newScene;
+    }
+    
+    private PackedScene GetSceneInstance(string name)
+    {
+        var file = GetFiles()
+            .FirstOrDefault(file => file.EndsWith(name + ".tscn"));
+
+        if (FileAccess.FileExists(file)) return GD.Load<PackedScene>(file);
+        
+        var file2 = GetFiles()
+            .FirstOrDefault(file3 => file3.EndsWith(name + ".tscn.remap"));
+
+        if (FileAccess.FileExists(file2)) return GD.Load<PackedScene>(file2.Replace(".remap", ""));
+        
+        GD.PrintErr("Failed to load scene: " + name);
+        return null;
+    }
+    
+    private List<string> GetFiles()
+    {
+        if (cachedFiles != null) return cachedFiles;
+        cachedFiles = GetFilesRecursive("res://");
+        return cachedFiles;
+    }
+    
+    private List<string> GetFilesRecursive(string path)
+    {
+        var files = new List<string>();
+        var dir = DirAccess.Open(path);
+        dir.ListDirBegin();
+        while (true)
+        {
+            var name = dir.GetNext();
+            if (name == "") break;
+            if (!dir.CurrentIsDir())
+            {
+                files.Add(path + "/" + name);
+            }
+            else
+            {
+                files.AddRange(GetFilesRecursive(path + "/" + name));
+            }
+        }
+        dir.ListDirEnd();
+        return files;
     }
     
     
