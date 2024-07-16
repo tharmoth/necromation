@@ -115,7 +115,7 @@ public partial class FactoryTileMap : LayerTileMap
 
 	private void SpawnGrass(Vector2I location)
 	{
-		SpawnBackgroundSprite(location, "soil2");
+		SpawnBackgroundSprite(location, "grasstile");
 		
 		var startpos = (location) * TileSize * (ProvinceSize + ProvinceGap);
 		var propPos = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
@@ -128,7 +128,7 @@ public partial class FactoryTileMap : LayerTileMap
 		spawner.SizePixels = 24;
 		spawner.Threshold = .5f;
 		spawner.GlobalPosition = propPos;
-		spawner.ZIndex = -98;
+		spawner.ZIndex = -97;
 		Globals.FactoryScene.CallDeferred("add_child", spawner);
 
 		PropSpawner rockSpawner = new();
@@ -139,7 +139,7 @@ public partial class FactoryTileMap : LayerTileMap
 		rockSpawner.SizePixels = 32;
 		rockSpawner.Threshold = .75f;
 		rockSpawner.GlobalPosition = propPos;
-		rockSpawner.ZIndex = -97;
+		rockSpawner.ZIndex = -98;
 		rockSpawner.UseWind = false;
 		rockSpawner.Single = true;
 		Globals.FactoryScene.CallDeferred("add_child", rockSpawner);
@@ -232,8 +232,26 @@ public partial class FactoryTileMap : LayerTileMap
 
 	public List<IEntity> GetEntitiesWithinRadius(Vector2I mapPosition, int radius)
 	{
-		return GetTilesInRadius(mapPosition, radius)
-			.Select(cell => GetEntity(cell, Building))
+		return GetEntities(GetTilesInRadius(mapPosition, radius));
+	}
+
+	public List<IEntity> GetEntitiesWithinRect(Rect2I rect)
+	{
+		List<Vector2I> tiles = new();
+		for (int x = rect.Position.X; x < rect.End.X; x++)
+		{
+			for (int y = rect.Position.Y; y < rect.End.Y; y++)
+			{
+				tiles.Add(new Vector2I(x, y));
+			}
+		}
+
+		return GetEntities(tiles);
+	}
+
+	private List<IEntity> GetEntities(List<Vector2I> tiles)
+	{
+		return tiles.Select(cell => GetEntity(cell, Building))
 			.Where(entity => entity != null)
 			.ToList();
 	}

@@ -27,9 +27,9 @@ public class Manaforge : Building, IInteractable, ITransferTarget, IPowerSource,
     #endregion
 
     #region IPowerSource Implementation
-    public float EnergyStored { get; set; }
-    public float PowerMax => 1000.0f;
-    public float PowerLimit => 100.0f;
+    public float Energy { get; set; }
+    public float EnergyMax => 1000.0f;
+    public float Power => 100.0f;
     public bool Disconnected
     {
         set
@@ -55,10 +55,10 @@ public class Manaforge : Building, IInteractable, ITransferTarget, IPowerSource,
     {
         base._Process(delta);
         _fuelComponent._Process(delta);
-        if (_fuelComponent.CanDrawPower() && EnergyStored <= PowerMax)
+        if (_fuelComponent.CanDrawPower() && Energy <= EnergyMax)
         {
             _fuelComponent.DrawPower();
-            EnergyStored += PowerLimit * (float) delta;
+            Energy += Power * (float) delta;
             StartAnimation?.Invoke();
         }
         else

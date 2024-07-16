@@ -71,6 +71,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	private readonly AudioStreamPlayer2D _audio = new();
 	private readonly GpuParticles2D _particles;
 	private readonly VisibleOnScreenNotifier2D _notifier = new();
+	private readonly List<object> _components = [];
 	// We need to cache these to cancel them if the building is removed before the animation is complete.
 	private Tween _xTween;
 	private Tween _yTween;
@@ -194,6 +195,26 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 			from y in Enumerable.Range(0, BuildingSize.Y)
 			select topLeft + new Vector2I(x, y)).ToList();
 		return positions;
+	}
+	
+	public void AddComponent(object component)
+	{
+		_components.Add(component);
+	}
+	
+	public void RemoveComponent(object component)
+	{
+		_components.Remove(component);
+	}
+	
+	public T GetComponent<T>() where T : class
+	{
+		return _components.Find(c => c is T) as T;
+	}
+	
+	public List<T> GetComponents<T>() where T : class
+	{
+		return _components.FindAll(c => c is T).ConvertAll(c => c as T);
 	}
 	
 	/******************************************************************

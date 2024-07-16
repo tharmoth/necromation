@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using Necromation;
 using Necromation.interactables.interfaces;
 
@@ -85,12 +86,14 @@ public partial class CursorManager : Node
 
 	private void UpdateCursorPosition()
 	{
+		var cursorPosition = Globals.Player.GetGlobalMousePosition();
+		
 		// Movement can come from either the cursor moving or the player moving so we just update every frame.
-		CursorItemCount.Position = Globals.Player.GetGlobalMousePosition() + new Vector2(16, 16);
-		CursorItemSprite.Position = Globals.Player.GetGlobalMousePosition();
+		CursorItemCount.Position = cursorPosition + new Vector2(16, 16);
+		CursorItemSprite.Position = cursorPosition;
 		
 		if (_buildingInHand == null) return;
-		CursorBuildingSprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(Globals.Player.GetGlobalMousePosition());
+		CursorBuildingSprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(cursorPosition);
 		if (_buildingInHand.BuildingSize.X % 2 == 0) CursorBuildingSprite.Position += new Vector2(16, 0);
 		if (_buildingInHand.BuildingSize.Y % 2 == 0) CursorBuildingSprite.Position += new Vector2(0, 16);
 	}
@@ -143,9 +146,34 @@ public partial class CursorManager : Node
 		if (_buildingInHand is IRotatable rotatable)
 			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(Globals.Player.SelectionRotationDegrees);
 		
-		CursorBuildingSprite.Modulate = _buildingInHand.CanPlaceAt(Globals.Player.GetGlobalMousePosition())
+		var canPlace = _buildingInHand.CanPlaceAt(Globals.Player.GetGlobalMousePosition());
+		CursorBuildingSprite.SelfModulate = canPlace
 			? new Color(0, 1, 0, 0.5f)
 			: new Color(1, 0, 0, 0.5f);
+
+		CursorBuildingSprite.GetChildren().ToList().ForEach(child => child.QueueFree());
+		if (canPlace && _buildingInHand is Pylon pylon) UpdatePylon(pylon);
+	}
+
+	private void UpdatePylon(Pylon pylon)
+	{
+		var cursorPosition = Globals.Player.GetGlobalMousePosition();
+		var mapPosition = Globals.FactoryScene.TileMap.GlobalToMap(cursorPosition);
+		var globalPosition = Globals.FactoryScene.TileMap.ToMap(cursorPosition);
+		pylon.Update(mapPosition);
+		
+		pylon.Links.ToList().ForEach(link =>
+		{
+			CursorBuildingSprite.AddChild(new Line2D 
+			{
+				Width = Pylon.LineWidth + 1, 
+				DefaultColor = Utils.ManaColor,
+				Points = [Vector2.Zero, link.GlobalPosition - globalPosition]
+			});
+		});
+		var poly = pylon.GetPowerRangePolygon();
+		poly.Color = poly.Color.Darkened(0.5f);
+		CursorBuildingSprite.AddChild(poly);
 	}
 	
 	private void MouseoverEntity()
@@ -163,7 +191,7 @@ public partial class CursorManager : Node
 		}
 		
 		CursorEntitySprite.Visible = true;
-		CursorEntitySprite.Modulate = Colors.White;
+		CursorEntitySprite.SelfModulate = Colors.White;
 
 		if (_cursorColorTween != null) return;
 		TweenColor();

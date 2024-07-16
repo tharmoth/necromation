@@ -108,6 +108,8 @@ public partial class Inserter : Building, IRotatable
         _audio.VolumeDb = -20.0f;
         Sprite.AddChild(_audio);
         UpdateInputOutput();
+        
+        AddComponent(new PowerConsumerComponent(Sprite));
     }
 
     private void Update()
@@ -159,6 +161,7 @@ public partial class Inserter : Building, IRotatable
         _isTransferring = !string.IsNullOrEmpty(item);
         
         if (!_isTransferring) return;
+        if (!GetComponent<PowerConsumerComponent>().DrawPower(delta)) return;
         Animate(item);
         _time = 0;
     }

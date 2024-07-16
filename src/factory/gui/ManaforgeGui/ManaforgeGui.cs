@@ -48,7 +48,7 @@ public partial class ManaforgeGui : DeferredUpdate
 		AddUpdateListeners(new List<Inventory> { _to, _crafter.GetInventories().First() });
 		
 		ProgressBar.Init(_crafter.GetProgressPercent);
-		FuelProgressBar.Init(() => _crafter.EnergyStored / _crafter.PowerMax);
+		FuelProgressBar.Init(() => _crafter.Energy / _crafter.EnergyMax);
 		
 		Title.Text = _crafter.ItemType;
 		

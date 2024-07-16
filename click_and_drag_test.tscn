@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bx6g3p57senen"]
-
-[ext_resource type="Script" path="res://src/factory/character/Actions/ClickAndDrag.cs" id="1_bhrfd"]
-
-[node name="ClickAndDrag" type="Node2D"]
-script = ExtResource("1_bhrfd")

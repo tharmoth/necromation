@@ -43,7 +43,7 @@ public partial class PowerSystem : Node
         
         // Calculate all the networks of pylons on the map.
         var pylons = buildings.OfType<Pylon>().ToHashSet();
-        pylons.ToList().ForEach(pylon => pylon.Update());
+        pylons.ToList().ForEach(pylon => pylon.Update(pylon.MapPosition));
         _networks.Clear();
         _networks.UnionWith(FindNetworks(pylons));
         
@@ -84,7 +84,7 @@ public partial class PowerSystem : Node
             network.Consumers.UnionWith(network.Links.SelectMany(pylon => pylon.Consumers));
             network.Sources.UnionWith(network.Links.SelectMany(pylon => pylon.Sources));
         }
-        
+
         return networks;
     }
     
@@ -114,28 +114,29 @@ public class PowerNetwork
     public void _Process(double delta)
     {
         var energyRequired = Consumers.Sum(consumer => consumer.EnergyRequired);
-        var maxEnergyAvailable = Sources.Sum(source => Math.Min(source.EnergyStored, source.PowerLimit * (float) delta));
+        var maxEnergyAvailable = Sources.Sum(source => Math.Min(source.Energy, source.Power * (float) delta));
         var energyConsumed = 0f;
 
         foreach (var consumer in Consumers)
         {
-            var energyToConsume = Math.Min(consumer.EnergyRequired, consumer.PowerLimit * (float)delta);
+            var energyToConsume = Math.Min(consumer.EnergyRequired, consumer.Power * (float)delta);
             energyToConsume = Math.Min(energyToConsume, maxEnergyAvailable - energyConsumed);
             energyConsumed += energyToConsume;
-            consumer.EnergyStored += energyToConsume;
+            consumer.Energy += energyToConsume;
         }
         
         var energyProvided = 0f;
         foreach (var source in Sources)
         {
-            var powerToProvide = Math.Min(source.EnergyStored, source.PowerLimit * (float)delta);
-            powerToProvide = Math.Min(powerToProvide, energyRequired - energyProvided);
-            energyProvided += powerToProvide;
-            source.EnergyStored -= powerToProvide;
+            var energyToProvide = Math.Min(source.Energy, source.Power * (float)delta);
+            energyToProvide = Math.Min(energyToProvide, energyRequired - energyProvided);
+            energyProvided += energyToProvide;
+            source.Energy -= energyToProvide;
         }
 
         Debug.Assert(energyProvided >= energyConsumed,
             "We should always provide more power than we consume!");
+
     }
 }
 
@@ -144,19 +145,19 @@ public interface IPowerConsumer
     /// <summary>
     /// The amount of energy stored in the entity available for use.
     /// </summary>
-    public float EnergyStored { get; set; }
+    public float Energy { get; set; }
     /// <summary>
     /// The maximum amount of energy that can be stored in the entity.
     /// </summary>
-    public float PowerMax { get; }
+    public float EnergyMax { get; }
     /// <summary>
     /// The maximum amount of power that can be input into the entity per second.
     /// </summary>
-    public float PowerLimit { get; }
+    public float Power { get; }
     /// <summary>
     /// Amount of power required by the entity to reach full power.
     /// </summary>
-    public float EnergyRequired => PowerMax - EnergyStored;
+    public float EnergyRequired => EnergyMax - Energy;
     /// <summary>
     /// If the entity is connected to a network.
     /// </summary>
@@ -168,11 +169,11 @@ public interface IPowerSource
     /// <summary>
     /// The amount of energy stored in the entity available for use.
     /// </summary>
-    public float EnergyStored { get; set; }
+    public float Energy { get; set; }
     /// <summary>
     /// The maximum amount of power that can be output from the entity per second.
     /// </summary>
-    public float PowerLimit { get; }
+    public float Power { get; }
     /// <summary>
     /// If the entity is connected to a network.
     /// </summary>
