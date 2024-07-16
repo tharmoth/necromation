@@ -258,6 +258,10 @@ public partial class MapTileMap : SKTileMap
 		{
 			return "Tin Ore";
 		}
+		if (coords.Equals(new Vector2I(2, 1)))
+		{
+			return "Mana";
+		}
 		if (coords.Equals(new Vector2I(3, 3)))
 		{
 			return "Bone Fragments";

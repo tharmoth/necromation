@@ -27,24 +27,24 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 	 * Private Variables                                                      *
 	 **************************************************************************/
 	// Logic
+	private readonly string _category;
+	private readonly Inventory _inputInventory;
+	private readonly Inventory _outputInventory = new();
 	private float _time;
 	private Recipe _recipe;
-	private readonly string _category;
-    private readonly Inventory _inputInventory;
-    private readonly Inventory _outputInventory = new();
     
 	// Visuals
-	private Tween _animationTween;
-	private Sprite2D _recipeSprite = new()
+	private readonly Sprite2D _recipeSprite = new()
 	{
 		ZIndex = 2
 	};
-	private Sprite2D _outlineSprite = new()
+	private readonly Sprite2D _outlineSprite = new()
 	{
 		ZIndex = 1,
 		Visible = false,
 		Texture = Database.Instance.GetTexture("Dark760")
 	};
+	private Tween _animationTween;
 	
 	/**************************************************************************
 	 * Constructor                                                            *

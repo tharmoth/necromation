@@ -5,6 +5,7 @@ public class FuelComponent
     public const float CoalBurnTime = 10.0f;
     public Inventory InputInventory { private get; init; }
     public float FuelTime { get; private set; }
+    public float Progress => FuelTime / CoalBurnTime;
 
     public void _Process(double delta)
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Necromation;
 using Necromation.components;
@@ -53,8 +54,10 @@ public class Manaforge : Building, IInteractable, ITransferTarget, FurnaceAnimat
     public override void _Process(double delta)
     {
         base._Process(delta);
+        
         _fuelComponent._Process(delta);
         _powerSourceComponent._Process(delta);
+        
         if (_fuelComponent.FuelTime > 0)
         {
             StartAnimation?.Invoke();
@@ -76,6 +79,12 @@ public class Manaforge : Building, IInteractable, ITransferTarget, FurnaceAnimat
     public void Interact(Inventory playerInventory)
     {
         ManaforgeGui.Display(playerInventory, this);
+    }
+    
+    public override bool CanPlaceAt(Vector2 position)
+    {
+        return base.CanPlaceAt(position) && GetOccupiedPositions(position)
+            .Any(mapPos => Globals.FactoryScene.TileMap.GetResourceType(mapPos) == "Mana");
     }
     
     #region ITransferTarget Implementation

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.components;
 using Necromation.factory.gui;
 using Necromation.gui;
 
@@ -49,7 +50,7 @@ public partial class FurnaceGui : DeferredUpdate
 		crafter.RecipeListeners.Add(FlagDirty);
 		
 		ProgressBar.Init(_crafter.GetProgressPercent);
-		FuelProgressBar.Init(_crafter.GetFuelProgressPercent);
+		FuelProgressBar.Init(() => _crafter.GetComponent<FuelComponent>().Progress);
 		
 		Title.Text = _crafter.ItemType;
 		

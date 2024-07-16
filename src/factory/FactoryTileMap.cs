@@ -219,6 +219,17 @@ public partial class FactoryTileMap : LayerTileMap
 	{
 		return Globals.FactoryScene.TileMap.GetEntity(mapPos, Resource) != null;
 	}
+	
+	public string GetResourceType(Vector2I mapPos)
+	{
+		var entity = Globals.FactoryScene.TileMap.GetEntity(mapPos, Resource);
+		if (entity is Resource resource)
+		{
+			return resource.Type;
+		}
+
+		return null;
+	}
 
 	public Building GetBuildingAtMouse()
 	{
