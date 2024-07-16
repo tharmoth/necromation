@@ -30,7 +30,7 @@ public class PowerConsumerComponent : IPowerConsumer
      **************************************************************************/
     private readonly Sprite2D _disconnectedSprite = new()
     {
-        ZIndex = 3,
+        ZIndex = 100,
         Texture = Database.Instance.GetTexture("Disconnected"),
         Visible = false
     };
@@ -47,7 +47,7 @@ public class PowerConsumerComponent : IPowerConsumer
     }
     
     /**************************************************************************
-     * Public Functions                                                       *
+     * Public Methods                                                       *
      **************************************************************************/
     public bool DrawPower(double delta)
     {

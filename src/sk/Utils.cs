@@ -79,4 +79,9 @@ public static class Utils
 	    return new Vector2(size.X / (float) sprite.Texture.GetWidth(),
 		    size.Y / (float) sprite.Texture.GetHeight());
     }
+
+    public static bool NonNull(object item)
+    {
+	    return item != null;
+    }
 }

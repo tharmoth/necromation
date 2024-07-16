@@ -218,7 +218,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	}
 	
 	/******************************************************************
-	 * Protected Methods                                                 *
+	 * Protected Methods                                              *
 	 ******************************************************************/
 	protected void TransferInventories(Inventory to, bool quietly)
 	{
@@ -236,9 +236,9 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		}
 	}
 
-	/**************************************************************************
-	 * Private Methods                                                        *
-	 **************************************************************************/
+	/*************************************************************************
+	 * Private Methods                                                       *
+	 *************************************************************************/
 	private void PlayBuildAnimation()
 	{
 		var clipTarget = ClipRect.Position.Y;

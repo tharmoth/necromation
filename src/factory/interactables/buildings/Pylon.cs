@@ -2,6 +2,7 @@
 using System.Linq;
 using Godot;
 using Necromation;
+using Necromation.components.animation;
 using Necromation.sk;
 
 public class Pylon : Building
@@ -23,12 +24,12 @@ public class Pylon : Building
     public readonly HashSet<Pylon> Links = new();
     public readonly HashSet<IPowerSource> Sources = new();
     public readonly HashSet<IPowerConsumer> Consumers = new();
-    public bool ShowLink { set; private get; }
 
     /**************************************************************************
      * Private Variables                                                       *
      **************************************************************************/
     private readonly Node2D _colorNode = new () {ZIndex = 100};
+    private readonly Polygon2D _powerRangePolygon = GetPowerRangePolygon();
 
     /**************************************************************************
      * Godot Methods                                                          *
@@ -39,7 +40,7 @@ public class Pylon : Building
         BaseNode.CallDeferred("add_child", _colorNode);
         _colorNode.Draw += DoDraw;
 
-        BaseNode.CallDeferred("add_child", GetPowerRangePolygon());
+        BaseNode.CallDeferred("add_child", _powerRangePolygon);
     }
 
     /**************************************************************************
@@ -62,12 +63,13 @@ public class Pylon : Building
             .ToList()
             .ForEach(building =>
             {
-                if (building is IPowerSource source)
+                var source = building.GetComponent<IPowerSource>();
+                if (source != null)
                 {
                     Sources.Add(source);
                 }
                 
-                var consumer = building.GetComponent<PowerConsumerComponent>();
+                var consumer = building.GetComponent<IPowerConsumer>();
                 if (consumer != null)
                 {
                     Consumers.Add(consumer);
@@ -76,8 +78,13 @@ public class Pylon : Building
        
         _colorNode.QueueRedraw();
     }
+    
+    public bool ShowRange
+    {
+        set => _powerRangePolygon.Visible = value;
+    }
 
-    public Polygon2D GetPowerRangePolygon()
+    public static Polygon2D GetPowerRangePolygon()
     {
         var color = Utils.ManaColor;
         color.A = .2f;

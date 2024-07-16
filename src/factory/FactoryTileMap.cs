@@ -255,4 +255,18 @@ public partial class FactoryTileMap : LayerTileMap
 			.Where(entity => entity != null)
 			.ToList();
 	}
+	
+	public List<T> GetEntities<T>() where T : class
+	{
+		return GetEntities(Building).OfType<T>().ToList();
+	}
+	
+	public HashSet<T> GetComponents<T>() where T : class
+	{
+		return GetEntities(Building)
+			.OfType<Building>()
+			.Select(building => building.GetComponent<T>())
+			.NonNull()
+			.ToHashSet();
+	}
 }

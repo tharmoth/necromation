@@ -38,18 +38,17 @@ public partial class PowerSystem : Node
     
     private void Update()
     {
-        var buildings = Globals.FactoryScene.TileMap.GetEntities(FactoryTileMap.Building)
-            .ToHashSet();
+        var world = Globals.FactoryScene.TileMap;
         
         // Calculate all the networks of pylons on the map.
-        var pylons = buildings.OfType<Pylon>().ToHashSet();
+        var pylons = world.GetEntities<Pylon>().ToHashSet();
         pylons.ToList().ForEach(pylon => pylon.Update(pylon.MapPosition));
         _networks.Clear();
         _networks.UnionWith(FindNetworks(pylons));
         
         // Find all the power sources and consumers on the map.
-        var powerSources = buildings.OfType<IPowerSource>().ToHashSet();
-        var powerConsumers = buildings.OfType<IPowerConsumer>().ToHashSet();
+        var powerSources = world.GetComponents<IPowerSource>().ToHashSet();
+        var powerConsumers = world.GetComponents<IPowerConsumer>().ToHashSet();
 
         // Find all the power sources and consumers that are connected to a network.
         var connectedSources = _networks.SelectMany(network => network.Sources).ToHashSet();

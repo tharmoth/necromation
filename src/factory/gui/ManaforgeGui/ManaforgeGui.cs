@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Necromation;
+using Necromation.components.animation;
 using Necromation.factory.gui;
 using Necromation.gui;
 
@@ -30,16 +31,10 @@ public partial class ManaforgeGui : DeferredUpdate
 	 **************************************************************************/
 	private Inventory _to;
 	private Manaforge _crafter;
-	
-	// Static Accessor
-	public static void Display(Inventory to, Manaforge crafter)
-	{
-		var gui = Scene.Instantiate<ManaforgeGui>();
-		gui.Init(to, crafter);
-		Globals.FactoryScene.Gui.Open(gui);
-	}
 
-	// Constructor workaround.
+	/**************************************************************************
+	 * Constructor                                                            *
+	 **************************************************************************/
 	private void Init(Inventory to, Manaforge crafter)
 	{
 		_to = to;
@@ -48,19 +43,39 @@ public partial class ManaforgeGui : DeferredUpdate
 		AddUpdateListeners(new List<Inventory> { _to, _crafter.GetInventories().First() });
 		
 		ProgressBar.Init(_crafter.GetProgressPercent);
-		FuelProgressBar.Init(() => _crafter.Energy / _crafter.EnergyMax);
+		FuelProgressBar.Init(GetEnergyPercent);
 		
 		Title.Text = _crafter.ItemType;
 		
 		BuildingTexture.Texture = Database.Instance.GetTexture(_crafter.ItemType);
 	}
-
+	
+	/*************************************************************************
+	 * Public Methods                                                        *
+	 *************************************************************************/
+	// Static Accessor
+	public static void Display(Inventory to, Manaforge crafter)
+	{
+		var gui = Scene.Instantiate<ManaforgeGui>();
+		gui.Init(to, crafter);
+		Globals.FactoryScene.Gui.Open(gui);
+	}
+	
+	/**************************************************************************
+	 * Protected Methods                                                      *
+	 **************************************************************************/
 	protected override void Update()
 	{
 		InventoryItemBox.UpdateInventory(_to, new List<Inventory> { _crafter.GetInventories().First()  }, InventoryItemList);
 		UpdateInventory(_crafter.GetInventories().First(), new List<Inventory> { _to }, SourceInventoryItemList, _crafter, true);
 		Dirty = false;
 	}
+	
+	/**************************************************************************
+	 * Private Methods                                                        *
+	 **************************************************************************/
+	private float GetEnergyPercent() => 
+		_crafter.GetComponent<PowerSourceComponent>().Energy / _crafter.GetComponent<PowerSourceComponent>().EnergyMax;
 	
 	private static void UpdateInventory(Inventory from, List<Inventory> to, Container list, Manaforge furnace, bool isInput)
 	{
@@ -69,5 +84,4 @@ public partial class ManaforgeGui : DeferredUpdate
 		list.Clear();
 		AssemblerItemBox.AddInventoryItem("Coal Ore", furnace.GetInventories().First().CountItem("Coal Ore"), from, to, list, true);
 	}
-
 }

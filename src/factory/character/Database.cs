@@ -22,7 +22,7 @@ public class Database
     private static List<string> cachedFiles;
     private readonly Dictionary<string, Texture2D> _textureCache = new();
     private readonly Dictionary<string, PackedScene> _sceneCache = new();
-    
+    private readonly Dictionary<string, AudioStream> _audioCache = new();
     public static Database Instance = new Database();
     
     private Database()
@@ -313,6 +313,30 @@ public class Database
         
         GD.PrintErr("Failed to load scene: " + name);
         return null;
+    }
+    
+    public static AudioStream GetAudio(string name)
+    {
+        if (Instance._audioCache.TryGetValue(name, out var audio)) return audio;
+        var newAudio = Instance.GetAudioInstance(name);
+        if (newAudio == null) return null;
+        
+        Instance._audioCache[name] = newAudio;
+        return newAudio;
+    }
+    
+    private AudioStream GetAudioInstance(string name)
+    {
+        var file = GetFiles()
+            .FirstOrDefault(file => file.EndsWith(name + ".wav") || file.EndsWith(name + ".mp3"));
+        if (FileAccess.FileExists(file)) return GD.Load<AudioStream>(file);
+        
+        var file2 = GetFiles()
+            .FirstOrDefault(file3 => file3.EndsWith(name + ".wav.import") || file3.EndsWith(name + ".mp3.import"));
+        if (FileAccess.FileExists(file2)) return GD.Load<AudioStream>(file2.Replace(".import", ""));
+        
+        GD.PrintErr("Failed to load audiostream: " + name);
+        return new AudioStream();
     }
     
     private List<string> GetFiles()

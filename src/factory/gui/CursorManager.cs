@@ -22,19 +22,15 @@ public partial class CursorManager : Node
 	private Building _buildingInHand;
 	private string _cachedSelected = "";
 
+	/*************************************************************************
+	 * Godot Methods                                                         *
+	 *************************************************************************/
 	public override void _Ready()
 	{
 		base._Ready();
 		Globals.PlayerInventory.Listeners.Add(UpdateLabel);
 	}
-
-	private void UpdateLabel()
-	{
-		var count = Globals.Player.Selected != null ? Globals.PlayerInventory.CountItem(Globals.Player.Selected) : 0;
-		CursorItemCount.Text = count != 0 ? count.ToString() : "";
-		if (count == 0) Globals.Player.Selected = null;
-	}
-
+	
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
@@ -46,29 +42,6 @@ public partial class CursorManager : Node
 		UpdateSelected();
 	}
 	
-	private void UpdateSelected()
-	{
-		if (!string.IsNullOrEmpty(Globals.Player.Selected))
-		{
-			CursorItemSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
-			CursorItemSprite.Scale = new Vector2(32 / (float)CursorItemSprite.Texture.GetWidth(),
-				32 / (float)CursorItemSprite.Texture.GetHeight());
-		}
-		
-		if (Building.IsBuilding(Globals.Player.Selected))
-		{
-			CursorBuildingSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
-			_buildingInHand = Building.GetBuilding(Globals.Player.Selected, IRotatable.BuildingOrientation.NorthSouth);
-		}
-		else
-		{
-			_buildingInHand = null;
-		}
-		
-		if (_buildingInHand is not IRotatable) Globals.Player.SelectionRotationDegrees = 0;
-		UpdateLabel();
-	}
-
 	public override void _Input(InputEvent @event)
 	{
 		UpdateCursorSprites();
@@ -84,6 +57,49 @@ public partial class CursorManager : Node
 		_motionEventHandled = false;
 	}
 
+	/*************************************************************************
+	 * Private Methods                                                       *
+	 *************************************************************************/
+	private bool ShouldShowPowerRange =>
+		_buildingInHand != null 
+		&& (_buildingInHand.GetComponent<IPowerConsumer>() != null
+		    || _buildingInHand.GetComponent<IPowerSource>() != null
+		    || _buildingInHand is Pylon
+		);
+
+	private void UpdateSelected()
+	{
+		if (!string.IsNullOrEmpty(Globals.Player.Selected))
+		{
+			CursorItemSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
+			CursorItemSprite.Scale = new Vector2(32 / (float)CursorItemSprite.Texture.GetWidth(),
+				32 / (float)CursorItemSprite.Texture.GetHeight());
+		}
+
+		if (Building.IsBuilding(Globals.Player.Selected))
+		{
+			CursorBuildingSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
+			_buildingInHand = Building.GetBuilding(Globals.Player.Selected, IRotatable.BuildingOrientation.NorthSouth);
+		}
+		else
+		{
+			_buildingInHand = null;
+		}
+
+		var shouldShowPowerRange = ShouldShowPowerRange;
+		Globals.FactoryScene.TileMap.GetEntities<Pylon>().ForEach(pylon => pylon.ShowRange = shouldShowPowerRange);
+		
+		if (_buildingInHand is not IRotatable) Globals.Player.SelectionRotationDegrees = 0;
+		UpdateLabel();
+	}
+
+	private void UpdateLabel()
+	{
+		var count = Globals.Player.Selected != null ? Globals.PlayerInventory.CountItem(Globals.Player.Selected) : 0;
+		CursorItemCount.Text = count != 0 ? count.ToString() : "";
+		if (count == 0) Globals.Player.Selected = null;
+	}
+	
 	private void UpdateCursorPosition()
 	{
 		var cursorPosition = Globals.Player.GetGlobalMousePosition();
@@ -171,7 +187,7 @@ public partial class CursorManager : Node
 				Points = [Vector2.Zero, link.GlobalPosition - globalPosition]
 			});
 		});
-		var poly = pylon.GetPowerRangePolygon();
+		var poly = Pylon.GetPowerRangePolygon();
 		poly.Color = poly.Color.Darkened(0.5f);
 		CursorBuildingSprite.AddChild(poly);
 	}
