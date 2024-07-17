@@ -8,7 +8,7 @@ using Necromation.interfaces;
 
 namespace Necromation;
 
-public class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IPowerConsumer
+public class Assembler : Building, ICrafter, IInteractable, ITransferTarget
 {
 	/**************************************************************************
 	 * Data Constants                                                         *
@@ -23,64 +23,29 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IPo
 	public override Vector2I BuildingSize => Vector2I.One * 3;
 	#endregion
 	
-	#region IPowerConsumer Implementation
-	public float EnergyStored { get; set; }
-	public float PowerMax => 100;
-	public float PowerLimit => 10;
-
-	private Tween _disconnectedTween;
-	public bool Disconnected
-	{
-		set
-		{
-			_disconnectedSprite.Visible = value;
-			
-			if (value)
-			{
-				if (_disconnectedTween != null) return;
-				_disconnectedTween = _disconnectedSprite.CreateTween();
-				_disconnectedTween.TweenProperty(_disconnectedSprite, "modulate", Colors.Transparent, 0.5f);
-				_disconnectedTween.TweenProperty(_disconnectedSprite, "modulate", Colors.White, 0.5f);
-				_disconnectedTween.SetLoops();
-			}
-			else
-			{
-				_disconnectedTween?.Kill();
-				_disconnectedTween = null;
-			}
-		}
-	}
-	#endregion
-	
 	/**************************************************************************
 	 * Private Variables                                                      *
 	 **************************************************************************/
 	// Logic
+	private readonly string _category;
+	private readonly Inventory _inputInventory;
+	private readonly Inventory _outputInventory = new();
 	private float _time;
 	private Recipe _recipe;
-	private readonly string _category;
-    private readonly Inventory _inputInventory;
-    private readonly Inventory _outputInventory = new();
     
 	// Visuals
-	private Tween _animationTween;
-	private Sprite2D _recipeSprite = new()
+	private readonly Sprite2D _recipeSprite = new()
 	{
 		ZIndex = 2
 	};
-	private Sprite2D _outlineSprite = new()
+	private readonly Sprite2D _outlineSprite = new()
 	{
 		ZIndex = 1,
 		Visible = false,
 		Texture = Database.Instance.GetTexture("Dark760")
 	};
-	private Sprite2D _disconnectedSprite = new()
-	{
-		ZIndex = 3,
-		Texture = Database.Instance.GetTexture("Disconnected"),
-		Visible = false
-	};
-
+	private Tween _animationTween;
+	
 	/**************************************************************************
 	 * Constructor                                                            *
 	 **************************************************************************/
@@ -96,9 +61,7 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IPo
 	    _recipeSprite.Position = new Vector2(0, -10);
 	    Sprite.AddChild(_recipeSprite);
 	    
-	    _disconnectedSprite.Position = new Vector2(0, -10);
-	    _disconnectedSprite.ScaleToSize(Vector2.One * 32.0f);
-	    Sprite.AddChild(_disconnectedSprite);
+	    AddComponent(new PowerConsumerComponent(Sprite));
 	}
 
 	/**************************************************************************
@@ -112,9 +75,8 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IPo
     		_time = 0;
     		return;
     	}
-	    
-	    // DrawPower
-	    if (!DrawPower(delta)) return;
+
+	    if (!GetComponent<PowerConsumerComponent>().DrawPower(delta)) return;
 	    
     	_time += (float)delta;
 	    Animate();
@@ -142,13 +104,6 @@ public class Assembler : Building, ICrafter, IInteractable, ITransferTarget, IPo
 	/**************************************************************************
 	 * Private Methods                                                        *
 	 **************************************************************************/
-	private bool DrawPower(double delta)
-	{
-		if (EnergyStored < PowerLimit * (float) delta) return false;
-		EnergyStored -= PowerLimit * (float) delta;
-		return true;
-	}
-
 	private bool CanHoldOutputItems()
 	{
 		foreach (var (item, count) in _recipe.Products)

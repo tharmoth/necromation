@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using Necromation;
 using Necromation.interactables.interfaces;
 
@@ -21,19 +22,15 @@ public partial class CursorManager : Node
 	private Building _buildingInHand;
 	private string _cachedSelected = "";
 
+	/*************************************************************************
+	 * Godot Methods                                                         *
+	 *************************************************************************/
 	public override void _Ready()
 	{
 		base._Ready();
 		Globals.PlayerInventory.Listeners.Add(UpdateLabel);
 	}
-
-	private void UpdateLabel()
-	{
-		var count = Globals.Player.Selected != null ? Globals.PlayerInventory.CountItem(Globals.Player.Selected) : 0;
-		CursorItemCount.Text = count != 0 ? count.ToString() : "";
-		if (count == 0) Globals.Player.Selected = null;
-	}
-
+	
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
@@ -45,29 +42,6 @@ public partial class CursorManager : Node
 		UpdateSelected();
 	}
 	
-	private void UpdateSelected()
-	{
-		if (!string.IsNullOrEmpty(Globals.Player.Selected))
-		{
-			CursorItemSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
-			CursorItemSprite.Scale = new Vector2(32 / (float)CursorItemSprite.Texture.GetWidth(),
-				32 / (float)CursorItemSprite.Texture.GetHeight());
-		}
-		
-		if (Building.IsBuilding(Globals.Player.Selected))
-		{
-			CursorBuildingSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
-			_buildingInHand = Building.GetBuilding(Globals.Player.Selected, IRotatable.BuildingOrientation.NorthSouth);
-		}
-		else
-		{
-			_buildingInHand = null;
-		}
-		
-		if (_buildingInHand is not IRotatable) Globals.Player.SelectionRotationDegrees = 0;
-		UpdateLabel();
-	}
-
 	public override void _Input(InputEvent @event)
 	{
 		UpdateCursorSprites();
@@ -83,14 +57,59 @@ public partial class CursorManager : Node
 		_motionEventHandled = false;
 	}
 
+	/*************************************************************************
+	 * Private Methods                                                       *
+	 *************************************************************************/
+	private bool ShouldShowPowerRange =>
+		_buildingInHand != null 
+		&& (_buildingInHand.GetComponent<IPowerConsumer>() != null
+		    || _buildingInHand.GetComponent<IPowerSource>() != null
+		    || _buildingInHand is Pylon
+		);
+
+	private void UpdateSelected()
+	{
+		if (!string.IsNullOrEmpty(Globals.Player.Selected))
+		{
+			CursorItemSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
+			CursorItemSprite.Scale = new Vector2(32 / (float)CursorItemSprite.Texture.GetWidth(),
+				32 / (float)CursorItemSprite.Texture.GetHeight());
+		}
+
+		if (Building.IsBuilding(Globals.Player.Selected))
+		{
+			CursorBuildingSprite.Texture = Database.Instance.GetTexture(Globals.Player.Selected);
+			_buildingInHand = Building.GetBuilding(Globals.Player.Selected, IRotatable.BuildingOrientation.NorthSouth);
+		}
+		else
+		{
+			_buildingInHand = null;
+		}
+
+		var shouldShowPowerRange = ShouldShowPowerRange;
+		Globals.FactoryScene.TileMap.GetEntities<Pylon>().ForEach(pylon => pylon.ShowRange = shouldShowPowerRange);
+		
+		if (_buildingInHand is not IRotatable) Globals.Player.SelectionRotationDegrees = 0;
+		UpdateLabel();
+	}
+
+	private void UpdateLabel()
+	{
+		var count = Globals.Player.Selected != null ? Globals.PlayerInventory.CountItem(Globals.Player.Selected) : 0;
+		CursorItemCount.Text = count != 0 ? count.ToString() : "";
+		if (count == 0) Globals.Player.Selected = null;
+	}
+	
 	private void UpdateCursorPosition()
 	{
+		var cursorPosition = Globals.Player.GetGlobalMousePosition();
+		
 		// Movement can come from either the cursor moving or the player moving so we just update every frame.
-		CursorItemCount.Position = Globals.Player.GetGlobalMousePosition() + new Vector2(16, 16);
-		CursorItemSprite.Position = Globals.Player.GetGlobalMousePosition();
+		CursorItemCount.Position = cursorPosition + new Vector2(16, 16);
+		CursorItemSprite.Position = cursorPosition;
 		
 		if (_buildingInHand == null) return;
-		CursorBuildingSprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(Globals.Player.GetGlobalMousePosition());
+		CursorBuildingSprite.GlobalPosition = Globals.FactoryScene.TileMap.ToMap(cursorPosition);
 		if (_buildingInHand.BuildingSize.X % 2 == 0) CursorBuildingSprite.Position += new Vector2(16, 0);
 		if (_buildingInHand.BuildingSize.Y % 2 == 0) CursorBuildingSprite.Position += new Vector2(0, 16);
 	}
@@ -143,9 +162,34 @@ public partial class CursorManager : Node
 		if (_buildingInHand is IRotatable rotatable)
 			rotatable.Orientation = IRotatable.GetOrientationFromDegrees(Globals.Player.SelectionRotationDegrees);
 		
-		CursorBuildingSprite.Modulate = _buildingInHand.CanPlaceAt(Globals.Player.GetGlobalMousePosition())
+		var canPlace = _buildingInHand.CanPlaceAt(Globals.Player.GetGlobalMousePosition());
+		CursorBuildingSprite.SelfModulate = canPlace
 			? new Color(0, 1, 0, 0.5f)
 			: new Color(1, 0, 0, 0.5f);
+
+		CursorBuildingSprite.GetChildren().ToList().ForEach(child => child.QueueFree());
+		if (canPlace && _buildingInHand is Pylon pylon) UpdatePylon(pylon);
+	}
+
+	private void UpdatePylon(Pylon pylon)
+	{
+		var cursorPosition = Globals.Player.GetGlobalMousePosition();
+		var mapPosition = Globals.FactoryScene.TileMap.GlobalToMap(cursorPosition);
+		var globalPosition = Globals.FactoryScene.TileMap.ToMap(cursorPosition);
+		pylon.Update(mapPosition);
+		
+		pylon.Links.ToList().ForEach(link =>
+		{
+			CursorBuildingSprite.AddChild(new Line2D 
+			{
+				Width = Pylon.LineWidth + 1, 
+				DefaultColor = Utils.ManaColor,
+				Points = [Vector2.Zero, link.GlobalPosition - globalPosition]
+			});
+		});
+		var poly = Pylon.GetPowerRangePolygon();
+		poly.Color = poly.Color.Darkened(0.5f);
+		CursorBuildingSprite.AddChild(poly);
 	}
 	
 	private void MouseoverEntity()
@@ -163,7 +207,7 @@ public partial class CursorManager : Node
 		}
 		
 		CursorEntitySprite.Visible = true;
-		CursorEntitySprite.Modulate = Colors.White;
+		CursorEntitySprite.SelfModulate = Colors.White;
 
 		if (_cursorColorTween != null) return;
 		TweenColor();

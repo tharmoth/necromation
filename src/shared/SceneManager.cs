@@ -39,6 +39,12 @@ public class SceneManager
 	
 	private static Scene _currentScene;
 	private static bool _changingScene = false;
+	
+	private static readonly ColorRect TransitionFade = new()
+	{
+		Color = new Color("00000000"),
+		AnchorsPreset = (int) Control.LayoutPreset.FullRect
+	};
 
 	public static void Register(Scene scene)
 	{
@@ -65,24 +71,41 @@ public class SceneManager
 	{
 		if (_changingScene) return;
 		_changingScene = true;
-
-		switch (scene)
+		
+		if (TransitionFade.GetParent() == null)
 		{
-			case SceneEnum.Factory:
-				if (!GodotObject.IsInstanceValid(_factoryScene)) _factoryScene = LoadScene("res://src/factory/factory.tscn") as FactoryScene;
-				ChangeScene(_factoryScene);
-				break;
-			case SceneEnum.Map:
-				if (!GodotObject.IsInstanceValid(_mapSceneScene)) _mapSceneScene = LoadScene("res://src/map/map.tscn") as MapScene;
-				ChangeScene(_mapSceneScene);
-				break;
-			case SceneEnum.Battle:
-				if (!GodotObject.IsInstanceValid(_battleSceneScene)) _battleSceneScene = LoadScene("res://src/battle/battle.tscn") as BattleScene;
-				ChangeScene(_battleSceneScene);
-				break;
-			default:
-				throw new ArgumentOutOfRangeException(nameof(scene), scene, null);
+			var canvasLayer = new CanvasLayer {Layer = 100};
+			canvasLayer.AddChild(TransitionFade);
+			TransitionFade.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+			SceneTree.Root.CallDeferred("add_child", canvasLayer);
 		}
+
+		TransitionFade.MouseFilter = Control.MouseFilterEnum.Stop;
+		var tween = SceneTree.Root.CreateTween();
+		tween.TweenProperty(TransitionFade, "color:a", 1.0f, 0.2);
+		tween.TweenCallback(Callable.From(() =>
+		{
+			switch (scene)
+			{
+				case SceneEnum.Factory:
+					if (!GodotObject.IsInstanceValid(_factoryScene)) _factoryScene = LoadScene("res://src/factory/factory.tscn") as FactoryScene;
+					ChangeScene(_factoryScene);
+					break;
+				case SceneEnum.Map:
+					if (!GodotObject.IsInstanceValid(_mapSceneScene)) _mapSceneScene = LoadScene("res://src/map/map.tscn") as MapScene;
+					ChangeScene(_mapSceneScene);
+					break;
+				case SceneEnum.Battle:
+					if (!GodotObject.IsInstanceValid(_battleSceneScene)) _battleSceneScene = LoadScene("res://src/battle/battle.tscn") as BattleScene;
+					ChangeScene(_battleSceneScene);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(scene), scene, null);
+			}
+		}));
+		tween.TweenInterval(0.5f);
+		tween.TweenProperty(TransitionFade, "color:a", 0.0f, 0.2);
+		tween.TweenCallback(Callable.From(() => TransitionFade.MouseFilter = Control.MouseFilterEnum.Ignore));
 
 		// We need  to wait or this will be called again once the map loads and it sees inputjustpressed.
 		SceneTree.CreateTimer(.1).Timeout += () => _changingScene = false;
@@ -104,11 +127,14 @@ public class SceneManager
 	private static void ChangeScene(Scene to)
 	{
 		_currentScene ??= SceneTree.Root.GetChildren().OfType<Scene>().FirstOrDefault();
-		_currentScene.OnClose();
-		_currentScene.Visible = false;
-		_currentScene.ProcessMode = Node.ProcessModeEnum.Disabled;
-		_currentScene.Camera.Enabled = false;
-		_currentScene.Gui.Visible = false;
+		if (_currentScene != null)
+		{
+			_currentScene.OnClose();
+			_currentScene.Visible = false;
+			_currentScene.ProcessMode = Node.ProcessModeEnum.Disabled;
+			_currentScene.Camera.Enabled = false;
+			_currentScene.Gui.Visible = false;
+		}
 		
 		to.Visible = true;
 		to.ProcessMode = Node.ProcessModeEnum.Inherit;

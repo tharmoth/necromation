@@ -1,0 +1,230 @@
+[gd_scene load_steps=11 format=3 uid="uid://tdfx7ln28p4h"]
+
+[ext_resource type="Theme" uid="uid://c8npfsrtbetpb" path="res://src/shared/gui/theme.tres" id="1_ojo4t"]
+[ext_resource type="Script" path="res://src/gui/MainMenu.cs" id="2_88rbb"]
+[ext_resource type="Texture2D" uid="uid://jqxp0hdxrswu" path="res://res/gui/grassland.png" id="2_xgq8i"]
+[ext_resource type="Texture2D" uid="uid://cb0js2gwv4flk" path="res://res/sprites/particles/vignette.png" id="3_5b0fi"]
+[ext_resource type="Texture2D" uid="uid://caoajoq1texck" path="res://res/gui/Logo_Discord_25px.png" id="4_rngsa"]
+[ext_resource type="PackedScene" uid="uid://dsabce6vfa6cs" path="res://src/shared/gui/outline.tscn" id="4_vpxqm"]
+[ext_resource type="Texture2D" uid="uid://b6xphxv6e7ypy" path="res://res/gui/MainMenu/panel-transparent-center-026.png" id="5_p87ta"]
+[ext_resource type="Script" path="res://src/sk/ActionButton.cs" id="6_tyo0w"]
+[ext_resource type="Script" path="res://src/sk/LinkButton.cs" id="8_2gnoq"]
+[ext_resource type="Texture2D" uid="uid://bqc7a03cq108" path="res://res/gui/Logo_Steam_25px.png" id="9_0djyy"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ojo4t")
+script = ExtResource("2_88rbb")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_xgq8i")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_5b0fi")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 100
+text = "Necromation"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Outline" parent="VBoxContainer/HBoxContainer/MarginContainer" instance=ExtResource("4_vpxqm")]
+visible = false
+layout_mode = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+texture = ExtResource("5_p87ta")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Indev Build"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "
+Many parts of the game are still in the exparementation stage and may be removed or changed completely."
+autowrap_mode = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
+auto_translate_mode = 1
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+texture = ExtResource("5_p87ta")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="NewGameButton" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+text = "New Game"
+flat = true
+script = ExtResource("6_tyo0w")
+_action = "new_game"
+
+[node name="LoadGameButton" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+text = "Load Game"
+flat = true
+script = ExtResource("6_tyo0w")
+_action = "load"
+
+[node name="SettingsButton" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+disabled = true
+text = "Settings"
+flat = true
+
+[node name="CreditsButton" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+disabled = true
+text = "Credits"
+flat = true
+
+[node name="ExitButton" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+text = "Exit"
+flat = true
+script = ExtResource("6_tyo0w")
+_action = "exit_game"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer3/VBoxContainer"]
+layout_mode = 2
+text = "External Links:"
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer3/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+text = "Discord"
+icon = ExtResource("4_rngsa")
+flat = true
+script = ExtResource("8_2gnoq")
+_url = "https://discord.com/invite/wdzwjxhgRT"
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/MarginContainer3/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+disabled = true
+text = "Steam"
+icon = ExtResource("9_0djyy")
+flat = true
+script = ExtResource("8_2gnoq")
+_url = "https://discord.com/invite/wdzwjxhgRT"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="TransitionFade" type="ColorRect" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

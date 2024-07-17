@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Necromation;
 using Necromation.components;
+using Necromation.components.animation;
 using Necromation.interfaces;
 
-public class Manaforge : Building, IInteractable, ITransferTarget, IPowerSource, FurnaceAnimationComponent.IAnimatable
+public class Manaforge : Building, IInteractable, ITransferTarget, FurnaceAnimationComponent.IAnimatable
 {
     /**************************************************************************
      * Events                                                                 *
@@ -25,40 +27,39 @@ public class Manaforge : Building, IInteractable, ITransferTarget, IPowerSource,
     public override Vector2I BuildingSize => Vector2I.One * 3;
     public override string ItemType => "Manaforge";
     #endregion
-
-    #region IPowerSource Implementation
-    public float EnergyStored { get; set; }
-    public float PowerMax => 1000.0f;
-    public float PowerLimit => 100.0f;
-    public bool Disconnected
-    {
-        set
-        {
-            GD.Print($"Manaforge Disconnected: {value}");
-        }
-    }
-    #endregion
     
     /**************************************************************************
      * Private Variables                                                      *
      **************************************************************************/
     private readonly Inventory _inventory = new ManaforgeInventory();
     private readonly FuelComponent _fuelComponent;
+    private readonly PowerSourceComponent _powerSourceComponent;
     
-    public Manaforge() : base()
+    /**************************************************************************
+     * Constructor                                                            *
+     **************************************************************************/
+    public Manaforge() : base()     
     {
         _fuelComponent = new FuelComponent() {InputInventory = _inventory};
-        new FurnaceAnimationComponent(this);
+        AddComponent(_fuelComponent);
+        _powerSourceComponent = new PowerSourceComponent { FuelComponent = _fuelComponent };
+        AddComponent(_powerSourceComponent);
+        var animation = new FurnaceAnimationComponent(this);
+        AddComponent(animation);
     }
 
+    /**************************************************************************
+     * Godot Methods                                                          *
+     **************************************************************************/
     public override void _Process(double delta)
     {
         base._Process(delta);
+        
         _fuelComponent._Process(delta);
-        if (_fuelComponent.CanDrawPower() && EnergyStored <= PowerMax)
+        _powerSourceComponent._Process(delta);
+        
+        if (_fuelComponent.FuelTime > 0)
         {
-            _fuelComponent.DrawPower();
-            EnergyStored += PowerLimit * (float) delta;
             StartAnimation?.Invoke();
         }
         else
@@ -67,6 +68,9 @@ public class Manaforge : Building, IInteractable, ITransferTarget, IPowerSource,
         }
     }
     
+    /**************************************************************************
+     * Public Methods                                                         *
+     **************************************************************************/
     public override float GetProgressPercent()
     {
         return _fuelComponent.FuelTime / FuelComponent.CoalBurnTime;
@@ -75,6 +79,12 @@ public class Manaforge : Building, IInteractable, ITransferTarget, IPowerSource,
     public void Interact(Inventory playerInventory)
     {
         ManaforgeGui.Display(playerInventory, this);
+    }
+    
+    public override bool CanPlaceAt(Vector2 position)
+    {
+        return base.CanPlaceAt(position) && GetOccupiedPositions(position)
+            .Any(mapPos => Globals.FactoryScene.TileMap.GetResourceType(mapPos) == "Mana");
     }
     
     #region ITransferTarget Implementation

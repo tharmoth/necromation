@@ -83,4 +83,9 @@ public static class Extensions
     {
         sprite.Scale = Vector2.One * size / Mathf.Max(sprite.Texture.GetSize().X, sprite.Texture.GetSize().Y);
     }
+    
+    public static IEnumerable<T> NonNull<T>(this IEnumerable<T> source) where T : class
+    {
+        return source.Where(item => item != null);
+    }
 }

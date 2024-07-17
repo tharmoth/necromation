@@ -51,10 +51,12 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
 	{
 	    _inputInventory = new FurnaceInventory(this);
 	    _fuelComponent = new FuelComponent{InputInventory = _inputInventory};
-
+		AddComponent(_fuelComponent);
+		
+		var animation = new FurnaceAnimationComponent(this);
+		AddComponent(animation);
+		
 	    UpdateAllowedIngredients();
-	    
-	    new FurnaceAnimationComponent(this);
 	}
     
 	/**************************************************************************
@@ -64,7 +66,8 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     {
 	    base._Ready();
 	    
-	    // Add this here because we need to remove it when the Sprite is removed from the tree.
+	    // Add this here because we need to remove it when the Sprite is removed
+	    // from the tree.
 	    UpdateAllowedIngredients();
 	    Globals.ResearchListeners.Add(UpdateAllowedIngredients);
     }
@@ -120,11 +123,6 @@ public partial class Furnace : Building, ITransferTarget, ICrafter, IInteractabl
     {
 	    if (_recipe == null) return 0;
 	    return _time / _recipe.Time;
-    }
-
-    public float GetFuelProgressPercent()
-    {
-	    return _fuelComponent.FuelTime / 10;
     }
     
     public override void Remove(Inventory to, bool quietly = false)

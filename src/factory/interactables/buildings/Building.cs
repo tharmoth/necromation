@@ -71,6 +71,7 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 	private readonly AudioStreamPlayer2D _audio = new();
 	private readonly GpuParticles2D _particles;
 	private readonly VisibleOnScreenNotifier2D _notifier = new();
+	private readonly List<object> _components = [];
 	// We need to cache these to cancel them if the building is removed before the animation is complete.
 	private Tween _xTween;
 	private Tween _yTween;
@@ -196,8 +197,28 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		return positions;
 	}
 	
+	public void AddComponent(object component)
+	{
+		_components.Add(component);
+	}
+	
+	public void RemoveComponent(object component)
+	{
+		_components.Remove(component);
+	}
+	
+	public T GetComponent<T>() where T : class
+	{
+		return _components.Find(c => c is T) as T;
+	}
+	
+	public List<T> GetComponents<T>() where T : class
+	{
+		return _components.FindAll(c => c is T).ConvertAll(c => c as T);
+	}
+	
 	/******************************************************************
-	 * Protected Methods                                                 *
+	 * Protected Methods                                              *
 	 ******************************************************************/
 	protected void TransferInventories(Inventory to, bool quietly)
 	{
@@ -215,9 +236,9 @@ public abstract class Building : FactoryTileMap.IEntity, ProgressTracker.IProgre
 		}
 	}
 
-	/**************************************************************************
-	 * Private Methods                                                        *
-	 **************************************************************************/
+	/*************************************************************************
+	 * Private Methods                                                       *
+	 *************************************************************************/
 	private void PlayBuildAnimation()
 	{
 		var clipTarget = ClipRect.Position.Y;

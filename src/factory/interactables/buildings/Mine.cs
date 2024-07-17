@@ -94,7 +94,12 @@ public class Mine : Building, IInteractable, ITransferTarget
     // Mines can only be placed over resources.
     public override bool CanPlaceAt(Vector2 position)
     {
-        return base.CanPlaceAt(position) && GetOccupiedPositions(position).Any(Globals.FactoryScene.TileMap.IsResource);
+        return base.CanPlaceAt(position) && GetOccupiedPositions(position)
+            .Any(mapPos =>
+            {
+                var resource = Globals.FactoryScene.TileMap.GetResourceType(mapPos);
+                return resource != null && resource != "Mana";
+            });
     }
     
     public override void Remove(Inventory to, bool quietly = false)

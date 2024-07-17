@@ -2,6 +2,7 @@
 using System.Linq;
 using Godot;
 using Necromation;
+using Necromation.components.animation;
 using Necromation.sk;
 
 public class Pylon : Building
@@ -9,7 +10,7 @@ public class Pylon : Building
     /**************************************************************************
      * Constants                                                              *
      **************************************************************************/
-    private const int LineWidth = 2;
+    public const int LineWidth = 1;
     
     /**************************************************************************
      * Building Implementation                                                *
@@ -28,6 +29,7 @@ public class Pylon : Building
      * Private Variables                                                       *
      **************************************************************************/
     private readonly Node2D _colorNode = new () {ZIndex = 100};
+    private readonly Polygon2D _powerRangePolygon = GetPowerRangePolygon();
 
     /**************************************************************************
      * Godot Methods                                                          *
@@ -37,36 +39,70 @@ public class Pylon : Building
         base._Ready();
         BaseNode.CallDeferred("add_child", _colorNode);
         _colorNode.Draw += DoDraw;
+
+        BaseNode.CallDeferred("add_child", _powerRangePolygon);
     }
 
     /**************************************************************************
      * Public Methods                                                         *
      **************************************************************************/
-    public void Update()
+    public void Update(Vector2I mapPosition)
     {
         Links.Clear();
         Sources.Clear();
         Consumers.Clear();
         
-        Globals.FactoryScene.TileMap.GetEntitiesWithinRadius(MapPosition, 10)
+        Globals.FactoryScene.TileMap.GetEntitiesWithinRadius(mapPosition, 10)
+            .OfType<Pylon>()
+            .ToList()
+            .ForEach(pylon => Links.Add(pylon));
+        
+        var powerRect = new Rect2I(mapPosition.X - 3, mapPosition.Y - 3, 7, 7);
+        Globals.FactoryScene.TileMap.GetEntitiesWithinRect(powerRect)
+            .OfType<Building>()
             .ToList()
             .ForEach(building =>
             {
-                switch (building)
+                var source = building.GetComponent<IPowerSource>();
+                if (source != null)
                 {
-                    case Pylon pylon:
-                        Links.Add(pylon);
-                        break;
-                    case Manaforge manaforge:
-                        Sources.Add(manaforge);
-                        break;
-                    case Assembler assembler:
-                        Consumers.Add(assembler);
-                        break;
+                    Sources.Add(source);
+                }
+                
+                var consumer = building.GetComponent<IPowerConsumer>();
+                if (consumer != null)
+                {
+                    Consumers.Add(consumer);
                 }
             });
        
         _colorNode.QueueRedraw();
+    }
+    
+    public bool ShowRange
+    {
+        set => _powerRangePolygon.Visible = value;
+    }
+
+    public static Polygon2D GetPowerRangePolygon()
+    {
+        var color = Utils.ManaColor;
+        color.A = .2f;
+        var rectStart = -3 * FactoryTileMap.TileSize - FactoryTileMap.TileSize / 2;
+        var rectSize = 7 * FactoryTileMap.TileSize;
+        var powerRect = new Rect2I(rectStart, rectStart, rectSize, rectSize);
+        return new Polygon2D 
+        {
+            Color = color,
+            Polygon =
+            [
+                new Vector2(powerRect.Position.X, powerRect.Position.Y),
+                new Vector2(powerRect.Position.X + powerRect.Size.X, powerRect.Position.Y),
+                new Vector2(powerRect.Position.X + powerRect.Size.X, powerRect.Position.Y + powerRect.Size.Y),
+                new Vector2(powerRect.Position.X, powerRect.Position.Y + powerRect.Size.Y)
+            ],
+            ZIndex = -1
+        };
     }
 
     /**************************************************************************
@@ -82,7 +118,15 @@ public class Pylon : Building
         {
             var start = Vector2.Zero;
             var end = _colorNode.ToLocal(link.GlobalPosition);
-            _colorNode.DrawLine(start, end, Utils.ManaColor, LineWidth);
+            _colorNode.DrawLine(start, end, Utils.ManaColor, LineWidth, true);
         }
+
+        // var color = Utils.ManaColor;
+        // color.A = .2f;
+        //
+        // var rectStart = -3 * FactoryTileMap.TileSize - FactoryTileMap.TileSize / 2;
+        // var rectSize = 7 * FactoryTileMap.TileSize;
+        // var powerRect = new Rect2I(rectStart, rectStart, rectSize, rectSize);
+        // _colorNode.DrawRect(powerRect, color);
     }
 }

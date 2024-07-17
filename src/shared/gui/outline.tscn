@@ -32,6 +32,7 @@ patch_margin_right = 7
 patch_margin_bottom = 7
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]
+visible = false
 modulate = Color(0.6, 0.6, 0.6, 1)
 layout_mode = 2
 texture = ExtResource("1_3t6af")
@@ -40,7 +41,7 @@ patch_margin_top = 7
 patch_margin_right = 7
 patch_margin_bottom = 7
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Vingette" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0.12549)
 layout_mode = 2
 mouse_filter = 2
