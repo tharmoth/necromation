@@ -6,9 +6,12 @@ using Necromation;
 using Necromation.gui;
 using Necromation.map;
 using Necromation.map.character;
+using Necromation.sk;
 
 public partial class FactoryScene : Scene
 {
+	public static bool ShouldLoad;
+	
 	/**************************************************************************
 	 * Child Accessors 													      *
 	 **************************************************************************/
@@ -38,7 +41,6 @@ public partial class FactoryScene : Scene
 	public override void _EnterTree()
 	{
 		base._EnterTree();
-
 		MusicManager.PlayAmbiance();
 	}
 
@@ -54,6 +56,18 @@ public partial class FactoryScene : Scene
 
 		var building = new BuildingSystem();
 		CallDeferred("add_child", building);
+		
+		// Used for loading from main menu. Not sure if good idea. Think on this.
+		if (ShouldLoad)
+		{
+			CallDeferred("LoadTest");
+			ShouldLoad = false;
+		}
+	}
+
+	private void LoadTest()
+	{
+		SKSaveLoad.LoadGame(this);
 	}
 
 	public override FactoryGUI Gui => GetNode<FactoryGUI>("%GUI");

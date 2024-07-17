@@ -1,6 +1,15 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://c8npfsrtbetpb"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://c8npfsrtbetpb"]
 
+[ext_resource type="Texture2D" uid="uid://ca50rxpiavpfg" path="res://res/gui/MainMenu/panel-border-010.png" id="1_0mgnp"]
 [ext_resource type="FontFile" uid="uid://ddl1wcwc0uwko" path="res://res/fonts/AoboshiOne-Regular.ttf" id="1_orsot"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ud6yj"]
+texture = ExtResource("1_0mgnp")
+texture_margin_left = 11.0
+texture_margin_top = 11.0
+texture_margin_right = 11.0
+texture_margin_bottom = 11.0
+modulate_color = Color(0.6, 0.6, 0.6, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bxf4a"]
 
@@ -8,6 +17,10 @@
 default_font = ExtResource("1_orsot")
 Button/colors/font_outline_color = Color(0, 0, 0, 1)
 Button/constants/outline_size = 5
+FlatButton/colors/font_hover_color = Color(1, 1, 0, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
 Label/constants/outline_size = 5
+LinkyButton/base_type = &"FlatButton"
+OutlineButton/base_type = &"Button"
+OutlineButton/styles/normal = SubResource("StyleBoxTexture_ud6yj")
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_bxf4a")
