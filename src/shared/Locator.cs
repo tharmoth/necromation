@@ -1,4 +1,6 @@
-﻿using Godot;
+﻿using System.Collections.Generic;
+using Godot;
+using Necromation.map.character;
 
 namespace Necromation;
 
@@ -45,4 +47,26 @@ public class Locator
         }
     }
     #endregion
+    
+    public static IMap Map
+    {
+        get => _map;
+        set => _map = value ?? new NullMap();
+    }
+    private static IMap _map = new NullMap();
+    private class NullMap : IMap
+    {
+        public List<Commander> PlayerCommanders
+        {
+            get
+            {
+                GD.PrintErr("Locator::Map::PlayerCommanders Map could not be located!");
+                return [];
+            }
+        }
+    }
+    public interface IMap
+    {
+        public List<Commander> PlayerCommanders { get;  }
+    }
 }

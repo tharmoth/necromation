@@ -5,7 +5,9 @@ using Godot;
 
 public static class Utils
 {
-	public static readonly Color ManaColor = new Color("4f8fba");
+	public static readonly Color ManaColor = new("4f8fba");
+	public static readonly Color LandColor = new("468232");
+	public static readonly Color OceanColor = new("4f8fba");
 	
     public static int RollDice(string damageString)
     {
@@ -83,5 +85,25 @@ public static class Utils
     public static bool NonNull(object item)
     {
 	    return item != null;
+    }
+    
+    public static Vector2 RandomPointOnCircle(float radius)
+    {
+	    var angle = GD.Randf() * Mathf.Pi * 2;
+	    return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+    }
+
+    public static Vector2 RandomPointInCircle(float radius)
+    {
+	    var randomRadius = (float)GD.RandRange(0, radius);
+	    return RandomPointOnCircle(randomRadius);
+    }
+    
+    public static float DistanceEuclideanSquared(Vector2 pos, Rect2 area)
+    {
+	    // pos is a point in the rect area
+	    // Scale pos such that it is in the range [-1, 1] and the center is (area.x / 2, area.y / 2)
+	    var scaled = (pos - area.Position) / area.Size * 2 - Vector2.One;
+	    return 1 - (1.0f - scaled.X * scaled.X) * (1.0f - scaled.Y * scaled.Y);
     }
 }

@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://btsbv7iyr1x8k"]
+
+[ext_resource type="Texture2D" uid="uid://gdq12fw5obqu" path="res://res/sprites/Tileset.png" id="1_mf7ph"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_obigx"]
+texture = ExtResource("1_mf7ph")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_2yuaw"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_obigx")
+
+[node name="TileMap" type="TileMap"]
+tile_set = SubResource("TileSet_2yuaw")
+format = 2
+layer_0/z_index = -100
+layer_0/tile_data = PackedInt32Array(196608, 131072, 0, 262144, 131072, 0, 327680, 131072, 0, 393216, 131072, 0, 458752, 131072, 0, 196609, 131072, 0, 262145, 131072, 0, 327681, 131072, 0, 393217, 131072, 0, 458753, 131072, 0, 196610, 131072, 0, 262146, 131072, 0, 327682, 131072, 0, 393218, 131072, 0, 458754, 131072, 0, 196611, 131072, 0, 262147, 131072, 0, 327683, 131072, 0, 393219, 131072, 0, 458755, 131072, 0, 196612, 131072, 0, 262148, 131072, 0, 327684, 131072, 0, 393220, 131072, 0, 458756, 131072, 0, 196613, 131072, 0, 262149, 131072, 0, 327685, 131072, 0, 393221, 131072, 0, 458757, 131072, 0, 196614, 131072, 0, 262150, 131072, 0, 327686, 131072, 0, 393222, 131072, 0, 458758, 131072, 0, 196615, 131072, 0, 262151, 131072, 0, 327687, 131072, 0, 393223, 131072, 0, 458759, 131072, 0)

@@ -69,8 +69,8 @@ public partial class MapSquad : PanelContainer
 	{
 		base._Process(delta);
 		// Polling is bad. I'm sorry. I'm just trying to get this done.
-		if (!Globals.MapScene.SelectedCommanders.Contains(_commander) && Background.Color != Colors.Black) Background.Color = Colors.Black;
-		else if (Globals.MapScene.SelectedCommanders.Contains(_commander) && Background.Color != _selectedColor) Background.Color = _selectedColor;
+		// if (!Globals.MapScene.SelectedCommanders.Contains(_commander) && Background.Color != Colors.Black) Background.Color = Colors.Black;
+		// else if (Globals.MapScene.SelectedCommanders.Contains(_commander) && Background.Color != _selectedColor) Background.Color = _selectedColor;
 	}
 
 	public override void _GuiInput(InputEvent @event)
@@ -87,16 +87,16 @@ public partial class MapSquad : PanelContainer
 			var startIndex = parentUnits.ToList().IndexOf(unit);
 			var endIndex = parentUnits.ToList().IndexOf(this);
 			var range = parentUnits.ToList().GetRange(Math.Min(startIndex, endIndex), Math.Abs(startIndex - endIndex) + 1);
-			range.Select(squad => squad._commander).ToList().ForEach(commander => Globals.MapScene.SelectedCommanders.Add(commander));
+			// range.Select(squad => squad._commander).ToList().ForEach(commander => Globals.MapScene.SelectedCommanders.Add(commander));
 		}
 		else if (Input.IsKeyPressed(Key.Ctrl))
 		{
-			Globals.MapScene.SelectedCommanders.Add(_commander);
+			// Globals.MapScene.SelectedCommanders.Add(_commander);
 		}
 		else
 		{
-			Globals.MapScene.SelectedCommanders.Clear();
-			Globals.MapScene.SelectedCommanders.Add(_commander);
+			// Globals.MapScene.SelectedCommanders.Clear();
+			// Globals.MapScene.SelectedCommanders.Add(_commander);
 		}
 		_lastClicked = this;
 	}

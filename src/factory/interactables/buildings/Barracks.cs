@@ -50,8 +50,13 @@ public class Barracks : Building, ITransferTarget, IInteractable
     
     private void SpawnCommander()
     {
-        Commander = Globals.MapScene.Commanders.FirstOrDefault(commander => commander.BarracksId == Id) 
-                     ?? new Commander(Globals.MapScene.FactoryProvince, "Player");
+        Commander = Locator.Map.PlayerCommanders.FirstOrDefault(commander => commander.BarracksId == Id);
+        if (Commander == null)
+        {
+            Commander = new Commander("Player");
+            Locator.Map.PlayerCommanders.Add(Commander);
+        }
+        
         Commander.BarracksId = Id;
         _inventory = Commander.Units;
     }

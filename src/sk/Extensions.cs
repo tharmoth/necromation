@@ -88,4 +88,20 @@ public static class Extensions
     {
         return source.Where(item => item != null);
     }
+    
+    public static T RandomElement<T>(this IEnumerable<T> source) where T : class
+    {
+        var enumerable = source.ToList();
+        return enumerable.ElementAt((int) (GD.Randi() % (enumerable.Count - 1)));
+    }
+    
+    public static Vector2I ToVector2I(this Vector2 vector)
+    {
+        return new Vector2I((int) vector.X, (int) vector.Y);
+    }
+    
+    public static Vector2 ToVector2(this Vector2I vector)
+    {
+        return new Vector2(vector.X, vector.Y);
+    }
 }

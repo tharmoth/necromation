@@ -4,6 +4,7 @@ using Godot;
 using Necromation.battle;
 using Necromation.factory;
 using Necromation.gui;
+using Necromation.map.character;
 
 namespace Necromation;
 

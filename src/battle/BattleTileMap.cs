@@ -50,16 +50,18 @@ public partial class BattleTileMap : LayerTileMap
 			}
 		}
 		
-		for (int x = 0; x < X * TileSize; x += FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize)
+		const int TileSize = 32;
+		const int ProvinceSize = 20;
+		for (int x = 0; x < X * TileSize; x += TileSize * ProvinceSize)
 		{
-			for (int y = 0; y < Y * TileSize; y  += FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize)
+			for (int y = 0; y < Y * TileSize; y  += TileSize * ProvinceSize)
 			{
 				var startpos = new Vector2(x, y);
-				var propPos = startpos + Vector2I.One * FactoryTileMap.ProvinceSize * TileSize / 2;
+				var propPos = startpos + Vector2I.One * ProvinceSize * TileSize / 2;
 				
 				Sprite2D sprite = new();
 				sprite.Texture = Database.Instance.GetTexture("soil2");
-				var scaler2 = (FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize) / sprite.Texture.GetSize().X;
+				var scaler2 = (TileSize * ProvinceSize) / sprite.Texture.GetSize().X;
 				sprite.Scale = new Vector2(scaler2, scaler2);
 				sprite.GlobalPosition = startpos + scaler2 * sprite.Texture.GetSize() / 2;
 				sprite.Centered = true;
@@ -70,7 +72,7 @@ public partial class BattleTileMap : LayerTileMap
 				rockSpawner.Textures.Add(Database.Instance.GetTexture("Rocks1"));
 				rockSpawner.Textures.Add(Database.Instance.GetTexture("Rocks3"));
 				rockSpawner.Density = 0.25f;
-				rockSpawner.Radius = FactoryTileMap.ProvinceSize * TileSize / 2;
+				rockSpawner.Radius = ProvinceSize * TileSize / 2;
 				rockSpawner.SizePixels = 32;
 				rockSpawner.Threshold = .75f;
 				rockSpawner.GlobalPosition = propPos;
@@ -83,7 +85,7 @@ public partial class BattleTileMap : LayerTileMap
 				spawner.Textures.Add(Database.Instance.GetTexture("Grass2"));
 				spawner.Textures.Add(Database.Instance.GetTexture("Grass5"));
 				spawner.Density = 0.8f;
-				spawner.Radius = FactoryTileMap.ProvinceSize * TileSize / 2;
+				spawner.Radius = ProvinceSize * TileSize / 2;
 				spawner.SizePixels = 24;
 				spawner.Threshold = 0.4f;
 				spawner.GlobalPosition = propPos;

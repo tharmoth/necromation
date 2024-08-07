@@ -196,10 +196,10 @@ public partial class Inserter : Building, IRotatable
     private void UpdateInputOutput()
     {
         
-        var position = -FactoryTileMap.TileSize * _range * Vector2.Down;
+        var position = -Globals.FactoryScene.TileMap.TileSet.TileSize.ToVector2() * _range * Vector2.Down;
         if (_range > 1)
         {
-            position += FactoryTileMap.TileSize * Vector2.Down / 2.0f;
+            position += Globals.FactoryScene.TileMap.TileSet.TileSize.ToVector2() * Vector2.Down / 2.0f;
         }
         SpriteInHand.Position = position;
     }

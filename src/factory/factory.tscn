@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=43 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
 [ext_resource type="Script" path="res://src/factory/gui/HelpGui/BlinkActionButton.cs" id="17_r47pg"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
+[ext_resource type="Texture2D" uid="uid://gdq12fw5obqu" path="res://res/sprites/Tileset.png" id="20_ml145"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
 [ext_resource type="Texture2D" uid="uid://8ybyljlq1nvu" path="res://res/sprites/Player-south.png" id="23_hi424"]
 [ext_resource type="Texture2D" uid="uid://cfafwwpbyr8yn" path="res://res/sprites/particles/SoftLight.png" id="23_hyyce"]
@@ -111,10 +112,67 @@ texture_region_size = Vector2i(32, 32)
 3:0/0 = 0
 4:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tn00a"]
+texture = ExtResource("20_ml145")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_1emfp"]
 tile_size = Vector2i(32, 32)
 sources/1 = SubResource("TileSetAtlasSource_8qpuw")
 sources/0 = SubResource("TileSetAtlasSource_adiq0")
+sources/2 = SubResource("TileSetAtlasSource_tn00a")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4uoh8"]
+texture = ExtResource("20_ml145")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_nb3r2"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_4uoh8")
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_h7m82"]
 random_pitch = 1.05
@@ -492,6 +550,13 @@ format = 2
 layer_0/z_index = -100
 layer_0/tile_data = PackedInt32Array(0, 1, 0, 65536, 1, 0, 131072, 1, 0, 196608, 1, 0, 262144, 1, 0, 327680, 1, 0, 393216, 1, 0, 458752, 1, 0, 524288, 1, 0, 589824, 1, 0, 655360, 1, 0, 1, 1, 0, 65537, 1, 0, 131073, 1, 0, 196609, 1, 0, 262145, 1, 0, 327681, 1, 0, 393217, 1, 0, 458753, 1, 0, 524289, 1, 0, 589825, 1, 0, 655361, 1, 0, 2, 1, 0, 65538, 1, 0, 131074, 1, 0, 196610, 1, 0, 262146, 1, 0, 327682, 1, 0, 393218, 1, 0, 458754, 1, 0, 524290, 1, 0, 589826, 1, 0, 655362, 1, 0, 3, 1, 0, 65539, 1, 0, 131075, 1, 0, 196611, 1, 0, 262147, 1, 0, 327683, 1, 0, 393219, 1, 0, 458755, 1, 0, 524291, 1, 0, 589827, 1, 0, 655363, 1, 0, 4, 1, 0, 65540, 1, 0, 131076, 1, 0, 196612, 1, 0, 262148, 1, 0, 327684, 1, 0, 393220, 1, 0, 458756, 1, 0, 524292, 1, 0, 589828, 1, 0, 655364, 1, 0, 5, 1, 0, 65541, 1, 0, 131077, 1, 0, 196613, 1, 0, 262149, 1, 0, 327685, 1, 0, 393221, 1, 0, 458757, 1, 0, 524293, 1, 0, 589829, 1, 0, 655365, 1, 0, 6, 1, 0, 65542, 1, 0, 131078, 1, 0, 196614, 1, 0, 262150, 1, 0, 327686, 1, 0, 393222, 1, 0, 458758, 1, 0, 524294, 1, 0, 589830, 1, 0, 655366, 1, 0, 7, 1, 0, 65543, 1, 0, 131079, 1, 0, 196615, 1, 0, 262151, 1, 0, 327687, 1, 0, 393223, 1, 0, 458759, 1, 0, 524295, 1, 0, 589831, 1, 0, 655367, 1, 0, 8, 1, 0, 65544, 1, 0, 131080, 1, 0, 196616, 1, 0, 262152, 1, 0, 327688, 1, 0, 393224, 1, 0, 458760, 1, 0, 524296, 1, 0, 589832, 1, 0, 655368, 1, 0, 9, 1, 0, 65545, 1, 0, 131081, 1, 0, 196617, 1, 0, 262153, 1, 0, 327689, 1, 0, 393225, 1, 0, 458761, 1, 0, 524297, 1, 0, 589833, 1, 0, 655369, 1, 0, 10, 1, 0, 65546, 1, 0, 131082, 1, 0, 196618, 1, 0, 262154, 1, 0, 327690, 1, 0, 393226, 1, 0, 458762, 1, 0, 524298, 1, 0, 589834, 1, 0, 655370, 1, 0)
 script = ExtResource("16_o18cr")
+
+[node name="VisionTileMap" type="TileMap" parent="."]
+unique_name_in_owner = true
+z_index = 100
+tile_set = SubResource("TileSet_nb3r2")
+format = 2
+layer_0/z_index = -100
 
 [node name="Character" type="Node2D" parent="."]
 light_mask = 4

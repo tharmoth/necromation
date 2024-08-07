@@ -49,17 +49,17 @@ public partial class BarracksBoxDraw : Control
 		_commander.Units.Listeners.Add(UpdateSprites);
 		UpdateSprites();
 		
-		_commander.Province.Commanders.ForEach(commander =>
-		{
-			if (commander == _commander) return;
-			Sprite2D sprite = new();
-			sprite.Scale = Vector2.One * 0.25f;
-			sprite.Texture = new Texture2D();
-			sprite.Modulate = new Color(1, 1, 1, 0.33f);
-			BoxDraw.AddChild(sprite);
-			UpdateSprites(commander, sprite);
-			CallDeferred("AddCommander", commander, sprite);
-		});
+		// _commander.Province.Commanders.ForEach(commander =>
+		// {
+		// 	if (commander == _commander) return;
+		// 	Sprite2D sprite = new();
+		// 	sprite.Scale = Vector2.One * 0.25f;
+		// 	sprite.Texture = new Texture2D();
+		// 	sprite.Modulate = new Color(1, 1, 1, 0.33f);
+		// 	BoxDraw.AddChild(sprite);
+		// 	UpdateSprites(commander, sprite);
+		// 	CallDeferred("AddCommander", commander, sprite);
+		// });
 	}
 
 	private void AddCommander(Commander commander, Sprite2D sprite)
@@ -115,7 +115,7 @@ public partial class BarracksBoxDraw : Control
 			{
 				var subSprite = new Sprite2D();
 				subSprite.Texture = Database.Instance.GetTexture(unitType);
-				// subSprite.Scale = Vector2.One * (MapTileMap.TileSize / 6.0f) / subSprite.Texture.GetWidth();
+				// subSprite.Scale = Vector2.One * (MapScene.MapCellSize / 6.0f) / subSprite.Texture.GetWidth();
 				subSprite.Position = new Vector2(-y * 10, x + offset) * 15;
 				subSprite.YSortEnabled = true;
 				spriteHolder.AddChild(subSprite);

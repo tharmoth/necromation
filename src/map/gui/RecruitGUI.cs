@@ -43,11 +43,11 @@ public partial class RecruitGUI : Control
 
 	private void Update()
 	{
-		var provence = Globals.MapScene.SelectedProvince;
-		if (provence == null) return;
-		
-		var label = GetNode<Label>("%RecruitList");
-		label.Text = "";
+		// var provence = Globals.MapScene.SelectedProvince;
+		// if (provence == null) return;
+		//
+		// var label = GetNode<Label>("%RecruitList");
+		// label.Text = "";
 		// foreach (var (name, count) in provence.RecruitQueue.OrderBy(pair => pair.Key))
 		// {
 		// 	label.Text += "Recruit " + name + " x" + count + "\n";

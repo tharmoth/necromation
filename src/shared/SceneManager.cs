@@ -79,8 +79,12 @@ public class SceneManager
 			TransitionFade.SetAnchorsPreset(Control.LayoutPreset.FullRect);
 			SceneTree.Root.CallDeferred("add_child", canvasLayer);
 		}
-
 		TransitionFade.MouseFilter = Control.MouseFilterEnum.Stop;
+		
+		// We need to stop the current scene from running before the animation or this may be called repeatedly.
+		_currentScene ??= SceneTree.Root.GetChildren().OfType<Scene>().FirstOrDefault();
+		if (_currentScene != null) _currentScene.ProcessMode = Node.ProcessModeEnum.Disabled;
+		
 		var tween = SceneTree.Root.CreateTween();
 		tween.TweenProperty(TransitionFade, "color:a", 1.0f, 0.2);
 		tween.TweenCallback(Callable.From(() =>
@@ -126,7 +130,6 @@ public class SceneManager
 
 	private static void ChangeScene(Scene to)
 	{
-		_currentScene ??= SceneTree.Root.GetChildren().OfType<Scene>().FirstOrDefault();
 		if (_currentScene != null)
 		{
 			_currentScene.OnClose();

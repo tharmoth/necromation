@@ -28,6 +28,7 @@ public partial class CursorManager : Node
 	public override void _Ready()
 	{
 		base._Ready();
+		ProcessMode = ProcessModeEnum.Pausable;
 		Globals.PlayerInventory.Listeners.Add(UpdateLabel);
 	}
 	

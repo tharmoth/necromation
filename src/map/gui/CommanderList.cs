@@ -13,10 +13,11 @@ public partial class CommanderList : Container
 
 	private void Update()
 	{
-		var provence = Globals.MapScene.SelectedProvince;
-		if (provence == null) return;
-
-		var commanders = provence.Commanders.Where(commander => commander.Team == "Player").ToList();
-		MapSquad.UpdateCommanderList(commanders, this);
+		// var provence = Globals.MapScene.SelectedProvince;
+		//
+		// if (provence == null) return;
+		//
+		// var commanders = provence.Commanders.Where(commander => commander.Team == "Player").ToList();
+		// MapSquad.UpdateCommanderList(commanders, this);
 	}
 }

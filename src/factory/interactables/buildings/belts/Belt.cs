@@ -48,7 +48,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     
     // Private fields
     private float _secondsPerItem = .5333f;
-    private float Speed => FactoryTileMap.TileSize / _secondsPerItem;
+    private float Speed => Globals.FactoryScene.TileMap.TileSet.TileSize.ToVector2().X / _secondsPerItem;
     protected Vector2I Output => MapPosition + TargetDirectionGlobal;
     protected Vector2I Input => MapPosition - TargetDirectionGlobal;
     private static Vector2I TargetDirectionLocal => new (0, -1);
@@ -188,7 +188,7 @@ public partial class Belt : Building, ITransferTarget, IRotatable
     
     private Belt GetBeltInDirection(Vector2 direction)
     {
-        var global = GlobalPosition + direction.Rotated(Rotation) * FactoryTileMap.TileSize;
+        var global = GlobalPosition + direction.Rotated(Rotation) * Globals.FactoryScene.TileMap.TileSet.TileSize.ToVector2().X;
         var map = Globals.FactoryScene.TileMap.GlobalToMap(global);
         var entity = Globals.FactoryScene.TileMap.GetEntity(map, FactoryTileMap.Building);
 

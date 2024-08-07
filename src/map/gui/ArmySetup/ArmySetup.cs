@@ -25,52 +25,42 @@ public partial class ArmySetup : PanelContainer
 		return gui;
 	}
 	
-	public override void _ExitTree()
-	{
-		base._ExitTree();
-		_province.Units.Listeners.Remove(UpdateProvince);
-	}
-	
-	public override void _Ready()
-	{
-		base._Ready();
-        
-		UpdateCommanders();
-		UpdateProvince();
-		SetupProvince();
-	}
-
-	private void UpdateCommanders()
-	{
-		CommanderList.GetChildren().ToList().ForEach(child => child.QueueFree());
-		_province.Commanders
-			.Where(commander => commander.Team == "Player")
-			.OrderBy(commander => commander.CommanderName)
-			.ToList().ForEach(AddCommander);
-	}
-	
-	private void AddCommander(Commander commander)
-	{
-		var setupCommander = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup_commander.tscn").Instantiate<ArmySetupCommander>();
-		setupCommander.Init(commander);
-		CommanderList.AddChild(setupCommander);
-	}
-	
-	private void UpdateProvince()
-	{
-		ProvenceNameLabel.Text = _province.ProvinceName + ",";
-		UnitCountLabel.Text = _province.Units.CountItems().ToString();
-	}
-
-	private void SetupProvince()
-	{
-		_province.Units.Listeners.Add(UpdateProvince);
-		
-		var parent = ProvinceUnitBox.GetParent();
-		ProvinceUnitBox.QueueFree();
-		
-		var squad = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup_squad.tscn").Instantiate<ArmySetupSquad>();
-		squad.Init(_province.Units, false);
-		parent.AddChild(squad);
-	}
+	// public override void _Ready()
+	// {
+	// 	base._Ready();
+ //        
+	// 	UpdateCommanders();
+	// 	UpdateProvince();
+	// 	SetupProvince();
+	// }
+	//
+	// private void UpdateCommanders()
+	// {
+	// 	CommanderList.GetChildren().ToList().ForEach(child => child.QueueFree());
+	// }
+	//
+	// private void AddCommander(Commander commander)
+	// {
+	// 	var setupCommander = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup_commander.tscn").Instantiate<ArmySetupCommander>();
+	// 	setupCommander.Init(commander);
+	// 	CommanderList.AddChild(setupCommander);
+	// }
+	//
+	// private void UpdateProvince()
+	// {
+	// 	ProvenceNameLabel.Text = _province.ProvinceName + ",";
+	// 	UnitCountLabel.Text = _province.Units.CountItems().ToString();
+	// }
+	//
+	// private void SetupProvince()
+	// {
+	// 	_province.Units.Listeners.Add(UpdateProvince);
+	// 	
+	// 	var parent = ProvinceUnitBox.GetParent();
+	// 	ProvinceUnitBox.QueueFree();
+	// 	
+	// 	var squad = GD.Load<PackedScene>("res://src/map/gui/ArmySetup/army_setup_squad.tscn").Instantiate<ArmySetupSquad>();
+	// 	squad.Init(_province.Units, false);
+	// 	parent.AddChild(squad);
+	// }
 }

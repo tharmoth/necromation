@@ -38,7 +38,7 @@ public partial class Resource : Node2D, LayerTileMap.IEntity
     {
         Type = itemType;
         _sprite.Texture = Database.Instance.GetTexture(Type);
-        _sprite.Scale = (Vector2.One * FactoryTileMap.TileSize * 1.15f) / _sprite.Texture.GetSize();
+        _sprite.Scale = (Globals.FactoryScene.TileMap.TileSet.TileSize.ToVector2() * 1.15f) / _sprite.Texture.GetSize();
         _sprite.FlipH = GD.Randf() > .5;
         _sprite.Position += new Vector2(GD.RandRange(-3, 3), GD.RandRange(-3, 3));
         AddChild(_sprite);

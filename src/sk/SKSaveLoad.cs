@@ -60,7 +60,8 @@ public class SKSaveLoad
                     Database.Load(nodeData);
                     break;
                 case "Map":
-                    MapTileMap.Load(nodeData);
+                    //TODO: Redo this
+                    // MapTileMap.Load(nodeData);
                     break;
                 default:
                     Resource.Load(nodeData);
@@ -114,9 +115,10 @@ public class SKSaveLoad
         var hotBarJson = Json.Stringify(hotBarData);
         saveGame.StoreLine(hotBarJson);
 
-        var mapData = Globals.MapScene.TileMap.Save();
-        var mapJson = Json.Stringify(mapData);
-        saveGame.StoreLine(mapJson);
+        // TODO: Fix this
+        // var mapData = Globals.MapScene.TileMap.Save();
+        // var mapJson = Json.Stringify(mapData);
+        // saveGame.StoreLine(mapJson);
         
         MusicManager.Play("save");
     }

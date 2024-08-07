@@ -23,6 +23,8 @@ public partial class FactoryScene : Scene
 		get => _map ??= GetNode<FactoryTileMap>("%TileMap");
 		private set => _map = value;
 	}
+	
+
 
 	public Node2D GroundItemHolder;
 	public DayNight DayNight => GetNode<DayNight>("%DayNight");
@@ -77,12 +79,20 @@ public partial class FactoryScene : Scene
 		base._Process(delta);
 		if (_initialized) return;
 		_initialized = true;
-		var position = MapScene.FactoryPosition;
-		Globals.Player.GlobalPosition =
-			position * FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize
-			+ position * FactoryTileMap.TileSize * FactoryTileMap.ProvinceGap
-			+ Vector2I.One * FactoryTileMap.TileSize * FactoryTileMap.ProvinceSize / 2;
-		TileMap.OnOpen();
+
+		
+		
+		var provence = Globals.MapScene
+			.Map
+			.Provinces
+			.First(province => province.Owner == "Player");
+
+		var provencePercent = provence.PositionPercent;
+		
+		var factorySize = TileMap.GetUsedRect().End * TileMap.TileSet.TileSize;
+		var factoryPosition = factorySize * provencePercent;
+
+		Globals.Player.GlobalPosition = factoryPosition;
 	}
 
 	public override void OnOpen()
@@ -90,35 +100,8 @@ public partial class FactoryScene : Scene
 		MusicManager.PlayAmbiance();
 		TileMap.OnOpen();
 		CursorLayer.Visible = true;
-		
-		// if (AttackTimer == null && Globals.MapScene.TileMap
-		// 	    .GetProvinces().Count(province => province.Owner == "Player") >= 4)
-		// {
-		// 	attacked = true;
-		// 	AttackTimer = new Timer();
-		// 	AddChild(AttackTimer);
-		// 	AttackProvince = Globals.MapScene.TileMap.Provinces.Where(province => province.Owner == "Player")
-		// 		.MinBy(_ => GD.Randf());
-		// 	
-		// 	GD.Print("attack incoming!");
-		// 	
-		// 	AttackTimer.WaitTime = 60*5;
-		// 	AttackTimer.Timeout += () =>
-		// 	{
-		// 		GD.Print("Under attack!");
-		// 		AttackTimer.QueueFree();
-		//
-		// 		var attackingCommander = new Commander(AttackProvince, "Enemy");
-		// 		attackingCommander.Units.Insert("Rabble", 10);
-		// 		attackingCommander.GlobalPosition = AttackProvince.GlobalPosition;
-		// 		AttackProvince.Commanders.Add(attackingCommander);
-		// 		Globals.MapScene.Gui.Battle();
-		// 		AttackTimer = null;
-		//                  
-		// 	};
-		// 	AttackTimer.Start();
-		// }
 	}
+	
 
 	public override void OnClose()
 	{

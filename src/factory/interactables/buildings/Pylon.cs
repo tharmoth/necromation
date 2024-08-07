@@ -88,9 +88,9 @@ public class Pylon : Building
     {
         var color = Utils.ManaColor;
         color.A = .2f;
-        var rectStart = -3 * FactoryTileMap.TileSize - FactoryTileMap.TileSize / 2;
-        var rectSize = 7 * FactoryTileMap.TileSize;
-        var powerRect = new Rect2I(rectStart, rectStart, rectSize, rectSize);
+        var rectStart = -3 * Globals.FactoryScene.TileMap.TileSet.TileSize - Globals.FactoryScene.TileMap.TileSet.TileSize / 2;
+        var rectSize = 7 * Globals.FactoryScene.TileMap.TileSet.TileSize;
+        var powerRect = new Rect2I(rectStart, rectSize);
         return new Polygon2D 
         {
             Color = color,
