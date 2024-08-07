@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://co6lxg74ro5nn"
-path="res://.godot/imported/soil2.png-371a9b25deed899ed8d06576416089fc.ctex"
+uid="uid://bl8y7ha821crw"
+path="res://.godot/imported/Ocean.png-8e6faac4688a870a8f00acafe9b5e545.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/soil2.png"
-dest_files=["res://.godot/imported/soil2.png-371a9b25deed899ed8d06576416089fc.ctex"]
+source_file="res://res/textures/Ocean.png"
+dest_files=["res://.godot/imported/Ocean.png-8e6faac4688a870a8f00acafe9b5e545.ctex"]
 
 [params]
 

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://df0vkwm5lx4c5" path="res://res/sprites/Arrow-right.png" id="7_da7t7"]
 [ext_resource type="Script" path="res://src/factory/gui/BarracksGui/BarracksBoxDraw.cs" id="9_8swuw"]
 [ext_resource type="PackedScene" uid="uid://j2tp2okl4jv6" path="res://src/factory/gui/Shared/FilterItemBox.tscn" id="9_nwdgr"]
-[ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/sprites/soil2.png" id="10_n1vl8"]
+[ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/textures/soil2.png" id="10_n1vl8"]
 [ext_resource type="Texture2D" uid="uid://ti2aa2bvwhet" path="res://res/sprites/unit/Skeleton Auxiliary.png" id="11_1u55i"]
 [ext_resource type="Texture2D" uid="uid://b6hdbjs0tv5pt" path="res://res/sprites/Grass.png" id="12_r38fp"]
 [ext_resource type="Texture2D" uid="uid://2qisvnfbjyo6" path="res://res/sprites/unit/Skeleton Marksman.png" id="14_c5yy1"]

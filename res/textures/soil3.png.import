@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d36cm8ucj2ttt"
-path="res://.godot/imported/grasstile.png-c3eef40fa9908112c180c2eb793fc3f3.ctex"
+uid="uid://eda0prgvwn61"
+path="res://.godot/imported/soil3.png-3b098d69f9b61278dfb1ce25ce5384a6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/grasstile.png"
-dest_files=["res://.godot/imported/grasstile.png-c3eef40fa9908112c180c2eb793fc3f3.ctex"]
+source_file="res://res/textures/soil3.png"
+dest_files=["res://.godot/imported/soil3.png-3b098d69f9b61278dfb1ce25ce5384a6.ctex"]
 
 [params]
 

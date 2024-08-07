@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://eda0prgvwn61"
-path="res://.godot/imported/soil3.png-f6bdbf8d88d986a079cb9746fb6db57c.ctex"
+uid="uid://5jpnp8fjkqym"
+path="res://.godot/imported/blend.png-508a71af9dbaed7b07ccf5e2a48343bf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/soil3.png"
-dest_files=["res://.godot/imported/soil3.png-f6bdbf8d88d986a079cb9746fb6db57c.ctex"]
+source_file="res://res/textures/blend.png"
+dest_files=["res://.godot/imported/blend.png-508a71af9dbaed7b07ccf5e2a48343bf.ctex"]
 
 [params]
 

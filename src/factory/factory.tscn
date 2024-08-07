@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://5frwg0ceb1di"]
+[gd_scene load_steps=50 format=3 uid="uid://5frwg0ceb1di"]
 
 [ext_resource type="Texture2D" uid="uid://i5d0bkk0gf0v" path="res://res/tilemap.png" id="1_4vku0"]
 [ext_resource type="Script" path="res://src/factory/FactoryScene.cs" id="1_4xbbd"]
@@ -21,9 +21,15 @@
 [ext_resource type="Texture2D" uid="uid://mov8ls0tdfwm" path="res://res/TX Tileset Grass.png" id="11_q1hir"]
 [ext_resource type="Script" path="res://src/factory/FactoryTileMap.cs" id="16_o18cr"]
 [ext_resource type="Script" path="res://src/factory/gui/HelpGui/BlinkActionButton.cs" id="17_r47pg"]
+[ext_resource type="Shader" path="res://src/factory/shaders/BlendTileMap.gdshader" id="18_hpkxc"]
 [ext_resource type="Script" path="res://src/shared/CheatCodes.cs" id="18_nrhn7"]
+[ext_resource type="Texture2D" uid="uid://d36cm8ucj2ttt" path="res://res/textures/grasstile.png" id="19_6wljk"]
+[ext_resource type="Texture2D" uid="uid://5jpnp8fjkqym" path="res://res/textures/blend.png" id="19_32hj3"]
+[ext_resource type="Texture2D" uid="uid://bmo4g6s7u70lk" path="res://res/textures/Grey.png" id="20_78ken"]
 [ext_resource type="Texture2D" uid="uid://gdq12fw5obqu" path="res://res/sprites/Tileset.png" id="20_ml145"]
+[ext_resource type="Texture2D" uid="uid://bl8y7ha821crw" path="res://res/textures/Ocean.png" id="21_nx3bv"]
 [ext_resource type="AudioStream" uid="uid://bc2w2asn2c8x5" path="res://res/sfx/gui/rollover3.ogg" id="23_1sfga"]
+[ext_resource type="Texture2D" uid="uid://co6lxg74ro5nn" path="res://res/textures/soil2.png" id="23_06yq5"]
 [ext_resource type="Texture2D" uid="uid://8ybyljlq1nvu" path="res://res/sprites/Player-south.png" id="23_hi424"]
 [ext_resource type="Texture2D" uid="uid://cfafwwpbyr8yn" path="res://res/sprites/particles/SoftLight.png" id="23_hyyce"]
 [ext_resource type="Texture2D" uid="uid://cs1hp40el17pt" path="res://res/sprites/hands.png" id="24_c65jo"]
@@ -34,6 +40,16 @@
 [ext_resource type="Texture2D" uid="uid://c5dvthv62hup2" path="res://res/sprites/Selection.png" id="31_o81rd"]
 [ext_resource type="Material" uid="uid://b4f6au4nnkrbj" path="res://src/factory/shaders/wind_sway.tres" id="32_6ccxq"]
 [ext_resource type="Texture2D" uid="uid://cb5xewe7cviqn" path="res://res/sprites/Tree.png" id="32_5354o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y1833"]
+shader = ExtResource("18_hpkxc")
+shader_parameter/enabled = false
+shader_parameter/should_blend = true
+shader_parameter/soil = ExtResource("23_06yq5")
+shader_parameter/grass = ExtResource("19_6wljk")
+shader_parameter/rock = ExtResource("20_78ken")
+shader_parameter/ocean = ExtResource("21_nx3bv")
+shader_parameter/blend = ExtResource("19_32hj3")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_adiq0"]
 texture = ExtResource("11_q1hir")
@@ -545,6 +561,7 @@ color = Color(0, 0, 0, 1)
 [node name="TileMap" type="TileMap" parent="."]
 unique_name_in_owner = true
 z_index = -5
+material = SubResource("ShaderMaterial_y1833")
 tile_set = SubResource("TileSet_1emfp")
 format = 2
 layer_0/z_index = -100
